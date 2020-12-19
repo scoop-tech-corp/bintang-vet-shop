@@ -14,5 +14,53 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('index');
+});
+
+Route::get('/login', function () {
+	return view('/auth/login');
+});
+
+Route::get('/register', function () {
+	return view('/auth/register');
+});
+
+Route::get('/cabang', function () {
+	return view('cabang');
+});
+
+Route::get('/user', function () {
+	return view('user');
+});
+
+Route::get('/pasien', function () {
+	return view('pasien');
+});
+
+Route::get('/dokter', function () {
+	return view('dokter');
+});
+
+Route::get('/periksa', function () {
+	return view('periksa');
+});
+
+Route::get('/tindakan', function () {
+	return view('tindakan');
+});
+
+Route::get('/gudang1', function () {
+	return view('gudang1');
+});
+
+Route::get('/gudang2', function () {
+	return view('gudang2');
+});
+
+Route::get('/pembayaran', function () {
+	return view('pembayaran');
+});
+
+Route::get('/kunjungan', function () {
+	return view('kunjungan');
 });

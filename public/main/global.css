@@ -1,0 +1,12 @@
+.section-logo-vet-clinic {
+	padding: 10px 0px; text-align: center
+}
+
+.section-logo-vet-clinic > img {
+	width: 150px;
+	border-radius: 50%;
+}
+
+.m-b-15px { 
+	margin-bottom: 15px;
+}
