@@ -26,6 +26,7 @@ Route::get('/register', function () {
 });
 
 Route::get('/cabang','BranchController@index');
+Route::get('/getDataBranch','BranchController@getDataBranch');
 
 Route::get('/cabang/tambah','BranchController@tambah');
 
