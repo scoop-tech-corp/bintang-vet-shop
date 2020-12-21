@@ -9,10 +9,12 @@ class BranchController extends Controller
 {
     public function index()
     {
+        return view('cabang.index');
+    }
 
+    public function getDataBranch() {
         $branch = Branch::all();
-
-        return view('cabang.index', ['branch' => $branch]);
+        return response()->json($branch);
     }
 
     public function tambah()
