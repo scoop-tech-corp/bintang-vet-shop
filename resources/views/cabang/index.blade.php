@@ -8,8 +8,8 @@
   </div>
   <!-- /.box-header -->
   <!-- form start -->
-  <div class="box-body">
-    <table id="table-cabang" class="table table-hover table-bordered">
+  <div class="box-body table-responsive">
+    <table id="table-cabang" class="table text-nowrap">
       <thead>
         <tr>
           <th>No</th>
@@ -67,6 +67,19 @@
     <!-- /.modal-dialog -->
   </div>
 
+  <div class="modal fade" id="confirm">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          @{{msgConfirm}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 @endsection
 
@@ -76,6 +89,8 @@
     'paging'      : false,
     'searching'   : false,
     'ordering'    : true,
+    "info"        : false,
+    responsive: true
   });
 </script>
 @endsection
