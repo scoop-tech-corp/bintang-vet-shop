@@ -25,8 +25,9 @@
 
   <!-- Axios  -->
 	<script src="{{ asset('vuejs/axios.js') }}"></script>
-	
-	<link rel="stylesheet" type='text/css' href="{{ asset('main/global.css') }}">
+
+	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/input-custom.css') }}">
+	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/global.css') }}">
 
   <!-- Google Font -->
   <link rel="stylesheet"
@@ -181,6 +182,6 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
     @yield('script-content')
-    <script src="{{ asset('main/dashboard/master-vue.js') }}"></script>
+    <script src="{{ asset('main/js/master-vue.js') }}"></script>
 </body>
 </html>
