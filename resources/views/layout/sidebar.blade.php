@@ -7,12 +7,12 @@
 		</div>
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">MENU UTAMA</li>
-			<li class="active"><a href="{{ url('/cabang') }}"><i class="fa fa-book"></i> <span>Cabang</span></a></li>
-			<li class=""><a href="{{ url('/user') }}"><i class="fa fa-book"></i> <span>User Management</span></a></li>
-			<li class=""><a href="{{ url('/pasien') }}"><i class="fa fa-book"></i> <span>Pasien</span></a></li>
+			<li class=""><a href="{{ url('/cabang') }}"><i class="fa fa-code-fork"></i> <span>Cabang</span></a></li>
+			<li class=""><a href="{{ url('/user') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>User Management</span></a></li>
+			<li class=""><a href="{{ url('/pasien') }}"><i class="fa fa-bed"></i> <span>Pasien</span></a></li>
 			<li class="treeview">
 				<a href="#">
-					<i class="fa fa-pie-chart"></i>
+					<i class="fa fa-file-text-o" aria-hidden="true"></i>
 					<span>Pendaftaran</span>
 					<span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
@@ -23,13 +23,13 @@
 					<li><a href="#"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li>
-			<li class=""><a href="{{ url('/dokter') }}"><i class="fa fa-book"></i> <span>Dokter</span></a></li>
-			<li class=""><a href="{{ url('/periksa') }}"><i class="fa fa-book"></i> <span>Hasil Pemeriksaan</span></a>
+			<li class=""><a href="{{ url('/dokter') }}"><i class="fa fa-stethoscope" aria-hidden="true"></i> <span>Dokter</span></a></li>
+			<li class=""><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a>
 			</li>
-			<li class=""><a href="{{ url('/tindakan') }}"><i class="fa fa-book"></i> <span>Tindakan</span></a></li>
+			<li class=""><a href="{{ url('/tindakan') }}"><i class="fa fa-medkit" aria-hidden="true"></i> <span>Tindakan</span></a></li>
 			<li class="treeview">
 				<a href="#">
-					<i class="fa fa-pie-chart"></i>
+					<i class="fa fa-database" aria-hidden="true"></i>
 					<span>Gudang</span>
 					<span class="pull-right-container">
 							<i class="fa fa-angle-left pull-right"></i>
@@ -40,10 +40,10 @@
 					<li><a href="{{ url('/gudang2') }}"><i class="fa fa-circle-o"></i> Gudang 2</a></li>
 				</ul>
 			</li>
-			<li class=""><a href="{{ url('/pembayaran') }}"><i class="fa fa-book"></i> <span>Pembayaran</span></a></li>
+			<li class=""><a href="{{ url('/pembayaran') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Pembayaran</span></a></li>
 			<li class="treeview">
 				<a href="#">
-					<i class="fa fa-pie-chart"></i>
+					<i class="fa fa-file-text" aria-hidden="true"></i>
 					<span>Laporan Keuangan</span>
 					<span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
@@ -56,7 +56,7 @@
 					<li><a href="#"><i class="fa fa-circle-o"></i> Tahunan</a></li>
 				</ul>
 			</li>
-			<li class=""><a href="{{ url('/kunjungan') }}"><i class="fa fa-book"></i> <span>Kunjungan</span></a></li>
+			<li class=""><a href="{{ url('/kunjungan') }}"><i class="fa fa-wheelchair" aria-hidden="true"></i> <span>Kunjungan</span></a></li>
 		</ul>
 	</section>
 	<!-- /.sidebar -->

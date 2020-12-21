@@ -25,42 +25,50 @@ Route::get('/register', function () {
 	return view('/auth/register');
 });
 
-Route::get('/cabang', function () {
-	return view('cabang');
-});
+Route::get('/cabang','BranchController@index');
+
+Route::get('/cabang/tambah','BranchController@tambah');
+
+Route::post('/cabang/store','BranchController@store');
+
+Route::get('/cabang/edit/{id}', 'BranchController@edit');
+
+Route::put('/cabang/update/{id}', 'BranchController@update');
+
+Route::get('/cabang/hapus/{id}', 'BranchController@delete');
 
 Route::get('/user', function () {
-	return view('user');
+	return view('user.index');
 });
 
 Route::get('/pasien', function () {
-	return view('pasien');
+	return view('pasien.index');
 });
 
 Route::get('/dokter', function () {
-	return view('dokter');
+	return view('dokter.index');
 });
 
 Route::get('/periksa', function () {
-	return view('periksa');
+	return view('periksa.index');
 });
 
 Route::get('/tindakan', function () {
-	return view('tindakan');
+	return view('tindakan.index');
 });
 
 Route::get('/gudang1', function () {
-	return view('gudang1');
+	return view('gudang1.index');
 });
 
 Route::get('/gudang2', function () {
-	return view('gudang2');
+	return view('gudang2.index');
 });
 
 Route::get('/pembayaran', function () {
-	return view('pembayaran');
+	return view('pembayaran.index');
 });
 
 Route::get('/kunjungan', function () {
-	return view('kunjungan');
+	return view('kunjungan.index');
 });
