@@ -12,14 +12,10 @@ class BranchController extends Controller
         return view('cabang.index');
     }
 
-    public function getDataBranch() {
+    public function getDataBranch()
+    {
         $branch = Branch::all();
         return response()->json($branch);
-    }
-
-    public function tambah()
-    {
-        return view('cabang.create');
     }
 
     public function store(Request $request)
@@ -35,7 +31,9 @@ class BranchController extends Controller
             'BranchName' => $request->NamaCabang,
         ]);
 
-        return redirect('/cabang');
+        return response()->json([
+            'message' => 'Berhasil menambah Cabang',
+        ], 200);
     }
 
     public function edit($id)
@@ -55,13 +53,17 @@ class BranchController extends Controller
         $branch->BranchCode = $request->KodeCabang;
         $branch->BranchName = $request->NamaCabang;
         $branch->save();
-        return redirect('/cabang');
+        return response()->json([
+            'message' => 'Berhasil mengupdate Cabang',
+        ], 200);
     }
 
     public function delete($id)
     {
         $branch = Branch::find($id);
         $branch->delete();
-        return redirect('/cabang');
+        return response()->json([
+            'message' => 'Berhasil menghapus Cabang',
+        ], 200);
     }
 }
