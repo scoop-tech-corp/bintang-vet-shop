@@ -5,6 +5,7 @@ const masterApp = new Vue({
 		namaCabang: '',
 		titleModal: '',
 		stateModal: '',
+		msgConfirm: '',
 		kdCabangErr1: false,
 		kdCabangErr2: false,
 		namaCabangErr: false,
@@ -44,7 +45,6 @@ const masterApp = new Vue({
 		getData: function() {
 			axios.get('/getDataBranch')
 				.then(resp => {
-					console.log('resp GET DATA', resp);
 					this.listCabang = resp.data;
 				})
 				.catch(err => {
@@ -59,6 +59,9 @@ const masterApp = new Vue({
 			axios.post('/cabang/store', form_data)
 			.then(resp => {
 				if(resp.status == 200) {
+					this.msgConfirm = 'Berhasil Menambah Cabang';
+					$('#confirm').modal('show');
+
 					$('#modal-cabang').modal('toggle');
 					this.refreshVariable();
 					this.getData();
