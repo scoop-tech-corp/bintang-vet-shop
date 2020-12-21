@@ -31,9 +31,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   <!-- Register Custom Css -->
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/auth/register.css') }}">
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/alert-custom.css') }}">
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/input-custom.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/register.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/alert-custom.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/input-custom.css') }}">
 </head>
 <body class="hold-transition register-page">
 <div id="register-app" class="register-box">
@@ -128,6 +128,6 @@
   });
 </script>
 
-<script src="{{ asset('main/auth/register-vue.js') }}"></script>
+<script src="{{ asset('main/js/auth/register-vue.js') }}"></script>
 </body>
 </html>
