@@ -67,11 +67,32 @@
     <!-- /.modal-dialog -->
   </div>
 
-  <div class="modal fade" id="confirm">
+  <div class="modal fade" id="modal-confirmation">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Peringatan!</h4>
+        </div>
+        <div class="modal-body">
+          <div class="box-body">
+            @{{confirmContent}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" @click="submitConfirm">Ya</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="msg-box">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-body">
-          @{{msgConfirm}}
+          @{{msgContent}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
@@ -86,10 +107,10 @@
 @section('script-content')
 <script>
   $('#table-cabang').DataTable({
-    'paging'      : false,
-    'searching'   : false,
-    'ordering'    : true,
-    "info"        : false,
+    'paging'     : false,
+    'searching'  : false,
+    "info"       : false,
+    "columnDefs" : [{ "orderable": false, "targets": 3 }],
     responsive: true
   });
 </script>

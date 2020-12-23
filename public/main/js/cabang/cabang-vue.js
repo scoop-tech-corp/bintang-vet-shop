@@ -1,11 +1,13 @@
 const masterApp = new Vue({
 	el: '#cabang-app',
 	data: {
+		idCabang: null,
 		kodeCabang: '',
 		namaCabang: '',
 		titleModal: '',
 		stateModal: '',
-		msgConfirm: '',
+		msgContent: '',
+		confirmContent: '',
 		kdCabangErr1: false,
 		kdCabangErr2: false,
 		namaCabangErr: false,
@@ -31,8 +33,15 @@ const masterApp = new Vue({
 			this.titleModal = 'Ubah Cabang';
 			$('#modal-cabang').modal('show');
 
+			this.idCabang   = item.id;
 			this.kodeCabang = item.BranchCode;
 			this.namaCabang = item.BranchName;
+		},
+		openFormDelete: function(item) {
+			this.stateModal = 'delete';
+			this.idCabang = item.id;
+			$('#modal-confirmation').modal('show');
+				this.confirmContent = 'Menghapus cabang akan mempengaruhi keseluruhan data';
 		},
 		kodeCabangKeyup: function(e) {
 			const regexp = /^[^a-z ]*$/;
@@ -52,19 +61,78 @@ const masterApp = new Vue({
 				});
 		},
 		submitCabang: function() {
-			const form_data = new FormData();
-			form_data.append('KodeCabang', this.kodeCabang);
-			form_data.append('NamaCabang', this.namaCabang);
+			
+			if (this.stateModal === 'add') {
+				const form_data = new FormData();
+				form_data.append('KodeCabang', this.kodeCabang);
+				form_data.append('NamaCabang', this.namaCabang);
 
+				this.processSave(form_data);
+			} else {
+
+				$('#modal-confirmation').modal('show');
+				this.confirmContent = 'Perubahan cabang akan mempengaruhi keseluruhan data';
+			}
+		},
+		submitConfirm: function() {
+			const form_data = new FormData();
+			form_data.append('id', this.idCabang);
+
+			if (this.stateModal === 'edit') {
+				form_data.append('KodeCabang', this.kodeCabang);
+				form_data.append('NamaCabang', this.namaCabang);
+				this.processEdit(form_data);
+			} else {
+				this.processDelete(form_data);
+			}
+		},
+		processDelete: function(form_data) {
+			axios.post('/cabang/hapus', form_data)
+			.then(resp => {
+				if (resp.status == 200) {
+					$('#modal-confirmation').modal('toggle');
+
+					this.msgContent = 'Berhasil menghapus abang';
+					$('#msg-box').modal('show');
+					this.getData();
+				}
+			})
+			.catch(err => {
+				console.log('error nich', err);
+			})
+		},
+		processEdit: function(form_data) {
+			axios.post('/cabang/update', form_data)
+			.then(resp => {
+				if (resp.status == 200) {
+					$('#modal-confirmation').modal('toggle');
+
+					this.msgContent = 'Berhasil Mengubah Cabang';
+					$('#msg-box').modal('show');
+
+					setTimeout(() => {
+						$('#modal-cabang').modal('toggle');
+						this.refreshVariable();
+						this.getData();
+					}, 2000);
+				}
+			})
+			.catch(err => {
+				console.log('error nich', err);
+			})
+		},
+		processSave: function(form_data) {
 			axios.post('/cabang/store', form_data)
 			.then(resp => {
 				if(resp.status == 200) {
-					this.msgConfirm = 'Berhasil Menambah Cabang';
-					$('#confirm').modal('show');
+					this.msgContent = 'Berhasil Menambah Cabang';
+					$('#msg-box').modal('show');
 
-					$('#modal-cabang').modal('toggle');
-					this.refreshVariable();
-					this.getData();
+					setTimeout(() => {
+						$('#modal-cabang').modal('toggle');
+						this.refreshVariable();
+						this.getData();
+					}, 2000);
 				}
 			})
 			.catch(err => {
