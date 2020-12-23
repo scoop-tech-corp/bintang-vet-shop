@@ -42,14 +42,14 @@ class BranchController extends Controller
         return view('cabang.edit', ['branch' => $branch]);
     }
 
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
         $this->validate($request, [
             'KodeCabang' => 'required',
             'NamaCabang' => 'required',
         ]);
 
-        $branch = Branch::find($id);
+        $branch = Branch::find($request->id);
         $branch->BranchCode = $request->KodeCabang;
         $branch->BranchName = $request->NamaCabang;
         $branch->save();
@@ -58,9 +58,9 @@ class BranchController extends Controller
         ], 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $branch = Branch::find($id);
+        $branch = Branch::find($request->id);
         $branch->delete();
         return response()->json([
             'message' => 'Berhasil menghapus Cabang',

@@ -1,5 +1,3 @@
-// Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
-
 const masterApp = new Vue({
 	el: '#master-app',
 	data: {
@@ -13,7 +11,7 @@ const masterApp = new Vue({
     baseUrl: ''
   },
   mounted() {
-
+    alert('READY GANS');
   },
   methods: {
 

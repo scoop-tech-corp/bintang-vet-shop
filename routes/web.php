@@ -34,9 +34,9 @@ Route::post('/cabang/store','BranchController@store');
 
 Route::get('/cabang/edit/{id}', 'BranchController@edit');
 
-Route::put('/cabang/update/{id}', 'BranchController@update');
+Route::post('/cabang/update', 'BranchController@update');
 
-Route::get('/cabang/hapus/{id}', 'BranchController@delete');
+Route::post('/cabang/hapus', 'BranchController@delete');
 
 Route::get('/user', function () {
 	return view('user.index');
