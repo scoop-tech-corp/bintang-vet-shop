@@ -20,12 +20,21 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['api']], function () {
 
     
-    Route::post('login', 'UserController@login');
+    Route::post('masuk', 'UserController@login');
 
     Route::group(['middleware' => ['jwt.auth']], function () {
         
         Route::post('register', 'UserController@register');
-        Route::post('logout', 'UserController@logout');
+        Route::post('keluar', 'UserController@logout');
+
+        //cabang
+        Route::get('cabang', 'CabangController@index');
+        Route::post('cabang', 'CabangController@create');
+        Route::put('cabang', 'CabangController@update');
+        Route::delete('cabang', 'CabangController@delete');
+
+        //user management
+        
 
     });
 });
