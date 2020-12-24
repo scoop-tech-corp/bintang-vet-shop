@@ -58,14 +58,14 @@
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
-								<span class="hidden-xs">Adiyansyah</span>
+								<span class="hidden-xs">@{{username}}</span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header">
 									<img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
 									<p>
-										Adiyansyah Dwi Putra - Dokter
+										@{{fullname}} - @{{role}}
 									</p>
 								</li>
 								<!-- Menu Body -->
@@ -89,7 +89,7 @@
 										<a href="#" class="btn btn-default btn-flat">Profil</a>
 									</div>
 									<div class="pull-right">
-										<a href="#" class="btn btn-default btn-flat" @click="onSignOut">Keluar</a>
+										<a href="#" class="btn btn-default btn-flat" @click="onLogOut">Keluar</a>
 									</div>
 								</li>
 							</ul>
