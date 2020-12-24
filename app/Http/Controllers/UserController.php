@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -58,6 +57,8 @@ class UserController extends Controller
             //return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
+        $user = User::find($request->user()->id);
+
         return response()->json(
             [
                 'user_id' => $request->user()->id,
@@ -73,14 +74,16 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $messages = [
-            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, simbol, dan angka!'
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, simbol, dan angka!',
         ];
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|min:3|max:25|unique:users',
-            'fullname' => 'required|string|min:3|max:255',
+            'username' => 'required|min:3|max:25|unique:users',
+            'fullname' => 'required|min:3|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'phone_number' => 'required|numeric|digits_between:10,12|unique:users',
+            'role' => 'required',
         ], $messages);
 
         // if ($validator->fails()) {
@@ -100,8 +103,10 @@ class UserController extends Controller
             'fullname' => $request->json('fullname'),
             'email' => $request->json('email'),
             'password' => bcrypt($request->json('password')),
-            // 'name' => $request->get('name'),
-            // 'email' => $request->get('email'),
+            'status' => 'active',
+            'phone_number' => strval($request->json('phone_number')),
+            'role' => $request->json('role'),
+            'created_by' => $request->user()->fullname,
             // 'password' => Hash::make($request->get('password')),
         ]);
 

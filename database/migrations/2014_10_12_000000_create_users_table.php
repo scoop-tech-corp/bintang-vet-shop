@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('staffing_number')->nullable();
             $table->string('username')->unique();
-            $table->string('fullname')->nullable();
+            $table->string('fullname');
             $table->string('gender')->nullable();
             $table->string('religion')->nullable();
             $table->string('birth_place')->nullable();
@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('image_profile')->nullable();
             $table->string('role')->nullable();
-            $table->string('status')->nullable();                   //aktif atau tidak jika tidak aktif maka tidak dapat login
+            $table->string('status');                   //aktif atau tidak jika tidak aktif maka tidak dapat login
             $table->string('created_by');
             $table->string('update_by')->nullable();    //siapa yang akan mengubah status user
             $table->string('deleted_by')->nullable();
