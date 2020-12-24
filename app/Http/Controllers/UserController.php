@@ -12,18 +12,6 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
-        // $credentials = $request->only('email', 'password');
-
-        // try {
-        //     if (!$token = JWTAuth::attempt($credentials)) {
-        //         return response()->json(['error' => 'invalid_credentials'], 400);
-        //     }
-        // } catch (JWTException $e) {
-        //     return response()->json(['error' => 'could_not_create_token'], 500);
-        // }
-
-        // return response()->json(compact('token'));
-
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required',
@@ -86,9 +74,6 @@ class UserController extends Controller
             'role' => 'required',
         ], $messages);
 
-        // if ($validator->fails()) {
-        //     return response()->json($validator->errors()->toJson(), 400);
-        // }
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
 
@@ -107,12 +92,7 @@ class UserController extends Controller
             'phone_number' => strval($request->json('phone_number')),
             'role' => $request->json('role'),
             'created_by' => $request->user()->fullname,
-            // 'password' => Hash::make($request->get('password')),
         ]);
-
-        // $token = JWTAuth::fromUser($user);
-
-        // return response()->json(compact('user', 'token'), 201);
 
         return response()->json(
             [
