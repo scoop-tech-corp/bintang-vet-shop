@@ -150,7 +150,7 @@ class UserController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
+            'username' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -162,7 +162,7 @@ class UserController extends Controller
             ], 401);
         }
 
-        $credentials = $request->only('email');
+        $credentials = $request->only('username');
         $token = null;
 
         $token = JWTAuth::invalidate($credentials);
