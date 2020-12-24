@@ -8,26 +8,26 @@ const loginApp = new Vue({
     message: '',
     usernameError: false,
     passwordError: false,
-    disableSubmit: true,
     showAlert: false,
     isSuccess: false,
     baseUrl: ''
   },
   mounted() { },
   computed: {
+    disableSubmit: function() {
+      return this.usernameError || this.passwordError;
+    }
   },
 	methods: {
     usernameKeyup: function(event) {
       const value = event.target.value;
       this.usernameError = !value ? true : false;
       this.passwordError = !this.form.password ? true : false;
-      this.disableSubmit = (this.usernameError || this.passwordError) ? true : false;
     },
     passwordKeyup: function(event) {
       const value = event.target.value;
       this.passwordError = !value ? true : false;
       this.usernameError = !this.form.username ? true : false;
-      this.disableSubmit = (this.usernameError || this.passwordError) ? true : false;
     },
 		onSubmit: function() {
       const formData = {
@@ -37,22 +37,20 @@ const loginApp = new Vue({
 
       this.message = '';
       if (formData.username && formData.password) {
-        axios.post(this.$refs.baseUrl.value + '/api/admin/auth/signin', formData, { headers: { "Content-Type": "application/json" } })
+        axios.post(this.$refs.baseUrl.value + '/api/login', formData, { headers: { "Content-Type": "application/json" } })
         .then(resp => {
-          console.log('Success', resp)
           this.showAlert = true; this.isSuccess = true;
           this.message = 'Login Success';
           this.form.username = ''; this.form.password = '';
           const getDataLogin = resp.data;
-          localStorage.setItem('muda-cantik', JSON.stringify({
+
+          localStorage.setItem('vet-clinic', JSON.stringify({
+            fullname: getDataLogin.fullname,
+            username: getDataLogin.username,
             email: getDataLogin.email,
-            fullName: getDataLogin.firstname + ' ' + getDataLogin.lastname,
-            imageprofile: getDataLogin.imageprofile,
-            phonenumber: getDataLogin.phonenumber,
             role: getDataLogin.role,
             token: getDataLogin.token,
-            user_id: getDataLogin.user_id,
-            username: getDataLogin.username
+            user_id: getDataLogin.user_id
           }));
         })
         .catch(err => {
@@ -67,7 +65,7 @@ const loginApp = new Vue({
           setTimeout(() => {
             if (this.isSuccess) { 
               this.showAlert = false;
-              location.href = this.$refs.baseUrl.value + '/admin'; 
+              location.href = this.$refs.baseUrl.value + '/'; 
             }
           }, 2000);
         });

@@ -65,11 +65,6 @@
           class="btn btn-primary btn-block btn-flat m-b-15px" @click="onSubmit">Sign In</button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <a href="{{ url('/register') }}" class="text-center">Register a new membership</a>
-        </div>
-      </div>
     </form>
 
   </div>
