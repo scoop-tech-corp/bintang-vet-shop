@@ -33,10 +33,19 @@ class CabangController extends Controller
             ], 403);
         }
 
-        $this->validate($request, [
+        $validate = Validator::make($request->all(), [
             'KodeCabang' => 'required|max:5|unique:branches,branch_code',
             'NamaCabang' => 'required|max:20|unique:branches,branch_name',
         ]);
+
+        if ($validate->fails()) {
+            $errors = $validate->errors()->all();
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $errors,
+            ], 422);
+        }
 
         Branch::create([
             'branch_code' => $request->KodeCabang,
@@ -70,7 +79,7 @@ class CabangController extends Controller
             return response()->json([
                 'message' => 'The given data was invalid.',
                 'errors' => $errors,
-            ], 401);
+            ], 422);
         }
 
         $branch = Branch::find($request->id);

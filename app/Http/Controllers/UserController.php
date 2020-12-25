@@ -21,7 +21,7 @@ class UserController extends Controller
             $errors = $validator->messages();
 
             return response()->json([
-                'message' => 'The given data was invalid.',
+                'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => $errors,
             ], 401);
         }
@@ -33,14 +33,14 @@ class UserController extends Controller
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
-                    'message' => 'The given data was invalid.',
+                    'message' => 'User yang dimasukkan tidak valid!',
                     'errors' => ['Username atau password yang dimasukkan salah!'],
                 ], 401);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
             return response()->json([
-                'message' => 'Could not create token!',
+                'message' => 'Tidak dapat membuat token!',
             ], 500);
             //return response()->json(['error' => 'could_not_create_token'], 500);
         }
@@ -49,8 +49,8 @@ class UserController extends Controller
 
         if ($user->status == 'Non Aktif') {
             return response()->json([
-                'message' => 'User yang dimasukkan tidak valid.',
-                'errors' => ['Access is not allowed!'],
+                'message' => 'User yang dimasukkan tidak valid!',
+                'errors' => ['Akses tidak diijinkan!'],
             ], 403);
         }
 
@@ -71,8 +71,8 @@ class UserController extends Controller
 
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
-                'message' => 'User yang dimasukkan tidak valid.',
-                'errors' => ['Access is not allowed!'],
+                'message' => 'User yang dimasukkan tidak valid!',
+                'errors' => ['Akses tidak diijinkan!'],
             ], 403);
         }
 
@@ -96,12 +96,12 @@ class UserController extends Controller
             $errors = $validator->errors()->all();
 
             return response()->json([
-                'message' => 'The given data was invalid.',
+                'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => $errors,
-            ], 400);
+            ], 422);
         }
 
-        $lastuser = User::orderBy('id','desc')->first()->id;
+        $lastuser = User::orderBy('id', 'desc')->first()->id;
 
         $staff_number = 'BVC-U-' . $request->json('kode_cabang') . '-' . str_pad($lastuser + 1, 4, 0, STR_PAD_LEFT);
 
@@ -120,8 +120,8 @@ class UserController extends Controller
 
         return response()->json(
             [
-                'message' => 'Register Success!',
-            ]
+                'message' => 'Register Berhasil!',
+            ], 200
         );
     }
 
@@ -129,8 +129,8 @@ class UserController extends Controller
     {
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'message' => 'User yang dimasukkan tidak valid!',
+                'errors' => ['Akses tidak diijinkan!'],
             ], 403);
         }
 
@@ -139,11 +139,8 @@ class UserController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            //'username' => 'required|min:3|max:25',
             'nama_lengkap' => 'required|min:3|max:255',
-            //'email' => 'required|email|max:255',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-            //'nomor_ponsel' => 'required|numeric|digits_between:10,12',
             'role' => 'required|string',
             'status' => 'required|boolean',
             'kode_cabang' => 'required|string',
@@ -156,11 +153,11 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'The given data was invalid.',
                 'errors' => $errors,
-            ], 400);
+            ], 422);
         }
 
         $user = User::find($request->id);
-        
+
         if (is_null($user)) {
             return response()->json([
                 'message' => 'The data was invalid.',
@@ -182,8 +179,6 @@ class UserController extends Controller
             'message' => 'Berhasil mengupdate Cabang',
         ], 200);
     }
-
-
 
     // public function getAuthenticatedUser()
     // {
@@ -221,7 +216,7 @@ class UserController extends Controller
             $errors = $validator->errors()->all();
 
             return response()->json([
-                'message' => 'The given data was invalid.',
+                'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => $errors,
             ], 401);
         }
@@ -234,8 +229,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'message' => 'Success!',
-            ]
-        );
+            ], 200);
 
     }
 }
