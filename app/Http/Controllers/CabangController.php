@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Validator;
 
 class CabangController extends Controller
 {
@@ -16,7 +18,7 @@ class CabangController extends Controller
             ], 403);
         }
 
-        $branch = Branch::select('id', 'branch_code', 'branch_name')->get();
+        $branch = Branch::select('id', 'branch_code', 'branch_name','created_by','created_at')->get();
 
         return response()->json($branch, 200);
     }
@@ -57,15 +59,35 @@ class CabangController extends Controller
             ], 403);
         }
 
-        $this->validate($request, [
-            'KodeCabang' => 'required|max:5|unique:branches,branch_code',
+        $validate = Validator::make($request->all(), [
+            'KodeCabang' => 'required|max:5', //|unique:branches,branch_code
             'NamaCabang' => 'required|max:20',
         ]);
 
+        if ($validate->fails()) {
+            $errors = $validate->errors()->all();
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $errors,
+            ], 401);
+        }
+
         $branch = Branch::find($request->id);
+        
+        if (is_null($branch)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
         $branch->branch_code = $request->KodeCabang;
         $branch->branch_name = $request->NamaCabang;
+        $branch->update_by = $request->user()->fullname;
+        $branch->updated_at = \Carbon\Carbon::now();
         $branch->save();
+
         return response()->json([
             'message' => 'Berhasil mengupdate Cabang',
         ], 200);
@@ -82,7 +104,21 @@ class CabangController extends Controller
         }
 
         $branch = Branch::find($request->id);
+
+        if (is_null($branch)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        $branch->isDeleted = true;
+        $branch->deleted_by = $request->user()->fullname;
+        $branch->deleted_at = \Carbon\Carbon::now();
+        $branch->save();
+
         $branch->delete();
+
         return response()->json([
             'message' => 'Berhasil menghapus Cabang',
         ], 200);
