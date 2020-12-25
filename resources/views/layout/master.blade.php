@@ -34,8 +34,8 @@
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper" id="master-app">
-    <input ref="baseUrl" type="hidden" value="{{ url('/') }}"/>
+	<div class="wrapper">
+    <input class="baseUrl" type="hidden" value="{{ url('/') }}"/>
 		<header class="main-header">
 			<!-- Logo -->
 			<a href="{{ url('/') }}" class="logo">
@@ -58,15 +58,13 @@
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
-								<span class="hidden-xs">@{{username}}</span>
+								<span class="hidden-xs username-txt"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header">
 									<img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-									<p>
-										@{{fullname}} - @{{role}}
-									</p>
+									<p class="nameAndRole-txt"></p>
 								</li>
 								<!-- Menu Body -->
 								{{-- <li class="user-body">
@@ -88,8 +86,8 @@
 									<div class="pull-left">
 										<a href="#" class="btn btn-default btn-flat">Profil</a>
 									</div>
-									<div class="pull-right">
-										<a href="#" class="btn btn-default btn-flat" @click="onLogOut">Keluar</a>
+									<div class="pull-right" id="btn-logout">
+										<a href="#" class="btn btn-default btn-flat">Keluar</a>
 									</div>
 								</li>
 							</ul>
@@ -110,9 +108,6 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>
-					Sistem Administrasi Bintang Vet Clinic
-				</h1>
 				{{-- <ol class="breadcrumb">
 					<li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li class="active">Dashboard</li>
@@ -182,6 +177,6 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
     @yield('script-content')
-    <script src="{{ asset('main/js/master-vue.js') }}"></script>
+    <script src="{{ asset('main/js/master.js') }}"></script>
 </body>
 </html>

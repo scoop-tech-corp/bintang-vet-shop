@@ -1,3 +1,8 @@
+.menuCabang, .menuUser, .menuPasien, .menuPendaftaran, .menuDokter, .menuPeriksa,
+.menuTindakan, .menuGudang, .menuPembayaran, .menuKeuangan, .menuKunjungan {
+	display: none;
+}
+
 .section-logo-vet-clinic {
 	padding: 10px 0px; text-align: center
 }

@@ -37,10 +37,10 @@ const loginApp = new Vue({
 
       this.message = '';
       if (formData.username && formData.password) {
-        axios.post(this.$refs.baseUrl.value + '/api/login', formData, { headers: { "Content-Type": "application/json" } })
+        axios.post(this.$refs.baseUrl.value + '/api/masuk', formData, { headers: { "Content-Type": "application/json" } })
         .then(resp => {
           this.showAlert = true; this.isSuccess = true;
-          this.message = 'Login Success';
+          this.message = 'Berhasil Masuk!';
           this.form.username = ''; this.form.password = '';
           const getDataLogin = resp.data;
 
