@@ -24,7 +24,6 @@ Route::group(['middleware' => ['api']], function () {
 
     Route::group(['middleware' => ['jwt.auth']], function () {
         
-        Route::post('register', 'UserController@register');
         Route::post('keluar', 'UserController@logout');
 
         //cabang
@@ -34,8 +33,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('cabang', 'CabangController@delete');
 
         //user management
-        
-
+        Route::post('register', 'UserController@register');
+        Route::put('register', 'UserController@update');
     });
 });
 
