@@ -47,6 +47,13 @@ class UserController extends Controller
 
         $user = User::find($request->user()->id);
 
+        if ($user->status == 'inactive') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         return response()->json(
             [
                 'user_id' => $request->user()->id,
