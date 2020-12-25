@@ -17,12 +17,16 @@ Route::get('/', function () {
 	return view('index');
 });
 
-Route::get('/login', function () {
+Route::get('/masuk', function () {
 	return view('auth.login');
 });
 
 Route::get('/user', function () {
 	return view('user.index');
+});
+
+Route::get('/cabang', function () {
+	return view('cabang.index');
 });
 
 // Route::get('/cabang','BranchController@index');
