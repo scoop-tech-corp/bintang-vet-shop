@@ -34,7 +34,7 @@ class UserController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
                     'message' => 'The given data was invalid.',
-                    'errors' => ['The password or username you entered is wrong!'],
+                    'errors' => ['Username atau password yang dimasukkan salah!'],
                 ], 401);
             }
         } catch (JWTException $e) {
@@ -47,9 +47,9 @@ class UserController extends Controller
 
         $user = User::find($request->user()->id);
 
-        if ($user->status == 'inactive') {
+        if ($user->status == 'Non Aktif') {
             return response()->json([
-                'message' => 'The user role was invalid.',
+                'message' => 'User yang dimasukkan tidak valid.',
                 'errors' => ['Access is not allowed!'],
             ], 403);
         }
@@ -68,17 +68,28 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'User yang dimasukkan tidak valid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $messages = [
             'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, simbol, dan angka!',
         ];
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|min:3|max:25|unique:users',
-            'fullname' => 'required|min:3|max:255',
+            'username' => 'required|min:3|max:25|unique:users,username',
+            'nama_lengkap' => 'required|min:3|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-            'phone_number' => 'required|numeric|digits_between:10,12|unique:users',
-            'role' => 'required',
+            'nomor_ponsel' => 'required|numeric|digits_between:10,12|unique:users,phone_number',
+            'role' => 'required|string',
+            'status' => 'required|boolean',
+            'kode_cabang' => 'required|string',
+            'cabang' => 'required|string',
         ], $messages);
 
         if ($validator->fails()) {
@@ -90,14 +101,20 @@ class UserController extends Controller
             ], 400);
         }
 
+        $lastuser = User::orderBy('id','desc')->first()->id;
+
+        $staff_number = 'BVC-U-' . $request->json('kode_cabang') . '-' . str_pad($lastuser + 1, 4, 0, STR_PAD_LEFT);
+
         $user = User::create([
+            'staffing_number' => $staff_number,
             'username' => $request->json('username'),
-            'fullname' => $request->json('fullname'),
+            'fullname' => $request->json('nama_lengkap'),
             'email' => $request->json('email'),
             'password' => bcrypt($request->json('password')),
-            'status' => 'active',
-            'phone_number' => strval($request->json('phone_number')),
+            'status' => $request->json('status'),
+            'phone_number' => strval($request->json('nomor_ponsel')),
             'role' => $request->json('role'),
+            'branch' => $request->json('kode_cabang'),
             'created_by' => $request->user()->fullname,
         ]);
 
@@ -107,6 +124,66 @@ class UserController extends Controller
             ]
         );
     }
+
+    public function update(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $messages = [
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, simbol, dan angka!',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            //'username' => 'required|min:3|max:25',
+            'nama_lengkap' => 'required|min:3|max:255',
+            //'email' => 'required|email|max:255',
+            'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            //'nomor_ponsel' => 'required|numeric|digits_between:10,12',
+            'role' => 'required|string',
+            'status' => 'required|boolean',
+            'kode_cabang' => 'required|string',
+            'cabang' => 'required|string',
+        ], $messages);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $errors,
+            ], 400);
+        }
+
+        $user = User::find($request->id);
+        
+        if (is_null($user)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        $user->fullname = $request->nama_lengkap;
+        $user->password = bcrypt($request->password);
+        $user->role = $request->role;
+        $user->status = $request->status;
+        $user->branch = $request->kode_cabang;
+        $user->status = $request->status;
+        $user->update_by = $request->user()->fullname;
+        $user->updated_at = \Carbon\Carbon::now();
+        $user->save();
+
+        return response()->json([
+            'message' => 'Berhasil mengupdate Cabang',
+        ], 200);
+    }
+
+
 
     // public function getAuthenticatedUser()
     // {

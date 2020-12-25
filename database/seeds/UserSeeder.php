@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456789',
             'role' => 'admin',
             'branch' => 'AS',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456788',
             'role' => 'resepsionis',
             'branch' => 'AS',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456787',
             'role' => 'dokter',
             'branch' => 'AS',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -57,10 +57,10 @@ class UserSeeder extends Seeder
             'fullname' => 'tona saputri',
             'email' => 'tona@gmail.com',
             'password' => bcrypt('password'),
-            'phone_number' => '081223456767',
+            'phone_number' => '081223456888',
             'role' => 'dokter',
             'branch' => 'AS',
-            'status' => 'inactive',
+            'status' => '0',
             'created_by' => 'budi',
         ]);
 
@@ -74,7 +74,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456779',
             'role' => 'admin',
             'branch' => 'KM',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -87,7 +87,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456768',
             'role' => 'resepsionis',
             'branch' => 'KM',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -100,7 +100,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456757',
             'role' => 'dokter',
             'branch' => 'KM',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -113,7 +113,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456747',
             'role' => 'dokter',
             'branch' => 'KM',
-            'status' => 'inactive',
+            'status' => '0',
             'created_by' => 'budi',
         ]);
 
@@ -127,7 +127,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456749',
             'role' => 'admin',
             'branch' => 'TJ',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -140,7 +140,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456778',
             'role' => 'resepsionis',
             'branch' => 'TJ',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -153,7 +153,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456777',
             'role' => 'dokter',
             'branch' => 'TJ',
-            'status' => 'active',
+            'status' => '1',
             'created_by' => 'budi',
         ]);
 
@@ -166,7 +166,7 @@ class UserSeeder extends Seeder
             'phone_number' => '081223456767',
             'role' => 'dokter',
             'branch' => 'TJ',
-            'status' => 'inactive',
+            'status' => '0',
             'created_by' => 'budi',
         ]);
 
