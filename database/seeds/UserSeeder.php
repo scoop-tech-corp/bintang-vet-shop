@@ -11,6 +11,30 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+
+        //branches
+        DB::table('branches')->insert([
+            'branch_code' => 'AS',
+            'branch_name' => 'Alam Sutera',
+            'created_by' => 'budi',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('branches')->insert([
+            'branch_code' => 'KM',
+            'branch_name' => 'Kembangan',
+            'created_by' => 'budi',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('branches')->insert([
+            'branch_code' => 'TJ',
+            'branch_name' => 'Tanjung Duren',
+            'created_by' => 'budi',
+            'created_at' => '2020-12-30'
+        ]);
+
+        
         //cabang alam sutera
         DB::table('users')->insert([
             'staffing_number' => '12345',
@@ -20,9 +44,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456789',
             'role' => 'admin',
-            'branch' => 'AS',
+            'branch' => 1,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -33,9 +58,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456788',
             'role' => 'resepsionis',
-            'branch' => 'AS',
+            'branch' => 1,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -46,9 +72,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456787',
             'role' => 'dokter',
-            'branch' => 'AS',
+            'branch' => 1,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -59,9 +86,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456888',
             'role' => 'dokter',
-            'branch' => 'AS',
+            'branch' => 1,
             'status' => '0',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         //cabang kembangan
@@ -73,9 +101,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456779',
             'role' => 'admin',
-            'branch' => 'KM',
+            'branch' => 2,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -86,9 +115,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456768',
             'role' => 'resepsionis',
-            'branch' => 'KM',
+            'branch' => 2,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -99,9 +129,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456757',
             'role' => 'dokter',
-            'branch' => 'KM',
+            'branch' => 2,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -112,9 +143,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456747',
             'role' => 'dokter',
-            'branch' => 'KM',
+            'branch' => 2,
             'status' => '0',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         //cabang tanjung duren
@@ -126,9 +158,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456749',
             'role' => 'admin',
-            'branch' => 'TJ',
+            'branch' => 3,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -139,9 +172,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456778',
             'role' => 'resepsionis',
-            'branch' => 'TJ',
+            'branch' => 3,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -152,9 +186,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456777',
             'role' => 'dokter',
-            'branch' => 'TJ',
+            'branch' => 3,
             'status' => '1',
             'created_by' => 'budi',
+            'created_at' => '2020-12-30'
         ]);
 
         DB::table('users')->insert([
@@ -165,29 +200,10 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456767',
             'role' => 'dokter',
-            'branch' => 'TJ',
+            'branch' => 3,
             'status' => '0',
             'created_by' => 'budi',
-        ]);
-
-        //branches
-        DB::table('branches')->insert([
-            'branch_code' => 'AS',
-            'branch_name' => 'Alam Sutera',
-            'created_by' => 'budi'
-        ]);
-        
-        DB::table('branches')->insert([
-            'branch_code' => 'KM',
-            'branch_name' => 'Kembangan',
-            'created_by' => 'budi'
-        ]);
-
-        DB::table('branches')->insert([
-            'branch_code' => 'TJ',
-            'branch_name' => 'Tanjung Duren',
-            'created_by' => 'budi'
-        ]);
-        
+            'created_at' => '2020-12-30'
+        ]);        
     }
 }
