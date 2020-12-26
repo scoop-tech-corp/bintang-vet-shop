@@ -33,6 +33,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('cabang', 'CabangController@delete');
 
         //user management
+        Route::get('user', 'UserController@index');
         Route::post('register', 'UserController@register');
         Route::put('register', 'UserController@update');
     });

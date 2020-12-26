@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -123,6 +124,23 @@ class UserController extends Controller
                 'message' => 'Register Berhasil!',
             ], 200
         );
+    }
+
+    public function index(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $user = DB::table('users')
+            ->join('branches', 'branches.id', '=', 'users.id')
+            ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
+
+        return response()->json($user, 200);
     }
 
     public function update(Request $request)
