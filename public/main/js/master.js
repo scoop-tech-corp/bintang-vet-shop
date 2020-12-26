@@ -9,8 +9,7 @@ $(document).ready(function() {
 
   let getAuthUser = localStorage.getItem('vet-clinic');
   if (!getAuthUser) {
-    alert('You Must Login First!');
-    location.href = this.$refs.baseUrl.value + '/login';
+    location.href = $('.baseUrl').val() + '/masuk';
   } else {
     getAuthUser = JSON.parse(getAuthUser);
     
@@ -29,7 +28,7 @@ $(document).ready(function() {
       $('.menuDokter').show();   $('.menuTindakan').show();
       $('.menuGudang').show();   $('.menuPembayaran').show();
       $('.menuKeuangan').show(); $('.menuKunjungan').show();
-      $('.menuCabang').show();      
+      $('.menuCabang').show();   $('.menuUser').show();
     } else if (role === 'resepsionis') {
       $('.menuPasien').show();   $('.menuPendaftaran').show();
       $('.menuTindakan').show(); $('.menuPembayaran').show();
@@ -41,27 +40,45 @@ $(document).ready(function() {
     }
   }
 
+  // set active class for current page
+  const pathName = window.location.pathname;
+  $('.sidebar-menu a').each(function(Key,Value) {
+    if (Value['href'] === window.location.origin + pathName) {
+      $(Value).parent().addClass('active');
+
+      if (pathName === '/gudang1' || pathName === '/gudang2') {
+        $('.menuGudang').addClass('active');
+      }
+    }
+  });
+
+  $('.listMenu').click(function() {
+    // $('.loading-screen').show();
+  });
+
   $('#btn-logout').click(function() {
+    const fd = new FormData();
+    fd.append('username', username);
+
     $.ajax({
       url : $('.baseUrl').val() + '/api/keluar',
       type: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
-      data: { 'username': username },
+      dataType: "json",
+      headers: { 'Authorization': `Bearer ${token}` },
+      data: fd, contentType: false, cache: false,
+      processData: false,
       success:function(resp) {
-        console.log('resp', resp);
         localStorage.removeItem('vet-clinic');
         location.href = $('.baseUrl').val() + '/masuk';
       },
       error: function(err) {
-        console.log('err', err);
-        if (err.status == '401') {
+        if (err.status == 401) {
           localStorage.removeItem('vet-clinic');
           location.href = $('.baseUrl').val() + '/masuk';
         }
       }
     });
   });
-
 });
 
 // const masterApp = new Vue({

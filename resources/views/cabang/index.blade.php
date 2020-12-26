@@ -12,19 +12,31 @@
     <table id="table-cabang" class="table text-nowrap">
       <thead>
         <tr>
-          <th>No</th>
-          <th>Kode Cabang</th>
-          <th>Cabang</th>
+          <th @click="onOrdering('id')">No
+            <span v-if="columnStatus.id == 'desc'" class="fa fa-sort-desc"></span>
+            <span v-if="columnStatus.id == 'asc'" class="fa fa-sort-asc"></span>
+            <span v-if="columnStatus.id == 'none'" class="fa fa-sort"></span>
+          </th>
+          <th @click="onOrdering('branch_code')">Kode Cabang
+            <span v-if="columnStatus.branch_code == 'desc'" class="fa fa-sort-desc"></span>
+            <span v-if="columnStatus.branch_code == 'asc'" class="fa fa-sort-asc"></span>
+            <span v-if="columnStatus.branch_code == 'none'" class="fa fa-sort"></span>
+          </th>
+          <th @click="onOrdering('branch_name')">Cabang
+            <span v-if="columnStatus.branch_name == 'desc'" class="fa fa-sort-desc"></span>
+            <span v-if="columnStatus.branch_name == 'asc'" class="fa fa-sort-asc"></span>
+            <span v-if="columnStatus.branch_name == 'none'" class="fa fa-sort"></span>
+          </th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in listCabang">
           <td>@{{ index + 1 }}</td>
-          <td>@{{ item.BranchCode }}</td>
-          <td>@{{ item.BranchName }}</td>
+          <td>@{{ item.branch_code }}</td>
+          <td>@{{ item.branch_name }}</td>
           <td>
-            <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button>
+            {{-- <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button> --}}
             <button type="button" class="btn btn-danger" @click="openFormDelete(item)">Hapus</button>
           </td>
         </tr>
@@ -54,6 +66,9 @@
                 <label for="cabang">Cabang</label>
                 <input type="text" class="form-control" @keyup="namaCabangKeyup" v-model="namaCabang" placeholder="Masukan nama cabang">
                 <div class="validate-error" v-if="namaCabangErr">Nama cabang harus di isi</div>
+              </div>
+              <div class="form-group">
+                <div class="validate-error" v-if="beErr" v-html="msgBeErr"></div>
               </div>
             </div>
           </form>
@@ -106,13 +121,13 @@
 
 @section('script-content')
 <script>
-  $('#table-cabang').DataTable({
-    'paging'     : false,
-    'searching'  : false,
-    "info"       : false,
-    "columnDefs" : [{ "orderable": false, "targets": 3 }],
-    responsive: true
-  });
+  // $('#table-cabang').DataTable({
+  //   'paging'     : false,
+  //   'searching'  : false,
+  //   "info"       : false,
+  //   "columnDefs" : [{ "orderable": false, "targets": 3 }],
+  //   responsive: true
+  // });
 </script>
 @endsection
 

@@ -29,6 +29,14 @@ Route::get('/cabang', function () {
 	return view('cabang.index');
 });
 
+Route::get('/gudang1', function () {
+	return view('gudang.gudang1-index');
+});
+
+Route::get('/gudang2', function () {
+	return view('gudang.gudang2-index');
+});
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {
@@ -61,14 +69,6 @@ Route::get('/cabang', function () {
 
 // Route::get('/tindakan', function () {
 // 	return view('tindakan.index');
-// });
-
-// Route::get('/gudang1', function () {
-// 	return view('gudang1.index');
-// });
-
-// Route::get('/gudang2', function () {
-// 	return view('gudang2.index');
 // });
 
 // Route::get('/pembayaran', function () {

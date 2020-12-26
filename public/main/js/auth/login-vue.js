@@ -8,6 +8,8 @@ const loginApp = new Vue({
     message: '',
     usernameError: false,
     passwordError: false,
+    passwordType: 'password',
+    showPassword: false,
     showAlert: false,
     isSuccess: false,
     baseUrl: ''
@@ -29,6 +31,10 @@ const loginApp = new Vue({
       this.passwordError = !value ? true : false;
       this.usernameError = !this.form.username ? true : false;
     },
+    togglePassword: function() {
+      this.showPassword = !this.showPassword;
+      this.passwordType = !this.showPassword ? 'password' : 'text';
+    },
 		onSubmit: function() {
       const formData = {
         'username': this.form.username,
@@ -37,6 +43,7 @@ const loginApp = new Vue({
 
       this.message = '';
       if (formData.username && formData.password) {
+        $('.loading-screen').show();
         axios.post(this.$refs.baseUrl.value + '/api/masuk', formData, { headers: { "Content-Type": "application/json" } })
         .then(resp => {
           this.showAlert = true; this.isSuccess = true;
@@ -62,12 +69,13 @@ const loginApp = new Vue({
           this.showAlert = true; this.isSuccess = false;
         })
         .finally(() => {
+          $('.loading-screen').hide();
           setTimeout(() => {
             if (this.isSuccess) { 
               this.showAlert = false;
               location.href = this.$refs.baseUrl.value + '/'; 
             }
-          }, 2000);
+          }, 1000);
         });
       }
 		}
