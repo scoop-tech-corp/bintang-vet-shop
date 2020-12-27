@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456789',
             'role' => 'admin',
-            'branch' => 1,
+            'branch_id' => 1,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456788',
             'role' => 'resepsionis',
-            'branch' => 1,
+            'branch_id' => 1,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456787',
             'role' => 'dokter',
-            'branch' => 1,
+            'branch_id' => 1,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -86,7 +86,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456888',
             'role' => 'dokter',
-            'branch' => 1,
+            'branch_id' => 1,
             'status' => '0',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -101,7 +101,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456779',
             'role' => 'admin',
-            'branch' => 2,
+            'branch_id' => 2,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -115,7 +115,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456768',
             'role' => 'resepsionis',
-            'branch' => 2,
+            'branch_id' => 2,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -129,7 +129,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456757',
             'role' => 'dokter',
-            'branch' => 2,
+            'branch_id' => 2,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -143,7 +143,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456747',
             'role' => 'dokter',
-            'branch' => 2,
+            'branch_id' => 2,
             'status' => '0',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -158,7 +158,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456749',
             'role' => 'admin',
-            'branch' => 3,
+            'branch_id' => 3,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -172,7 +172,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456778',
             'role' => 'resepsionis',
-            'branch' => 3,
+            'branch_id' => 3,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -186,7 +186,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456777',
             'role' => 'dokter',
-            'branch' => 3,
+            'branch_id' => 3,
             'status' => '1',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
@@ -200,7 +200,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'phone_number' => '081223456767',
             'role' => 'dokter',
-            'branch' => 3,
+            'branch_id' => 3,
             'status' => '0',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'

@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('image_profile')->nullable();
             $table->string('role')->nullable();
-            $table->integer('branch');
+            $table->integer('branch_id');
             $table->boolean('status');                   //aktif atau tidak jika tidak aktif maka tidak dapat login
             $table->string('created_by');
             $table->string('update_by')->nullable();    //siapa yang akan mengubah status user

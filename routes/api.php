@@ -34,8 +34,8 @@ Route::group(['middleware' => ['api']], function () {
 
         //user management
         Route::get('user', 'UserController@index');
-        Route::post('register', 'UserController@register');
-        Route::put('register', 'UserController@update');
+        Route::post('user', 'UserController@register');
+        Route::put('user', 'UserController@update');
     });
 });
 
