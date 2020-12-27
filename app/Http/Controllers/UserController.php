@@ -50,7 +50,7 @@ class UserController extends Controller
 
         if ($user->status == 'Non Aktif') {
             return response()->json([
-                'message' => 'User yang dimasukkan tidak valid!',
+                'message' => 'Akun yang anda gunakan tidak aktif!',
                 'errors' => ['Akses tidak diijinkan!'],
             ], 403);
         }
@@ -135,10 +135,28 @@ class UserController extends Controller
             ], 403);
         }
 
-        $user = DB::table('users')
-            ->join('branches', 'branches.id', '=', 'users.id')
-            ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
+        if ($request->orderby == 'asc') {
+
+            $user = DB::table('users')
+                ->join('branches', 'users.branch_id', '=', 'branches.id')
+                ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'asc')->get();
+
+        } else if ($request->orderby == 'desc') {
+
+            $user = DB::table('users')
+                ->join('branches', 'users.branch_id', '=', 'branches.id')
+                ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'desc')->get();
+
+        } else {
+
+            $user = DB::table('users')
+                ->join('branches', 'users.branch_id', '=', 'branches.id')
+                ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
+
+        }
 
         return response()->json($user, 200);
     }
@@ -196,6 +214,11 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Berhasil mengupdate Cabang',
         ], 200);
+    }
+
+    public function Search(Type $var = null)
+    {
+        # code...
     }
 
     // public function getAuthenticatedUser()

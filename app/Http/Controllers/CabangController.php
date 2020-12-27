@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Validator;
 
 class CabangController extends Controller
@@ -18,9 +17,22 @@ class CabangController extends Controller
             ], 403);
         }
 
-        $branch = Branch::select('id', 'branch_code', 'branch_name','created_by','created_at')->get();
+        if ($request->orderby == 'asc') {
+
+            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->orderBy($request->column, 'asc')->get();
+
+        } else if ($request->orderby == 'desc') {
+
+            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->orderBy($request->column, 'desc')->get();
+
+        } else {
+
+            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->get();
+
+        }
 
         return response()->json($branch, 200);
+
     }
 
     public function create(Request $request)
@@ -83,7 +95,7 @@ class CabangController extends Controller
         }
 
         $branch = Branch::find($request->id);
-        
+
         if (is_null($branch)) {
             return response()->json([
                 'message' => 'The data was invalid.',

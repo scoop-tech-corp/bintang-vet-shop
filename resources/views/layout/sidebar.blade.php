@@ -35,8 +35,11 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Gudang 1</a></li>
-					<li><a href="{{ url('/gudang2') }}"><i class="fa fa-circle-o"></i> Gudang 2</a></li>
+					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Kategori Barang</a></li>
+					<li><a href="{{ url('/gudang2') }}"><i class="fa fa-circle-o"></i> Satuan Barang</a></li>
+					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Daftar Barang</a></li>
+					<li><a href="{{ url('/gudang2') }}"><i class="fa fa-circle-o"></i> Pembagian Harga</a></li>
+					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Daftar Jasa</a></li>
 				</ul>
 			</li>
 			<li class="menuPembayaran"><a href="{{ url('/pembayaran') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Pembayaran</span></a></li>
