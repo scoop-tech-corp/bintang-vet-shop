@@ -12,6 +12,25 @@
 	border-radius: 50%;
 }
 
+.fa-sort-asc, .fa-sort-desc {
+	opacity: 0.5;
+}
+
+.fa-sort {
+	opacity: 0.2;
+}
+
+.loading-screen {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url('/assets/loading.gif') 50% 50% no-repeat rgb(249,249,249,0.5);
+  display: none;
+}
+
 .m-b-15px { 
 	margin-bottom: 15px;
 }

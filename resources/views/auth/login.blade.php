@@ -58,10 +58,12 @@
           <span class="validate-error">@{{usernameError ? 'Username perlu di isi' : ''}}</span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" :class="{'error-form-control' : passwordError}"
+          <input v-bind:type="passwordType" class="form-control" :class="{'error-form-control' : passwordError}"
             @keyup="passwordKeyup" @keydown.enter="onSubmit" placeholder="Kata Sandi" v-model="form.password">
-          <span class="glyphicon glyphicon-eye-open form-control-feedback"></span>
-          {{-- <span class="glyphicon glyphicon-eye-close form-control-feedback"></span> --}}
+
+          <span @click="togglePassword" class="glyphicon icon-password" 
+            :class="{ 'glyphicon-eye-open': showPassword, 'glyphicon-eye-close': !showPassword }"></span>
+
           <span class="validate-error">@{{passwordError ? 'Kata Sandi perlu di isi' : ''}}</span>
         </div>
         <div class="row">
@@ -75,6 +77,7 @@
     </div>
     <!-- /.login-box-body -->
   </div>
+  <div class="loading-screen"></div>
 </div>
 <!-- /.login-box -->
 

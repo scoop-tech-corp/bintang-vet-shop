@@ -145,7 +145,8 @@
 				immediately after the control sidebar -->
 		<div class="control-sidebar-bg"></div>
 
-	</div>
+  </div>
+  <div class="loading-screen"></div>
   <!-- ./wrapper -->
 
     <!-- jQuery 3 -->
@@ -153,7 +154,9 @@
     <!-- Bootstrap 3.3.7 -->
     <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
-    @yield('vue-content')
+	  <script src="{{ asset('main/js/master.js') }}"></script>
+
+	  @yield('vue-content')
 
     <!-- FastClick -->
     <script src="{{ asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
@@ -173,10 +176,9 @@
     <script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
 
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('dist/js/pages/dashboard2.js') }}"></script>
+    {{-- <script src="{{ asset('dist/js/pages/dashboard2.js') }}"></script> --}}
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
-    @yield('script-content')
-    <script src="{{ asset('main/js/master.js') }}"></script>
+	@yield('script-content')
 </body>
 </html>
