@@ -90,7 +90,7 @@ class UserController extends Controller
             'role' => 'required|string',
             'status' => 'required|boolean',
             'kode_cabang' => 'required|string',
-            'cabang' => 'required|string',
+            'id_cabang' => 'required|integer',
         ], $messages);
 
         if ($validator->fails()) {
@@ -102,7 +102,9 @@ class UserController extends Controller
             ], 422);
         }
 
-        $lastuser = User::orderBy('id', 'desc')->first()->id;
+        $lastuser = DB::table('users')
+            ->where('branch_id', '=', $request->id_cabang)
+            ->count();
 
         $staff_number = 'BVC-U-' . $request->json('kode_cabang') . '-' . str_pad($lastuser + 1, 4, 0, STR_PAD_LEFT);
 
@@ -115,7 +117,7 @@ class UserController extends Controller
             'status' => $request->json('status'),
             'phone_number' => strval($request->json('nomor_ponsel')),
             'role' => $request->json('role'),
-            'branch' => $request->json('kode_cabang'),
+            'branch_id' => $request->json('id_cabang'),
             'created_by' => $request->user()->fullname,
         ]);
 
@@ -175,12 +177,13 @@ class UserController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
+            'nomor_kepegawaian' => 'required|string',
             'nama_lengkap' => 'required|min:3|max:255',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'role' => 'required|string',
             'status' => 'required|boolean',
+            'id_cabang' => 'required|integer',
             'kode_cabang' => 'required|string',
-            'cabang' => 'required|string',
         ], $messages);
 
         if ($validator->fails()) {
@@ -201,11 +204,30 @@ class UserController extends Controller
             ], 404);
         }
 
+        $chk_user_branch = DB::table('users')
+            ->select('branch_id')
+            ->where('id', '=', $request->id)->get();
+
+        $staff_number = '';
+
+        if ($chk_user_branch != $request->id_cabang) {
+            $lastuser = DB::table('users')
+                ->where('branch_id', '=', $request->id_cabang)
+                ->count();
+
+            $staff_number = 'BVC-U-' . $request->json('kode_cabang') . '-' . str_pad($lastuser + 1, 4, 0, STR_PAD_LEFT);
+        } else {
+
+            $staff_number = $request->nomor_kepegawaian;
+
+        }
+
+        $user->staffing_number = $staff_number;
         $user->fullname = $request->nama_lengkap;
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->status = $request->status;
-        $user->branch = $request->kode_cabang;
+        $user->branch_id = $request->id_cabang;
         $user->status = $request->status;
         $user->update_by = $request->user()->fullname;
         $user->updated_at = \Carbon\Carbon::now();
@@ -216,7 +238,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function Search(Type $var = null)
+    public function search(Type $var = null)
     {
         # code...
     }
