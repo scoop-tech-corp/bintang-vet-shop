@@ -85,7 +85,7 @@ class UserController extends Controller
             'username' => 'required|min:3|max:25|unique:users,username',
             'nama_lengkap' => 'required|min:3|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'password' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'nomor_ponsel' => 'required|numeric|digits_between:10,12|unique:users,phone_number',
             'role' => 'required|string',
             'status' => 'required|boolean',
@@ -142,21 +142,21 @@ class UserController extends Controller
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
                 ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'asc')->get();
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'asc')->get();
 
         } else if ($request->orderby == 'desc') {
 
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
                 ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'desc')->get();
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'desc')->get();
 
         } else {
 
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
                 ->select('users.id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
 
         }
 
@@ -179,7 +179,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nomor_kepegawaian' => 'required|string',
             'nama_lengkap' => 'required|min:3|max:255',
-            'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            //'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'role' => 'required|string',
             'status' => 'required|boolean',
             'id_cabang' => 'required|integer',
@@ -224,7 +224,7 @@ class UserController extends Controller
 
         $user->staffing_number = $staff_number;
         $user->fullname = $request->nama_lengkap;
-        $user->password = bcrypt($request->password);
+        //$user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->status = $request->status;
         $user->branch_id = $request->id_cabang;
