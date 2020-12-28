@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Validator;
@@ -19,15 +19,21 @@ class CabangController extends Controller
 
         if ($request->orderby == 'asc') {
 
-            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->orderBy($request->column, 'asc')->get();
+            $branch = DB::table('branches')
+            ->select('id', 'branch_code', 'branch_name', 'created_by',
+            DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'asc')->get();
 
         } else if ($request->orderby == 'desc') {
 
-            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->orderBy($request->column, 'desc')->get();
+            $branch = DB::table('branches')
+            ->select('id', 'branch_code', 'branch_name', 'created_by', 
+            DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'desc')->get();
 
         } else {
 
-            $branch = Branch::select('id', 'branch_code', 'branch_name', 'created_by', 'created_at')->get();
+            $branch = DB::table('branches')
+                ->select('id', 'branch_code', 'branch_name', 'created_by',
+                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->get();
 
         }
 
