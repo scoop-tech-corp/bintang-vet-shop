@@ -15,7 +15,9 @@
   <!-- jvectormap -->
   <link rel="stylesheet" href="{{ asset('bower_components/jvectormap/jquery-jvectormap.css') }}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{ asset('bower_components/datatables/css/dataTables.bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('bower_components/datatables/css/dataTables.bootstrap.min.css') }}">
+	<!-- Select2 -->
+  <link rel="stylesheet" href="{{ asset('bower_components/select2/dist/css/select2.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.css') }}">
   <link rel="stylesheet" href="{{ asset('dist/css/skins/_all-skins.css') }}">
@@ -28,10 +30,17 @@
 
 	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/input-custom.css') }}">
 	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/global.css') }}">
+	@yield('css-content')	
 
   <!-- Google Font -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		
+	<!-- jQuery 3 -->
+	<script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -149,14 +158,9 @@
   <div class="loading-screen"></div>
   <!-- ./wrapper -->
 
-    <!-- jQuery 3 -->
-    <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap 3.3.7 -->
-    <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('main/js/master.js') }}"></script>
 
-	  <script src="{{ asset('main/js/master.js') }}"></script>
-
-	  @yield('vue-content')
+		@yield('vue-content')
 
     <!-- FastClick -->
     <script src="{{ asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
@@ -173,12 +177,15 @@
     <!-- SlimScroll -->
     <script src="{{ asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
     <!-- ChartJS -->
-    <script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
+		<script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
+		<!-- Select2 -->
+		<script src="{{ asset('bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     {{-- <script src="{{ asset('dist/js/pages/dashboard2.js') }}"></script> --}}
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
-	@yield('script-content')
+		@yield('script-content')
+
 </body>
 </html>

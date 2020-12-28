@@ -1,0 +1,21 @@
+.inner-box-title {
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0px;
+}
+
+.search-section {
+	width: 200px;
+	position: relative;
+}
+
+.search-section > i {
+	position: absolute;
+	top: 10px;
+	left: 15px;
+}
+
+.search-section > input {
+	padding: 6px 12px 6px 40px;
+}
+ 

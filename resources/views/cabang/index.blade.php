@@ -9,14 +9,10 @@
   <!-- /.box-header -->
   <!-- form start -->
   <div class="box-body table-responsive">
-    <table id="table-cabang" class="table text-nowrap">
+    <table id="table-cabang" class="table table-striped text-nowrap">
       <thead>
         <tr>
-          <th @click="onOrdering('id')">No
-            <span v-if="columnStatus.id == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.id == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.id == 'none'" class="fa fa-sort"></span>
-          </th>
+          <th>No</th>
           <th @click="onOrdering('branch_code')">Kode Cabang
             <span v-if="columnStatus.branch_code == 'desc'" class="fa fa-sort-desc"></span>
             <span v-if="columnStatus.branch_code == 'asc'" class="fa fa-sort-asc"></span>
@@ -37,7 +33,7 @@
           <td>@{{ item.branch_name }}</td>
           <td>
             {{-- <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button> --}}
-            <button type="button" class="btn btn-danger" @click="openFormDelete(item)">Hapus</button>
+            <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>
         </tr>
       </tbody>

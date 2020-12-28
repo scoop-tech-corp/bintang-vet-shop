@@ -3317,7 +3317,7 @@ table.text-center th {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin: 7% auto;
+  margin: 2% auto;
 }
 @media (max-width: 768px) {
   .login-box,

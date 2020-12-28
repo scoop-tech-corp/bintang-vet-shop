@@ -12,12 +12,11 @@ $(document).ready(function() {
 			confirmContent: '',
 			kdCabangErr1: false,
 			kdCabangErr2: false,
+			namaCabangErr: false,
 			beErr: false,
 			msgBeErr: '',
-			namaCabangErr: false,
 			listCabang: [],
 			columnStatus: {
-				id: 'none',
 				branch_code: 'none',
 				branch_name: 'none',
 			}
@@ -27,7 +26,7 @@ $(document).ready(function() {
 		},
 		computed: {
 			validateSimpanCabang: function() {
-				return this.kdCabangErr1 || this.kdCabangErr2 || this.beErr || this.namaCabangErr;
+				return this.kdCabangErr1 || this.kdCabangErr2 || this.beErr || this.namaCabangErr || !this.touchedForm;
 			}
 		},
 		methods: {
@@ -40,39 +39,34 @@ $(document).ready(function() {
 			openFormUpdate: function(item) {
 				this.stateModal = 'edit';
 				this.titleModal = 'Ubah Cabang';
-				$('#modal-cabang').modal('show');
+				this.refreshVariable();
 
 				this.idCabang   = item.id;
 				this.kodeCabang = item.BranchCode;
 				this.namaCabang = item.BranchName;
+				$('#modal-cabang').modal('show');
 			},
 			openFormDelete: function(item) {
 				this.stateModal = 'delete';
 				this.idCabang = item.id;
+				this.confirmContent = 'Menghapus cabang akan mempengaruhi keseluruhan data';
 				$('#modal-confirmation').modal('show');
-					this.confirmContent = 'Menghapus cabang akan mempengaruhi keseluruhan data';
 			},
 			kodeCabangKeyup: function(e) {
 				const regexp = /^[^a-z ]*$/;
-				this.kdCabangErr1 = (!this.kodeCabang) ? true : false;
 				this.kdCabangErr2 = (!regexp.test(this.kodeCabang)) ? true : false;
-				this.beErr = false;
+
+				this.validationForm();
 			},
 			namaCabangKeyup: function(e) {
-				this.namaCabangErr = (!this.namaCabang) ? true : false;
-				this.beErr = false;
+				this.validationForm();
 			},
 			onOrdering: function(e) {
 
 				this.columnStatus[e] = (this.columnStatus[e] == 'asc') ? 'desc' : 'asc';
-				if (e === 'id') {
-					this.columnStatus['branch_code'] = 'none';
-					this.columnStatus['branch_name'] = 'none';
-				} else if (e === 'branch_code') {
-					this.columnStatus['id'] = 'none';
+				if (e === 'branch_code') {
 					this.columnStatus['branch_name'] = 'none';
 				} else {
-					this.columnStatus['id'] = 'none';
 					this.columnStatus['branch_code'] = 'none';
 				}
 
@@ -198,9 +192,16 @@ $(document).ready(function() {
 					$('.loading-screen').hide();
 				});
 			},
+			validationForm: function() {
+				this.touchedForm = true;
+				this.kdCabangErr1 = (!this.kodeCabang) ? true : false;
+				this.namaCabangErr = (!this.namaCabang) ? true : false;
+				this.beErr = false;
+			},
 			refreshVariable: function() {
-				this.kodeCabang = '';
-				this.namaCabang = '';
+				this.kodeCabang = ''; this.namaCabang = '';
+				this.kdCabangErr1 = false; this.kdCabangErr2 = false;
+				this.namaCabangErr = false; this.touchedForm = false;
 				this.beErr = false;
 			}
 		}
