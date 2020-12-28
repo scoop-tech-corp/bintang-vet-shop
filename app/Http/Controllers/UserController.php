@@ -141,22 +141,25 @@ class UserController extends Controller
 
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id','users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'asc')->get();
+                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
+                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'asc')->get();
 
         } else if ($request->orderby == 'desc') {
 
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id','users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->orderBy($request->column, 'desc')->get();
+                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
+                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'desc')->get();
 
         } else {
 
             $user = DB::table('users')
                 ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id','users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by', 'users.created_at')->get();
+                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
+                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->get();
 
         }
 
