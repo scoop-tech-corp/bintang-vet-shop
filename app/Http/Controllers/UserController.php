@@ -209,11 +209,11 @@ class UserController extends Controller
 
         $chk_user_branch = DB::table('users')
             ->select('branch_id')
-            ->where('id', '=', $request->id)->get();
+            ->where('id', '=', $request->id)->first();
 
         $staff_number = '';
 
-        if ($chk_user_branch != $request->id_cabang) {
+        if ($chk_user_branch->branch_id != $request->id_cabang) {
             $lastuser = DB::table('users')
                 ->where('branch_id', '=', $request->id_cabang)
                 ->count();
