@@ -52,8 +52,8 @@ $(document).ready(function() {
     }
   });
 
-  $('.listMenu').click(function() {
-    // $('.loading-screen').show();
+  $('.menuCabang').click(function() {
+    $('.loading-screen').show();
   });
 
   $('#btn-logout').click(function() {

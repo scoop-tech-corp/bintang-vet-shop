@@ -20,6 +20,19 @@
 	opacity: 0.2;
 }
 
+.icon-password {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center; 
+}
+
 .loading-screen {
   position: fixed;
   left: 0px;
@@ -29,6 +42,15 @@
   z-index: 9999;
   background: url('/assets/loading.gif') 50% 50% no-repeat rgb(249,249,249,0.5);
   display: none;
+}
+
+.position-valueText-edit {
+  position: absolute;
+  right: 275px;
+}
+
+.p-relative {
+  position: relative;
 }
 
 .m-b-15px { 
