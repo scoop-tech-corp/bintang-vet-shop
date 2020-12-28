@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $user = User::find($request->user()->id);
 
-        if ($user->status == 'Non Aktif') {
+        if ($user->status == 0) {
             return response()->json([
                 'message' => 'Akun yang anda gunakan tidak aktif!',
                 'errors' => ['Akses tidak diijinkan!'],
