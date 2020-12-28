@@ -33,7 +33,7 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'image_profile',
         'role',
-        'branch',
+        'branch_id',
         'status',
         'created_by',
         'update_by',
