@@ -204,6 +204,52 @@ class UserSeeder extends Seeder
             'status' => '0',
             'created_by' => 'budi',
             'created_at' => '2020-12-30'
-        ]);        
+        ]);
+        
+        //pasien
+        DB::table('patients')->insert([
+            'branch_id' => 1,
+            'id_member' => 'BVC-P-AS-0001',
+            'pet_category' => 'kucing',
+            'pet_name' => 'kuki',
+            'pet_gender' => 'betina',
+            'pet_year_age' => 2,
+            'pet_month_age' => 10,
+            'owner_name' => 'agus',
+            'owner_address' => 'tangerang selatan',
+            'owner_phone_number' => '081234560987',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('patients')->insert([
+            'branch_id' => 3,
+            'id_member' => 'BVC-P-KM-0001',
+            'pet_category' => 'anjing',
+            'pet_name' => 'rambo',
+            'pet_gender' => 'jantan',
+            'pet_year_age' => 2,
+            'pet_month_age' => 10,
+            'owner_name' => 'tina',
+            'owner_address' => 'lebak bulus',
+            'owner_phone_number' => '081234560988',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('patients')->insert([
+            'branch_id' => 2,
+            'id_member' => 'BVC-P-TJ-0001',
+            'pet_category' => 'kucing',
+            'pet_name' => 'tabi',
+            'pet_gender' => 'tidak diketahui',
+            'pet_year_age' => 2,
+            'pet_month_age' => 10,
+            'owner_name' => 'tono',
+            'owner_address' => 'pondok indah',
+            'owner_phone_number' => '081234560989',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
