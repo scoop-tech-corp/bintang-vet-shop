@@ -36,6 +36,13 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('user', 'UserController@index');
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
+
+        //pasien
+        Route::get('pasien', 'PasienController@index');
+        Route::get('pasien/detail', 'PasienController@detail');
+        Route::post('pasien', 'PasienController@create');
+        Route::put('pasien', 'PasienController@update');
+        Route::delete('pasien', 'PasienController@delete');
     });
 });
 
