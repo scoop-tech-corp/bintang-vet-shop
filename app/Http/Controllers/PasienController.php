@@ -65,7 +65,7 @@ class PasienController extends Controller
         $validator = Validator::make($request->all(), [
             'kategori_hewan' => 'required|min:3|max:25',
             'nama_hewan' => 'required|min:3|max:25',
-            'jenis_kelamin_hewan' => 'required|string|max:10',
+            'jenis_kelamin_hewan' => 'required|string|max:51',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
             'nama_pemilik' => 'required|string|max:25',
@@ -119,7 +119,7 @@ class PasienController extends Controller
         $validator = Validator::make($request->all(), [
             'kategori_hewan' => 'required|min:3|max:25',
             'nama_hewan' => 'required|min:3|max:25',
-            'jenis_kelamin_hewan' => 'required|string|max:10',
+            'jenis_kelamin_hewan' => 'required|string|max:51',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
             'nama_pemilik' => 'required|string|max:25',
