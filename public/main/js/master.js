@@ -52,9 +52,9 @@ $(document).ready(function() {
     }
   });
 
-  $('.menuCabang').click(function() {
-    $('.loading-screen').show();
-  });
+  // $('.menuCabang').click(function() {
+  //   $('#loading-screen').show();
+  // });
 
   $('#btn-logout').click(function() {
     const fd = new FormData();

@@ -77,7 +77,7 @@ $(document).ready(function() {
 				}
 			},
 			getData: function() {
-				$('.loading-screen').show();
+				$('#loading-screen').show();
 				axios.get($('.baseUrl').val() + '/api/cabang', { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listCabang = resp.data;
@@ -89,7 +89,7 @@ $(document).ready(function() {
 						}
 					})
 					.finally(() => {
-						$('.loading-screen').hide();
+						$('#loading-screen').hide();
 					});
 			},
 			submitCabang: function() {
@@ -150,7 +150,7 @@ $(document).ready(function() {
 							$('#modal-cabang').modal('toggle');
 							this.refreshVariable();
 							this.getData();
-						}, 2000);
+						}, 1000);
 					}
 				})
 				.catch(err => {
@@ -161,7 +161,7 @@ $(document).ready(function() {
 				})
 			},
 			processSave: function(form_data) {
-				$('.loading-screen').show();
+				$('#loading-screen').show();
 				axios.post($('.baseUrl').val() + '/api/cabang', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if(resp.status == 200) {
@@ -172,7 +172,7 @@ $(document).ready(function() {
 							$('#modal-cabang').modal('toggle');
 							this.refreshVariable();
 							this.getData();
-						}, 2000);
+						}, 1000);
 					}
 				})
 				.catch(err => {
@@ -189,7 +189,7 @@ $(document).ready(function() {
 					}
 				})
 				.finally(() => {
-					$('.loading-screen').hide();
+					$('#loading-screen').hide();
 				});
 			},
 			validationForm: function() {

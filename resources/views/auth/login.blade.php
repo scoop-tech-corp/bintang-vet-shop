@@ -77,7 +77,7 @@
     </div>
     <!-- /.login-box-body -->
   </div>
-  <div class="loading-screen"></div>
+  <div id="loading-screen"></div>
 </div>
 <!-- /.login-box -->
 
