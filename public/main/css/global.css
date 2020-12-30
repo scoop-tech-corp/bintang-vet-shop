@@ -33,7 +33,7 @@
   text-align: center; 
 }
 
-.loading-screen {
+#loading-screen {
   position: fixed;
   left: 0px;
   top: 0px;
@@ -44,13 +44,43 @@
   display: none;
 }
 
-.position-valueText-edit {
-  position: absolute;
-  right: 275px;
+.detail-label {
+  font-weight: 700;
+  padding-bottom: 15px;
+}
+
+.detail-value {
+  padding-bottom: 15px;
+  padding-left: 40px;
+}
+
+.inner-box-title {
+	display: flex;
+	justify-content: space-between;
+	margin: 20px 0px;
+}
+
+.input-search-section {
+	width: 200px;
+	position: relative;
+}
+
+.input-search-section > i {
+	position: absolute;
+	top: 10px;
+	left: 15px;
+}
+
+.input-search-section > input {
+	padding: 6px 12px 6px 40px;
 }
 
 .p-relative {
   position: relative;
+}
+
+.p-right-42px {
+  padding-right: 42px;
 }
 
 .m-b-15px { 

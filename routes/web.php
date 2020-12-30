@@ -29,6 +29,10 @@ Route::get('/cabang', function () {
 	return view('cabang.index');
 });
 
+Route::get('/pasien', function () {
+	return view('pasien.index');
+});
+
 Route::get('/gudang1', function () {
 	return view('gudang.gudang1-index');
 });
@@ -54,10 +58,6 @@ Route::get('/gudang2', function () {
 // Route::post('/cabang/update', 'BranchController@update');
 
 // Route::post('/cabang/hapus', 'BranchController@delete');
-
-// Route::get('/pasien', function () {
-// 	return view('pasien.index');
-// });
 
 // Route::get('/dokter', function () {
 // 	return view('dokter.index');

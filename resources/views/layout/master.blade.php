@@ -44,6 +44,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
+		<div id="loading-screen"></div>
     <input class="baseUrl" type="hidden" value="{{ url('/') }}"/>
 		<header class="main-header">
 			<!-- Logo -->
@@ -155,7 +156,6 @@
 		<div class="control-sidebar-bg"></div>
 
   </div>
-  <div class="loading-screen"></div>
   <!-- ./wrapper -->
 
 		<script src="{{ asset('main/js/master.js') }}"></script>

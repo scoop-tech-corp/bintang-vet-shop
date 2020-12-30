@@ -87,17 +87,8 @@ $(document).ready(function() {
 				}
 			},
 			submitConfirm: function() {
-				// const form_data = new FormData();
-				// form_data.append('id', this.idPegawai);
 
 				if (this.stateModal === 'edit') {
-					// form_data.append('nomor_kepegawaian', this.nomorPegawai);
-					// form_data.append('nama_lengkap', this.namaLengkap);
-					// form_data.append('role', this.selectRole);
-					// form_data.append('status', this.selectStatus);
-					// form_data.append('id_cabang', this.selectCabang.id);
-					// form_data.append('kode_cabang', this.selectCabang.branch_code);
-
 					const request = {
 						id: this.idPegawai,
 						nomor_kepegawaian: this.nomorPegawai,
@@ -107,12 +98,12 @@ $(document).ready(function() {
 						id_cabang: this.selectCabang.id,
 						kode_cabang: this.selectCabang.branch_code
 					};
-					
+
 					this.processEdit(request);
 				}
 			},
 			getData: function() {
-				$('.loading-screen').show();
+				$('#loading-screen').show();
 				axios.get($('.baseUrl').val() + '/api/user', { params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listUser = resp.data;
@@ -124,7 +115,7 @@ $(document).ready(function() {
 						}
 					})
 					.finally(() => {
-						$('.loading-screen').hide();
+						$('#loading-screen').hide();
 					});
 			},
 			getDataCabang: function() {
@@ -140,7 +131,7 @@ $(document).ready(function() {
 					});
 			},
 			processSave: function(form_data) {
-				$('.loading-screen').show();
+				$('#loading-screen').show();
 				axios.post($('.baseUrl').val() + '/api/user', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if(resp.status == 200) {
@@ -151,7 +142,7 @@ $(document).ready(function() {
 							$('#modal-user').modal('toggle');
 							this.refreshVariable();
 							this.reloadData();
-						}, 2000);
+						}, 1000);
 					}
 				})
 				.catch(err => {
@@ -168,10 +159,11 @@ $(document).ready(function() {
 					}
 				})
 				.finally(() => {
-					$('.loading-screen').hide();
+					$('#loading-screen').hide();
 				});
 			},
 			processEdit: function(form_data) {
+				$('#loading-screen').show();
 				axios.put($('.baseUrl').val() + '/api/user', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if(resp.status == 200) {
@@ -184,7 +176,7 @@ $(document).ready(function() {
 							$('#modal-user').modal('toggle');
 							this.refreshVariable();
 							this.reloadData();
-						}, 2000);
+						}, 1000);
 					}
 				})
 				.catch(err => {
@@ -202,7 +194,7 @@ $(document).ready(function() {
 					}
 				})
 				.finally(() => {
-					$('.loading-screen').hide();
+					$('#loading-screen').hide();
 				});
 			},
 			onSearch: function(e) {
