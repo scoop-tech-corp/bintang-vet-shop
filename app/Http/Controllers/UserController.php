@@ -241,35 +241,35 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function search(Type $var = null)
+    public function search(Request $request)
     {
-        # code...
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'User yang dimasukkan tidak valid!',
+                'errors' => ['Akses tidak diijinkan!'],
+            ], 403);
+        }
+
+        $user = DB::table('users')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
+                DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))
+            ->where('users.branch_id', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.staffing_number', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.username', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.email', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.role', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.phone_number', 'like', '%' . $request->keyword . '%')
+            ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.status', 'like', '%' . $request->keyword . '%')
+            ->orwhere('users.created_by', 'like', '%' . $request->keyword . '%')
+            ->get();
+
+        return response()->json($user, 200);
+
     }
-
-    // public function getAuthenticatedUser()
-    // {
-    //     try {
-
-    //         if (!$user = JWTAuth::parseToken()->authenticate()) {
-    //             return response()->json(['user_not_found'], 404);
-    //         }
-
-    //     } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-    //         return response()->json(['token_expired'], $e->getStatusCode());
-
-    //     } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-    //         return response()->json(['token_invalid'], $e->getStatusCode());
-
-    //     } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-    //         return response()->json(['token_absent'], $e->getStatusCode());
-
-    //     }
-
-    //     return response()->json(compact('user'));
-    // }
 
     public function logout(Request $request)
     {
@@ -296,6 +296,5 @@ class UserController extends Controller
             [
                 'message' => 'Success!',
             ], 200);
-
     }
 }

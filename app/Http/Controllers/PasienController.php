@@ -54,8 +54,8 @@ class PasienController extends Controller
                 , 'patients.pet_year_age', 'patients.pet_month_age', 'branches.branch_name', 'patients.created_by',
                 DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"),
                 'patients.owner_name', 'patients.owner_address', 'patients.owner_phone_number')
-                ->where('patients.id', '=', $request->id)
-                ->get();
+            ->where('patients.id', '=', $request->id)
+            ->get();
 
         return response()->json($patient, 200);
     }
@@ -187,6 +187,21 @@ class PasienController extends Controller
 
     public function search(Request $request)
     {
-        # code...
+        $patient = DB::table('patients')
+            ->join('branches', 'patients.branch_id', '=', 'branches.id')
+            ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
+                , 'patients.pet_year_age', 'branches.branch_name', 'patients.created_by',
+                DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
+            ->where('patients.isDeleted', '=', 'false')
+            ->where('patients.id_member', 'like', '%' . $request->keyword . '%')
+            ->orwhere('patients.pet_category', 'like', '%' . $request->keyword . '%')
+            ->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
+            ->orwhere('patients.pet_gender', 'like', '%' . $request->keyword . '%')
+            ->orwhere('patients.pet_year_age', 'like', '%' . $request->keyword . '%')
+            ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+            ->orwhere('patients.created_by', 'like', '%' . $request->keyword . '%')
+            ->get();
+
+        return response()->json($patient, 200);
     }
 }
