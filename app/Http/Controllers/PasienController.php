@@ -63,13 +63,13 @@ class PasienController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kategori_hewan' => 'required|min:3|max:25',
-            'nama_hewan' => 'required|min:3|max:25',
+            'kategori_hewan' => 'required|min:3|max:51',
+            'nama_hewan' => 'required|min:3|max:51',
             'jenis_kelamin_hewan' => 'required|string|max:51',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
-            'nama_pemilik' => 'required|string|max:25',
-            'alamat_pemilik' => 'required|string|max:25',
+            'nama_pemilik' => 'required|string|max:51',
+            'alamat_pemilik' => 'required|string|max:101',
             'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,12',
         ]);
 
@@ -117,13 +117,13 @@ class PasienController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kategori_hewan' => 'required|min:3|max:25',
-            'nama_hewan' => 'required|min:3|max:25',
+            'kategori_hewan' => 'required|min:3|max:51',
+            'nama_hewan' => 'required|min:3|max:51',
             'jenis_kelamin_hewan' => 'required|string|max:51',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
-            'nama_pemilik' => 'required|string|max:25',
-            'alamat_pemilik' => 'required|string|max:25',
+            'nama_pemilik' => 'required|string|max:51',
+            'alamat_pemilik' => 'required|string|max:101',
             'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,12',
         ]);
 
