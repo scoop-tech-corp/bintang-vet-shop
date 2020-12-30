@@ -36,6 +36,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('user', 'UserController@index');
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
+        Route::post('user/search', 'UserController@search');
 
         //pasien
         Route::get('pasien', 'PasienController@index');
@@ -43,6 +44,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pasien', 'PasienController@create');
         Route::put('pasien', 'PasienController@update');
         Route::delete('pasien', 'PasienController@delete');
+        Route::post('pasien/search', 'PasienController@search');
     });
 });
 
