@@ -92,6 +92,28 @@ $(document).ready(function() {
 				this.orderSetup.column = e;
 				this.getData();
 			},
+			onSearch: function() {
+				$('#loading-screen').show();
+
+				const form_data = new FormData();
+				form_data.append('keyword', this.searchTxt);
+
+				axios.post($('.baseUrl').val() + '/api/kategori-barang/search', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				.then(resp => {
+					if(resp.status == 200) {
+						this.listData = resp.data;
+					}
+				})
+				.catch(err => {
+					if (err.response.status === 401) {
+						localStorage.removeItem('vet-clinic');
+	          location.href = $('.baseUrl').val() + '/masuk';
+					}
+				})
+				.finally(() => {
+					$('#loading-screen').hide();
+				});
+			},
 			getData: function() {
 				$('#loading-screen').show();
 				axios.get($('.baseUrl').val() + '/api/kategori-barang', { params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})

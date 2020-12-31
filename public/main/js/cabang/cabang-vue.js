@@ -19,6 +19,10 @@ $(document).ready(function() {
 			columnStatus: {
 				branch_code: 'none',
 				branch_name: 'none',
+			},
+			orderSetup: {
+				orderby:'',
+				column: ''
 			}
 		},
 		mounted() {
@@ -70,15 +74,13 @@ $(document).ready(function() {
 					this.columnStatus['branch_code'] = 'none';
 				}
 
-				if (this.columnStatus[e] == 'asc') {
-					this.listCabang = this.listCabang.sort((a,b)=> (a[e] > b[e] ? 1 : -1));
-				} else if (this.columnStatus[e] == 'desc') {
-					this.listCabang = this.listCabang.sort((a,b)=> (a[e] < b[e] ? 1 : -1));
-				}
+				this.orderSetup.orderby = this.columnStatus[e];
+				this.orderSetup.column = e;
+				this.getData();
 			},
 			getData: function() {
 				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/cabang', { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.get($('.baseUrl').val() + '/api/cabang', {  params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listCabang = resp.data;
 					})
