@@ -7,8 +7,6 @@ $(document).ready(function() {
 			searchTxt: '',
 			titleModal: '',   stateModal: '',
 			msgContent: '',   confirmContent: '',
-			titleModal: '',   stateModal: '',
-			msgContent: '',   confirmContent: '',
 			idPasien: '',     nomorRegis: '',
 			animalType: '',   animalName: '',
 			animalSex: '',
