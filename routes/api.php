@@ -52,6 +52,13 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('kategori-barang', 'KategoriBarangController@update');
         Route::delete('kategori-barang', 'KategoriBarangController@delete');
         Route::post('kategori-barang/search', 'KategoriBarangController@search');
+
+        //satuan barang
+        Route::get('satuan-barang', 'SatuanBarangController@index');
+        Route::post('satuan-barang', 'SatuanBarangController@create');
+        Route::put('satuan-barang', 'SatuanBarangController@update');
+        Route::delete('satuan-barang', 'SatuanBarangController@delete');
+        Route::post('satuan-barang/search', 'SatuanBarangController@search');
     });
 });
 
