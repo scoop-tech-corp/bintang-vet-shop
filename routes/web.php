@@ -33,12 +33,12 @@ Route::get('/pasien', function () {
 	return view('pasien.index');
 });
 
-Route::get('/gudang1', function () {
-	return view('gudang.gudang1-index');
+Route::get('/kategori-barang', function () {
+	return view('gudang.kategori-barang.index');
 });
 
-Route::get('/gudang2', function () {
-	return view('gudang.gudang2-index');
+Route::get('/satuan-barang', function () {
+	return view('gudang.satuan-barang.index');
 });
 
 // Route::get('/cabang','BranchController@index');
