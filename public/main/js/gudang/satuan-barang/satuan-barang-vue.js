@@ -54,7 +54,7 @@ $(document).ready(function() {
 			submitSatuanBarang: function() {
 				if (this.stateModal === 'add') {
 					const form_data = new FormData();
-					form_data.append('UnitKategori', this.satuanBarang);
+					form_data.append('NamaSatuan', this.satuanBarang);
 
 					this.processSave(form_data);
 				} else if (this.stateModal === 'edit') {
@@ -67,7 +67,7 @@ $(document).ready(function() {
 				if (this.stateModal === 'edit') {
 					const request = {
 						id: this.idSatuan,
-						UnitKategori: this.satuanBarang,
+						NamaSatuan: this.satuanBarang,
 					};
 
 					this.processEdit(request);
