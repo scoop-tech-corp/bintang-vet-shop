@@ -68,11 +68,17 @@
 .input-search-section > i {
 	position: absolute;
 	top: 10px;
-	left: 15px;
+  left: 15px;
+  cursor: pointer;
 }
 
 .input-search-section > input {
 	padding: 6px 12px 6px 40px;
+}
+
+/* cursor pointer for icon sort in column (table) */
+.table > thead > tr > th > .fa {
+  cursor: pointer;
 }
 
 .p-relative {

@@ -8,7 +8,7 @@
       <button class="btn btn-info" @click="openFormAdd">Tambah</button>
       <div class="input-search-section">
         <input type="text" class="form-control" placeholder="search.." v-model="searchTxt" @keydown.enter="onSearch">
-        <i class="fa fa-search" aria-hidden="true"></i>
+        <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
       </div>
     </div>
   </div>

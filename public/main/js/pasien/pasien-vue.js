@@ -125,6 +125,28 @@ $(document).ready(function() {
 					this.processDelete({ id: this.idPasien });
 				}
 			},
+			onSearch: function() {
+				$('#loading-screen').show();
+
+				const form_data = new FormData();
+				form_data.append('keyword', this.searchTxt);
+
+				axios.post($('.baseUrl').val() + '/api/pasien/search', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				.then(resp => {
+					if(resp.status == 200) {
+						this.listPasien = resp.data;
+					}
+				})
+				.catch(err => {
+					if (err.response.status === 401) {
+						localStorage.removeItem('vet-clinic');
+	          location.href = $('.baseUrl').val() + '/masuk';
+					}
+				})
+				.finally(() => {
+					$('#loading-screen').hide();
+				});
+			},
 			processSave: function(form_data) {
 				$('#loading-screen').show();
 				axios.post($('.baseUrl').val() + '/api/pasien', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})

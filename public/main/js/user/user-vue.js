@@ -102,6 +102,28 @@ $(document).ready(function() {
 					this.processEdit(request);
 				}
 			},
+			onSearch: function() {
+				$('#loading-screen').show();
+
+				const form_data = new FormData();
+				form_data.append('keyword', this.searchTxt);
+
+				axios.post($('.baseUrl').val() + '/api/user/search', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				.then(resp => {
+					if(resp.status == 200) {
+						this.listUser = resp.data;
+					}
+				})
+				.catch(err => {
+					if (err.response.status === 401) {
+						localStorage.removeItem('vet-clinic');
+	          location.href = $('.baseUrl').val() + '/masuk';
+					}
+				})
+				.finally(() => {
+					$('#loading-screen').hide();
+				});
+			},
 			getData: function() {
 				$('#loading-screen').show();
 				axios.get($('.baseUrl').val() + '/api/user', { params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
@@ -196,9 +218,6 @@ $(document).ready(function() {
 				.finally(() => {
 					$('#loading-screen').hide();
 				});
-			},
-			onSearch: function(e) {
-				console.log('event', this.searchTxt);
 			},
 			usernameKeyup: function(e) {
 				this.validationForm();
