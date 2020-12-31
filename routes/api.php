@@ -45,6 +45,13 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('pasien', 'PasienController@update');
         Route::delete('pasien', 'PasienController@delete');
         Route::post('pasien/search', 'PasienController@search');
+
+        //kategori barang
+        Route::get('kategori-barang', 'KategoriBarangController@index');
+        Route::post('kategori-barang', 'KategoriBarangController@create');
+        Route::put('kategori-barang', 'KategoriBarangController@update');
+        Route::delete('kategori-barang', 'KategoriBarangController@delete');
+        Route::post('kategori-barang/search', 'KategoriBarangController@search');
     });
 });
 
