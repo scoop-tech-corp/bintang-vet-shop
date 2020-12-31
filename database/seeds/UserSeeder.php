@@ -251,5 +251,24 @@ class UserSeeder extends Seeder
             'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
+
+        //category_goods
+        DB::table('category_goods')->insert([
+            'category_name' => 'Antibiotik',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_goods')->insert([
+            'category_name' => 'Suplemen',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_goods')->insert([
+            'category_name' => 'Anti Radang',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
