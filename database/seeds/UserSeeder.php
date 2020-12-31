@@ -270,5 +270,24 @@ class UserSeeder extends Seeder
             'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
+
+        //unit_goods
+        DB::table('unit_goods')->insert([
+            'unit_name' => 'Pcs',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('unit_goods')->insert([
+            'unit_name' => 'Box',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('unit_goods')->insert([
+            'unit_name' => 'Strip',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
