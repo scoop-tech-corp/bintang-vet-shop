@@ -289,5 +289,39 @@ class UserSeeder extends Seeder
             'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
+
+        //list_of_items
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Vosea',
+            'total_item' => '3',
+            'unit_goods_id' => '3',
+            'price_item' => '15000',
+            'category_goods_id' => '2',
+            'branch_id' => '1',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Kaotin',
+            'total_item' => '4',
+            'unit_goods_id' => '2',
+            'price_item' => '16000',
+            'category_goods_id' => '2',
+            'branch_id' => '2',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Doxy',
+            'total_item' => '6',
+            'unit_goods_id' => '3',
+            'price_item' => '25000',
+            'category_goods_id' => '2',
+            'branch_id' => '3',
+            'created_by' => 'budi saputri',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
