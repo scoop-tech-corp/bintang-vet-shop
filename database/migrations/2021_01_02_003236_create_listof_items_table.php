@@ -17,8 +17,7 @@ class CreateListofItemsTable extends Migration
             $table->id();
             $table->string('item_name');
             $table->integer('total_item');
-            $table->integer('unit_goods_id');
-            $table->decimal('price_item');            
+            $table->integer('unit_goods_id');        
             $table->integer('category_goods_id');
             $table->integer('branch_id');            
             $table->boolean('isDeleted')->nullable()->default(false);

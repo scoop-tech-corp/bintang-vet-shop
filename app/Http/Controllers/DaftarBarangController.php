@@ -25,7 +25,7 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'list_of_items.price_item', 'category_goods.category_name'
+                    'unit_goods.unit_name', 'category_goods.category_name'
                     , 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->orderBy($request->column, 'asc')
@@ -38,7 +38,7 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'list_of_items.price_item', 'category_goods.category_name'
+                    'unit_goods.unit_name', 'category_goods.category_name'
                     , 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->orderBy($request->column, 'desc')
@@ -50,7 +50,7 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'list_of_items.price_item', 'category_goods.category_name'
+                    'unit_goods.unit_name', 'category_goods.category_name'
                     , 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->get();
@@ -65,7 +65,6 @@ class DaftarBarangController extends Controller
             'nama_barang' => 'required|string|min:3|max:50',
             'jumlah_barang' => 'required|numeric|min:1',
             'satuan_barang' => 'required|string|max:50',
-            'harga_satuan_barang' => 'required|numeric|min:0|not_in:0',
             'kategori_barang' => 'required|string|max:50',
             'cabang' => 'required|string|max:50',
         ]);
@@ -83,7 +82,6 @@ class DaftarBarangController extends Controller
             'item_name' => $request->nama_barang,
             'total_item' => $request->jumlah_barang,
             'unit_goods_id' => $request->satuan_barang,
-            'price_item' => $request->harga_satuan_barang,
             'category_goods_id' => $request->kategori_barang,
             'branch_id' => $request->cabang,
             'created_by' => $request->user()->fullname,
@@ -102,7 +100,6 @@ class DaftarBarangController extends Controller
             'nama_barang' => 'required|string|min:3|max:50',
             'jumlah_barang' => 'required|numeric|min:1',
             'satuan_barang' => 'required|string|max:50',
-            'harga_satuan_barang' => 'required|numeric|min:0|not_in:0',
             'kategori_barang' => 'required|string|max:50',
             'cabang' => 'required|string|max:50',
         ]);
@@ -128,7 +125,6 @@ class DaftarBarangController extends Controller
         $item->item_name = $request->nama_barang;
         $item->total_item = $request->jumlah_barang;
         $item->unit_goods_id = $request->satuan_barang;
-        $item->price_item = $request->harga_satuan_barang;
         $item->category_goods_id = $request->kategori_barang;
         $item->branch_id = $request->cabang;
         $item->update_by = $request->user()->fullname;
@@ -170,13 +166,12 @@ class DaftarBarangController extends Controller
             ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
             ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
             ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                'unit_goods.unit_name', 'list_of_items.price_item', 'category_goods.category_name'
+                'unit_goods.unit_name', 'category_goods.category_name'
                 , 'branches.branch_name', 'list_of_items.created_by',
                 DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
             ->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
             ->orwhere('list_of_items.total_item', 'like', '%' . $request->keyword . '%')
             ->orwhere('unit_goods.unit_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('list_of_items.price_item', 'like', '%' . $request->keyword . '%')
             ->orwhere('category_goods.category_name', 'like', '%' . $request->keyword . '%')
             ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
             ->orwhere('list_of_items.created_by', 'like', '%' . $request->keyword . '%')
