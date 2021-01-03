@@ -25,8 +25,8 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'category_goods.category_name'
-                    , 'branches.branch_name', 'list_of_items.created_by',
+                    'unit_goods.id', 'unit_goods.unit_name', 'category_goods.id', 'category_goods.category_name'
+                    , 'branches.id', 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->orderBy($request->column, 'asc')
                 ->get();
@@ -38,8 +38,8 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'category_goods.category_name'
-                    , 'branches.branch_name', 'list_of_items.created_by',
+                    'unit_goods.id', 'unit_goods.unit_name', 'category_goods.id', 'category_goods.category_name'
+                    , 'branches.id', 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->orderBy($request->column, 'desc')
                 ->get();
@@ -50,8 +50,8 @@ class DaftarBarangController extends Controller
                 ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
                 ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
                 ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'unit_goods.unit_name', 'category_goods.category_name'
-                    , 'branches.branch_name', 'list_of_items.created_by',
+                    'unit_goods.id', 'unit_goods.unit_name', 'category_goods.id', 'category_goods.category_name'
+                    , 'branches.id', 'branches.branch_name', 'list_of_items.created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                 ->get();
         }
