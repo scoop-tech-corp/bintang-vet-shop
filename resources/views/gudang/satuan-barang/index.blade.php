@@ -64,5 +64,5 @@
   
 @endsection
 @section('vue-content')
-<script src="{{ asset('main/js/gudang/satuan-barang/satuan-barang-vue.js') }}"></script>
+  <script src="{{ asset('main/js/gudang/satuan-barang/satuan-barang-vue.js') }}"></script>
 @endsection

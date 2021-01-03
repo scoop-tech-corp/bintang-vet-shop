@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="submitConfirm">Ya</button>
+          <button id="submitConfirm" type="button" class="btn btn-primary" @click="submitConfirm">Ya</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
         </div>
       </div>

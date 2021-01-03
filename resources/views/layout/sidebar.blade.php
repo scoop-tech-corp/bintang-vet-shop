@@ -37,7 +37,7 @@
 				<ul class="treeview-menu">
 					<li><a href="{{ url('/kategori-barang') }}"><i class="fa fa-circle-o"></i> Kategori Barang</a></li>
 					<li><a href="{{ url('/satuan-barang') }}"><i class="fa fa-circle-o"></i> Satuan Barang</a></li>
-					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Daftar Barang</a></li>
+					<li><a href="{{ url('/daftar-barang') }}"><i class="fa fa-circle-o"></i> Daftar Barang</a></li>
 					<li><a href="{{ url('/gudang2') }}"><i class="fa fa-circle-o"></i> Pembagian Harga</a></li>
 					<li><a href="{{ url('/gudang1') }}"><i class="fa fa-circle-o"></i> Daftar Jasa</a></li>
 				</ul>

@@ -41,6 +41,10 @@ Route::get('/satuan-barang', function () {
 	return view('gudang.satuan-barang.index');
 });
 
+Route::get('/daftar-barang', function () {
+	return view('gudang.daftar-barang.index');
+});
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {
