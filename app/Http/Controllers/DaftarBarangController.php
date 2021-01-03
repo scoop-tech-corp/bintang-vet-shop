@@ -78,7 +78,20 @@ class DaftarBarangController extends Controller
             ], 422);
         }
 
-        $patient = ListofItems::create([
+        $check_branch = DB::table('list_of_items')
+            ->where('branch_id', '=', $request->cabang)
+            ->where('item_name', '=', $request->nama_barang)
+            ->count();
+
+        if ($check_branch > 0) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data duplicate!'],
+            ], 422);
+        }
+
+        $item = ListofItems::create([
             'item_name' => $request->nama_barang,
             'total_item' => $request->jumlah_barang,
             'unit_goods_id' => $request->satuan_barang,
@@ -120,6 +133,21 @@ class DaftarBarangController extends Controller
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
+        }
+
+        $find_duplicate = db::table('list_of_items')
+            ->where('branch_id', '=', $request->cabang)
+            ->where('item_name', '=', $request->nama_barang)
+            ->where('id', '!=', $request->id)
+            ->count();
+
+        if ($find_duplicate != 0) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data duplicate!'],
+            ], 422);
+
         }
 
         $item->item_name = $request->nama_barang;

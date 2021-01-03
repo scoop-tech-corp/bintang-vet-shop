@@ -113,7 +113,7 @@ class SatuanBarangController extends Controller
 
         $find_duplicate = db::table('unit_goods')
             ->select('unit_name')
-            ->where('unit_name', 'like', '%' . $request->NamaSatuan . '%')
+            ->where('unit_name', '=', $request->NamaSatuan)
             ->where('id', '!=', $request->id)
             ->count();
 
