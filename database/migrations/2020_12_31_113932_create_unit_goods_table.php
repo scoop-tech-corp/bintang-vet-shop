@@ -13,12 +13,12 @@ class CreateUnitGoodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('unit_goods', function (Blueprint $table) {
+        Schema::create('unit_item', function (Blueprint $table) {
             $table->id();
             $table->string('unit_name');
             $table->boolean('isDeleted')->nullable()->default(false);
-            $table->string('created_by');
-            $table->string('update_by')->nullable();
+            $table->integer('user_id');
+            $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamp('deleted_at',0)->nullable();
             $table->timestamps();
@@ -32,6 +32,6 @@ class CreateUnitGoodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('unit_goods');
+        Schema::dropIfExists('unit_item');
     }
 }

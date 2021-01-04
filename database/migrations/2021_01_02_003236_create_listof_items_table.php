@@ -17,12 +17,12 @@ class CreateListofItemsTable extends Migration
             $table->id();
             $table->string('item_name');
             $table->integer('total_item');
-            $table->integer('unit_goods_id');        
-            $table->integer('category_goods_id');
+            $table->integer('unit_item_id');        
+            $table->integer('category_item_id');
             $table->integer('branch_id');            
             $table->boolean('isDeleted')->nullable()->default(false);
-            $table->string('created_by');
-            $table->string('update_by')->nullable();
+            $table->integer('user_id');
+            $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamp('deleted_at',0)->nullable();
             $table->timestamps();

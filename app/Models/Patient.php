@@ -26,7 +26,7 @@ class Patient extends Model
         'owner_name',
         'owner_address',
         'owner_phone_number',
-        'created_by',
+        'user_id',
         'update_by',
         'deleted_by',
         'deleted_at'];

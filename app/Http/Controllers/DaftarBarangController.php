@@ -18,43 +18,33 @@ class DaftarBarangController extends Controller
             ], 403);
         }
 
-        if ($request->orderby == 'asc') {
+        $item = DB::table('list_of_items')
+            ->join('users', 'list_of_items.user_id', '=', 'users.id')
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
+                'list_of_items.unit_item_id', 'unit_item.unit_name', 'list_of_items.category_item_id', 'category_item.category_name'
+                , 'list_of_items.branch_id', 'branches.branch_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
 
-            $item = DB::table('list_of_items')
-                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
-                ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
-                ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
-                ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'list_of_items.unit_goods_id', 'unit_goods.unit_name', 'list_of_items.category_goods_id', 'category_goods.category_name'
-                    , 'list_of_items.branch_id', 'branches.branch_name', 'list_of_items.created_by',
-                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                ->orderBy($request->column, 'asc')
-                ->get();
+        if ($request->keyword) {
 
-        } else if ($request->orderby == 'desc') {
-
-            $item = DB::table('list_of_items')
-                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
-                ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
-                ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
-                ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'list_of_items.unit_goods_id', 'unit_goods.unit_name', 'list_of_items.category_goods_id', 'category_goods.category_name'
-                    , 'list_of_items.branch_id', 'branches.branch_name', 'list_of_items.created_by',
-                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                ->orderBy($request->column, 'desc')
-                ->get();
-        } else {
-
-            $item = DB::table('list_of_items')
-                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
-                ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
-                ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
-                ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                    'list_of_items.unit_goods_id', 'unit_goods.unit_name', 'list_of_items.category_goods_id', 'category_goods.category_name'
-                    , 'list_of_items.branch_id', 'branches.branch_name', 'list_of_items.created_by',
-                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                ->get();
+            $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('list_of_items.total_item', 'like', '%' . $request->keyword . '%')
+                ->orwhere('unit_item.unit_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('category_item.category_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
+
+        if ($request->orderby) {
+            $item = $item->orderBy($request->column, $request->orderby);
+        }
+
+        $item = $item->orderBy('list_of_items.id', 'asc');
+
+        $item = $item->get();
 
         return response()->json($item, 200);
     }
@@ -73,7 +63,7 @@ class DaftarBarangController extends Controller
             $errors = $validator->errors()->all();
 
             return response()->json([
-                'message' => 'Pasien yang dimasukkan tidak valid!',
+                'message' => 'Barang yang dimasukkan tidak valid!',
                 'errors' => $errors,
             ], 422);
         }
@@ -94,10 +84,10 @@ class DaftarBarangController extends Controller
         $item = ListofItems::create([
             'item_name' => $request->nama_barang,
             'total_item' => $request->jumlah_barang,
-            'unit_goods_id' => $request->satuan_barang,
-            'category_goods_id' => $request->kategori_barang,
+            'unit_item_id' => $request->satuan_barang,
+            'category_item_id' => $request->kategori_barang,
             'branch_id' => $request->cabang,
-            'created_by' => $request->user()->fullname,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json(
@@ -152,15 +142,15 @@ class DaftarBarangController extends Controller
 
         $item->item_name = $request->nama_barang;
         $item->total_item = $request->jumlah_barang;
-        $item->unit_goods_id = $request->satuan_barang;
-        $item->category_goods_id = $request->kategori_barang;
+        $item->unit_item_id = $request->satuan_barang;
+        $item->category_item_id = $request->kategori_barang;
         $item->branch_id = $request->cabang;
-        $item->update_by = $request->user()->fullname;
+        $item->user_update_id = $request->user()->id;
         $item->updated_at = \Carbon\Carbon::now();
         $item->save();
 
         return response()->json([
-            'message' => 'Berhasil mengupdate Barang',
+            'message' => 'Berhasil mengubah Barang',
         ], 200);
     }
 
@@ -185,27 +175,6 @@ class DaftarBarangController extends Controller
         return response()->json([
             'message' => 'Berhasil menghapus Barang',
         ], 200);
-    }
-
-    public function search(Request $request)
-    {
-        $item = DB::table('list_of_items')
-            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
-            ->join('unit_goods', 'list_of_items.unit_goods_id', '=', 'unit_goods.id')
-            ->join('category_goods', 'list_of_items.category_goods_id', '=', 'category_goods.id')
-            ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                'unit_goods.unit_name', 'category_goods.category_name'
-                , 'branches.branch_name', 'list_of_items.created_by',
-                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-            ->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('list_of_items.total_item', 'like', '%' . $request->keyword . '%')
-            ->orwhere('unit_goods.unit_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('category_goods.category_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('list_of_items.created_by', 'like', '%' . $request->keyword . '%')
-            ->get();
-
-        return response()->json($item, 200);
     }
 
     public function download_template()

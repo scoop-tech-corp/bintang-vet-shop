@@ -16,21 +16,21 @@ class UserSeeder extends Seeder
         DB::table('branches')->insert([
             'branch_code' => 'AS',
             'branch_name' => 'Alam Sutera',
-            'created_by' => 'budi',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
         
         DB::table('branches')->insert([
             'branch_code' => 'KM',
             'branch_name' => 'Kembangan',
-            'created_by' => 'budi',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
         DB::table('branches')->insert([
             'branch_code' => 'TJ',
             'branch_name' => 'Tanjung Duren',
-            'created_by' => 'budi',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'branch_id' => 1,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
             'role' => 'resepsionis',
             'branch_id' => 1,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -74,7 +74,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 1,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -88,7 +88,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 1,
             'status' => '0',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -103,7 +103,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'branch_id' => 2,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -117,7 +117,7 @@ class UserSeeder extends Seeder
             'role' => 'resepsionis',
             'branch_id' => 2,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -131,7 +131,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 2,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -145,7 +145,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 2,
             'status' => '0',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -160,7 +160,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'branch_id' => 3,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -174,7 +174,7 @@ class UserSeeder extends Seeder
             'role' => 'resepsionis',
             'branch_id' => 3,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -188,7 +188,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 3,
             'status' => '1',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
 
@@ -202,7 +202,7 @@ class UserSeeder extends Seeder
             'role' => 'dokter',
             'branch_id' => 3,
             'status' => '0',
-            'created_by' => 'budi',
+            'created_by' => 'budi saputri',
             'created_at' => '2020-12-30'
         ]);
         
@@ -218,7 +218,7 @@ class UserSeeder extends Seeder
             'owner_name' => 'agus',
             'owner_address' => 'tangerang selatan',
             'owner_phone_number' => '081234560987',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
         
@@ -233,7 +233,7 @@ class UserSeeder extends Seeder
             'owner_name' => 'tina',
             'owner_address' => 'lebak bulus',
             'owner_phone_number' => '081234560988',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
@@ -248,45 +248,45 @@ class UserSeeder extends Seeder
             'owner_name' => 'tono',
             'owner_address' => 'pondok indah',
             'owner_phone_number' => '081234560989',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        //category_goods
-        DB::table('category_goods')->insert([
+        //category_item
+        DB::table('category_item')->insert([
             'category_name' => 'Antibiotik',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        DB::table('category_goods')->insert([
+        DB::table('category_item')->insert([
             'category_name' => 'Suplemen',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        DB::table('category_goods')->insert([
+        DB::table('category_item')->insert([
             'category_name' => 'Anti Radang',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        //unit_goods
-        DB::table('unit_goods')->insert([
+        //unit_item
+        DB::table('unit_item')->insert([
             'unit_name' => 'Pcs',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        DB::table('unit_goods')->insert([
+        DB::table('unit_item')->insert([
             'unit_name' => 'Box',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
-        DB::table('unit_goods')->insert([
+        DB::table('unit_item')->insert([
             'unit_name' => 'Strip',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
@@ -294,30 +294,30 @@ class UserSeeder extends Seeder
         DB::table('list_of_items')->insert([
             'item_name' => 'Vosea',
             'total_item' => '3',
-            'unit_goods_id' => '3',
-            'category_goods_id' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
             'branch_id' => '1',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
         DB::table('list_of_items')->insert([
             'item_name' => 'Kaotin',
             'total_item' => '4',
-            'unit_goods_id' => '2',
-            'category_goods_id' => '2',
+            'unit_item_id' => '2',
+            'category_item_id' => '2',
             'branch_id' => '2',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
 
         DB::table('list_of_items')->insert([
             'item_name' => 'Doxy',
             'total_item' => '6',
-            'unit_goods_id' => '3',
-            'category_goods_id' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
             'branch_id' => '3',
-            'created_by' => 'budi saputri',
+            'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
     }

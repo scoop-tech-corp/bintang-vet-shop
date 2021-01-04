@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UnitGoods;
+use App\Models\UnitItem;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -18,33 +18,26 @@ class SatuanBarangController extends Controller
             ], 403);
         }
 
-        if ($request->orderby == 'asc') {
+        $unit_item = DB::table('unit_item')
+            ->join('users', 'unit_item.user_id', '=', 'users.id')
+            ->select('unit_item.id', 'unit_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(unit_item.created_at, '%d %b %Y') as created_at"))
+            ->where('isDeleted', '=', 'false');
 
-            $unit_goods = DB::table('unit_goods')
-                ->select('id', 'unit_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->orderBy($request->column, 'asc')->get();
-
-        } else if ($request->orderby == 'desc') {
-
-            $unit_goods = DB::table('unit_goods')
-                ->select('id', 'unit_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->orderBy($request->column, 'desc')->get();
-
-        } else {
-
-            $unit_goods = DB::table('unit_goods')
-                ->select('id', 'unit_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->get();
-
+        if ($request->keyword) {
+            $unit_item = $unit_item->where('isDeleted', '=', 'false')
+                ->where('unit_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('created_by', 'like', '%' . $request->keyword . '%');
         }
 
-        return response()->json($unit_goods, 200);
+        if($request->orderby)
+        {
+            $unit_item = $unit_item->orderBy($request->column, $request->orderby);
+        }
+
+        $unit_item = $unit_item->get();
+
+        return response()->json($unit_item, 200);
 
     }
 
@@ -58,7 +51,7 @@ class SatuanBarangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'NamaSatuan' => 'required|string|max:50|unique:unit_goods,unit_name',
+            'NamaSatuan' => 'required|string|max:50|unique:unit_item,unit_name',
         ]);
 
         if ($validate->fails()) {
@@ -70,9 +63,9 @@ class SatuanBarangController extends Controller
             ], 422);
         }
 
-        UnitGoods::create([
+        UnitItem::create([
             'unit_name' => $request->NamaSatuan,
-            'created_by' => $request->user()->fullname,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json([
@@ -102,16 +95,16 @@ class SatuanBarangController extends Controller
             ], 422);
         }
 
-        $unit_goods = UnitGoods::find($request->id);
+        $unit_item = UnitItem::find($request->id);
 
-        if (is_null($unit_goods)) {
+        if (is_null($unit_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $find_duplicate = db::table('unit_goods')
+        $find_duplicate = db::table('unit_item')
             ->select('unit_name')
             ->where('unit_name', '=', $request->NamaSatuan)
             ->where('id', '!=', $request->id)
@@ -126,10 +119,10 @@ class SatuanBarangController extends Controller
 
         }
 
-        $unit_goods->unit_name = $request->NamaSatuan;
-        $unit_goods->update_by = $request->user()->fullname;
-        $unit_goods->updated_at = \Carbon\Carbon::now();
-        $unit_goods->save();
+        $unit_item->unit_name = $request->NamaSatuan;
+        $unit_item->user_update_id = $request->user()->id;
+        $unit_item->updated_at = \Carbon\Carbon::now();
+        $unit_item->save();
 
         return response()->json([
             'message' => 'Berhasil mengupdate Unit Barang',
@@ -145,44 +138,24 @@ class SatuanBarangController extends Controller
             ], 403);
         }
 
-        $unit_goods = UnitGoods::find($request->id);
+        $unit_item = UnitItem::find($request->id);
 
-        if (is_null($unit_goods)) {
+        if (is_null($unit_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $unit_goods->isDeleted = true;
-        $unit_goods->deleted_by = $request->user()->fullname;
-        $unit_goods->deleted_at = \Carbon\Carbon::now();
-        $unit_goods->save();
+        $unit_item->isDeleted = true;
+        $unit_item->deleted_by = $request->user()->fullname;
+        $unit_item->deleted_at = \Carbon\Carbon::now();
+        $unit_item->save();
 
-        $unit_goods->delete();
+        $unit_item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Unit Barang',
         ], 200);
-    }
-
-    public function search(Request $request)
-    {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
-
-        $unit_goods = DB::table('unit_goods')
-            ->select('id', 'unit_name', 'created_by',
-                DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false')
-            ->where('unit_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('created_by', 'like', '%' . $request->keyword . '%')
-            ->get();
-
-        return response()->json($unit_goods, 200);
     }
 }

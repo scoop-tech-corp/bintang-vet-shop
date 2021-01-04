@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CategoryGoods;
+use App\Models\CategoryItem;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -18,33 +18,26 @@ class KategoriBarangController extends Controller
             ], 403);
         }
 
-        if ($request->orderby == 'asc') {
+        $category_item = DB::table('category_item')
+        ->join('users', 'category_item.user_id', '=', 'users.id')
+            ->select('category_item.id', 'category_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(category_item.created_at, '%d %b %Y') as created_at"))
+            ->where('isDeleted', '=', 'false');
 
-            $category_goods = DB::table('category_goods')
-                ->select('id', 'category_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->orderBy($request->column, 'asc')->get();
-
-        } else if ($request->orderby == 'desc') {
-
-            $category_goods = DB::table('category_goods')
-                ->select('id', 'category_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->orderBy($request->column, 'desc')->get();
-
-        } else {
-
-            $category_goods = DB::table('category_goods')
-                ->select('id', 'category_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-                ->where('isDeleted', '=', 'false')
-                ->get();
-
+        if ($request->keyword) {
+            $category_item = $category_item->where('isDeleted', '=', 'false')
+                ->where('category_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('created_by', 'like', '%' . $request->keyword . '%');
         }
 
-        return response()->json($category_goods, 200);
+        if($request->orderby)
+        {
+            $category_item = $category_item->orderBy($request->column, $request->orderby);
+        }
+
+        $category_item = $category_item->get();
+
+        return response()->json($category_item, 200);
     }
 
     public function create(Request $request)
@@ -57,7 +50,7 @@ class KategoriBarangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'NamaKategori' => 'required|string|max:50|unique:category_goods,category_name',
+            'NamaKategori' => 'required|string|max:50|unique:category_item,category_name',
         ]);
 
         if ($validate->fails()) {
@@ -69,9 +62,9 @@ class KategoriBarangController extends Controller
             ], 422);
         }
 
-        CategoryGoods::create([
+        CategoryItem::create([
             'category_name' => $request->NamaKategori,
-            'created_by' => $request->user()->fullname,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json([
@@ -101,16 +94,16 @@ class KategoriBarangController extends Controller
             ], 422);
         }
 
-        $category_goods = CategoryGoods::find($request->id);
+        $category_item = CategoryItem::find($request->id);
 
-        if (is_null($category_goods)) {
+        if (is_null($category_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $find_duplicate = db::table('category_goods')
+        $find_duplicate = db::table('category_item')
             ->select('category_name')
             ->where('category_name', 'like', '%' . $request->NamaKategori . '%')
             ->where('id', '!=', $request->id)
@@ -125,10 +118,10 @@ class KategoriBarangController extends Controller
 
         }
 
-        $category_goods->category_name = $request->NamaKategori;
-        $category_goods->update_by = $request->user()->fullname;
-        $category_goods->updated_at = \Carbon\Carbon::now();
-        $category_goods->save();
+        $category_item->category_name = $request->NamaKategori;
+        $category_item->user_update_id = $request->user()->id;
+        $category_item->updated_at = \Carbon\Carbon::now();
+        $category_item->save();
 
         return response()->json([
             'message' => 'Berhasil mengupdate Kategori Barang',
@@ -144,44 +137,24 @@ class KategoriBarangController extends Controller
             ], 403);
         }
 
-        $category_goods = CategoryGoods::find($request->id);
+        $category_item = CategoryItem::find($request->id);
 
-        if (is_null($category_goods)) {
+        if (is_null($category_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $category_goods->isDeleted = true;
-        $category_goods->deleted_by = $request->user()->fullname;
-        $category_goods->deleted_at = \Carbon\Carbon::now();
-        $category_goods->save();
+        $category_item->isDeleted = true;
+        $category_item->deleted_by = $request->user()->fullname;
+        $category_item->deleted_at = \Carbon\Carbon::now();
+        $category_item->save();
 
-        $category_goods->delete();
+        $category_item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Barang',
         ], 200);
-    }
-
-    public function search(Request $request)
-    {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
-
-        $category_goods = DB::table('category_goods')
-            ->select('id', 'category_name', 'created_by',
-                DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false')
-            ->where('category_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('created_by', 'like', '%' . $request->keyword . '%')
-            ->get();
-
-        return response()->json($category_goods, 200);
     }
 }

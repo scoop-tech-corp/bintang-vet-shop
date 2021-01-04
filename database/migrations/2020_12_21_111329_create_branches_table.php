@@ -18,8 +18,8 @@ class CreateBranchesTable extends Migration
             $table->string('branch_code');
             $table->string('branch_name');
             $table->boolean('isDeleted')->nullable()->default(false);
-            $table->string('created_by');
-            $table->string('update_by')->nullable();
+            $table->integer('user_id');
+            $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamp('deleted_at',0)->nullable();
             $table->timestamps();

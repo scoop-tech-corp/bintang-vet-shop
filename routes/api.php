@@ -34,36 +34,30 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('user', 'UserController@index');
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
-        Route::post('user/search', 'UserController@search');
 
         //pasien
         Route::get('pasien', 'PasienController@index');
-        Route::get('pasien/detail', 'PasienController@detail');
         Route::post('pasien', 'PasienController@create');
         Route::put('pasien', 'PasienController@update');
         Route::delete('pasien', 'PasienController@delete');
-        Route::post('pasien/search', 'PasienController@search');
 
         //kategori barang
         Route::get('kategori-barang', 'KategoriBarangController@index');
         Route::post('kategori-barang', 'KategoriBarangController@create');
         Route::put('kategori-barang', 'KategoriBarangController@update');
         Route::delete('kategori-barang', 'KategoriBarangController@delete');
-        Route::post('kategori-barang/search', 'KategoriBarangController@search');
 
         //satuan barang
         Route::get('satuan-barang', 'SatuanBarangController@index');
         Route::post('satuan-barang', 'SatuanBarangController@create');
         Route::put('satuan-barang', 'SatuanBarangController@update');
         Route::delete('satuan-barang', 'SatuanBarangController@delete');
-        Route::post('satuan-barang/search', 'SatuanBarangController@search');
 
-        //satuan barang
+        //daftar barang
         Route::get('daftar-barang', 'DaftarBarangController@index');
         Route::post('daftar-barang', 'DaftarBarangController@create');
         Route::put('daftar-barang', 'DaftarBarangController@update');
         Route::delete('daftar-barang', 'DaftarBarangController@delete');
-        Route::post('daftar-barang/search', 'DaftarBarangController@search');
 
         Route::get('daftar-barang/download-template', 'DaftarBarangController@download_template');
     });
