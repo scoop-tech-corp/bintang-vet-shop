@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+
 use App\Models\Branch;
+use DB;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -17,25 +18,24 @@ class CabangController extends Controller
             ], 403);
         }
 
-        if ($request->orderby == 'asc') {
+        $branch = DB::table('branches')
+            ->join('users', 'branches.user_id', '=', 'users.id')
+            ->select('branches.id', 'branch_code', 'branch_name',
+             'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"));
 
-            $branch = DB::table('branches')
-            ->select('id', 'branch_code', 'branch_name', 'created_by',
-            DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'asc')->get();
-
-        } else if ($request->orderby == 'desc') {
-
-            $branch = DB::table('branches')
-            ->select('id', 'branch_code', 'branch_name', 'created_by', 
-            DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'desc')->get();
-
-        } else {
-
-            $branch = DB::table('branches')
-                ->select('id', 'branch_code', 'branch_name', 'created_by',
-                    DB::raw("DATE_FORMAT(created_at, '%d %b %Y') as created_at"))->get();
-
+        if ($request->keyword) {
+            $branch = $branch->where('branch_code', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
+
+        if ($request->orderby) {
+
+            $branch = $branch->orderBy($request->column, $request->orderby);
+        }
+
+        $branch = $branch->get();
 
         return response()->json($branch, 200);
 
@@ -68,7 +68,7 @@ class CabangController extends Controller
         Branch::create([
             'branch_code' => $request->KodeCabang,
             'branch_name' => $request->NamaCabang,
-            'created_by' => $request->user()->fullname,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json([
@@ -111,7 +111,7 @@ class CabangController extends Controller
 
         $branch->branch_code = $request->KodeCabang;
         $branch->branch_name = $request->NamaCabang;
-        $branch->update_by = $request->user()->fullname;
+        $branch->user_update_id = $request->user()->id;
         $branch->updated_at = \Carbon\Carbon::now();
         $branch->save();
 

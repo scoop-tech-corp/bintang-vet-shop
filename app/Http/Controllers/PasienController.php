@@ -11,51 +11,33 @@ class PasienController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->orderby == 'asc') {
 
-            $patient = DB::table('patients')
-                ->join('branches', 'patients.branch_id', '=', 'branches.id')
-                ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                    , 'patients.pet_year_age', 'branches.branch_name', 'patients.created_by',
-                    DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'asc')
-                ->where('patients.isDeleted', '=', 'false')
-                ->get();
-
-        } else if ($request->orderby == 'desc') {
-
-            $patient = DB::table('patients')
-                ->join('branches', 'patients.branch_id', '=', 'branches.id')
-                ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                    , 'patients.pet_year_age', 'branches.branch_name', 'patients.created_by',
-                    DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'desc')
-                ->where('patients.isDeleted', '=', 'false')
-                ->get();
-
-        } else {
-
-            $patient = DB::table('patients')
-                ->join('branches', 'patients.branch_id', '=', 'branches.id')
-                ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                    , 'patients.pet_year_age', 'branches.branch_name', 'patients.created_by',
-                    DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
-                ->where('patients.isDeleted', '=', 'false')
-                ->get();
-
-        }
-
-        return response()->json($patient, 200);
-    }
-
-    public function detail(Request $request)
-    {
         $patient = DB::table('patients')
             ->join('branches', 'patients.branch_id', '=', 'branches.id')
+            ->join('users', 'patients.user_id', '=', 'users.id')
             ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                , 'patients.pet_year_age', 'patients.pet_month_age', 'branches.branch_name', 'patients.created_by',
-                DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"),
-                'patients.owner_name', 'patients.owner_address', 'patients.owner_phone_number')
-            ->where('patients.id', '=', $request->id)
-            ->get();
+                , 'patients.pet_year_age', 'branches.branch_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
+            ->where('patients.isDeleted', '=', 'false');
+
+        if ($request->keyword) {
+            $patient = $patient->where('patients.id_member', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_category', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_gender', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_year_age', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->orderby) {
+
+            $patient = $patient->orderBy($request->column, $request->orderby);
+        }
+
+        $patient = $patient->orderBy('id', 'asc');
+
+        $patient = $patient->get();
 
         return response()->json($patient, 200);
     }
@@ -104,7 +86,7 @@ class PasienController extends Controller
             'owner_address' => $request->alamat_pemilik,
             'owner_phone_number' => strval($request->nomor_ponsel_pengirim),
             'branch_id' => $request->user()->branch_id,
-            'created_by' => $request->user()->fullname,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json(
@@ -153,7 +135,7 @@ class PasienController extends Controller
         $patient->owner_name = $request->nama_pemilik;
         $patient->owner_address = $request->alamat_pemilik;
         $patient->owner_phone_number = $request->nomor_ponsel_pengirim;
-        $patient->update_by = $request->user()->fullname;
+        $patient->user_update_id = $request->user()->id;
         $patient->updated_at = \Carbon\Carbon::now();
         $patient->save();
 
@@ -183,25 +165,5 @@ class PasienController extends Controller
         return response()->json([
             'message' => 'Berhasil menghapus Pasien',
         ], 200);
-    }
-
-    public function search(Request $request)
-    {
-        $patient = DB::table('patients')
-            ->join('branches', 'patients.branch_id', '=', 'branches.id')
-            ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                , 'patients.pet_year_age', 'branches.branch_name', 'patients.created_by',
-                DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
-            ->where('patients.isDeleted', '=', 'false')
-            ->where('patients.id_member', 'like', '%' . $request->keyword . '%')
-            ->orwhere('patients.pet_category', 'like', '%' . $request->keyword . '%')
-            ->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('patients.pet_gender', 'like', '%' . $request->keyword . '%')
-            ->orwhere('patients.pet_year_age', 'like', '%' . $request->keyword . '%')
-            ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
-            ->orwhere('patients.created_by', 'like', '%' . $request->keyword . '%')
-            ->get();
-
-        return response()->json($patient, 200);
     }
 }

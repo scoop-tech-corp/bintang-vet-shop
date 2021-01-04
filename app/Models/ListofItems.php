@@ -14,8 +14,8 @@ class ListofItems extends Model
 
     protected $fillable = ['item_name',
     'total_item',
-    'unit_goods_id',
-    'category_goods_id',
+    'unit_item_id',
+    'category_item_id',
     'branch_id',
-    'created_by'];
+    'user_id'];
 }
