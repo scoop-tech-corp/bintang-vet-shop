@@ -320,5 +320,24 @@ class UserSeeder extends Seeder
             'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
+
+        //service_categories
+        DB::table('service_categories')->insert([
+            'category_name' => 'Operasi',
+            'user_id' => '1',
+            'created_at' => '2020-12-29'
+        ]);
+
+        DB::table('service_categories')->insert([
+            'category_name' => 'Tindakan 1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('service_categories')->insert([
+            'category_name' => 'Tindakan 2',
+            'user_id' => '1',
+            'created_at' => '2020-12-31'
+        ]);
     }
 }

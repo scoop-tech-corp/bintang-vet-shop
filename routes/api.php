@@ -60,6 +60,12 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('daftar-barang', 'DaftarBarangController@delete');
 
         Route::get('daftar-barang/download-template', 'DaftarBarangController@download_template');
+
+        //kategori jasa
+        Route::get('kategori-jasa', 'KategoriJasaController@index');
+        Route::post('kategori-jasa', 'KategoriJasaController@create');
+        Route::put('kategori-jasa', 'KategoriJasaController@update');
+        Route::delete('kategori-jasa', 'KategoriJasaController@delete');
     });
 });
 
