@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CategoryItem;
+use App\Models\ServiceCategory;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
 
-class KategoriBarangController extends Controller
+class KategoriJasaController extends Controller
 {
     public function index(Request $request)
     {
@@ -18,24 +18,23 @@ class KategoriBarangController extends Controller
             ], 403);
         }
 
-        $category_item = DB::table('category_item')
-            ->join('users', 'category_item.user_id', '=', 'users.id')
-            ->select('category_item.id', 'category_name', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(category_item.created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false');
+        $service_categories = DB::table('service_categories')
+            ->join('users', 'service_categories.user_id', '=', 'users.id')
+            ->select('service_categories.id', 'category_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(service_categories.created_at, '%d %b %Y') as created_at"));
 
         if ($request->keyword) {
-            $category_item = $category_item->where('category_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('created_by', 'like', '%' . $request->keyword . '%');
+            $service_categories = $service_categories->where('category_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('service_categories.created_by', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->orderby) {
-            $category_item = $category_item->orderBy($request->column, $request->orderby);
+            $service_categories = $service_categories->orderBy($request->column, $request->orderby);
         }
 
-        $category_item = $category_item->get();
+        $service_categories = $service_categories->get();
 
-        return response()->json($category_item, 200);
+        return response()->json($service_categories, 200);
     }
 
     public function create(Request $request)
@@ -48,7 +47,7 @@ class KategoriBarangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'NamaKategori' => 'required|string|max:50|unique:category_item,category_name',
+            'NamaKategoriJasa' => 'required|string|max:50|unique:service_categories,category_name',
         ]);
 
         if ($validate->fails()) {
@@ -60,13 +59,13 @@ class KategoriBarangController extends Controller
             ], 422);
         }
 
-        CategoryItem::create([
-            'category_name' => $request->NamaKategori,
+        ServiceCategory::create([
+            'category_name' => $request->NamaKategoriJasa,
             'user_id' => $request->user()->id,
         ]);
 
         return response()->json([
-            'message' => 'Berhasil menambah Kategori Barang',
+            'message' => 'Berhasil menambah Kategori Jasa',
         ], 200);
     }
 
@@ -80,7 +79,7 @@ class KategoriBarangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'NamaKategori' => 'required|string|max:50',
+            'NamaKategoriJasa' => 'required|string|max:50',
         ]);
 
         if ($validate->fails()) {
@@ -92,18 +91,18 @@ class KategoriBarangController extends Controller
             ], 422);
         }
 
-        $category_item = CategoryItem::find($request->id);
+        $service_categories = ServiceCategory::find($request->id);
 
-        if (is_null($category_item)) {
+        if (is_null($service_categories)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $find_duplicate = db::table('category_item')
+        $find_duplicate = db::table('service_categories')
             ->select('category_name')
-            ->where('category_name', 'like', '%' . $request->NamaKategori . '%')
+            ->where('category_name', 'like', '%' . $request->NamaKategoriJasa . '%')
             ->where('id', '!=', $request->id)
             ->count();
 
@@ -116,13 +115,13 @@ class KategoriBarangController extends Controller
 
         }
 
-        $category_item->category_name = $request->NamaKategori;
-        $category_item->user_update_id = $request->user()->id;
-        $category_item->updated_at = \Carbon\Carbon::now();
-        $category_item->save();
+        $service_categories->category_name = $request->NamaKategoriJasa;
+        $service_categories->user_update_id = $request->user()->id;
+        $service_categories->updated_at = \Carbon\Carbon::now();
+        $service_categories->save();
 
         return response()->json([
-            'message' => 'Berhasil mengupdate Kategori Barang',
+            'message' => 'Berhasil mengupdate Kategori Jasa',
         ], 200);
     }
 
@@ -135,24 +134,24 @@ class KategoriBarangController extends Controller
             ], 403);
         }
 
-        $category_item = CategoryItem::find($request->id);
+        $service_categories = ServiceCategory::find($request->id);
 
-        if (is_null($category_item)) {
+        if (is_null($service_categories)) {
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data not found!'],
             ], 404);
         }
 
-        $category_item->isDeleted = true;
-        $category_item->deleted_by = $request->user()->fullname;
-        $category_item->deleted_at = \Carbon\Carbon::now();
-        $category_item->save();
+        $service_categories->isDeleted = true;
+        $service_categories->deleted_by = $request->user()->fullname;
+        $service_categories->deleted_at = \Carbon\Carbon::now();
+        $service_categories->save();
 
-        $category_item->delete();
+        $service_categories->delete();
 
         return response()->json([
-            'message' => 'Berhasil menghapus Kategori Barang',
+            'message' => 'Berhasil menghapus Kategori Jasa',
         ], 200);
     }
 }
