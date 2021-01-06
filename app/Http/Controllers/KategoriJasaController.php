@@ -25,7 +25,7 @@ class KategoriJasaController extends Controller
 
         if ($request->keyword) {
             $service_categories = $service_categories->where('category_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('service_categories.created_by', 'like', '%' . $request->keyword . '%');
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->orderby) {
