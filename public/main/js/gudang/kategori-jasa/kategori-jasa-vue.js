@@ -1,12 +1,12 @@
 $(document).ready(function() {
-	const kategoriBarangApp = new Vue({
-		el: '#kategori-barang-app',
+	const kategoriJasaApp = new Vue({
+		el: '#kategori-jasa-app',
 		data: {
 			listData: [],
 			searchTxt: '',
 			titleModal: '',   stateModal: '',
 			msgContent: '',   confirmContent: '',
-			idKategori: '',   kategoriBarang: '',
+			idKategori: '',   kategoriJasa: '',
 			kategoriErr1: false, touchedForm: false,
 			beErr: false,     msgBeErr: '',
 			columnStatus: {
@@ -24,43 +24,43 @@ $(document).ready(function() {
 			this.getData();
 		},
 		computed: {
-			validateSimpanKateBarang: function() {
+			validateSimpanKateJasa: function() {
 				return this.kategoriErr1 || this.beErr || !this.touchedForm;
 			}
 		},
 		methods: {
 			openFormAdd: function() {
 				this.stateModal = 'add';
-				this.titleModal = 'Tambah Kategori Barang';
+				this.titleModal = 'Tambah Kategori Jasa';
 				this.refreshVariable();
-				$('#modal-kategori-barang').modal('show');
+				$('#modal-kategori-jasa').modal('show');
 			},
 			openFormUpdate: function(item) {
 				this.stateModal = 'edit';
-				this.titleModal = 'Ubah Kategori Barang';
+				this.titleModal = 'Ubah Kategori Jasa';
 				this.refreshVariable();
 				this.idKategori = item.id;
-				this.kategoriBarang = item.category_name;
-				$('#modal-kategori-barang').modal('show');
+				this.kategoriJasa = item.category_name;
+				$('#modal-kategori-jasa').modal('show');
 			},
 			openFormDelete: function(item) {
 				this.stateModal = 'delete';
 				this.idKategori = item.id;
-				this.confirmContent = 'Anda yakin ingin menghapus Kategori Barang ini?';
+				this.confirmContent = 'Anda yakin ingin menghapus Kategori Jasa ini?';
 				$('#modal-confirmation').modal('show');
 			},
-			kategoriBarangKeyup: function() {
+			kategoriJasaKeyup: function() {
 				this.validationForm();
 			},
-			submitKateBarang: function() {
+			submitKateJasa: function() {
 				if (this.stateModal === 'add') {
 					const form_data = new FormData();
-					form_data.append('NamaKategori', this.kategoriBarang);
+					form_data.append('NamaKategoriJasa', this.kategoriJasa);
 
 					this.processSave(form_data);
 				} else if (this.stateModal === 'edit') {
 					$('#modal-confirmation').modal('show');
-					this.confirmContent = 'Anda yakin untuk mengubah kategori barang ?';
+					this.confirmContent = 'Anda yakin untuk mengubah kategori jasa ?';
 				}
 			},
 			submitConfirm: function() {
@@ -68,7 +68,7 @@ $(document).ready(function() {
 				if (this.stateModal === 'edit') {
 					const request = {
 						id: this.idKategori,
-						NamaKategori: this.kategoriBarang,
+						NamaKategoriJasa: this.kategoriJasa,
 					};
 
 					this.processEdit(request);
@@ -99,7 +99,7 @@ $(document).ready(function() {
 			},
 			getData: function() {
 				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/kategori-barang', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.get($('.baseUrl').val() + '/api/kategori-jasa', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listData = resp.data;
 					})
@@ -115,14 +115,14 @@ $(document).ready(function() {
 			},
 			processSave: function(form_data) {
 				$('#loading-screen').show();
-				axios.post($('.baseUrl').val() + '/api/kategori-barang', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.post($('.baseUrl').val() + '/api/kategori-jasa', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if(resp.status == 200) {
-						this.msgContent = 'Berhasil Menambah Kategori Barang';
+						this.msgContent = 'Berhasil Menambah Kategori Jasa';
 						$('#msg-box').modal('show');
 
 						setTimeout(() => {
-							$('#modal-kategori-barang').modal('toggle');
+							$('#modal-kategori-jasa').modal('toggle');
 							this.refreshVariable();
 							this.getData();
 						}, 1000);
@@ -147,16 +147,16 @@ $(document).ready(function() {
 			},
 			processEdit: function(form_data) {
 				$('#loading-screen').show();
-				axios.put($('.baseUrl').val() + '/api/kategori-barang', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.put($('.baseUrl').val() + '/api/kategori-jasa', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if(resp.status == 200) {
 						$('#modal-confirmation').modal('toggle');
 
-						this.msgContent = 'Berhasil Mengubah Kategori';
+						this.msgContent = 'Berhasil Mengubah Kategori Jasa';
 						$('#msg-box').modal('show');
 
 						setTimeout(() => {
-							$('#modal-kategori-barang').modal('toggle');
+							$('#modal-kategori-jasa').modal('toggle');
 							this.refreshVariable();
 							this.getData();
 						}, 1000);
@@ -181,12 +181,12 @@ $(document).ready(function() {
 				});
 			},
 			processDelete: function(form_data) {
-				axios.delete($('.baseUrl').val() + '/api/kategori-barang', { params: form_data, headers: { 'Authorization': `Bearer ${token}` } })
+				axios.delete($('.baseUrl').val() + '/api/kategori-jasa', { params: form_data, headers: { 'Authorization': `Bearer ${token}` } })
 				.then(resp => {
 					if (resp.status == 200) {
 						$('#modal-confirmation').modal('toggle');
 
-						this.msgContent = 'Berhasil menghapus kategori barang';
+						this.msgContent = 'Berhasil menghapus kategori jasa';
 						$('#msg-box').modal('show');
 						this.getData();
 					}
@@ -201,10 +201,10 @@ $(document).ready(function() {
 			},
 			validationForm: function() {
 				this.touchedForm = true; this.beErr = false;
-				this.kategoriErr1 = (!this.kategoriBarang) ? true : false; 
+				this.kategoriErr1 = (!this.kategoriJasa) ? true : false; 
 			},
 			refreshVariable: function() {
-				this.kategoriBarang = ''; this.kategoriErr1 = false;
+				this.kategoriJasa = ''; this.kategoriErr1 = false;
 				this.beErr = false; this.touchedForm = false;
 			}
 		}
