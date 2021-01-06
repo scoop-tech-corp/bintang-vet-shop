@@ -45,6 +45,16 @@ Route::get('/daftar-barang', function () {
 	return view('gudang.daftar-barang.index');
 });
 
+Route::get('/kategori-jasa', function () {
+	return view('gudang.kategori-jasa.index');
+});
+
+
+Route::get('/daftar-jasa', function () {
+	return view('gudang.daftar-jasa.index');
+});
+
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {

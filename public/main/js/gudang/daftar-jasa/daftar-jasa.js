@@ -1,13 +1,11 @@
 $(document).ready(function() {
-	let optSatuanBarang = '';
-	let optKategoriBarang = '';
+	let optKategoriJasa = '';
 	let optCabang = '';
 
+	let getId = null;
 	let modalState = '';
-	let isValidNamaBarang = false;
-	let isValidJumlahBarang = false;
-	let isValidSelectedSatuanBarang = false;
-	let isValidSelectedKategori = false;
+	let isValidNamaJasa = false;
+	let isValidSelectedKategoriJasa = false;
 	let isValidSelectedCabang = false;
 	let isBeErr = false;
 	let paramUrlSetup = {
@@ -17,13 +15,10 @@ $(document).ready(function() {
 	};
 
 	// load daftar barang
-	loadDaftarBarang();
-
-	// load satuan barang
-	loadSatuanBarang();
+	loadDaftarJasa();
 
 	// load kategori barang
-	loadKategoriBarang();
+	loadKategoriJasa();
 
 	// load cabang
 	loadCabang();
@@ -53,34 +48,27 @@ $(document).ready(function() {
 		paramUrlSetup.orderby = $(this).attr('orderby');
 		paramUrlSetup.column = column;
 
-		loadDaftarBarang();
+		loadDaftarJasa();
 	});
 	
 	$('.openFormAdd').click(function() {
 		modalState = 'add';
-		$('.modal-title').text('Tambah Daftar Barang');
+		$('.modal-title').text('Tambah Daftar Jasa');
 		refreshForm();
 		formConfigure();
 	});
 
-	$('.openFormUpload').click(function() {
-		$('#modal-upload-daftar-barang .modal-title').text('Upload Barang Sekaligus');
-		$('#modal-upload-daftar-barang').modal('show');
-	});	
-
-	$('#btnSubmitDaftarBarang').click(function() {
+	$('#btnSubmitDaftarJasa').click(function() {
 
 		if (modalState == 'add') {
 
 			const fd = new FormData();
-			fd.append('nama_barang', $('#namaBarang').val());
-			fd.append('jumlah_barang', $('#jumlahBarang').val());
-			fd.append('satuan_barang', $('#selectedSatuanBarang').val());
-			fd.append('kategori_barang', $('#selectedKategoriBarang').val());
-			fd.append('cabang', $('#selectedCabang').val());
+			fd.append('NamaLayanan', $('#namaJasa').val());
+			fd.append('KategoriJasa', $('#selectedKategoriJasa').val());
+			fd.append('CabangId', $('#selectedCabang').val());
 
 			$.ajax({
-				url : $('.baseUrl').val() + '/api/daftar-barang',
+				url : $('.baseUrl').val() + '/api/daftar-jasa',
 				type: 'POST',
 				dataType: 'JSON',
 				headers: { 'Authorization': `Bearer ${token}` },
@@ -89,18 +77,18 @@ $(document).ready(function() {
 				beforeSend: function() { $('#loading-screen').show(); },
 				success: function(resp) {
 
-					$("#msg-box .modal-body").text('Berhasil Menambah Daftar Barang');
+					$("#msg-box .modal-body").text('Berhasil Menambah Daftar Jasa');
 					$('#msg-box').modal('show');
 
 					setTimeout(() => {
-						$('#modal-daftar-barang').modal('toggle');
+						$('#modal-daftar-jasa').modal('toggle');
 						refreshForm();
-						loadDaftarBarang();
+						loadDaftarJasa();
 					}, 1000);
 				}, complete: function() { $('#loading-screen').hide(); }
 				, error: function(err) {
 					if (err.status === 422) {
-						let errText = ''; $('#beErr').empty(); $('#btnSubmitDaftarBarang').attr('disabled', true);
+						let errText = ''; $('#beErr').empty(); $('#btnSubmitDaftarJasa').attr('disabled', true);
 						$.each(err.responseJSON.errors, function(idx, v) {
 							errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
 						});
@@ -114,37 +102,35 @@ $(document).ready(function() {
 
 		} else {
 			// edit
-			$('#modal-confirmation .box-body').text('Anda yakin untuk mengubah daftar barang ?');
+			$('#modal-confirmation .modal-title').text('Peringatan');
+			$('#modal-confirmation .box-body').text('Anda yakin untuk mengubah daftar jasa ?');
 			$('#modal-confirmation').modal('show');
 		}
 	});
 
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
-		loadDaftarBarang();
+		loadDaftarJasa();
 	}
 
-	function loadDaftarBarang() {
-
+	function loadDaftarJasa() {
+		getId = null;
+		modalState = '';
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/daftar-barang',
+			url     : $('.baseUrl').val() + '/api/daftar-jasa',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				let getId = null;
-				let listDaftarBarang = '';
-				$('#list-daftar-barang tr').remove();
+				let listDaftarJasa = '';
+				$('#list-daftar-jasa tr').remove();
 
 				$.each(data, function(idx, v) {
-					listDaftarBarang += `<tr>`
+					listDaftarJasa += `<tr>`
 						+ `<td>${++idx}</td>`
-						+ `<td>${v.item_name}</td>`
-						+ `<td>${v.total_item}</td>`
-						+ `<td>${v.unit_name}</td>`
+						+ `<td>${v.service_name}</td>`
 						+ `<td>${v.category_name}</td>`
-						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
@@ -153,27 +139,27 @@ $(document).ready(function() {
 							</td>`
 						+ `</tr>`;
 				});
-				$('#list-daftar-barang').append(listDaftarBarang);
+				$('#list-daftar-jasa').append(listDaftarJasa);
 
 				$('.openFormEdit').click(function() {
 					const getObj = data.find(x => x.id == $(this).val());
 					modalState = 'edit';
 					refreshForm();
-					$('.modal-title').text('Edit Daftar Barang');
+					$('.modal-title').text('Edit Daftar Jasa');
 
 					formConfigure();
 					getId = getObj.id;
-					$('#namaBarang').val(getObj.item_name);
-					$('#jumlahBarang').val(getObj.total_item);
-					$('#selectedSatuanBarang').val(getObj.unit_goods_id); $('#selectedSatuanBarang').trigger('change');
-					$('#selectedKategoriBarang').val(getObj.category_goods_id); $('#selectedKategoriBarang').trigger('change');
+					$('#namaJasa').val(getObj.service_name);
+					$('#selectedKategoriJasa').val(getObj.service_category_id); $('#selectedKategoriJasa').trigger('change');
 					$('#selectedCabang').val(getObj.branch_id); $('#selectedCabang').trigger('change');
 				});
 			
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
+					console.log('getId', getId);
 					modalState = 'delete';
-					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus Daftar Barang ini?');
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus Daftar Jasa ini?');
 					$('#modal-confirmation').modal('show');
 				});
 
@@ -183,30 +169,29 @@ $(document).ready(function() {
 
 						const datas = {
 							id: getId,
-							nama_barang: $('#namaBarang').val(),
-							jumlah_barang: $('#jumlahBarang').val(),
-							satuan_barang: 	$('#selectedSatuanBarang').val(),
-							kategori_barang: $('#selectedKategoriBarang').val(),
-							cabang: $('#selectedCabang').val()
+							NamaLayanan: $('#namaJasa').val(),
+							KategoriJasa: $('#selectedKategoriJasa').val(),
+							CabangId: $('#selectedCabang').val()
 						};
 
 						$.ajax({
-							url : $('.baseUrl').val() + '/api/daftar-barang',
+							url : $('.baseUrl').val() + '/api/daftar-jasa',
 							type: 'PUT',
 							dataType: 'JSON',
 							headers: { 'Authorization': `Bearer ${token}` },
 							data: datas,
 							beforeSend: function() { $('#loading-screen').show(); },
 							success: function(data) {
+								$('#modal-confirmation .modal-title').text('Peringatan');
 								$('#modal-confirmation').modal('toggle');
 
-								$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Barang');
+								$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Jasa');
 								$('#msg-box').modal('show');
 
 								setTimeout(() => {
-									$('#modal-daftar-barang').modal('toggle');
+									$('#modal-daftar-jasa').modal('toggle');
 									refreshForm();
-									loadDaftarBarang();
+									loadDaftarJasa();
 								}, 1000);
 
 							}, complete: function() { $('#loading-screen').hide(); }
@@ -219,18 +204,20 @@ $(document).ready(function() {
 						});
 					} else {
 						// process delete
+						console.log('delete id', getId);
 						$.ajax({
-							url     : $('.baseUrl').val() + '/api/daftar-barang',
+							url     : $('.baseUrl').val() + '/api/daftar-jasa',
 							headers : { 'Authorization': `Bearer ${token}` },
 							type    : 'DELETE',
 							data	  : { id: getId },
 							beforeSend: function() { $('#loading-screen').show(); },
 							success: function(data) {
+								$('#modal-confirmation .modal-title').text('Peringatan');
 								$('#modal-confirmation').modal('toggle');
 
-								$("#msg-box .modal-body").text('Berhasil menghapus daftar barang');
+								$("#msg-box .modal-body").text('Berhasil menghapus daftar jasa');
 								$('#msg-box').modal('show');
-								loadDaftarBarang();
+								loadDaftarJasa();
 
 							}, complete: function() { $('#loading-screen').hide(); }
 							, error: function(err) {
@@ -254,52 +241,34 @@ $(document).ready(function() {
 	}
 
 	function formConfigure() {
-		$('#selectedSatuanBarang').select2();
-		$('#selectedKategoriBarang').select2();
+		$('#selectedKategoriJasa').select2();
 		$('#selectedCabang').select2();
-		$('#modal-daftar-barang').modal('show');
-		$('#btnSubmitDaftarBarang').attr('disabled', true);
+		$('#modal-daftar-jasa').modal('show');
+		$('#btnSubmitDaftarJasa').attr('disabled', true);
 		
-		$('#namaBarang').keyup(function () { validationForm(); });
-		$('#jumlahBarang').keyup(function () { validationForm(); });
-		$('#selectedSatuanBarang').change(function() { validationForm(); });
-		$('#hargaSatuanBarang').keyup(function () { validationForm(); });
-		$('#selectedKategoriBarang').change(function () { validationForm(); });
+		$('#namaJasa').keyup(function () { validationForm(); });
+		$('#selectedKategoriJasa').change(function () { validationForm(); });
 		$('#selectedCabang').change(function () { validationForm(); });
 	}
 
 	function refreshForm() {
-		$('#namaBarang').val(null);
-		$('#jumlahBarang').val(null);
-		$('#selectedSatuanBarang').val(null);
-		$('#selectedKategoriBarang').val(null);
+		$('#namaJasa').val(null);
+		$('#selectedKategoriJasa').val(null);
 		$('#selectedCabang').val(null);
 		$('#beErr').empty(); isBeErr = false;
 	}
 
 	function validationForm() {
-		if (!$('#namaBarang').val()) {
-			$('#namaBarangErr1').text('Nama barang harus di isi'); isValidNamaBarang = false;
+		if (!$('#namaJasa').val()) {
+			$('#namaJasaErr1').text('Nama jasa harus di isi'); isValidNamaJasa = false;
 		} else { 
-			$('#namaBarangErr1').text(''); isValidNamaBarang = true;
+			$('#namaJasaErr1').text(''); isValidNamaJasa = true;
 		}
 
-		if (!$('#jumlahBarang').val()) {
-			$('#jumlahBarangErr1').text('Jumlah barang harus di isi'); isValidJumlahBarang = false;
-		} else { 
-			$('#jumlahBarangErr1').text(''); isValidJumlahBarang = true;
-		}
-
-		if (!$('#selectedSatuanBarang').val()) {
-			$('#satuanBarangErr1').text('Satuan barang harus di isi'); isValidSelectedSatuanBarang = false;
+		if (!$('#selectedKategoriJasa').val()) {
+			$('#kategoriJasaErr1').text('Kategori jasa harus di isi'); isValidSelectedKategoriJasa = false;
 		} else {
-			$('#satuanBarangErr1').text(''); isValidSelectedSatuanBarang = true;
-		}
-
-		if (!$('#selectedKategoriBarang').val()) {
-			$('#kategoriBarangErr1').text('Kategori barang harus di isi'); isValidSelectedKategori = false;
-		} else {
-			$('#kategoriBarangErr1').text(''); isValidSelectedKategori = true;
+			$('#kategoriJasaErr1').text(''); isValidSelectedKategoriJasa = true;
 		}
 
 		if (!$('#selectedCabang').val()) {
@@ -310,54 +279,28 @@ $(document).ready(function() {
 
 		$('#beErr').empty(); isBeErr = false;
 
-		if (!isValidNamaBarang || !isValidJumlahBarang || !isValidSelectedSatuanBarang || !isValidSelectedKategori 
-			|| !isValidSelectedCabang || isBeErr) {
-			$('#btnSubmitDaftarBarang').attr('disabled', true);
+		if (!isValidNamaJasa || !isValidSelectedKategoriJasa || !isValidSelectedCabang || isBeErr) {
+			$('#btnSubmitDaftarJasa').attr('disabled', true);
 		} else {
-			$('#btnSubmitDaftarBarang').attr('disabled', false);
+			$('#btnSubmitDaftarJasa').attr('disabled', false);
 		}
 	}
 
-	function loadSatuanBarang() {
+	function loadKategoriJasa() {
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/satuan-barang',
+			url     : $('.baseUrl').val() + '/api/kategori-jasa',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				optSatuanBarang += `<option value=''>Pilih Satuan Barang</option>`
-	
-				if (data.length) {
-					for (var i = 0 ; i < data.length ; i++){
-						optSatuanBarang += `<option value=${data[i].id}>${data[i].unit_name}</option>`;
-					}
-				}
-				$('#selectedSatuanBarang').append(optSatuanBarang);
-			}, complete: function() { $('#loading-screen').hide(); },
-			error: function(err) {
-				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
-					location.href = $('.baseUrl').val() + '/masuk';
-				}
-			}
-		});
-	}
-
-	function loadKategoriBarang() {
-		$.ajax({
-			url     : $('.baseUrl').val() + '/api/kategori-barang',
-			headers : { 'Authorization': `Bearer ${token}` },
-			type    : 'GET',
-			beforeSend: function() { $('#loading-screen').show(); },
-			success: function(data) {
-				optKategoriBarang += `<option value=''>Pilih Kategori Barang</option>`
+				optKategoriJasa += `<option value=''>Pilih Kategori Jasa</option>`
 	
 				if (data.length) {
 					for (let i = 0 ; i < data.length ; i++) {
-						optKategoriBarang += `<option value=${data[i].id}>${data[i].category_name}</option>`;
+						optKategoriJasa += `<option value=${data[i].id}>${data[i].category_name}</option>`;
 					}
 				}
-				$('#selectedKategoriBarang').append(optKategoriBarang);
+				$('#selectedKategoriJasa').append(optKategoriJasa);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
