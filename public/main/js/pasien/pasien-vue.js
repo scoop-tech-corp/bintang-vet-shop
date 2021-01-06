@@ -28,9 +28,10 @@ $(document).ready(function() {
 				created_by: 'none',
 				created_at: 'none'
 			},
-			orderSetup: {
+			paramUrlSetup: {
 				orderby:'',
-				column: ''
+				column: '',
+				keyword: ''
 			}
 		},
 		mounted() {
@@ -126,26 +127,8 @@ $(document).ready(function() {
 				}
 			},
 			onSearch: function() {
-				$('#loading-screen').show();
-
-				const form_data = new FormData();
-				form_data.append('keyword', this.searchTxt);
-
-				axios.post($('.baseUrl').val() + '/api/pasien/search', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
-				.then(resp => {
-					if(resp.status == 200) {
-						this.listPasien = resp.data;
-					}
-				})
-				.catch(err => {
-					if (err.response.status === 401) {
-						localStorage.removeItem('vet-clinic');
-	          location.href = $('.baseUrl').val() + '/masuk';
-					}
-				})
-				.finally(() => {
-					$('#loading-screen').hide();
-				});
+				this.paramUrlSetup.keyword =  this.searchTxt;
+				this.getData();
 			},
 			processSave: function(form_data) {
 				$('#loading-screen').show();
@@ -301,13 +284,13 @@ $(document).ready(function() {
 					this.columnStatus['created_by'] = 'none';
 				}
 
-				this.orderSetup.orderby = this.columnStatus[e];
-				this.orderSetup.column = e;
+				this.paramUrlSetup.orderby = this.columnStatus[e];
+				this.paramUrlSetup.column = e;
 				this.getData();
 			},
 			getData: function() {
 				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/pasien', { params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.get($('.baseUrl').val() + '/api/pasien', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listPasien = resp.data;
 					})

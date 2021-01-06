@@ -14,9 +14,10 @@ $(document).ready(function() {
 				created_by: 'none',
 				created_at: 'none'
 			},
-			orderSetup: {
+			paramUrlSetup: {
 				orderby:'',
-				column: ''
+				column: '',
+				keyword: ''
 			}
 		},
 		mounted() {
@@ -88,35 +89,17 @@ $(document).ready(function() {
 					this.columnStatus['created_by'] = 'none';
 				}
 
-				this.orderSetup.orderby = this.columnStatus[e];
-				this.orderSetup.column = e;
+				this.paramUrlSetup.orderby = this.columnStatus[e];
+				this.paramUrlSetup.column = e;
 				this.getData();
 			},
 			onSearch: function() {
-				$('#loading-screen').show();
-
-				const form_data = new FormData();
-				form_data.append('keyword', this.searchTxt);
-
-				axios.post($('.baseUrl').val() + '/api/satuan-barang/search', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
-				.then(resp => {
-					if(resp.status == 200) {
-						this.listData = resp.data;
-					}
-				})
-				.catch(err => {
-					if (err.response.status === 401) {
-						localStorage.removeItem('vet-clinic');
-	          location.href = $('.baseUrl').val() + '/masuk';
-					}
-				})
-				.finally(() => {
-					$('#loading-screen').hide();
-				});
+				this.paramUrlSetup.keyword =  this.searchTxt;
+				this.getData();
 			},
 			getData: function() {
 				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/satuan-barang', { params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.get($('.baseUrl').val() + '/api/satuan-barang', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listData = resp.data;
 					})
