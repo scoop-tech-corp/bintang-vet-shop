@@ -339,5 +339,30 @@ class UserSeeder extends Seeder
             'user_id' => '1',
             'created_at' => '2020-12-31'
         ]);
+
+        //list_of_services
+        DB::table('list_of_services')->insert([
+            'service_name' => 'rawat jalan',
+            'service_category_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'rawat inap',
+            'service_category_id' => '3',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'operasi caesar',
+            'service_category_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }

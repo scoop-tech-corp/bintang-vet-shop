@@ -51,6 +51,13 @@ class DaftarBarangController extends Controller
 
     public function create(Request $request)
     {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'nama_barang' => 'required|string|min:3|max:50',
             'jumlah_barang' => 'required|numeric|min:1',
@@ -99,6 +106,13 @@ class DaftarBarangController extends Controller
 
     public function update(Request $request)
     {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'nama_barang' => 'required|string|min:3|max:50',
             'jumlah_barang' => 'required|numeric|min:1',
@@ -156,6 +170,13 @@ class DaftarBarangController extends Controller
 
     public function delete(Request $request)
     {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $item = ListofItems::find($request->id);
 
         if (is_null($item)) {
@@ -179,6 +200,13 @@ class DaftarBarangController extends Controller
 
     public function download_template()
     {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         return response()->download(public_path('source_download/cobadownload.xlsx'), 'Template Excel');
     }
 
