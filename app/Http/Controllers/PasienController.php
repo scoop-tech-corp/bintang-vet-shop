@@ -15,8 +15,9 @@ class PasienController extends Controller
         $patient = DB::table('patients')
             ->join('branches', 'patients.branch_id', '=', 'branches.id')
             ->join('users', 'patients.user_id', '=', 'users.id')
-            ->select('patients.id', 'patients.branch_id', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
-                , 'patients.pet_year_age', 'branches.branch_name', 'users.fullname as created_by',
+            ->select('patients.id', 'patients.branch_id', 'branches.branch_name', 'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender'
+                , 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address', 'patients.owner_phone_number'
+                , 'branches.branch_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
             ->where('patients.isDeleted', '=', 'false');
 
@@ -26,6 +27,10 @@ class PasienController extends Controller
                 ->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
                 ->orwhere('patients.pet_gender', 'like', '%' . $request->keyword . '%')
                 ->orwhere('patients.pet_year_age', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_month_age', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.owner_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.owner_address', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.owner_phone_number', 'like', '%' . $request->keyword . '%')
                 ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
                 ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
@@ -45,13 +50,13 @@ class PasienController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kategori_hewan' => 'required|min:3|max:51',
+            'kategori_hewan' => 'required|min:3|max:50',
             'nama_hewan' => 'required|min:3|max:51',
-            'jenis_kelamin_hewan' => 'required|string|max:51',
+            'jenis_kelamin_hewan' => 'required|string|max:50',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
-            'nama_pemilik' => 'required|string|max:51',
-            'alamat_pemilik' => 'required|string|max:101',
+            'nama_pemilik' => 'required|string|max:50',
+            'alamat_pemilik' => 'required|string|max:100',
             'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,12',
         ]);
 
