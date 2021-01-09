@@ -86,6 +86,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pembagian-harga-barang', 'HargaBarangController@create');
         Route::put('pembagian-harga-barang', 'HargaBarangController@update');
         Route::delete('pembagian-harga-barang', 'HargaBarangController@delete');
+        Route::get('pembagian-harga-barang/kategori-barang', 'HargaBarangController@item_category');
+        Route::get('pembagian-harga-barang/nama-barang', 'HargaBarangController@item_name');
     });
 });
 
