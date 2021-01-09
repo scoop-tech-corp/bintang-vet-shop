@@ -73,6 +73,11 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('daftar-jasa', 'DaftarJasaController@update');
         Route::delete('daftar-jasa', 'DaftarJasaController@delete');
 
+        //pembagian harga jasa
+        Route::get('pembagian-harga-jasa', 'HargaJasaController@index');
+        Route::post('pembagian-harga-jasa', 'HargaJasaController@create');
+        Route::put('pembagian-harga-jasa', 'HargaJasaController@update');
+        Route::delete('pembagian-harga-jasa', 'HargaJasaController@delete');
     });
 });
 
