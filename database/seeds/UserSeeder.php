@@ -364,5 +364,44 @@ class UserSeeder extends Seeder
             'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'operasi biasa',
+            'service_category_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //price_services
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '1',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '2',
+            'selling_price' => 120000,
+            'capital_price' => 20000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '3',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
