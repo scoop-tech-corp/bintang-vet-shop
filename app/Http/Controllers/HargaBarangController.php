@@ -198,4 +198,56 @@ class HargaBarangController extends Controller
         ], 200);
     }
 
+    public function item_category(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $list_of_item = DB::table('list_of_items')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->select('category_item_id', 'category_item.category_name')
+            ->where('branch_id', '=', $request->branch_id)
+            ->distinct('category_item_id')
+            ->get();
+
+        if (is_null($list_of_item)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        return response()->json($list_of_item, 200);
+    }
+
+    public function item_name(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $list_of_items = DB::table('list_of_items')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->select('list_of_items.id', 'list_of_items.item_name')
+            ->where('branch_id', '=', $request->branch_id)
+            ->where('category_item_id', '=', $request->category_item_id)
+            ->get();
+
+        if (is_null($list_of_items)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        return response()->json($list_of_items, 200);
+    }
+
 }
