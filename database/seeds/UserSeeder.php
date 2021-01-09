@@ -403,5 +403,36 @@ class UserSeeder extends Seeder
             'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
+
+        //price_items
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '1',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '2',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '3',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
