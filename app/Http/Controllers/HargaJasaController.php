@@ -150,7 +150,7 @@ class HargaJasaController extends Controller
                 'errors' => ['Data duplicate!'],
             ], 422);
         }
-        
+
         $price_services->list_of_services_id = $request->ListOfServiceId;
         $price_services->selling_price = $request->HargaJual;
         $price_services->capital_price = $request->HargaModal;
@@ -193,5 +193,57 @@ class HargaJasaController extends Controller
         return response()->json([
             'message' => 'Berhasil menghapus Data',
         ], 200);
+    }
+
+    public function service_category(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $list_of_services = DB::table('list_of_services')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->select('service_category_id', 'service_categories.category_name')
+            ->where('branch_id', '=', $request->branch_id)
+            ->distinct('service_category_id')
+            ->get();
+
+        if (is_null($list_of_services)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        return response()->json($list_of_services, 200);
+    }
+
+    public function service_name(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $list_of_services = DB::table('list_of_services')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->select('list_of_services.id', 'list_of_services.service_name')
+            ->where('branch_id', '=', $request->branch_id)
+            ->where('service_category_id', '=', $request->service_category_id)
+            ->get();
+
+        if (is_null($list_of_services)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data not found!'],
+            ], 404);
+        }
+
+        return response()->json($list_of_services, 200);
     }
 }
