@@ -235,7 +235,8 @@ class HargaBarangController extends Controller
 
         $list_of_items = DB::table('list_of_items')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
-            ->select('list_of_items.id', 'list_of_items.item_name')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->select('list_of_items.id', 'list_of_items.item_name','total_item','unit_item_id','unit_item.unit_name')
             ->where('branch_id', '=', $request->branch_id)
             ->where('category_item_id', '=', $request->category_item_id)
             ->get();
