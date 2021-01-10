@@ -9,18 +9,18 @@
 			</div>
 			<div class="modal-body">
         <div class="content">
-          <div class="box box-success">
+          <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Download Template</h3>
             </div>
             <div class="box-body">
               <div>Gunakan Template untuk menambah barang secara sekaligus</div>
-              <button class="btn btn-success">Download Template</button>
+              <button class="btn btn-info">Download Template</button>
             </div>
           </div>
         </div>
         <div class="content">
-          <div class="box box-success">
+          <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Upload File</h3>
             </div>

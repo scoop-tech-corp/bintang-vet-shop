@@ -3,6 +3,10 @@
 	display: none;
 }
 
+body { 
+   padding-right: 0 !important; /* too handle bug for modal bootstrap*/
+}
+
 .section-logo-vet-clinic {
 	padding: 10px 0px; text-align: center
 }

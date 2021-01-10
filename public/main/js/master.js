@@ -46,7 +46,9 @@ $(document).ready(function() {
     if (Value['href'] === window.location.origin + pathName) {
       $(Value).parent().addClass('active');
 
-      if (pathName === '/kategori-barang' || pathName === '/satuan-barang' || pathName === '/daftar-barang') {
+      if (pathName === '/kategori-barang' || pathName === '/satuan-barang' 
+        || pathName === '/daftar-barang' || pathName === '/kategori-jasa' 
+        || pathName === '/daftar-jasa' || pathName === '/pembagian-harga') {
         $('.menuGudang').addClass('active');
       }
     }

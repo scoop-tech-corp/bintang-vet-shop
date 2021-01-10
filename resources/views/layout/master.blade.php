@@ -156,8 +156,7 @@
 		<div class="control-sidebar-bg"></div>
 
   </div>
-  <!-- ./wrapper -->
-
+	<!-- ./wrapper -->
 		<script src="{{ asset('main/js/master.js') }}"></script>
 
 		@yield('vue-content')
