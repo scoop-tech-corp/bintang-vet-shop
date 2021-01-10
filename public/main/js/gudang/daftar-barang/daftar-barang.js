@@ -3,6 +3,7 @@ $(document).ready(function() {
 	let optKategoriBarang = '';
 	let optCabang = '';
 
+	let getId = null;
 	let modalState = '';
 	let isValidNamaBarang = false;
 	let isValidJumlahBarang = false;
@@ -119,12 +120,79 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#submitConfirm').click(function() {
+		if (modalState == 'edit') {
+			// process edit
+			const datas = {
+				id: getId,
+				nama_barang: $('#namaBarang').val(),
+				jumlah_barang: $('#jumlahBarang').val(),
+				satuan_barang: 	$('#selectedSatuanBarang').val(),
+				kategori_barang: $('#selectedKategoriBarang').val(),
+				cabang: $('#selectedCabang').val()
+			};
+
+			$.ajax({
+				url : $('.baseUrl').val() + '/api/daftar-barang',
+				type: 'PUT',
+				dataType: 'JSON',
+				headers: { 'Authorization': `Bearer ${token}` },
+				data: datas,
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Barang');
+					$('#msg-box').modal('show');
+
+					setTimeout(() => {
+						$('#modal-daftar-barang').modal('toggle');
+						refreshForm();
+						loadDaftarBarang();
+					}, 1000);
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
+		} else {
+			// process delete
+			$.ajax({
+				url     : $('.baseUrl').val() + '/api/daftar-barang',
+				headers : { 'Authorization': `Bearer ${token}` },
+				type    : 'DELETE',
+				data	  : { id: getId },
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil menghapus daftar barang');
+					$('#msg-box').modal('show');
+					loadDaftarBarang();
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
+		}
+	});
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadDaftarBarang();
 	}
 
 	function loadDaftarBarang() {
+		getId = null;
+		modalState = '';
 
 		$.ajax({
 			url     : $('.baseUrl').val() + '/api/daftar-barang',
@@ -133,7 +201,6 @@ $(document).ready(function() {
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				let getId = null;
 				let listDaftarBarang = '';
 				$('#list-daftar-barang tr').remove();
 
@@ -175,72 +242,6 @@ $(document).ready(function() {
 					modalState = 'delete';
 					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus Daftar Barang ini?');
 					$('#modal-confirmation').modal('show');
-				});
-
-				$('#submitConfirm').click(function() {
-					if (modalState == 'edit') {
-						// process edit
-
-						const datas = {
-							id: getId,
-							nama_barang: $('#namaBarang').val(),
-							jumlah_barang: $('#jumlahBarang').val(),
-							satuan_barang: 	$('#selectedSatuanBarang').val(),
-							kategori_barang: $('#selectedKategoriBarang').val(),
-							cabang: $('#selectedCabang').val()
-						};
-
-						$.ajax({
-							url : $('.baseUrl').val() + '/api/daftar-barang',
-							type: 'PUT',
-							dataType: 'JSON',
-							headers: { 'Authorization': `Bearer ${token}` },
-							data: datas,
-							beforeSend: function() { $('#loading-screen').show(); },
-							success: function(data) {
-								$('#modal-confirmation').modal('toggle');
-
-								$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Barang');
-								$('#msg-box').modal('show');
-
-								setTimeout(() => {
-									$('#modal-daftar-barang').modal('toggle');
-									refreshForm();
-									loadDaftarBarang();
-								}, 1000);
-
-							}, complete: function() { $('#loading-screen').hide(); }
-							, error: function(err) {
-								if (err.status == 401) {
-									localStorage.removeItem('vet-clinic');
-									location.href = $('.baseUrl').val() + '/masuk';
-								}
-							}
-						});
-					} else {
-						// process delete
-						$.ajax({
-							url     : $('.baseUrl').val() + '/api/daftar-barang',
-							headers : { 'Authorization': `Bearer ${token}` },
-							type    : 'DELETE',
-							data	  : { id: getId },
-							beforeSend: function() { $('#loading-screen').show(); },
-							success: function(data) {
-								$('#modal-confirmation').modal('toggle');
-
-								$("#msg-box .modal-body").text('Berhasil menghapus daftar barang');
-								$('#msg-box').modal('show');
-								loadDaftarBarang();
-
-							}, complete: function() { $('#loading-screen').hide(); }
-							, error: function(err) {
-								if (err.status == 401) {
-									localStorage.removeItem('vet-clinic');
-									location.href = $('.baseUrl').val() + '/masuk';
-								}
-							}
-						});
-					}
 				});
 
 			}, complete: function() { $('#loading-screen').hide(); },

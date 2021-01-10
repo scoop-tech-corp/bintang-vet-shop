@@ -49,9 +49,12 @@ Route::get('/kategori-jasa', function () {
 	return view('gudang.kategori-jasa.index');
 });
 
-
 Route::get('/daftar-jasa', function () {
 	return view('gudang.daftar-jasa.index');
+});
+
+Route::get('/pembagian-harga', function () {
+	return view('gudang.pembagian-harga.index');
 });
 
 

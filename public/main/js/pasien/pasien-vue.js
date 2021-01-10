@@ -56,7 +56,17 @@ $(document).ready(function() {
 				this.refreshVariable();
 				this.idPasien = item.id;
 
-				this.getDetail();
+				this.nomorRegis = item.id_member;
+				this.animalType = item.pet_category;
+				this.animalName = item.pet_name;
+				this.animalSex = item.pet_gender;
+				this.animalYear = item.pet_year_age;
+				this.animalMonth = item.pet_month_age;
+				this.ownerName = item.owner_name;
+				this.ownerAddress = item.owner_address;
+				this.ownerTelp = item.owner_phone_number;
+
+				$('#modal-pasien').modal('show');
 			},
 			openFormDelete: function(item) {
 				this.stateModal = 'delete';
@@ -293,34 +303,6 @@ $(document).ready(function() {
 				axios.get($('.baseUrl').val() + '/api/pasien', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listPasien = resp.data;
-					})
-					.catch(err => {
-						if (err.response.status === 401) {
-							localStorage.removeItem('vet-clinic');
-							location.href = $('.baseUrl').val() + '/masuk';
-						}
-					})
-					.finally(() => {
-						$('#loading-screen').hide();
-					});
-			},
-			getDetail: function() {
-				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/pasien/detail', { params: {id: this.idPasien }, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
-					.then(resp => {
-						const getPasienDetail = resp.data;
-						this.nomorRegis = getPasienDetail[0].id_member;
-						this.animalType = getPasienDetail[0].pet_category;
-						this.animalName = getPasienDetail[0].pet_name;
-						this.animalSex = getPasienDetail[0].pet_gender;
-						this.animalSex = getPasienDetail[0].pet_gender;
-						this.animalYear = getPasienDetail[0].pet_year_age;
-						this.animalMonth = getPasienDetail[0].pet_month_age;
-						this.ownerName = getPasienDetail[0].owner_name;
-						this.ownerAddress = getPasienDetail[0].owner_address;
-						this.ownerTelp = getPasienDetail[0].owner_phone_number;
-
-						$('#modal-pasien').modal('show');
 					})
 					.catch(err => {
 						if (err.response.status === 401) {

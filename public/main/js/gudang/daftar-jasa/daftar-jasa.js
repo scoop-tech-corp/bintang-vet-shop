@@ -108,6 +108,74 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#submitConfirm').click(function() {
+
+		if (modalState == 'edit') {
+			// process edit
+			const datas = {
+				id: getId,
+				NamaLayanan: $('#namaJasa').val(),
+				KategoriJasa: $('#selectedKategoriJasa').val(),
+				CabangId: $('#selectedCabang').val()
+			};
+
+			$.ajax({
+				url : $('.baseUrl').val() + '/api/daftar-jasa',
+				type: 'PUT',
+				dataType: 'JSON',
+				headers: { 'Authorization': `Bearer ${token}` },
+				data: datas,
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Jasa');
+					$('#msg-box').modal('show');
+
+					setTimeout(() => {
+						$('#modal-daftar-jasa').modal('toggle');
+						refreshForm();
+						loadDaftarJasa();
+					}, 1000);
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
+		} else {
+			// process delete
+			console.log('delete id', getId);
+			$.ajax({
+				url     : $('.baseUrl').val() + '/api/daftar-jasa',
+				headers : { 'Authorization': `Bearer ${token}` },
+				type    : 'DELETE',
+				data	  : { id: getId },
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil menghapus daftar jasa');
+					$('#msg-box').modal('show');
+
+					loadDaftarJasa();
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
+		}
+	});
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadDaftarJasa();
@@ -131,6 +199,7 @@ $(document).ready(function() {
 						+ `<td>${++idx}</td>`
 						+ `<td>${v.service_name}</td>`
 						+ `<td>${v.category_name}</td>`
+						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
@@ -144,8 +213,9 @@ $(document).ready(function() {
 				$('.openFormEdit').click(function() {
 					const getObj = data.find(x => x.id == $(this).val());
 					modalState = 'edit';
-					refreshForm();
+
 					$('.modal-title').text('Edit Daftar Jasa');
+					refreshForm();
 
 					formConfigure();
 					getId = getObj.id;
@@ -156,78 +226,11 @@ $(document).ready(function() {
 			
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
-					console.log('getId', getId);
 					modalState = 'delete';
+
 					$('#modal-confirmation .modal-title').text('Peringatan');
 					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus Daftar Jasa ini?');
 					$('#modal-confirmation').modal('show');
-				});
-
-				$('#submitConfirm').click(function() {
-					if (modalState == 'edit') {
-						// process edit
-
-						const datas = {
-							id: getId,
-							NamaLayanan: $('#namaJasa').val(),
-							KategoriJasa: $('#selectedKategoriJasa').val(),
-							CabangId: $('#selectedCabang').val()
-						};
-
-						$.ajax({
-							url : $('.baseUrl').val() + '/api/daftar-jasa',
-							type: 'PUT',
-							dataType: 'JSON',
-							headers: { 'Authorization': `Bearer ${token}` },
-							data: datas,
-							beforeSend: function() { $('#loading-screen').show(); },
-							success: function(data) {
-								$('#modal-confirmation .modal-title').text('Peringatan');
-								$('#modal-confirmation').modal('toggle');
-
-								$("#msg-box .modal-body").text('Berhasil Mengubah Daftar Jasa');
-								$('#msg-box').modal('show');
-
-								setTimeout(() => {
-									$('#modal-daftar-jasa').modal('toggle');
-									refreshForm();
-									loadDaftarJasa();
-								}, 1000);
-
-							}, complete: function() { $('#loading-screen').hide(); }
-							, error: function(err) {
-								if (err.status == 401) {
-									localStorage.removeItem('vet-clinic');
-									location.href = $('.baseUrl').val() + '/masuk';
-								}
-							}
-						});
-					} else {
-						// process delete
-						console.log('delete id', getId);
-						$.ajax({
-							url     : $('.baseUrl').val() + '/api/daftar-jasa',
-							headers : { 'Authorization': `Bearer ${token}` },
-							type    : 'DELETE',
-							data	  : { id: getId },
-							beforeSend: function() { $('#loading-screen').show(); },
-							success: function(data) {
-								$('#modal-confirmation .modal-title').text('Peringatan');
-								$('#modal-confirmation').modal('toggle');
-
-								$("#msg-box .modal-body").text('Berhasil menghapus daftar jasa');
-								$('#msg-box').modal('show');
-								loadDaftarJasa();
-
-							}, complete: function() { $('#loading-screen').hide(); }
-							, error: function(err) {
-								if (err.status == 401) {
-									localStorage.removeItem('vet-clinic');
-									location.href = $('.baseUrl').val() + '/masuk';
-								}
-							}
-						});
-					}
 				});
 
 			}, complete: function() { $('#loading-screen').hide(); },
@@ -255,6 +258,9 @@ $(document).ready(function() {
 		$('#namaJasa').val(null);
 		$('#selectedKategoriJasa').val(null);
 		$('#selectedCabang').val(null);
+		$('#namaJasaErr1').text(''); isValidNamaJasa = true;
+		$('#kategoriJasaErr1').text(''); isValidSelectedKategoriJasa = true;
+		$('#cabangErr1').text(''); isValidSelectedCabang = true;
 		$('#beErr').empty(); isBeErr = false;
 	}
 

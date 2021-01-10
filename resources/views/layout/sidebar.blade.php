@@ -40,6 +40,7 @@
 					<li><a href="{{ url('/daftar-barang') }}"><i class="fa fa-circle-o"></i> Daftar Barang</a></li>
 					<li><a href="{{ url('/kategori-jasa') }}"><i class="fa fa-circle-o"></i> Kategori Jasa</a></li>
 					<li><a href="{{ url('/daftar-jasa') }}"><i class="fa fa-circle-o"></i> Daftar Jasa</a></li>
+					<li><a href="{{ url('/pembagian-harga') }}"><i class="fa fa-circle-o"></i> Pembagian Harga</a></li>
 				</ul>
 			</li>
 			<li class="menuPembayaran"><a href="{{ url('/pembayaran') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Pembayaran</span></a></li>
