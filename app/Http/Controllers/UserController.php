@@ -58,6 +58,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'user_id' => $request->user()->id,
+                'branch_id' => $user->branch_id,
                 'token' => $token,
                 'username' => $user->username,
                 'fullname' => $user->fullname,
