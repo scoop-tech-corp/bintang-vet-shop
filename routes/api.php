@@ -94,6 +94,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('rawat-jalan', 'RawatJalanController@create');
         Route::put('rawat-jalan', 'RawatJalanController@update');
         Route::delete('rawat-jalan', 'RawatJalanController@delete');
+        Route::get('rawat-jalan/dokter', 'RawatJalanController@doctor');
     });
 });
 
