@@ -442,6 +442,7 @@ class UserSeeder extends Seeder
             'complaint' => 'pilek',
             'registrant' => 'agus',
             'user_id' => '1',
+            'doctor_user_id' => '3',
             'created_at' => '2020-12-30'
         ]);
 
@@ -451,6 +452,7 @@ class UserSeeder extends Seeder
             'complaint' => 'gatal-gatal',
             'registrant' => 'kuncoro',
             'user_id' => '1',
+            'doctor_user_id' => '4',
             'created_at' => '2020-12-30'
         ]);
 
@@ -460,6 +462,7 @@ class UserSeeder extends Seeder
             'complaint' => 'batuk',
             'registrant' => 'supri',
             'user_id' => '1',
+            'doctor_user_id' => '7',
             'created_at' => '2020-12-30'
         ]);
     }
