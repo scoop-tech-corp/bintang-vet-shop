@@ -19,8 +19,8 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="#"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
-					<li><a href="#"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
+					<li><a href="{{ url('/rawat-jalan') }}"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
+					<li><a href="{{ url('/rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li>
 			<li class="menuDokter"><a href="{{ url('/dokter') }}"><i class="fa fa-stethoscope" aria-hidden="true"></i> <span>Dokter</span></a></li>

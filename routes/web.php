@@ -57,6 +57,14 @@ Route::get('/pembagian-harga', function () {
 	return view('gudang.pembagian-harga.index');
 });
 
+Route::get('/rawat-inap', function () {
+	return view('pendaftaran.rawat-inap.index');
+});
+
+Route::get('/rawat-jalan', function () {
+	return view('pendaftaran.rawat-jalan.index');
+});
+
 
 // Route::get('/cabang','BranchController@index');
 
