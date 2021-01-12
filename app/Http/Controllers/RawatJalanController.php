@@ -23,13 +23,12 @@ class RawatJalanController extends Controller
             ->join('users as user_doctor', 'out_patients.doctor_user_id', '=', 'user_doctor.id')
             ->join('patients', 'out_patients.patient_id', '=', 'patients.id')
             ->join('branches', 'patients.branch_id', '=', 'branches.id')
-            ->select('out_patients.id as out_patients_id', 'out_patients.id_register', 'out_patients.patient_id',
-                'patients.id_member', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
+            ->select('out_patients.id as id', 'out_patients.id_number', 'out_patients.patient_id',
+                'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
                 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
                 'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
                 'user_doctor.username as username_doctor', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(out_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id');
-        //->where('users.branch_id', '=', $request->user()->branch_id);
 
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
@@ -37,15 +36,7 @@ class RawatJalanController extends Controller
 
         if ($request->keyword) {
 
-            $data = $data->where('patients.id_member', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.pet_category', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.pet_gender', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.pet_year_age', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.pet_month_age', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.owner_name', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.owner_address', 'like', '%' . $request->keyword . '%')
-            //->orwhere('patients.owner_phone_number', 'like', '%' . $request->keyword . '%')
+            $data = $data->where('patients.id_number', 'like', '%' . $request->keyword . '%')
                 ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
                 ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%')
                 ->orwhere('out_patients.complaint', 'like', '%' . $request->keyword . '%')
@@ -78,7 +69,7 @@ class RawatJalanController extends Controller
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|numeric',
             'doctor_user_id' => 'required|numeric',
-            'keluhan' => 'required|string|min:3|max:51',
+            'keluhan' => 'required|string|min:3|max:50',
             'nama_pendaftar' => 'required|string|min:3|max:50',
         ]);
 
@@ -105,7 +96,7 @@ class RawatJalanController extends Controller
         $out_patient_number = 'BVC-RJ-' . $getbranchuser->branch_code . '-' . str_pad($lasttransaction + 1, 4, 0, STR_PAD_LEFT);
 
         $patient = OutPatient::create([
-            'id_register' => $out_patient_number,
+            'id_number' => $out_patient_number,
             'patient_id' => $request->patient_id,
             'doctor_user_id' => $request->doctor_user_id,
             'complaint' => $request->keluhan,
