@@ -95,6 +95,12 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('rawat-jalan', 'RawatJalanController@update');
         Route::delete('rawat-jalan', 'RawatJalanController@delete');
         Route::get('rawat-jalan/dokter', 'RawatJalanController@doctor');
+
+        //rawat inap
+        Route::get('rawat-inap', 'RawatInapController@index');
+        Route::post('rawat-inap', 'RawatInapController@create');
+        Route::put('rawat-inap', 'RawatInapController@update');
+        Route::delete('rawat-inap', 'RawatInapController@delete');
     });
 });
 
