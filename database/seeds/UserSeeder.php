@@ -465,5 +465,42 @@ class UserSeeder extends Seeder
             'doctor_user_id' => '7',
             'created_at' => '2020-12-30'
         ]);
+
+        //in_patients
+        DB::table('in_patients')->insert([
+            'id_number' => 'BVC-RI-AS-0001',
+            'patient_id' => '2',
+            'complaint' => 'pilek',
+            'registrant' => 'agus',
+            'estimate_day' => '4',
+            'reality_day' => '5',
+            'user_id' => '1',            
+            'doctor_user_id' => '3',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('in_patients')->insert([
+            'id_number' => 'BVC-RI-AS-0002',
+            'patient_id' => '3',
+            'complaint' => 'gatal-gatal',
+            'registrant' => 'kuncoro',
+            'estimate_day' => '4',
+            'reality_day' => '5',
+            'user_id' => '1',
+            'doctor_user_id' => '4',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('in_patients')->insert([
+            'id_number' => 'BVC-RI-AS-0003',
+            'patient_id' => '1',
+            'complaint' => 'batuk',
+            'registrant' => 'supri',
+            'estimate_day' => '4',
+            'reality_day' => '5',
+            'user_id' => '1',
+            'doctor_user_id' => '7',
+            'created_at' => '2020-12-30'
+        ]);
     }
 }
