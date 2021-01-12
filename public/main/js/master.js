@@ -50,6 +50,8 @@ $(document).ready(function() {
         || pathName === '/daftar-barang' || pathName === '/kategori-jasa' 
         || pathName === '/daftar-jasa' || pathName === '/pembagian-harga') {
         $('.menuGudang').addClass('active');
+      } else if (pathName === '/rawat-jalan' || pathName === '/rawat-inap') {
+        $('.menuPendaftaran').addClass('active');
       }
     }
   });
