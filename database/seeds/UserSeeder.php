@@ -437,7 +437,7 @@ class UserSeeder extends Seeder
 
         //out_patients
         DB::table('out_patients')->insert([
-            'id_register' => 'BVC-RJ-AS-0001',
+            'id_number' => 'BVC-RJ-AS-0001',
             'patient_id' => '2',
             'complaint' => 'pilek',
             'registrant' => 'agus',
@@ -447,7 +447,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('out_patients')->insert([
-            'id_register' => 'BVC-RJ-AS-0002',
+            'id_number' => 'BVC-RJ-AS-0002',
             'patient_id' => '3',
             'complaint' => 'gatal-gatal',
             'registrant' => 'kuncoro',
@@ -457,7 +457,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('out_patients')->insert([
-            'id_register' => 'BVC-RJ-AS-0003',
+            'id_number' => 'BVC-RJ-AS-0003',
             'patient_id' => '1',
             'complaint' => 'batuk',
             'registrant' => 'supri',
