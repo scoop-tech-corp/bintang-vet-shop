@@ -36,12 +36,14 @@ class RawatJalanController extends Controller
 
         if ($request->keyword) {
 
-            $data = $data->where('patients.id_number', 'like', '%' . $request->keyword . '%')
-                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+            $data = $data->where('out_patients.id', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.id_member', 'like', '%' . $request->keyword . '%')
+                ->orwhere('patients.pet_name', 'like', '%' . $request->keyword . '%')
                 ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%')
                 ->orwhere('out_patients.complaint', 'like', '%' . $request->keyword . '%')
                 ->orwhere('out_patients.registrant', 'like', '%' . $request->keyword . '%')
-                ->orwhere('user_doctor.username', 'like', '%' . $request->keyword . '%');
+                ->orwhere('user_doctor.username', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->orderby) {
