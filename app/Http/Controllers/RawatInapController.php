@@ -27,10 +27,10 @@ class RawatInapController extends Controller
                 'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
                 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
                 'patients.owner_phone_number', 'in_patients.complaint', 'in_patients.registrant',
-                'in_patients.estimate_day', 'in_patients.reality_day', 'user_doctor.id as user_doctor_id',
+                'in_patients.estimate_day', 'in_patients.reality_day', 'user_doctor.id as user_doctor_id', 'in_patients.acceptance_status',
                 'user_doctor.username as username_doctor', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id');
-
+                //$table->integer('acceptance_status');
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
         }
@@ -108,6 +108,7 @@ class RawatInapController extends Controller
             'estimate_day' => $request->estimasi_waktu,
             'reality_day' => $request->realita_waktu,
             'user_id' => $request->user()->id,
+            'acceptance_status' => 0
         ]);
 
         return response()->json(
@@ -162,6 +163,7 @@ class RawatInapController extends Controller
         $in_patient->reality_day = $request->realita_waktu;
         $in_patient->user_update_id = $request->user()->id;
         $in_patient->updated_at = \Carbon\Carbon::now();
+        $in_patient->acceptance_status = 0;
         $in_patient->save();
 
         return response()->json([

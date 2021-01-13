@@ -22,7 +22,8 @@ class CreateInPatientsTable extends Migration
             $table->integer('estimate_day');
             $table->integer('reality_day');
             $table->integer('doctor_user_id');
-            $table->integer('user_id');            
+            $table->integer('user_id');
+            $table->integer('acceptance_status');            
             $table->boolean('isDeleted')->nullable()->default(false);            
             $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();

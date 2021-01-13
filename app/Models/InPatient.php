@@ -13,5 +13,5 @@ class InPatient extends Model
     protected $guarded = ['id'];
 
     protected $fillable = ['id_number','patient_id','complaint',
-    'registrant','user_id','doctor_user_id','estimate_day','reality_day'];
+    'registrant','user_id','doctor_user_id','estimate_day','reality_day','acceptance_status'];
 }
