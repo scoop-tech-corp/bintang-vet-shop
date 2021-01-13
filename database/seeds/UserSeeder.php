@@ -479,6 +479,7 @@ class UserSeeder extends Seeder
             'reality_day' => '5',
             'user_id' => '1',            
             'doctor_user_id' => '3',
+            'acceptance_status' => '0',
             'created_at' => '2020-12-30'
         ]);
 
@@ -491,6 +492,7 @@ class UserSeeder extends Seeder
             'reality_day' => '5',
             'user_id' => '1',
             'doctor_user_id' => '4',
+            'acceptance_status' => '1',
             'created_at' => '2020-12-30'
         ]);
 
@@ -503,6 +505,7 @@ class UserSeeder extends Seeder
             'reality_day' => '5',
             'user_id' => '1',
             'doctor_user_id' => '7',
+            'acceptance_status' => '2',
             'created_at' => '2020-12-30'
         ]);
     }

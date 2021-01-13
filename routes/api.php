@@ -107,6 +107,11 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('dokter-rawat-jalan', 'DokterRawatJalanController@index');
         Route::get('dokter-rawat-jalan/terima', 'DokterRawatJalanController@accept');
         Route::get('dokter-rawat-jalan/tolak', 'DokterRawatJalanController@decline');
+
+        //dokter rawat inap
+        Route::get('dokter-rawat-inap', 'DokterRawatInapController@index');
+        Route::get('dokter-rawat-inap/terima', 'DokterRawatInapController@accept');
+        Route::get('dokter-rawat-inap/tolak', 'DokterRawatInapController@decline');
     });
 });
 
