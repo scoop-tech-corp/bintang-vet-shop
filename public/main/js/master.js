@@ -29,6 +29,7 @@ $(document).ready(function() {
       $('.menuGudang').show();   $('.menuPembayaran').show();
       $('.menuKeuangan').show(); $('.menuKunjungan').show();
       $('.menuCabang').show();   $('.menuUser').show();
+      $('.menuPeriksa').show();
     } else if (role === 'resepsionis') {
       $('.menuPasien').show();   $('.menuPendaftaran').show();
       $('.menuTindakan').show(); $('.menuPembayaran').show();
@@ -36,7 +37,7 @@ $(document).ready(function() {
     } else if (role === 'dokter') {
       $('.menuDokter').show();   $('.menuPasien').show();
       $('.menuTindakan').show(); $('.menuGudang').show();
-      $('.menuKunjungan').show();
+      $('.menuKunjungan').show(); $('.menuPeriksa').show();
     }
   }
 
@@ -52,6 +53,8 @@ $(document).ready(function() {
         $('.menuGudang').addClass('active');
       } else if (pathName === '/rawat-jalan' || pathName === '/rawat-inap') {
         $('.menuPendaftaran').addClass('active');
+      } else if (pathName === '/dokter-rawat-jalan') {
+        $('.menuDokter').addClass('active');
       }
     }
   });

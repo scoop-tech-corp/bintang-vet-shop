@@ -3,11 +3,11 @@
 @section('content')
 <div class="box box-info" id="rawat-jalan-app">
   <div class="box-header with-border">
-    <h3 class="box-title">Rawat Jalan</h3>
+    <h3 class="box-title">Daftar Rawat Jalan</h3>
     <div class="inner-box-title">
       <button class="btn btn-info openFormAdd">Tambah</button>
       <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="search..">
+        <input type="text" class="form-control" placeholder="cari..">
         <i class="fa fa-search" aria-hidden="true"></i>
       </div>
     </div>
@@ -24,6 +24,7 @@
           <th class="onOrdering" data='complaint' orderby="none">Keluhan <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='registrant' orderby="none">Nama Pendaftar <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='branch_name' orderby="none">Dokter yang menangani <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='registrant' orderby="none">Status <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
           <th>Aksi</th>

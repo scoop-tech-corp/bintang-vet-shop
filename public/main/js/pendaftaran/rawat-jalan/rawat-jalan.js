@@ -216,43 +216,65 @@ $(document).ready(function() {
             + `<td>${v.pet_name}</td>`
             + `<td>${v.complaint}</td>`
             + `<td>${v.registrant}</td>`
-            + `<td>${v.username_doctor}</td>`            
+						+ `<td>${v.username_doctor}</td>`     
+						+ `<td>${generateBedge(v.acceptance_status)}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-warning openFormEdit" ${v.acceptance_status == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-danger openFormDelete" ${v.acceptance_status == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`
 						+ `</tr>`;
 				});
 				$('#list-rawat-jalan').append(listRawatJalan);
 
+				function generateBedge(status) {
+					let bedge = '';
+					switch (status) {
+						case 1:
+							bedge = '<span class="label label-success">Diterima</span>';
+							break;
+						case 2:
+							bedge = '<span class="label label-danger">Ditolak</span>';
+							break;
+						default:
+							bedge = '<span class="label label-warning">Menunggu Konfirmasi</span>';
+							break;
+					}
+					return bedge;
+				}
+
 				$('.openFormEdit').click(function() {
 					const getObj = data.find(x => x.id == $(this).val());
-					modalState = 'edit';
+					if (getObj.acceptance_status != 1) {
+						modalState = 'edit';
 
-					$('.modal-title').text('Edit Rawat Jalan');
-					refreshForm();
+						$('.modal-title').text('Edit Rawat Jalan');
+						refreshForm();
 
-					formConfigure();
-					getId = getObj.id;
-					$('#namaPendaftar').val(getObj.registrant); $('#keluhan').val(getObj.complaint);
-					$('#selectedPasien').val(getObj.patient_id); $('#selectedPasien').trigger('change');
-					$('#selectedDokter').val(getObj.user_doctor_id); $('#selectedDokter').trigger('change');
-					$('#nomorPasienTxt').text(getObj.id_member); $('#jenisHewanTxt').text(getObj.pet_category);
-					$('#namaHewanTxt').text(getObj.pet_name); $('#jenisKelaminTxt').text(getObj.pet_gender);
-					$('#usiaHewanTahunTxt').text(`${getObj.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getObj.pet_month_age} Bulan`);
-					$('#namaPemilikTxt').text(getObj.owner_name); $('#alamatPemilikTxt').text(getObj.owner_address);
-					$('#nomorHpPemilikTxt').text(getObj.owner_phone_number);
+						formConfigure();
+						getId = getObj.id;
+						$('#namaPendaftar').val(getObj.registrant); $('#keluhan').val(getObj.complaint);
+						$('#selectedPasien').val(getObj.patient_id); $('#selectedPasien').trigger('change');
+						$('#selectedDokter').val(getObj.user_doctor_id); $('#selectedDokter').trigger('change');
+						$('#nomorPasienTxt').text(getObj.id_member); $('#jenisHewanTxt').text(getObj.pet_category);
+						$('#namaHewanTxt').text(getObj.pet_name); $('#jenisKelaminTxt').text(getObj.pet_gender);
+						$('#usiaHewanTahunTxt').text(`${getObj.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getObj.pet_month_age} Bulan`);
+						$('#namaPemilikTxt').text(getObj.owner_name); $('#alamatPemilikTxt').text(getObj.owner_address);
+						$('#nomorHpPemilikTxt').text(getObj.owner_phone_number);
+					}
 				});
 			
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
-					modalState = 'delete';
+					const getObj = data.find(x => x.id == getId);
+					if (getObj.acceptance_status != 1) {
+						modalState = 'delete';
 
-					$('#modal-confirmation .modal-title').text('Peringatan');
-					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus data ini?');
-					$('#modal-confirmation').modal('show');
+						$('#modal-confirmation .modal-title').text('Peringatan');
+						$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus data ini?');
+						$('#modal-confirmation').modal('show');
+					}
 				});
 
 			}, complete: function() { $('#loading-screen').hide(); },

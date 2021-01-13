@@ -23,7 +23,18 @@
 					<li><a href="{{ url('/rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li>
-			<li class="menuDokter"><a href="{{ url('/dokter') }}"><i class="fa fa-stethoscope" aria-hidden="true"></i> <span>Dokter</span></a></li>
+			<li class="treeview menuDokter">
+				<a href="#">
+					<i class="fa fa-stethoscope" aria-hidden="true"></i>
+					<span>Dokter</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{{ url('/dokter-rawat-jalan') }}"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
+				</ul>
+			</li>
 			<li class="menuPeriksa"><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>
 			<li class="menuTindakan"><a href="{{ url('/tindakan') }}"><i class="fa fa-medkit" aria-hidden="true"></i> <span>Tindakan</span></a></li>
 			<li class="treeview menuGudang">

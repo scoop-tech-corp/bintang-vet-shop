@@ -136,7 +136,7 @@
 			<div class="pull-right hidden-xs">
 				<b>Version</b> 1.0
 			</div>
-			<strong>Copyright &copy; 2020 <a href="#">Vet Clinic</a>.</strong> All rights
+			<strong>Copyright &copy; <script>document.write(new Date().getFullYear())</script> <a href="#">Vet Clinic</a>.</strong> All rights
 			reserved.
 		</footer>
 

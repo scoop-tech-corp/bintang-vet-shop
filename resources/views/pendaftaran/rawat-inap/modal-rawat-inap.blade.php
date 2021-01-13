@@ -75,7 +75,7 @@
 							<label for="realitaRawatInap" class="p-top-10px">Realita waktu rawat inap</label>
 							<div>
 								<div class="d-flex form-horizontal-container-c">
-									<input id="realitaRawatInap" type="number" class="form-control m-l-20px" min="0">
+									<input id="realitaRawatInap" type="number" class="form-control m-l-20px" min="0" style="width: 38%;">
 									&nbsp;<span>Hari</span>
 								</div>
 								<div id="realitaRawatInapErr1" class="validate-error m-l-20px"></div>

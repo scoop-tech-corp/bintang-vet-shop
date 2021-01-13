@@ -66,6 +66,11 @@ Route::get('/rawat-jalan', function () {
 });
 
 
+Route::get('/dokter-rawat-jalan', function () {
+	return view('dokter.rawat-jalan.index');
+});
+
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {
