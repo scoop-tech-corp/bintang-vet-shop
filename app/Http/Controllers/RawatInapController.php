@@ -109,8 +109,7 @@ class RawatInapController extends Controller
             'reality_day' => $request->realita_waktu,
             'user_id' => $request->user()->id,
         ]);
-        
-        
+
         return response()->json(
             [
                 'message' => 'Tambah Data Berhasil!',
@@ -159,6 +158,8 @@ class RawatInapController extends Controller
         $in_patient->doctor_user_id = $request->doctor_user_id;
         $in_patient->complaint = $request->keluhan;
         $in_patient->registrant = $request->nama_pendaftar;
+        $in_patient->estimate_day = $request->estimasi_waktu;
+        $in_patient->reality_day = $request->realita_waktu;
         $in_patient->user_update_id = $request->user()->id;
         $in_patient->updated_at = \Carbon\Carbon::now();
         $in_patient->save();
