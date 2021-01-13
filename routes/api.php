@@ -102,6 +102,11 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('rawat-inap', 'RawatInapController@create');
         Route::put('rawat-inap', 'RawatInapController@update');
         Route::delete('rawat-inap', 'RawatInapController@delete');
+
+        //dokter rawat jalan
+        Route::get('dokter-rawat-jalan', 'DokterRawatJalanController@index');
+        Route::get('dokter-rawat-jalan/terima', 'DokterRawatJalanController@accept');
+        Route::get('dokter-rawat-jalan/tolak', 'DokterRawatJalanController@decline');
     });
 });
 
