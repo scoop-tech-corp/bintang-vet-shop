@@ -22,6 +22,7 @@ class CreateOutPatientsTable extends Migration
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('doctor_user_id');
             $table->integer('user_id');
+            $table->integer('acceptance_status');
             $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamp('deleted_at',0)->nullable();

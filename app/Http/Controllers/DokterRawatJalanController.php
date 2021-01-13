@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\OutPatient;
+use App\Models\OutPatientAdmissions;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
 
-class RawatJalanController extends Controller
+class DokterRawatJalanController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Access is not allowed!'],
@@ -27,10 +28,11 @@ class RawatJalanController extends Controller
                 'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
                 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
                 'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
-                'user_doctor.username as username_doctor', 'out_patients.acceptance_status', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(out_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id');
+                'user_doctor.username as username_doctor', 'users.fullname as created_by', 'out_patients.acceptance_status',
+                DB::raw("DATE_FORMAT(out_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id')
+            ->where('out_patients.acceptance_status', '=', '0');
 
-        if ($request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'dokter') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
         }
 
@@ -56,87 +58,15 @@ class RawatJalanController extends Controller
         $data = $data->get();
 
         return response()->json($data, 200);
-
     }
 
-    public function create(Request $request)
+    public function accept(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Access is not allowed!'],
             ], 403);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'patient_id' => 'required|numeric',
-            'doctor_user_id' => 'required|numeric',
-            'keluhan' => 'required|string|min:3|max:50',
-            'nama_pendaftar' => 'required|string|min:3|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors()->all();
-
-            return response()->json([
-                'message' => 'Data yang dimasukkan tidak valid!',
-                'errors' => $errors,
-            ], 422);
-        }
-
-        $lasttransaction = DB::table('out_patients')
-            ->join('users', 'out_patients.user_id', '=', 'users.id')
-            ->join('branches', 'users.branch_id', '=', 'branches.id')
-            ->where('branch_id', '=', $request->user()->branch_id)
-            ->count();
-
-        $getbranchuser = DB::table('branches')
-            ->select('branch_code')
-            ->where('id', '=', $request->user()->branch_id)
-            ->first();
-
-        $out_patient_number = 'BVC-RJ-' . $getbranchuser->branch_code . '-' . str_pad($lasttransaction + 1, 4, 0, STR_PAD_LEFT);
-
-        $patient = OutPatient::create([
-            'id_number' => $out_patient_number,
-            'patient_id' => $request->patient_id,
-            'doctor_user_id' => $request->doctor_user_id,
-            'complaint' => $request->keluhan,
-            'registrant' => $request->nama_pendaftar,
-            'user_id' => $request->user()->id,
-            'acceptance_status' => 0,
-        ]);
-
-        return response()->json(
-            [
-                'message' => 'Tambah Data Berhasil!',
-            ], 200
-        );
-    }
-
-    public function update(Request $request)
-    {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'patient_id' => 'required|numeric',
-            'doctor_user_id' => 'required|numeric',
-            'keluhan' => 'required|string|min:3|max:51',
-            'nama_pendaftar' => 'required|string|min:3|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors()->all();
-
-            return response()->json([
-                'message' => 'Data yang dimasukkan tidak valid!',
-                'errors' => $errors,
-            ], 422);
         }
 
         $out_patient = OutPatient::find($request->id);
@@ -151,25 +81,33 @@ class RawatJalanController extends Controller
                 'message' => 'The data was invalid.',
                 'errors' => ['Data tidak dapat diubah karena sudah diterima oleh dokter!'],
             ], 422);
+        } elseif ($out_patient->acceptance_status == 2) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak dapat diubah karena sudah ditolak oleh dokter!'],
+            ], 422);
         }
 
-        $out_patient->patient_id = $request->patient_id;
-        $out_patient->doctor_user_id = $request->doctor_user_id;
-        $out_patient->complaint = $request->keluhan;
-        $out_patient->registrant = $request->nama_pendaftar;
+        $out_patient->acceptance_status = 1;
         $out_patient->user_update_id = $request->user()->id;
-        $out_patient->acceptance_status = 0;
         $out_patient->updated_at = \Carbon\Carbon::now();
         $out_patient->save();
 
+        $patient = OutPatientAdmissions::create([
+            'outpatient_id' => $out_patient->id,
+            'reason' => '',
+            'acceptance_status' => 1,
+            'user_id' => $request->user()->id,
+        ]);
+
         return response()->json([
-            'message' => 'Berhasil mengupdate Data',
+            'message' => 'Proses Data Berhasil',
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function decline(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Access is not allowed!'],
@@ -186,19 +124,29 @@ class RawatJalanController extends Controller
         } elseif ($out_patient->acceptance_status == 1) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data tidak dapat dihapus karena sudah diterima oleh dokter!'],
+                'errors' => ['Data tidak dapat diubah karena sudah diterima oleh dokter!'],
+            ], 422);
+        } elseif ($out_patient->acceptance_status == 2) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak dapat diubah karena sudah ditolak oleh dokter!'],
             ], 422);
         }
 
-        $out_patient->isDeleted = true;
-        $out_patient->deleted_by = $request->user()->fullname;
-        $out_patient->deleted_at = \Carbon\Carbon::now();
+        $out_patient->acceptance_status = 2;
+        $out_patient->user_update_id = $request->user()->id;
+        $out_patient->updated_at = \Carbon\Carbon::now();
         $out_patient->save();
 
-        $out_patient->delete();
+        $patient = OutPatientAdmissions::create([
+            'outpatient_id' => $out_patient->id,
+            'reason' => $request->reason,
+            'acceptance_status' => 1,
+            'user_id' => $request->user()->id,
+        ]);
 
         return response()->json([
-            'message' => 'Berhasil menghapus Data',
+            'message' => 'Proses Data Berhasil',
         ], 200);
     }
 }
