@@ -298,4 +298,29 @@ class UserController extends Controller
                 'message' => 'Success!',
             ], 200);
     }
+
+    public function doctor(Request $request)
+    {
+        if ($request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $data = DB::table('users')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select('users.id', 'users.username', 'users.role', 'branches.id as branch_id', 'branches.branch_name')
+            ->where('users.role', '=', 'dokter');
+
+        if ($request->user()->role == 'resepsionis') {
+            $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
+        }
+
+        $data = $data->orderBy('users.id', 'asc');
+
+        $data = $data->get();
+
+        return response()->json($data, 200);
+    }
 }

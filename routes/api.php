@@ -35,6 +35,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
 
+        Route::get('user/dokter', 'UserController@doctor');
+
         //pasien
         Route::get('pasien', 'PasienController@index');
         Route::post('pasien', 'PasienController@create');
@@ -94,7 +96,6 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('rawat-jalan', 'RawatJalanController@create');
         Route::put('rawat-jalan', 'RawatJalanController@update');
         Route::delete('rawat-jalan', 'RawatJalanController@delete');
-        Route::get('rawat-jalan/dokter', 'RawatJalanController@doctor');
 
         //rawat inap
         Route::get('rawat-inap', 'RawatInapController@index');
