@@ -2,7 +2,7 @@
   <div class="inner-box-title">
     <button class="btn btn-info openFormAddBarang">Tambah</button>
     <div class="input-search-section">
-      <input type="text" class="form-control" placeholder="search..">
+      <input type="text" class="form-control" placeholder="cari..">
       <i class="fa fa-search" aria-hidden="true"></i>
     </div>
   </div>

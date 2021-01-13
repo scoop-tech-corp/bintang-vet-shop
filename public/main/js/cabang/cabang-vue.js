@@ -3,6 +3,7 @@ $(document).ready(function() {
 	const cabangApp = new Vue({
 		el: '#cabang-app',
 		data: {
+			searchTxt: '',
 			idCabang: null,
 			kodeCabang: '',
 			namaCabang: '',
@@ -20,9 +21,10 @@ $(document).ready(function() {
 				branch_code: 'none',
 				branch_name: 'none',
 			},
-			orderSetup: {
+			paramUrlSetup: {
 				orderby:'',
-				column: ''
+				column: '',
+				keyword: ''
 			}
 		},
 		mounted() {
@@ -74,13 +76,13 @@ $(document).ready(function() {
 					this.columnStatus['branch_code'] = 'none';
 				}
 
-				this.orderSetup.orderby = this.columnStatus[e];
-				this.orderSetup.column = e;
+				this.paramUrlSetup.orderby = this.columnStatus[e];
+				this.paramUrlSetup.column = e;
 				this.getData();
 			},
 			getData: function() {
 				$('#loading-screen').show();
-				axios.get($('.baseUrl').val() + '/api/cabang', {  params: this.orderSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
+				axios.get($('.baseUrl').val() + '/api/cabang', {  params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
 						this.listCabang = resp.data;
 					})
@@ -161,6 +163,10 @@ $(document).ready(function() {
 	          location.href = $('.baseUrl').val() + '/masuk';
 					}
 				})
+			},
+			onSearch: function() {
+				this.paramUrlSetup.keyword =  this.searchTxt;
+				this.getData();
 			},
 			processSave: function(form_data) {
 				$('#loading-screen').show();

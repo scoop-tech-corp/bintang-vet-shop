@@ -85,12 +85,28 @@ body {
   cursor: pointer;
 }
 
+.d-flex {
+  display: flex;
+}
+
 .p-relative {
   position: relative;
 }
 
+.p-top-10px {
+  padding-top: 5px;
+}
+
 .p-right-42px {
   padding-right: 42px;
+}
+
+.m-l-10px {
+  margin-left: 10px;
+}
+
+.m-l-20px {
+  margin-left: 20px;
 }
 
 .m-b-15px { 

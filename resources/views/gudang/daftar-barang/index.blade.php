@@ -10,7 +10,7 @@
         <button class="btn btn-info openFormUpload">Upload Sekaligus</button>
       </div>
       <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="search.." @keydown.enter="onSearch">
+        <input type="text" class="form-control" placeholder="cari.." @keydown.enter="onSearch">
         <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
       </div>
     </div>

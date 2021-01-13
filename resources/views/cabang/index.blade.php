@@ -4,7 +4,13 @@
 <div class="box box-info" id="cabang-app">
   <div class="box-header with-border">
     <h3 class="box-title">Cabang</h3>
-    <button class="btn btn-info pull-right" @click="openFormAdd">Tambah</button>
+    <div class="inner-box-title">
+      <button class="btn btn-info" @click="openFormAdd">Tambah</button>
+      <div class="input-search-section">
+        <input type="text" class="form-control" placeholder="cari.." v-model="searchTxt" @keydown.enter="onSearch">
+        <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+      </div>
+    </div>
   </div>
   <!-- /.box-header -->
   <!-- form start -->
