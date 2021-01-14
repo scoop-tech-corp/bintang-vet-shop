@@ -142,6 +142,15 @@ class DokterRawatJalanController extends Controller
             'alasan' => 'required|string|min:10|max:100',
         ]);
 
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'Data yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
+        }
+
         $patient = OutPatientAdmissions::create([
             'outpatient_id' => $out_patient->id,
             'reason' => $request->alasan,

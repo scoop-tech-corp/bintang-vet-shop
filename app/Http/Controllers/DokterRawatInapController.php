@@ -142,6 +142,15 @@ class DokterRawatInapController extends Controller
             'alasan' => 'required|string|min:10|max:100',
         ]);
 
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'Data yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
+        }
+
         $in_patient = InPatientAdmissions::create([
             'inpatient_id' => $in_patient->id,
             'reason' => $request->alasan,
