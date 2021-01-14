@@ -138,9 +138,13 @@ class DokterRawatJalanController extends Controller
         $out_patient->updated_at = \Carbon\Carbon::now();
         $out_patient->save();
 
+        $validator = Validator::make($request->all(), [
+            'alasan' => 'required|string|min:10|max:100',
+        ]);
+
         $patient = OutPatientAdmissions::create([
             'outpatient_id' => $out_patient->id,
-            'reason' => $request->reason,
+            'reason' => $request->alasan,
             'acceptance_status' => 1,
             'user_id' => $request->user()->id,
         ]);

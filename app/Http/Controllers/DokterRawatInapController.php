@@ -6,6 +6,7 @@ use App\Models\InPatient;
 use App\Models\InPatientAdmissions;
 use DB;
 use Illuminate\Http\Request;
+use Validator;
 
 class DokterRawatInapController extends Controller
 {
@@ -137,9 +138,13 @@ class DokterRawatInapController extends Controller
         $in_patient->updated_at = \Carbon\Carbon::now();
         $in_patient->save();
 
+        $validator = Validator::make($request->all(), [
+            'alasan' => 'required|string|min:10|max:100',
+        ]);
+
         $in_patient = InPatientAdmissions::create([
             'inpatient_id' => $in_patient->id,
-            'reason' => $request->reason,
+            'reason' => $request->alasan,
             'acceptance_status' => 1,
             'user_id' => $request->user()->id,
         ]);
