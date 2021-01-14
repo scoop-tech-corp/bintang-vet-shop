@@ -133,11 +133,6 @@ class DokterRawatJalanController extends Controller
             ], 422);
         }
 
-        $out_patient->acceptance_status = 2;
-        $out_patient->user_update_id = $request->user()->id;
-        $out_patient->updated_at = \Carbon\Carbon::now();
-        $out_patient->save();
-
         $validator = Validator::make($request->all(), [
             'alasan' => 'required|string|min:10|max:100',
         ]);
@@ -157,6 +152,11 @@ class DokterRawatJalanController extends Controller
             'acceptance_status' => 1,
             'user_id' => $request->user()->id,
         ]);
+
+        $out_patient->acceptance_status = 2;
+        $out_patient->user_update_id = $request->user()->id;
+        $out_patient->updated_at = \Carbon\Carbon::now();
+        $out_patient->save();
 
         return response()->json([
             'message' => 'Proses Data Berhasil',
