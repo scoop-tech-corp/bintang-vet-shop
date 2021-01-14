@@ -12,7 +12,7 @@
 					<div class="box-body">
             <div class="form-group">
 							<label for="alasan">Alasan</label>
-							<textarea id="alasan" cols="30" rows="10"></textarea>
+							<textarea id="alasan" class="form-control" placeholder="Masukan Alasan Menolak"></textarea>
 							<div id="alasanErr1" class="validate-error"></div>
 						</div>
 						<div class="form-group">
