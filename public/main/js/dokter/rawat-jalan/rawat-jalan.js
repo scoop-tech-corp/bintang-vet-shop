@@ -69,7 +69,9 @@ $(document).ready(function() {
 			$('#alasanErr1').text('Alasan harus di isi'); isValidAlasan = false;
 		} else { 
 			$('#alasanErr1').text(''); isValidAlasan = true;
-		}
+    }
+    
+    $('#beErr').empty(); isBeErr = false;
 
     if (!isValidAlasan || isBeErr) {
       $('#btnSubmitTolakRawatJalan').attr('disabled', true);
@@ -197,8 +199,7 @@ $(document).ready(function() {
     $('#namaHewanTxt').text(''); $('#jenisKelaminTxt').text('');
     $('#usiaHewanTahunTxt').text(''); $('#usiaHewanBulanTxt').text('');
     $('#namaPemilikTxt').text(''); $('#alamatPemilikTxt').text('');
-    $('#nomorHpPemilikTxt').text('');
-    
+    $('#nomorHpPemilikTxt').text(''); $('#alasan').val(null);
     $('#alasanErr1').text(''); isValidAlasan = true;
     $('#beErr').empty(); isBeErr = false;
 	}
