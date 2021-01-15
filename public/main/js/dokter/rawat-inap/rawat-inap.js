@@ -9,7 +9,7 @@ $(document).ready(function() {
 		keyword: ''
   };
   
-  loadDokterRawatJalan();
+  loadDokterRawatInap();
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -36,12 +36,12 @@ $(document).ready(function() {
 		paramUrlSetup.orderby = $(this).attr('orderby');
 		paramUrlSetup.column = column;
 
-		loadDokterRawatJalan();
+		loadDokterRawatInap();
   });
 
   $('#submitConfirm').click(function() {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan/terima',
+      url     : $('.baseUrl').val() + '/api/dokter-rawat-inap/terima',
       headers : { 'Authorization': `Bearer ${token}` },
       type    : 'GET',
       data	  : { id: getId },
@@ -53,7 +53,7 @@ $(document).ready(function() {
         $("#msg-box .modal-body").text('Berhasil Menerima Pasien');
         $('#msg-box').modal('show');  
 
-        loadDokterRawatJalan();
+        loadDokterRawatInap();
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
         if (err.status == 401) {
@@ -74,15 +74,15 @@ $(document).ready(function() {
     $('#beErr').empty(); isBeErr = false;
 
     if (!isValidAlasan || isBeErr) {
-      $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+      $('#btnSubmitTolakRawatInap').attr('disabled', true);
     } else {
-      $('#btnSubmitTolakRawatJalan').attr('disabled', false);
+      $('#btnSubmitTolakRawatInap').attr('disabled', false);
     }
   });
 
-  $('#btnSubmitTolakRawatJalan').click(function() {
+  $('#btnSubmitTolakRawatInap').click(function() {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan/tolak',
+      url     : $('.baseUrl').val() + '/api/dokter-rawat-inap/tolak',
       headers : { 'Authorization': `Bearer ${token}` },
       type    : 'GET',
       data	  : { id: getId, alasan: $('#alasan').val() },
@@ -93,14 +93,14 @@ $(document).ready(function() {
         $('#msg-box').modal('show');
 
         setTimeout(() => {
-          $('#modal-tolak-rawat-jalan').modal('toggle');
-          refreshForm(); loadDokterRawatJalan();
+          $('#modal-tolak-rawat-inap').modal('toggle');
+          refreshForm(); loadDokterRawatInap();
         }, 1000);
 
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
         if (err.status === 422) {
-          let errText = ''; $('#beErr').empty(); $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+          let errText = ''; $('#beErr').empty(); $('#btnSubmitTolakRawatInap').attr('disabled', true);
           $.each(err.responseJSON.errors, function(idx, v) {
             errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
           });
@@ -115,23 +115,23 @@ $(document).ready(function() {
 
   function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
-		loadDokterRawatJalan();
+		loadDokterRawatInap();
 	}
 
-  function loadDokterRawatJalan() {
+  function loadDokterRawatInap() {
     getId = null;
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan',
+			url     : $('.baseUrl').val() + '/api/dokter-rawat-inap',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				let listDokterRawatJalan = '';
-				$('#list-dokter-rawat-jalan tr').remove();
+				let listDokterRawatInap = '';
+				$('#list-dokter-rawat-inap tr').remove();
 
 				$.each(data, function(idx, v) {
-					listDokterRawatJalan += `<tr>`
+					listDokterRawatInap += `<tr>`
 						+ `<td>${++idx}</td>`
 						+ `<td>${v.id_number}</td>`
             + `<td>${v.id_number_patient}</td>`
@@ -148,14 +148,14 @@ $(document).ready(function() {
 							</td>`
 						+ `</tr>`;
 				});
-				$('#list-dokter-rawat-jalan').append(listDokterRawatJalan);
+				$('#list-dokter-rawat-inap').append(listDokterRawatInap);
 
 				$('.openDetail').click(function() {
           const getObj = data.find(x => x.id == $(this).val());
           refreshForm();
 
-          $('.modal-title').text('Detail Pasien Rawat Jalan');
-          $('#detail-rawat-jalan').modal('show');
+          $('.modal-title').text('Detail Pasien Rawat Inap');
+          $('#detail-rawat-inap').modal('show');
 
           $('#nomorRegistrasiTxt').text(getObj.id_number); $('#keluhanTxt').text(getObj.complaint); $('#namaPendaftarTxt').text(getObj.registrant);
           $('#nomorPasienTxt').text(getObj.id_number_patient); $('#jenisHewanTxt').text(getObj.pet_category);
@@ -163,6 +163,7 @@ $(document).ready(function() {
           $('#usiaHewanTahunTxt').text(`${getObj.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getObj.pet_month_age} Bulan`);
           $('#namaPemilikTxt').text(getObj.owner_name); $('#alamatPemilikTxt').text(getObj.owner_address);
           $('#nomorHpPemilikTxt').text(getObj.owner_phone_number);
+          $('#estimasiTxt').text(`${getObj.estimate_day} Hari`); $('#realitaTxt').text(`${getObj.reality_day} Hari`);
 				});
 			
 				$('.openTerima').click(function() {
@@ -176,10 +177,10 @@ $(document).ready(function() {
         
         $('.openTolak').click(function() {
           getId = $(this).val(); refreshForm();
-          $('.modal-title').text('Konfirmasi Tolak Rawat Jalan Pasien');
-          $('#modal-tolak-rawat-jalan').modal('show');
+          $('.modal-title').text('Konfirmasi Tolak Rawat Inap Pasien');
+          $('#modal-tolak-rawat-inap').modal('show');
 
-          $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+          $('#btnSubmitTolakRawatInap').attr('disabled', true);
         });
 
 			}, complete: function() { $('#loading-screen').hide(); },
@@ -198,7 +199,8 @@ $(document).ready(function() {
     $('#namaHewanTxt').text(''); $('#jenisKelaminTxt').text('');
     $('#usiaHewanTahunTxt').text(''); $('#usiaHewanBulanTxt').text('');
     $('#namaPemilikTxt').text(''); $('#alamatPemilikTxt').text('');
-    $('#nomorHpPemilikTxt').text(''); $('#alasan').val(null);
+    $('#nomorHpPemilikTxt').text(''); $('#estimasiTxt').text('');
+    $('#realitaTxt').text(''); $('#alasan').val(null);
     $('#alasanErr1').text(''); isValidAlasan = true;
     $('#beErr').empty(); isBeErr = false;
 	}

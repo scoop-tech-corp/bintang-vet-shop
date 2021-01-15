@@ -33,6 +33,7 @@
 				</a>
 				<ul class="treeview-menu">
 					<li><a href="{{ url('/dokter-rawat-jalan') }}"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
+					<li><a href="{{ url('/dokter-rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li>
 			<li class="menuPeriksa"><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>

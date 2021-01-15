@@ -1,9 +1,9 @@
 @extends('layout.master')
 
 @section('content')
-<div class="box box-info" id="rawat-jalan-app">
+<div class="box box-info" id="dokter-rawat-inap-app">
   <div class="box-header with-border">
-    <h3 class="box-title">Pasien Rawat Jalan</h3>
+    <h3 class="box-title">Pasien Rawat Inap</h3>
     <div class="inner-box-title pull-right">
       <div class="input-search-section">
         <input type="text" class="form-control" placeholder="cari..">
@@ -28,19 +28,19 @@
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody id="list-dokter-rawat-jalan"></tbody>
+      <tbody id="list-dokter-rawat-inap"></tbody>
     </table>
   </div>
   <!-- /.box-body -->
 
-  @component('dokter.rawat-jalan.detail-rawat-jalan') @endcomponent
-  @component('dokter.rawat-jalan.modal-tolak-rawat-jalan') @endcomponent
+  @component('dokter.rawat-inap.detail-rawat-inap') @endcomponent
+  @component('dokter.rawat-inap.modal-tolak-rawat-inap') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 </div>
 @endsection
 @section('script-content')
-  <script src="{{ asset('main/js/dokter/rawat-jalan/rawat-jalan.js') }}"></script>  
+  <script src="{{ asset('main/js/dokter/rawat-inap/rawat-inap.js') }}"></script>  
 @endsection
 @section('vue-content')
 

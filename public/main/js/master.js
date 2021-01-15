@@ -53,7 +53,7 @@ $(document).ready(function() {
         $('.menuGudang').addClass('active');
       } else if (pathName === '/rawat-jalan' || pathName === '/rawat-inap') {
         $('.menuPendaftaran').addClass('active');
-      } else if (pathName === '/dokter-rawat-jalan') {
+      } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {
         $('.menuDokter').addClass('active');
       }
     }
