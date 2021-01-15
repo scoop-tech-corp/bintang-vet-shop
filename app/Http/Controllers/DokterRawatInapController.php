@@ -134,11 +134,6 @@ class DokterRawatInapController extends Controller
             ], 422);
         }
 
-        $in_patient->acceptance_status = 2;
-        $in_patient->user_update_id = $request->user()->id;
-        $in_patient->updated_at = \Carbon\Carbon::now();
-        $in_patient->save();
-
         $validator = Validator::make($request->all(), [
             'alasan' => 'required|string|min:10|max:100',
         ]);
@@ -158,6 +153,11 @@ class DokterRawatInapController extends Controller
             'acceptance_status' => 1,
             'user_id' => $request->user()->id,
         ]);
+
+        $in_patient->acceptance_status = 2;
+        $in_patient->user_update_id = $request->user()->id;
+        $in_patient->updated_at = \Carbon\Carbon::now();
+        $in_patient->save();
 
         return response()->json([
             'message' => 'Proses Data Berhasil',
