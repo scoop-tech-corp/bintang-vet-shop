@@ -147,7 +147,7 @@ class DokterRawatInapController extends Controller
             ], 422);
         }
 
-        $in_patient = InPatientAdmissions::create([
+        $in_patient_admission = InPatientAdmissions::create([
             'inpatient_id' => $in_patient->id,
             'reason' => $request->alasan,
             'acceptance_status' => 1,
