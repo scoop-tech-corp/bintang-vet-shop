@@ -70,6 +70,10 @@ Route::get('/dokter-rawat-jalan', function () {
 	return view('dokter.rawat-jalan.index');
 });
 
+Route::get('/dokter-rawat-inap', function () {
+	return view('dokter.rawat-inap.index');
+});
+
 
 // Route::get('/cabang','BranchController@index');
 
