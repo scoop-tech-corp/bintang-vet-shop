@@ -30,7 +30,8 @@ class DokterRawatInapController extends Controller
                 'patients.owner_phone_number', 'in_patients.complaint', 'in_patients.registrant',
                 'in_patients.estimate_day', 'in_patients.reality_day', 'user_doctor.id as user_doctor_id', 'in_patients.acceptance_status',
                 'user_doctor.username as username_doctor', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id');
+                DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id')
+                ->where('in_patients.acceptance_status', '=', '0');;
 
         if ($request->user()->role == 'dokter') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
