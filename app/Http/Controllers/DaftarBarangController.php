@@ -11,7 +11,7 @@ class DaftarBarangController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Access is not allowed!'],
@@ -27,6 +27,10 @@ class DaftarBarangController extends Controller
                 'list_of_items.unit_item_id', 'unit_item.unit_name', 'list_of_items.category_item_id', 'category_item.category_name'
                 , 'list_of_items.branch_id', 'branches.branch_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+        }
 
         if ($request->keyword) {
 

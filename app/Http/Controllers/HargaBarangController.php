@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PriceItem;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\PriceItem;
 
 class HargaBarangController extends Controller
 {
@@ -30,6 +30,10 @@ class HargaBarangController extends Controller
                 'branches.id as branch_id', 'branches.branch_name', 'price_items.selling_price',
                 'price_items.capital_price', 'price_items.doctor_fee', 'price_items.petshop_fee',
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(price_items.created_at, '%d %b %Y') as created_at"));
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $price_items = $price_items->where('branches.id', '=', $request->branch_id);
+        }
 
         if ($request->keyword) {
 
@@ -153,7 +157,7 @@ class HargaBarangController extends Controller
                 'errors' => ['Data duplicate!'],
             ], 422);
         }
-        
+
         $price_items->list_of_items_id = $request->ListOfItemsId;
         $price_items->selling_price = $request->HargaJual;
         $price_items->capital_price = $request->HargaModal;
@@ -236,7 +240,7 @@ class HargaBarangController extends Controller
         $list_of_items = DB::table('list_of_items')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
             ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-            ->select('list_of_items.id', 'list_of_items.item_name','total_item','unit_item_id','unit_item.unit_name')
+            ->select('list_of_items.id', 'list_of_items.item_name', 'total_item', 'unit_item_id', 'unit_item.unit_name')
             ->where('branch_id', '=', $request->branch_id)
             ->where('category_item_id', '=', $request->category_item_id)
             ->get();

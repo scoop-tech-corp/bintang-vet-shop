@@ -21,6 +21,14 @@ class PasienController extends Controller
                 DB::raw("DATE_FORMAT(patients.created_at, '%d %b %Y') as created_at"))
             ->where('patients.isDeleted', '=', 'false');
 
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            $patient = $patient->where('patients.branch_id', '=', $request->user()->branch_id);
+        }
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $patient = $patient->where('patients.branch_id', '=', $request->branch_id);
+        }
+
         if ($request->keyword) {
             $patient = $patient->where('patients.id_member', 'like', '%' . $request->keyword . '%')
                 ->orwhere('patients.pet_category', 'like', '%' . $request->keyword . '%')
@@ -51,13 +59,13 @@ class PasienController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'kategori_hewan' => 'required|min:3|max:50',
-            'nama_hewan' => 'required|min:3|max:51',
+            'nama_hewan' => 'required|min:3|max:50',
             'jenis_kelamin_hewan' => 'required|string|max:50',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
             'nama_pemilik' => 'required|string|max:50',
             'alamat_pemilik' => 'required|string|max:100',
-            'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,12',
+            'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,13',
         ]);
 
         if ($validator->fails()) {
@@ -103,15 +111,22 @@ class PasienController extends Controller
 
     public function update(Request $request)
     {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
-            'kategori_hewan' => 'required|min:3|max:51',
-            'nama_hewan' => 'required|min:3|max:51',
-            'jenis_kelamin_hewan' => 'required|string|max:51',
+            'kategori_hewan' => 'required|min:3|max:50',
+            'nama_hewan' => 'required|min:3|max:50',
+            'jenis_kelamin_hewan' => 'required|string|max:50',
             'usia_tahun_hewan' => 'required|numeric|min:0',
             'usia_bulan_hewan' => 'required|numeric|min:0|max:12',
-            'nama_pemilik' => 'required|string|max:51',
-            'alamat_pemilik' => 'required|string|max:101',
-            'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,12',
+            'nama_pemilik' => 'required|string|max:50',
+            'alamat_pemilik' => 'required|string|max:100',
+            'nomor_ponsel_pengirim' => 'required|numeric|digits_between:10,13',
         ]);
 
         if ($validator->fails()) {
@@ -151,6 +166,13 @@ class PasienController extends Controller
 
     public function delete(Request $request)
     {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
         $patient = Patient::find($request->id);
 
         if (is_null($patient)) {
