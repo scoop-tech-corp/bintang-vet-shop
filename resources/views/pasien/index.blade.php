@@ -5,10 +5,13 @@
   <div class="box-header with-border">
     <h3 class="box-title">Pasien</h3>
     <div class="inner-box-title">
-      <button class="btn btn-info" @click="openFormAdd">Tambah</button>
-      <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="cari.." v-model="searchTxt" @keydown.enter="onSearch">
-        <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+      <button class="btn btn-info openFormAdd">Tambah</button>
+      <div class="d-flex width-350px">
+        <div class="input-search-section m-r-10px">
+          <input type="text" class="form-control" placeholder="cari..">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
@@ -18,51 +21,19 @@
       <thead>
         <tr>
           <th>No</th>
-          <th @click="onOrdering('id_member')">No. Registrasi
-            <span v-if="columnStatus.id_member == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.id_member == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.id_member == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('pet_category')">Jenis Hewan
-            <span v-if="columnStatus.pet_category == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.pet_category == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.pet_category == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('pet_name')">Nama Hewan
-            <span v-if="columnStatus.pet_name == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.pet_name == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.pet_name == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('pet_gender')">Jenis Kelamin
-            <span v-if="columnStatus.pet_gender == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.pet_gender == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.pet_gender == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('pet_year_age')">Usia Hewan
-            <span v-if="columnStatus.pet_year_age == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.pet_year_age == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.pet_year_age == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('branch_name')">Cabang
-            <span v-if="columnStatus.branch_name == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.branch_name == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.branch_name == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('created_by')">Didaftarkan Oleh
-            <span v-if="columnStatus.created_by == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.created_by == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.created_by == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('created_at')">Tanggal Daftar
-            <span v-if="columnStatus.created_at == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.created_at == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.created_at == 'none'" class="fa fa-sort"></span>
-          </th>
+          <th class="onOrdering" data='id_member' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='pet_category' orderby="none">Jenis Hewan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='pet_name' orderby="none">Nama Hewan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='pet_gender' orderby="none">Jenis Kelamin <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='pet_year_age' orderby="none">Usia Hewan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='created_by' orderby="none">Didaftarkan Oleh <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='created_at' orderby="none">Tanggal Daftar <span class="fa fa-sort"></span></th>
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="(item, index) in listPasien">
+      <tbody id="list-pasien">
+        {{-- <tr v-for="(item, index) in listPasien">
           <td>@{{ index + 1 }}</td>
           <td>@{{ item.id_member }}</td>
           <td>@{{ item.pet_category }}</td>
@@ -73,11 +44,10 @@
           <td>@{{ item.created_by }}</td>
           <td>@{{ item.created_at }}</td>
           <td>
-            {{-- <button type="button" class="btn btn-info" @click="openFormDetail(item)"><i class="fa fa-eye" aria-hidden="true"></i></button> --}}
             <button type="button" class="btn btn-warning" @click="openFormUpdate(item)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>
-        </tr>
+        </tr> --}}
       </tbody>
     </table>
   </div>
@@ -92,11 +62,9 @@
 </div>
 @endsection
 @section('script-content')
-  
+  <script src="{{ asset('main/js/pasien/pasien.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/pasien.css') }}">
 @endsection
-@section('vue-content')
-  <script src="{{ asset('main/js/pasien/pasien-vue.js') }}"></script>
-@endsection
+@section('vue-content')@endsection

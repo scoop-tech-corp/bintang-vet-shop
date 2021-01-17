@@ -38,6 +38,20 @@
 			</li>
 			<li class="menuPeriksa"><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>
 			<li class="menuTindakan"><a href="{{ url('/tindakan') }}"><i class="fa fa-medkit" aria-hidden="true"></i> <span>Tindakan</span></a></li>
+			<li class="treeview menuLayanan">
+				<a href="#">
+					<i class="fa fa-user-md" aria-hidden="true"></i>
+					<span>Layanan</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{{ url('/kategori-jasa') }}"><i class="fa fa-circle-o"></i> Kategori Jasa</a></li>
+					<li><a href="{{ url('/daftar-jasa') }}"><i class="fa fa-circle-o"></i> Daftar Jasa</a></li>
+					<li><a href="{{ url('/pembagian-harga-jasa') }}"><i class="fa fa-circle-o"></i> Pembagian Harga Jasa</a></li>
+				</ul>
+			</li>
 			<li class="treeview menuGudang">
 				<a href="#">
 					<i class="fa fa-database" aria-hidden="true"></i>
@@ -50,9 +64,7 @@
 					<li><a href="{{ url('/kategori-barang') }}"><i class="fa fa-circle-o"></i> Kategori Barang</a></li>
 					<li><a href="{{ url('/satuan-barang') }}"><i class="fa fa-circle-o"></i> Satuan Barang</a></li>
 					<li><a href="{{ url('/daftar-barang') }}"><i class="fa fa-circle-o"></i> Daftar Barang</a></li>
-					<li><a href="{{ url('/kategori-jasa') }}"><i class="fa fa-circle-o"></i> Kategori Jasa</a></li>
-					<li><a href="{{ url('/daftar-jasa') }}"><i class="fa fa-circle-o"></i> Daftar Jasa</a></li>
-					<li><a href="{{ url('/pembagian-harga') }}"><i class="fa fa-circle-o"></i> Pembagian Harga</a></li>
+					<li><a href="{{ url('/pembagian-harga-barang') }}"><i class="fa fa-circle-o"></i> Pembagian Harga Barang</a></li>
 				</ul>
 			</li>
 			<li class="menuPembayaran"><a href="{{ url('/pembayaran') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Pembayaran</span></a></li>

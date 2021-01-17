@@ -9,9 +9,12 @@
         <button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
         <button class="btn btn-info openFormUpload">Upload Sekaligus</button>
       </div>
-      <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="cari.." @keydown.enter="onSearch">
-        <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+      <div class="d-flex width-350px">
+        <div class="input-search-section m-r-10px">
+          <input type="text" class="form-control" placeholder="cari.." @keydown.enter="onSearch">
+          <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+        </div>
+        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
@@ -48,6 +51,4 @@
 @section('script-content')
   <script src="{{ asset('main/js/gudang/daftar-barang/daftar-barang.js') }}"></script>  
 @endsection
-@section('vue-content')
-{{-- <script src="{{ asset('main/js/gudang/daftar-barang/daftar-barang-vue.js') }}"></script> --}}
-@endsection
+@section('vue-content')@endsection

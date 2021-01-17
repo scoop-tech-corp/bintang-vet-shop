@@ -1,44 +1,44 @@
 @extends('layout.master')
 
 @section('content')
-<div class="box box-info" id="daftar-jasa-app">
+<div class="box box-info" id="pembagian-harga-jasa-app">
   <div class="box-header with-border">
-    <h3 class="box-title">Daftar Jasa</h3>
+    <h3 class="box-title">Harga Jasa</h3>
     <div class="inner-box-title">
       <button class="btn btn-info openFormAdd">Tambah</button>
-      <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="cari..">
-        <i class="fa fa-search" aria-hidden="true"></i>
+      <div class="d-flex width-350px">
+        <div class="input-search-section m-r-10px">
+          <input type="text" class="form-control" placeholder="cari..">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
 
-  <div class="box-body table-responsive">
+  <div class="table-responsive">
     <table class="table table-striped text-nowrap">
-      <thead>
+      <thead style="border-top: 1px solid #f4f4f4;">
         <tr>
           <th>No</th>
           <th class="onOrdering" data='service_name' orderby="none">Jenis Pelayanan <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='category_name' orderby="none">Kategori <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='category_name' orderby="none">Kategori Jasa <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody id="list-daftar-jasa"></tbody>
+      <tbody id="list-harga-jasa"></tbody>
     </table>
   </div>
-  <!-- /.box-body -->
 
-  @component('gudang.daftar-jasa.modal-daftar-jasa') @endcomponent
+  @component('layanan.pembagian-harga.modal-harga-jasa') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
-</div>
-@endsection
-@section('script-content')
-  <script src="{{ asset('main/js/gudang/daftar-jasa/daftar-jasa.js') }}"></script>  
-@endsection
-@section('vue-content')
 
 @endsection
+@section('script-content')
+  <script src="{{ asset('main/js/layanan/pembagian-harga/harga-jasa.js') }}"></script>
+@endsection
+@section('vue-content') @endsection

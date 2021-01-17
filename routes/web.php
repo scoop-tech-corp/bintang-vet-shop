@@ -45,16 +45,20 @@ Route::get('/daftar-barang', function () {
 	return view('gudang.daftar-barang.index');
 });
 
+Route::get('/pembagian-harga-barang', function () {
+	return view('gudang.pembagian-harga.index');
+});
+
 Route::get('/kategori-jasa', function () {
-	return view('gudang.kategori-jasa.index');
+	return view('layanan.kategori-jasa.index');
 });
 
 Route::get('/daftar-jasa', function () {
-	return view('gudang.daftar-jasa.index');
+	return view('layanan.daftar-jasa.index');
 });
 
-Route::get('/pembagian-harga', function () {
-	return view('gudang.pembagian-harga.index');
+Route::get('/pembagian-harga-jasa', function () {
+	return view('layanan.pembagian-harga.index');
 });
 
 Route::get('/rawat-inap', function () {
@@ -64,7 +68,6 @@ Route::get('/rawat-inap', function () {
 Route::get('/rawat-jalan', function () {
 	return view('pendaftaran.rawat-jalan.index');
 });
-
 
 Route::get('/dokter-rawat-jalan', function () {
 	return view('dokter.rawat-jalan.index');

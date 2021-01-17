@@ -47,10 +47,11 @@ $(document).ready(function() {
     if (Value['href'] === window.location.origin + pathName) {
       $(Value).parent().addClass('active');
 
-      if (pathName === '/kategori-barang' || pathName === '/satuan-barang' 
-        || pathName === '/daftar-barang' || pathName === '/kategori-jasa' 
-        || pathName === '/daftar-jasa' || pathName === '/pembagian-harga') {
+      if (pathName === '/kategori-barang' || pathName === '/satuan-barang'  || pathName === '/daftar-barang'
+        || pathName === '/pembagian-harga-barang') {
         $('.menuGudang').addClass('active');
+      } else if(pathName === '/kategori-jasa' || pathName === '/daftar-jasa' || pathName === '/pembagian-harga-jasa') {
+        $('.menuLayanan').addClass('active');
       } else if (pathName === '/rawat-jalan' || pathName === '/rawat-inap') {
         $('.menuPendaftaran').addClass('active');
       } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {

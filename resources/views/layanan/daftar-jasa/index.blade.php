@@ -1,10 +1,9 @@
 @extends('layout.master')
 
 @section('content')
-
-<div class="box box-info" id="pembagian-harga-barang-app">
+<div class="box box-info" id="daftar-jasa-app">
   <div class="box-header with-border">
-    <h3 class="box-title">Harga Barang</h3>
+    <h3 class="box-title">Daftar Jasa</h3>
     <div class="inner-box-title">
       <button class="btn btn-info openFormAdd">Tambah</button>
       <div class="d-flex width-350px">
@@ -17,30 +16,32 @@
     </div>
   </div>
 
-  <div class="table-responsive">
+  <div class="box-body table-responsive">
     <table class="table table-striped text-nowrap">
       <thead>
         <tr>
           <th>No</th>
-          <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='category_name' orderby="none">Kategori Barang <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='total_item' orderby="none">Jumlah Barang <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='unit_name' orderby="none">Satuan Barang <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='service_name' orderby="none">Jenis Pelayanan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='category_name' orderby="none">Kategori <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody id="list-harga-barang"></tbody>
+      <tbody id="list-daftar-jasa"></tbody>
     </table>
   </div>
+  <!-- /.box-body -->
 
-  @component('gudang.pembagian-harga.modal-harga-barang') @endcomponent
+  @component('layanan.daftar-jasa.modal-daftar-jasa') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
+</div>
 @endsection
 @section('script-content')
-  <script src="{{ asset('main/js/gudang/pembagian-harga/harga-barang.js') }}"></script>
+  <script src="{{ asset('main/js/layanan/daftar-jasa/daftar-jasa.js') }}"></script>  
 @endsection
-@section('vue-content') @endsection
+@section('vue-content')
+
+@endsection
