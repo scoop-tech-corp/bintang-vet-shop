@@ -26,6 +26,10 @@ class DaftarJasaController extends Controller
                 , 'list_of_services.branch_id', 'branches.branch_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(list_of_services.created_at, '%d %b %Y') as created_at"));
 
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $list_of_services = $list_of_services->where('list_of_services.branch_id', '=', $request->branch_id);
+        }
+
         if ($request->keyword) {
 
             $list_of_services = $list_of_services->where('list_of_services.service_name', 'like', '%' . $request->keyword . '%')

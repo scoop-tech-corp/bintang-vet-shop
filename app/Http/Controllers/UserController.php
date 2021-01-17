@@ -138,31 +138,36 @@ class UserController extends Controller
             ], 403);
         }
 
-        if ($request->orderby == 'asc') {
+        $user = DB::table('users')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
+                , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
+                DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"));
 
-            $user = DB::table('users')
-                ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
-                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'asc')->get();
+        if ($request->keyword) {
 
-        } else if ($request->orderby == 'desc') {
-
-            $user = DB::table('users')
-                ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
-                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->orderBy($request->column, 'desc')->get();
-
-        } else {
-
-            $user = DB::table('users')
-                ->join('branches', 'users.branch_id', '=', 'branches.id')
-                ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
-                    , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
-                    DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))->get();
-
+            $user = $user->where('users.branch_id', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.staffing_number', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.username', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.email', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.role', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.phone_number', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.status', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.created_by', 'like', '%' . $request->keyword . '%');
         }
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $user = $user->where('users.branch_id', '=', $request->branch_id);
+        }
+
+        if ($request->orderby) {
+
+            $user = $user->orderBy($request->column, $request->orderby);
+        }
+
+        $user = $user->get();
 
         return response()->json($user, 200);
     }

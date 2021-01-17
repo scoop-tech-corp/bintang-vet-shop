@@ -29,6 +29,10 @@ class HargaJasaController extends Controller
                 'price_services.capital_price', 'price_services.doctor_fee', 'price_services.petshop_fee',
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(price_services.created_at, '%d %b %Y') as created_at"));
 
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $price_services = $price_services->where('branches.id', '=', $request->branch_id);
+        }
+
         if ($request->keyword) {
 
             $price_services = $price_services
