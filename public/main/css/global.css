@@ -85,6 +85,10 @@ body {
   cursor: pointer;
 }
 
+.width-350px {
+  width: 350px;
+}
+
 .d-flex {
   display: flex;
 }

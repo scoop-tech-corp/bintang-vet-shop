@@ -1,7 +1,8 @@
 $(document).ready(function() {
 	let optSatuanBarang = '';
 	let optKategoriBarang = '';
-	let optCabang = '';
+	let optCabang1 = '';
+	let optCabang2 = '';
 
 	let getId = null;
 	let modalState = '';
@@ -12,10 +13,13 @@ $(document).ready(function() {
 	let isValidSelectedCabang = false;
 	let isBeErr = false;
 	let paramUrlSetup = {
-		orderby:'',
+		orderby: '',
 		column: '',
-		keyword: ''
+		keyword: '',
+		branchId: ''
 	};
+
+	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
 	// load daftar barang
 	loadDaftarBarang();
@@ -185,6 +189,14 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
+  $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
+
+  function onFilterCabang(value) {
+    paramUrlSetup.branchId = value;
+		loadDaftarBarang();
+  }
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadDaftarBarang();
@@ -193,12 +205,11 @@ $(document).ready(function() {
 	function loadDaftarBarang() {
 		getId = null;
 		modalState = '';
-
 		$.ajax({
 			url     : $('.baseUrl').val() + '/api/daftar-barang',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				let listDaftarBarang = '';
@@ -258,6 +269,7 @@ $(document).ready(function() {
 		$('#selectedSatuanBarang').select2();
 		$('#selectedKategoriBarang').select2();
 		$('#selectedCabang').select2();
+
 		$('#modal-daftar-barang').modal('show');
 		$('#btnSubmitDaftarBarang').attr('disabled', true);
 		
@@ -376,14 +388,16 @@ $(document).ready(function() {
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				optCabang += `<option value=''>Pilih Cabang</option>`
+				optCabang1 += `<option value=''>Pilih Cabang</option>`
+				optCabang2 += `<option value=''>Cabang</option>`
 	
 				if (data.length) {
 					for (let i = 0 ; i < data.length ; i++) {
-						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+						optCabang1 += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+						optCabang2 += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
 					}
 				}
-				$('#selectedCabang').append(optCabang);
+				$('#selectedCabang').append(optCabang1); $('#filterCabang').append(optCabang2);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {

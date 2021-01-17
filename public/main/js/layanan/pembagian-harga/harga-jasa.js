@@ -13,26 +13,24 @@ $(document).ready(function() {
   let isValidHargaModal = false;
   let isValidFeeDokter = false;
   let isValidFeePetshop = false;
-  let activeTab = 'Daftar Barang';
   let customErr1 = false;
   let isBeErr = false;
 	let paramUrlSetup = {
 		orderby:'',
 		column: '',
-		keyword: ''
+    keyword: '',
+    branchId: ''
   };
 
+  $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
   $('#selectedCabang').append(`<option value=''>Pilih Cabang</option>`);
   $('#selectedKategoriJasa').append(`<option value=''>Pilih Kategori Jasa</option>`);
   $('#selectedJenisPelayanan').append(`<option value=''>Pilih Jenis Pelayanan</option>`);
+  $('#filterCabang').append(`<option value=''>Cabang</option>`);
 
   loadHargaJasa();
 
   loadCabang();
-
-  $('#pembagian-harga-app .nav li a').click(function() {
-    activeTab = $(this).text();
-  });
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -123,72 +121,70 @@ $(document).ready(function() {
   });
 
   $('#submitConfirm').click(function() {
-    if (activeTab == 'Daftar Jasa') {
-      if (modalState == 'edit') {
-        // process edit
-        const datas = {
-          id: getId,
-          ListOfServiceId: $('#selectedJenisPelayanan').val(),
-          HargaJual: $('#hargaJual').val(),
-          HargaModal: $('#hargaModal').val(),
-          FeeDokter: $('#feeDokter').val(),
-          FeePetShop: $('#feePetshop').val()
-        };
+    if (modalState == 'edit') {
+      // process edit
+      const datas = {
+        id: getId,
+        ListOfServiceId: $('#selectedJenisPelayanan').val(),
+        HargaJual: $('#hargaJual').val(),
+        HargaModal: $('#hargaModal').val(),
+        FeeDokter: $('#feeDokter').val(),
+        FeePetShop: $('#feePetshop').val()
+      };
 
-        $.ajax({
-          url : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
-          type: 'PUT',
-          dataType: 'JSON',
-          headers: { 'Authorization': `Bearer ${token}` },
-          data: datas,
-          beforeSend: function() { $('#loading-screen').show(); },
-          success: function(data) {
-            $('#modal-confirmation .modal-title').text('Peringatan');
-            $('#modal-confirmation').modal('toggle');
+      $.ajax({
+        url : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
+        type: 'PUT',
+        dataType: 'JSON',
+        headers: { 'Authorization': `Bearer ${token}` },
+        data: datas,
+        beforeSend: function() { $('#loading-screen').show(); },
+        success: function(data) {
+          $('#modal-confirmation .modal-title').text('Peringatan');
+          $('#modal-confirmation').modal('toggle');
 
-            $("#msg-box .modal-body").text('Berhasil Mengubah harga jasa');
-            $('#msg-box').modal('show');
+          $("#msg-box .modal-body").text('Berhasil Mengubah harga jasa');
+          $('#msg-box').modal('show');
 
-            setTimeout(() => {
-              $('#modal-harga-jasa').modal('toggle');
-              refreshForm();
-              loadHargaJasa();
-            }, 1000);
-
-          }, complete: function() { $('#loading-screen').hide(); }
-          , error: function(err) {
-            if (err.status == 401) {
-              localStorage.removeItem('vet-clinic');
-              location.href = $('.baseUrl').val() + '/masuk';
-            }
-          }
-        });
-      } else {
-        // process delete
-        $.ajax({
-          url     : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
-          headers : { 'Authorization': `Bearer ${token}` },
-          type    : 'DELETE',
-          data	  : { id: getId },
-          beforeSend: function() { $('#loading-screen').show(); },
-          success: function(data) {
-            $('#modal-confirmation .modal-title').text('Peringatan');
-            $('#modal-confirmation').modal('toggle');
-
-            $("#msg-box .modal-body").text('Berhasil menghapus data');
-            $('#msg-box').modal('show');
-
+          setTimeout(() => {
+            $('#modal-harga-jasa').modal('toggle');
+            refreshForm();
             loadHargaJasa();
+          }, 1000);
 
-          }, complete: function() { $('#loading-screen').hide(); }
-          , error: function(err) {
-            if (err.status == 401) {
-              localStorage.removeItem('vet-clinic');
-              location.href = $('.baseUrl').val() + '/masuk';
-            }
+        }, complete: function() { $('#loading-screen').hide(); }
+        , error: function(err) {
+          if (err.status == 401) {
+            localStorage.removeItem('vet-clinic');
+            location.href = $('.baseUrl').val() + '/masuk';
           }
-        });
-      }
+        }
+      });
+    } else {
+      // process delete
+      $.ajax({
+        url     : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
+        headers : { 'Authorization': `Bearer ${token}` },
+        type    : 'DELETE',
+        data	  : { id: getId },
+        beforeSend: function() { $('#loading-screen').show(); },
+        success: function(data) {
+          $('#modal-confirmation .modal-title').text('Peringatan');
+          $('#modal-confirmation').modal('toggle');
+
+          $("#msg-box .modal-body").text('Berhasil menghapus data');
+          $('#msg-box').modal('show');
+
+          loadHargaJasa();
+
+        }, complete: function() { $('#loading-screen').hide(); }
+        , error: function(err) {
+          if (err.status == 401) {
+            localStorage.removeItem('vet-clinic');
+            location.href = $('.baseUrl').val() + '/masuk';
+          }
+        }
+      });
     }
   });
 
@@ -232,6 +228,14 @@ $(document).ready(function() {
   $('#feeDokter').keyup(function () { validationHargaJual(); validationForm(); });
   $('#feePetshop').keyup(function () { validationHargaJual(); validationForm(); });
 
+  $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
+  $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
+
+  function onFilterCabang(value) {
+    paramUrlSetup.branchId = value;
+		loadHargaJasa();
+  }
+
   function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadHargaJasa();
@@ -244,7 +248,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				let listHargaJasa = '';
@@ -316,7 +320,7 @@ $(document).ready(function() {
 						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
 					}
 				}
-        $('#selectedCabang').append(optCabang);
+        $('#selectedCabang').append(optCabang); $('#filterCabang').append(optCabang);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
@@ -492,7 +496,7 @@ $(document).ready(function() {
   function validationBtnSubmitHargaJasa() {
     if (!isValidSelectedCabang || !isValidSelectedKategoriJasa || !isValidSelectedJenisPelayanan 
       || !isValidHargaJual || !isValidHargaModal || !isValidFeeDokter || !isValidFeePetshop 
-      || customErr1 || isBeErr) {
+      || !customErr1 || isBeErr) {
 			$('#btnSubmitHargaJasa').attr('disabled', true);
 		} else {
 			$('#btnSubmitHargaJasa').attr('disabled', false);

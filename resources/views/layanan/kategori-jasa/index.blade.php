@@ -52,7 +52,7 @@
   </div>
   <!-- /.box-body -->
 
-  @component('gudang.kategori-jasa.modal-kategori-jasa') @endcomponent
+  @component('layanan.kategori-jasa.modal-kategori-jasa') @endcomponent
 
   @component('layout.modal-confirmation') @endcomponent
 
@@ -64,5 +64,5 @@
   
 @endsection
 @section('vue-content')
-<script src="{{ asset('main/js/gudang/kategori-jasa/kategori-jasa-vue.js') }}"></script>
+<script src="{{ asset('main/js/layanan/kategori-jasa/kategori-jasa-vue.js') }}"></script>
 @endsection

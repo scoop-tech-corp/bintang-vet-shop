@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	let optKategoriJasa = '';
-	let optCabang = '';
+	let optCabang1 = '';
+	let optCabang2 = '';
 
 	let getId = null;
 	let modalState = '';
@@ -11,8 +12,11 @@ $(document).ready(function() {
 	let paramUrlSetup = {
 		orderby:'',
 		column: '',
-		keyword: ''
+		keyword: '',
+		branchId: ''
 	};
+
+	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
 	// load daftar barang
 	loadDaftarJasa();
@@ -176,6 +180,14 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
+  $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
+
+  function onFilterCabang(value) {
+    paramUrlSetup.branchId = value;
+		loadDaftarJasa();
+  }
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadDaftarJasa();
@@ -188,7 +200,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/daftar-jasa',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				let listDaftarJasa = '';
@@ -324,14 +336,16 @@ $(document).ready(function() {
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				optCabang += `<option value=''>Pilih Cabang</option>`
+				optCabang1 += `<option value=''>Pilih Cabang</option>`;
+				optCabang2 += `<option value=''>Cabang</option>`;
 	
 				if (data.length) {
 					for (let i = 0 ; i < data.length ; i++) {
-						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+						optCabang1 += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+						optCabang2 += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
 					}
 				}
-				$('#selectedCabang').append(optCabang);
+				$('#selectedCabang').append(optCabang1); $('#filterCabang').append(optCabang2);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
