@@ -11,7 +11,7 @@ class HargaJasaController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Access is not allowed!'],
@@ -31,6 +31,10 @@ class HargaJasaController extends Controller
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $price_services = $price_services->where('branches.id', '=', $request->branch_id);
+        }
+
+        if ($request->user()->role == 'dokter') {
+            $price_services = $price_services->where('branches.id', '=', $request->user()->branch_id);
         }
 
         if ($request->keyword) {
