@@ -21,6 +21,10 @@ $(document).ready(function() {
 			}
 		},
 		mounted() {
+			if (role.toLowerCase() == 'dokter') {
+				$('.columnAction').hide();
+				$('.section-left-box-title .btn').hide();
+			}
 			this.getData();
 		},
 		computed: {
@@ -30,10 +34,12 @@ $(document).ready(function() {
 		},
 		methods: {
 			openFormAdd: function() {
-				this.stateModal = 'add';
-				this.titleModal = 'Tambah Satuan Barang';
-				this.refreshVariable();
-				$('#modal-satuan-barang').modal('show');
+				if (role.toLowerCase() != 'dokter') {
+					this.stateModal = 'add';
+					this.titleModal = 'Tambah Satuan Barang';
+					this.refreshVariable();
+					$('#modal-satuan-barang').modal('show');
+				}
 			},
 			openFormUpdate: function(item) {
 				this.stateModal = 'edit';
@@ -101,7 +107,12 @@ $(document).ready(function() {
 				$('#loading-screen').show();
 				axios.get($('.baseUrl').val() + '/api/satuan-barang', { params: this.paramUrlSetup, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 					.then(resp => {
-						this.listData = resp.data;
+						const getRespData = resp.data;
+						getRespData.map(item => {
+							item.isRoleAccess = (role.toLowerCase() == 'dokter') ? false : true;
+							return item;
+						});
+						this.listData = getRespData;
 					})
 					.catch(err => {
 						if (err.response.status === 401) {

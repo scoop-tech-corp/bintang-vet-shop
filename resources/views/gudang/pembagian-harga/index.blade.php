@@ -6,13 +6,12 @@
   <div class="box-header with-border">
     <h3 class="box-title">Harga Barang</h3>
     <div class="inner-box-title">
-      <button class="btn btn-info openFormAdd">Tambah</button>
-      <div class="d-flex width-350px">
+      <div class="section-left-box-title"></div>
+      <div class="section-right-box-title">
         <div class="input-search-section m-r-10px">
           <input type="text" class="form-control" placeholder="cari..">
           <i class="fa fa-search" aria-hidden="true"></i>
         </div>
-        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
@@ -29,7 +28,7 @@
           <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-          <th>Aksi</th>
+          <th class="columnAction">Aksi</th>
         </tr>
       </thead>
       <tbody id="list-harga-barang"></tbody>

@@ -5,16 +5,12 @@
   <div class="box-header with-border">
     <h3 class="box-title">Daftar Barang</h3>
     <div class="inner-box-title">
-      <div>
-        <button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
-        <button class="btn btn-info openFormUpload">Upload Sekaligus</button>
-      </div>
-      <div class="d-flex width-350px">
+      <div class="section-left-box-title"></div>
+      <div class="section-right-box-title">
         <div class="input-search-section m-r-10px">
           <input type="text" class="form-control" placeholder="cari.." @keydown.enter="onSearch">
           <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
         </div>
-        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
@@ -31,7 +27,7 @@
           <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-          <th>Aksi</th>
+          <th class="columnAction">Aksi</th>
         </tr>
       </thead>
       <tbody id="list-daftar-barang"></tbody>

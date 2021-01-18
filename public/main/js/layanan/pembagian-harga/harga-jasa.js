@@ -22,15 +22,23 @@ $(document).ready(function() {
     branchId: ''
   };
 
-  $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
-  $('#selectedCabang').append(`<option value=''>Pilih Cabang</option>`);
-  $('#selectedKategoriJasa').append(`<option value=''>Pilih Kategori Jasa</option>`);
-  $('#selectedJenisPelayanan').append(`<option value=''>Pilih Jenis Pelayanan</option>`);
-  $('#filterCabang').append(`<option value=''>Cabang</option>`);
+  if (role.toLowerCase() == 'dokter') {
+    $('.columnAction').hide(); $('#filterCabang').hide();
+  } else {
+    $('#selectedCabang').append(`<option value=''>Pilih Cabang</option>`);
+    $('#selectedKategoriJasa').append(`<option value=''>Pilih Kategori Jasa</option>`);
+    $('#selectedJenisPelayanan').append(`<option value=''>Pilih Jenis Pelayanan</option>`);
+
+    $('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
+		$('.section-right-box-title').addClass('width-350px');
+		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
+
+    $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+    $('#filterCabang').append(`<option value=''>Cabang</option>`);
+    loadCabang();
+  }
 
   loadHargaJasa();
-
-  loadCabang();
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -205,7 +213,7 @@ $(document).ready(function() {
     $('#selectedJenisPelayanan').val(null);
     $('#selectedJenisPelayanan').append(optJenisPelayanan);
 
-    validationForm();
+    validationHargaJual(); validationForm();
   });
 
   $('#selectedKategoriJasa').on('select2:select', function (e) {
@@ -219,10 +227,10 @@ $(document).ready(function() {
       $('#selectedJenisPelayanan').append(optJenisPelayanan);
     }
 
-    validationForm();
+    validationHargaJual(); validationForm();
   });
 
-  $('#selectedJenisPelayanan').on('select2:select', function (e) { validationForm(); });
+  $('#selectedJenisPelayanan').on('select2:select', function (e) { validationHargaJual(); validationForm(); });
   $('#hargaJual').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaModal').keyup(function () { validationHargaJual(); validationForm(); });
   $('#feeDokter').keyup(function () { validationHargaJual(); validationForm(); });
@@ -262,10 +270,10 @@ $(document).ready(function() {
 						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
-						+ `<td>
+						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`
+							</td>`)
 						+ `</tr>`;
 				});
 				$('#list-harga-jasa').append(listHargaJasa);

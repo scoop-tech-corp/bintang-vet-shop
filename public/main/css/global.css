@@ -80,6 +80,10 @@ body {
 	padding: 6px 12px 6px 40px;
 }
 
+.section-right-box-title {
+  display: flex;
+}
+
 /* cursor pointer for icon sort in column (table) */
 .table > thead > tr > th > .fa {
   cursor: pointer;
