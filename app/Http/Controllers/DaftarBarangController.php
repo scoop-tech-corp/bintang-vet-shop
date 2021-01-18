@@ -32,6 +32,10 @@ class DaftarBarangController extends Controller
             $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
         }
 
+        if ($request->user()->role == 'dokter') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+        }
+
         if ($request->keyword) {
 
             $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
