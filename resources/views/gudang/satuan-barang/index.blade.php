@@ -5,10 +5,14 @@
   <div class="box-header with-border">
     <h3 class="box-title">Satuan Barang</h3>
     <div class="inner-box-title">
-      <button class="btn btn-info" @click="openFormAdd">Tambah</button>
-      <div class="input-search-section">
-        <input type="text" class="form-control" placeholder="cari.." v-model="searchTxt" @keydown.enter="onSearch">
-        <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+      <div class="section-left-box-title">
+        <button class="btn btn-info" @click="openFormAdd">Tambah</button>
+      </div>
+      <div class="section-right-box-title">
+        <div class="input-search-section">
+          <input type="text" class="form-control" placeholder="cari.." v-model="searchTxt" @keydown.enter="onSearch">
+          <i class="fa fa-search" aria-hidden="true" @click="onSearch"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +37,7 @@
             <span v-if="columnStatus.created_at == 'asc'" class="fa fa-sort-asc"></span>
             <span v-if="columnStatus.created_at == 'none'" class="fa fa-sort"></span>
           </th>
-          <th>Aksi</th>
+          <th class="columnAction">Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +46,7 @@
           <td>@{{ item.unit_name }}</td>
           <td>@{{ item.created_by }}</td>
           <td>@{{ item.created_at }}</td>
-          <td>
+          <td v-if="item.isRoleAccess">
             <button type="button" class="btn btn-warning" @click="openFormUpdate(item)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>

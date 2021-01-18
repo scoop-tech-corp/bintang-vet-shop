@@ -19,19 +19,30 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
-	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+	if (role.toLowerCase() == 'dokter') {
+		$('.columnAction').hide(); $('#filterCabang').hide();
+	} else {
+		$('.section-left-box-title').append(
+			`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
+			<button class="btn btn-info openFormUpload">Upload Sekaligus</button>`
+		);
+		$('.section-right-box-title').addClass('width-350px');
+		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
+
+		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+
+		// load satuan barang
+		loadSatuanBarang();
+
+		// load kategori barang
+		loadKategoriBarang();
+
+		// load cabang
+		loadCabang();
+	}
 
 	// load daftar barang
 	loadDaftarBarang();
-
-	// load satuan barang
-	loadSatuanBarang();
-
-	// load kategori barang
-	loadKategoriBarang();
-
-	// load cabang
-	loadCabang();
 
 	$('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -216,20 +227,20 @@ $(document).ready(function() {
 				$('#list-daftar-barang tr').remove();
 
 				$.each(data, function(idx, v) {
-					listDaftarBarang += `<tr>`
-						+ `<td>${++idx}</td>`
-						+ `<td>${v.item_name}</td>`
-						+ `<td>${v.total_item}</td>`
-						+ `<td>${v.unit_name}</td>`
-						+ `<td>${v.category_name}</td>`
-						+ `<td>${v.branch_name}</td>`
-						+ `<td>${v.created_by}</td>`
-						+ `<td>${v.created_at}</td>`
-						+ `<td>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`
-						+ `</tr>`;
+					listDaftarBarang += `<tr>
+						<td>${++idx}</td>
+						<td>${v.item_name}</td>
+						<td>${v.total_item}</td>
+						<td>${v.unit_name}</td>
+						<td>${v.category_name}</td>
+						<td>${v.branch_name}</td>
+						<td>${v.created_by}</td>
+						<td>${v.created_at}</td>`
+						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
+							<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+							<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+						</td>`)
+					+`</tr>`;
 				});
 				$('#list-daftar-barang').append(listDaftarBarang);
 
