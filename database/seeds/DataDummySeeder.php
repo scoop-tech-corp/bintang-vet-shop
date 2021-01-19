@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
+class DataDummySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -10,7 +10,29 @@ class UserSeeder extends Seeder
      * @return void
      */
     public function run()
-    {        
+    {
+        DB::table('branches')->insert([
+            'branch_code' => 'AS',
+            'branch_name' => 'Alam Sutera',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('branches')->insert([
+            'branch_code' => 'KM',
+            'branch_name' => 'Kembangan',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('branches')->insert([
+            'branch_code' => 'TJ',
+            'branch_name' => 'Tanjung Duren',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        
         //cabang alam sutera
         DB::table('users')->insert([
             'staffing_number' => '12345',
@@ -225,6 +247,223 @@ class UserSeeder extends Seeder
             'owner_address' => 'pondok indah',
             'owner_phone_number' => '081234560989',
             'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //category_item
+        DB::table('category_item')->insert([
+            'category_name' => 'Antibiotik',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
+            'category_name' => 'Suplemen',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
+            'category_name' => 'Anti Radang',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //unit_item
+        DB::table('unit_item')->insert([
+            'unit_name' => 'Pcs',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('unit_item')->insert([
+            'unit_name' => 'Box',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('unit_item')->insert([
+            'unit_name' => 'Strip',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //list_of_items
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Vosea',
+            'total_item' => '3',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Kaotin',
+            'total_item' => '4',
+            'unit_item_id' => '2',
+            'category_item_id' => '2',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Doxy',
+            'total_item' => '6',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //service_categories
+        DB::table('service_categories')->insert([
+            'category_name' => 'Operasi',
+            'user_id' => '1',
+            'created_at' => '2020-12-29'
+        ]);
+
+        DB::table('service_categories')->insert([
+            'category_name' => 'Tindakan 1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('service_categories')->insert([
+            'category_name' => 'Tindakan 2',
+            'user_id' => '1',
+            'created_at' => '2020-12-31'
+        ]);
+
+        //list_of_services
+        DB::table('list_of_services')->insert([
+            'service_name' => 'rawat jalan',
+            'service_category_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'rawat inap',
+            'service_category_id' => '3',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'operasi caesar',
+            'service_category_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_services')->insert([
+            'service_name' => 'operasi biasa',
+            'service_category_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //price_services
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '1',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '2',
+            'selling_price' => 120000,
+            'capital_price' => 20000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_services')->insert([
+            'list_of_services_id' => '3',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //price_items
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '1',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '2',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('price_items')->insert([
+            'list_of_items_id' => '3',
+            'selling_price' => 200000,
+            'capital_price' => 60000,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 70000,
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //registrations
+        DB::table('registrations')->insert([
+            'id_number' => 'BVC-RP-AS-0001',
+            'patient_id' => '2',
+            'complaint' => 'pilek',
+            'registrant' => 'agus',
+            'user_id' => '1',
+            'doctor_user_id' => '3',
+            'acceptance_status' => '0',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('registrations')->insert([
+            'id_number' => 'BVC-RP-AS-0002',
+            'patient_id' => '3',
+            'complaint' => 'gatal-gatal',
+            'registrant' => 'kuncoro',
+            'user_id' => '1',
+            'doctor_user_id' => '4',
+            'acceptance_status' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('registrations')->insert([
+            'id_number' => 'BVC-RP-AS-0003',
+            'patient_id' => '1',
+            'complaint' => 'batuk',
+            'registrant' => 'supri',
+            'user_id' => '1',
+            'doctor_user_id' => '7',
+            'acceptance_status' => '2',
             'created_at' => '2020-12-30'
         ]);
     }
