@@ -10,7 +10,8 @@
 			<li class="menuCabang"><a href="{{ url('/cabang') }}"><i class="fa fa-code-fork"></i> <span>Cabang</span></a></li>
 			<li class="menuUser"><a href="{{ url('/user') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>User Management</span></a></li>
 			<li class="menuPasien"><a href="{{ url('/pasien') }}"><i class="fa fa-bed"></i> <span>Pasien</span></a></li>
-			<li class="treeview menuPendaftaran">
+			<li class="menuPendaftaran"><a href="{{ url('/pendaftaran') }}"><i class="fa fa-file-text-o"></i> <span>Pendaftaran</span></a></li>
+			{{-- <li class="treeview menuPendaftaran">
 				<a href="#">
 					<i class="fa fa-file-text-o" aria-hidden="true"></i>
 					<span>Pendaftaran</span>
@@ -20,10 +21,11 @@
 				</a>
 				<ul class="treeview-menu">
 					<li><a href="{{ url('/rawat-jalan') }}"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
-					{{-- <li><a href="{{ url('/rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li> --}}
+					<li><a href="{{ url('/rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
-			</li>
-			<li class="treeview menuDokter">
+			</li> --}}
+			<li class="menuDokter"><a href="{{ url('/dokter') }}"><i class="fa fa-stethoscope"></i> <span>Dokter</span></a></li>
+			{{-- <li class="treeview menuDokter">
 				<a href="#">
 					<i class="fa fa-stethoscope" aria-hidden="true"></i>
 					<span>Dokter</span>
@@ -33,9 +35,9 @@
 				</a>
 				<ul class="treeview-menu">
 					<li><a href="{{ url('/dokter-rawat-jalan') }}"><i class="fa fa-circle-o"></i> Rawat Jalan</a></li>
-					{{-- <li><a href="{{ url('/dokter-rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li> --}}
+					<li><a href="{{ url('/dokter-rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
-			</li>
+			</li> --}}
 			<li class="menuPeriksa"><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>
 			{{-- <li class="menuTindakan"><a href="{{ url('/tindakan') }}"><i class="fa fa-medkit" aria-hidden="true"></i> <span>Tindakan</span></a></li> --}}
 			<li class="treeview menuLayanan">

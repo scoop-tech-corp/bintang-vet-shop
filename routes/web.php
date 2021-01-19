@@ -61,21 +61,21 @@ Route::get('/pembagian-harga-jasa', function () {
 	return view('layanan.pembagian-harga.index');
 });
 
-Route::get('/rawat-inap', function () {
-	return view('pendaftaran.rawat-inap.index');
-});
+// Route::get('/rawat-inap', function () {
+// 	return view('pendaftaran.rawat-inap.index');
+// });
 
-Route::get('/rawat-jalan', function () {
+Route::get('/pendaftaran', function () {
 	return view('pendaftaran.rawat-jalan.index');
 });
 
-Route::get('/dokter-rawat-jalan', function () {
+Route::get('/dokter', function () {
 	return view('dokter.rawat-jalan.index');
 });
 
-Route::get('/dokter-rawat-inap', function () {
-	return view('dokter.rawat-inap.index');
-});
+// Route::get('/dokter-rawat-inap', function () {
+// 	return view('dokter.rawat-inap.index');
+// });
 
 
 // Route::get('/cabang','BranchController@index');

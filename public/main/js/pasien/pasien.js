@@ -1,5 +1,8 @@
 $(document).ready(function() {
+	let modalState = '';
+	let getId = null
 	let optCabang = '';
+
 	let isValidAnimalType = false;
   let isValidAnimalName = false;
   let isValidAnimalSex = false;
@@ -16,12 +19,17 @@ $(document).ready(function() {
     keyword: '',
     branchId: ''
 	};
-	
-	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+
+	if (role.toLowerCase() == 'resepsionis') {
+		$('.columnAction').hide(); // $('#filterCabang').hide();
+	} else if (role.toLowerCase() == 'admin') {
+		$('.section-right-box-title').addClass('width-350px');
+		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
+		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+		loadCabang();
+	}
 
 	loadPasien();
-
-	loadCabang();
 
 	$('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -235,10 +243,10 @@ $(document).ready(function() {
 						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
-						+ `<td>
+						+ ((role.toLowerCase() == 'resepsionis') ? `` : `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`
+							</td>`)
 						+ `</tr>`;
 				});
 				$('#list-pasien').append(listPasien);
