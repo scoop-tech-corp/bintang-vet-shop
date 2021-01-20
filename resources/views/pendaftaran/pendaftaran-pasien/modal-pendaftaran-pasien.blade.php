@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-rawat-jalan">
+<div class="modal fade" id="modal-pendaftaran-pasien">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -8,7 +8,7 @@
 				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form class="form-rawat-jalan">
+				<form class="form-pendaftaran-pasien">
 					<div class="box-body">
             <div class="form-group">
 							<label for="selectedPasien">Cari Pasien</label>
@@ -74,7 +74,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="btnSubmitRawatJalan">Simpan</button>
+				<button type="button" class="btn btn-primary" id="btnSubmitPendaftaranPasien">Simpan</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

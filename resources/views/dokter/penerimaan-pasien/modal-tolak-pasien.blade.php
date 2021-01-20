@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-tolak-rawat-jalan">
+<div class="modal fade" id="modal-tolak-pasien">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -8,7 +8,7 @@
 				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form class="form-tolak-rawat-jalan">
+				<form class="form-tolak-pasien">
 					<div class="box-body">
             <div class="form-group">
 							<label for="alasan">Alasan</label>
@@ -22,7 +22,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="btnSubmitTolakRawatJalan">Simpan</button>
+				<button type="button" class="btn btn-primary" id="btnSubmitTolakPasien">Simpan</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

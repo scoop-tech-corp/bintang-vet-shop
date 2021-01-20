@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	let optCabang = '';
   let optPasien = '';
 	let optDokter = '';
 	let listPasien = [];
@@ -13,14 +14,19 @@ $(document).ready(function() {
   let paramUrlSetup = {
 		orderby:'',
 		column: '',
-		keyword: ''
+		keyword: '',
+		branchId: ''
 	};
 
-  loadRawatJalan();
+  loadPendaftaranPasien();
 
   loadPasien();
 
-  loadDokter();
+	loadDokter();
+
+	loadCabang();
+	
+	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -47,17 +53,17 @@ $(document).ready(function() {
 		paramUrlSetup.orderby = $(this).attr('orderby');
 		paramUrlSetup.column = column;
 
-		loadRawatJalan();
+		loadPendaftaranPasien();
   });
   
   $('.openFormAdd').click(function() {
 		modalState = 'add';
-		$('.modal-title').text('Tambah Rawat Jalan');
+		$('.modal-title').text('Tambah Pendaftaran Pasien');
 		refreshText(); refreshForm();
 		formConfigure();
 	});
 
-	$('#btnSubmitRawatJalan').click(function() {
+	$('#btnSubmitPendaftaranPasien').click(function() {
     if (modalState == 'add') {
 
 			const fd = new FormData();
@@ -67,7 +73,7 @@ $(document).ready(function() {
       fd.append('nama_pendaftar', $('#namaPendaftar').val());
 
 			$.ajax({
-				url : $('.baseUrl').val() + '/api/rawat-jalan',
+				url : $('.baseUrl').val() + '/api/registrasi-pasien',
 				type: 'POST',
 				dataType: 'JSON',
 				headers: { 'Authorization': `Bearer ${token}` },
@@ -76,18 +82,18 @@ $(document).ready(function() {
 				beforeSend: function() { $('#loading-screen').show(); },
 				success: function(resp) {
 
-					$("#msg-box .modal-body").text('Berhasil Menambah Rawat Jalan');
+					$("#msg-box .modal-body").text('Berhasil Menambah Data');
 					$('#msg-box').modal('show');
 
 					setTimeout(() => {
-						$('#modal-rawat-jalan').modal('toggle');
+						$('#modal-pendaftaran-pasien').modal('toggle');
 						refreshForm();
-						loadRawatJalan();
+						loadPendaftaranPasien();
 					}, 1000);
 				}, complete: function() { $('#loading-screen').hide(); }
 				, error: function(err) {
 					if (err.status === 422) {
-						let errText = ''; $('#beErr').empty(); $('#btnSubmitRawatJalan').attr('disabled', true);
+						let errText = ''; $('#beErr').empty(); $('#btnSubmitPendaftaranPasien').attr('disabled', true);
 						$.each(err.responseJSON.errors, function(idx, v) {
 							errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
 						});
@@ -118,7 +124,7 @@ $(document).ready(function() {
 			};
 
 			$.ajax({
-				url : $('.baseUrl').val() + '/api/rawat-jalan',
+				url : $('.baseUrl').val() + '/api/registrasi-pasien',
 				type: 'PUT',
 				dataType: 'JSON',
 				headers: { 'Authorization': `Bearer ${token}` },
@@ -128,13 +134,13 @@ $(document).ready(function() {
 					$('#modal-confirmation .modal-title').text('Peringatan');
 					$('#modal-confirmation').modal('toggle');
 
-					$("#msg-box .modal-body").text('Berhasil Mengubah rawat jalan');
+					$("#msg-box .modal-body").text('Berhasil Mengubah Data');
 					$('#msg-box').modal('show');
 
 					setTimeout(() => {
-						$('#modal-rawat-jalan').modal('toggle');
+						$('#modal-pendaftaran-pasien').modal('toggle');
 						refreshForm();
-						loadRawatJalan();
+						loadPendaftaranPasien();
 					}, 1000);
 
 				}, complete: function() { $('#loading-screen').hide(); }
@@ -148,7 +154,7 @@ $(document).ready(function() {
 		} else {
 			// process delete
 			$.ajax({
-				url     : $('.baseUrl').val() + '/api/rawat-jalan',
+				url     : $('.baseUrl').val() + '/api/registrasi-pasien',
 				headers : { 'Authorization': `Bearer ${token}` },
 				type    : 'DELETE',
 				data	  : { id: getId },
@@ -160,7 +166,7 @@ $(document).ready(function() {
 					$("#msg-box .modal-body").text('Berhasil menghapus data');
 					$('#msg-box').modal('show');
 
-					loadRawatJalan();
+					loadPendaftaranPasien();
 
 				}, complete: function() { $('#loading-screen').hide(); }
 				, error: function(err) {
@@ -190,26 +196,33 @@ $(document).ready(function() {
 	$('#namaPendaftar').keyup(function () { validationForm(); });
 	$('#selectedDokter').on('select2:select', function (e) { validationForm(); });
 
+	$('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
+  $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
-		loadRawatJalan();
+		loadPendaftaranPasien();
 	}
 
-  function loadRawatJalan() {
-    getId = null;
-		modalState = '';
+	function onFilterCabang(value) {
+    paramUrlSetup.branchId = value;
+		loadPendaftaranPasien();
+  }
+
+  function loadPendaftaranPasien() {
+    getId = null; modalState = '';
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/rawat-jalan',
+			url     : $('.baseUrl').val() + '/api/registrasi-pasien',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				let listRawatJalan = '';
-				$('#list-rawat-jalan tr').remove();
+				let listPendaftaranPasien = '';
+				$('#list-pendaftaran-pasien tr').remove();
 
 				$.each(data, function(idx, v) {
-					listRawatJalan += `<tr>`
+					listPendaftaranPasien += `<tr>`
 						+ `<td>${++idx}</td>`
 						+ `<td>${v.id_number}</td>`
 						+ `<td>${v.id_number_patient}</td>`
@@ -226,7 +239,7 @@ $(document).ready(function() {
 							</td>`
 						+ `</tr>`;
 				});
-				$('#list-rawat-jalan').append(listRawatJalan);
+				$('#list-pendaftaran-pasien').append(listPendaftaranPasien);
 
 				function generateBedge(status) {
 					let bedge = '';
@@ -249,7 +262,7 @@ $(document).ready(function() {
 					if (getObj.acceptance_status != 1) {
 						modalState = 'edit';
 
-						$('.modal-title').text('Edit Rawat Jalan');
+						$('.modal-title').text('Edit Pendaftaran Pasien');
 						refreshForm();
 
 						formConfigure();
@@ -335,7 +348,32 @@ $(document).ready(function() {
 				}
 			}
 		});
-  }
+	}
+	
+	function loadCabang() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/cabang',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data) {
+				optCabang += `<option value=''>Cabang</option>`
+	
+				if (data.length) {
+					for (let i = 0 ; i < data.length ; i++) {
+						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+					}
+				}
+				$('#filterCabang').append(optCabang);
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+	}
 
   function refreshForm() {
     $('#selectedPasien').val(null); $('#keluhan').val(null);
@@ -384,9 +422,9 @@ $(document).ready(function() {
 
 		if (!isValidSelectedPasien || !isValidSelectedDokter || !isValidKeluhan 
 				|| !isValidNamaPendaftar|| isBeErr) {
-			$('#btnSubmitRawatJalan').attr('disabled', true);
+			$('#btnSubmitPendaftaranPasien').attr('disabled', true);
 		} else {
-			$('#btnSubmitRawatJalan').attr('disabled', false);
+			$('#btnSubmitPendaftaranPasien').attr('disabled', false);
 		}
 	}
 
@@ -394,8 +432,8 @@ $(document).ready(function() {
     $('#selectedPasien').select2();
 		$('#selectedDokter').select2();
 
-		$('#modal-rawat-jalan').modal('show');
-		$('#btnSubmitRawatJalan').attr('disabled', true);
+		$('#modal-pendaftaran-pasien').modal('show');
+		$('#btnSubmitPendaftaranPasien').attr('disabled', true);
   }
 
 });
