@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOutpatientAdmissionsTable extends Migration
+class CreateDoctorAcceptancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateOutpatientAdmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('outpatient_admissions', function (Blueprint $table) {
-            $table->id();
-            $table->integer('outpatient_id');
+        Schema::create('doctor_acceptances', function (Blueprint $table) {
+            $table->integer('patient_registration_id');
             $table->integer('acceptance_status');
             $table->string('reason');
             $table->integer('user_id');
@@ -30,6 +29,6 @@ class CreateOutpatientAdmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('outpatient_admissions');
+        Schema::dropIfExists('doctor_acceptances');
     }
 }
