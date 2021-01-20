@@ -66,11 +66,11 @@ Route::get('/pembagian-harga-jasa', function () {
 // });
 
 Route::get('/pendaftaran', function () {
-	return view('pendaftaran.rawat-jalan.index');
+	return view('pendaftaran.pendaftaran-pasien.index');
 });
 
 Route::get('/dokter', function () {
-	return view('dokter.rawat-jalan.index');
+	return view('dokter.penerimaan-pasien.index');
 });
 
 // Route::get('/dokter-rawat-inap', function () {

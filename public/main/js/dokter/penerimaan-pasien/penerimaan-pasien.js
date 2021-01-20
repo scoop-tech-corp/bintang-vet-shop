@@ -9,7 +9,7 @@ $(document).ready(function() {
 		keyword: ''
   };
   
-  loadDokterRawatJalan();
+  loadPenerimaanPasien();
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -36,12 +36,12 @@ $(document).ready(function() {
 		paramUrlSetup.orderby = $(this).attr('orderby');
 		paramUrlSetup.column = column;
 
-		loadDokterRawatJalan();
+		loadPenerimaanPasien();
   });
 
   $('#submitConfirm').click(function() {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan/terima',
+      url     : $('.baseUrl').val() + '/api/penerimaan-pasien/terima',
       headers : { 'Authorization': `Bearer ${token}` },
       type    : 'GET',
       data	  : { id: getId },
@@ -53,7 +53,7 @@ $(document).ready(function() {
         $("#msg-box .modal-body").text('Berhasil Menerima Pasien');
         $('#msg-box').modal('show');  
 
-        loadDokterRawatJalan();
+        loadPenerimaanPasien();
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
         if (err.status == 401) {
@@ -74,15 +74,15 @@ $(document).ready(function() {
     $('#beErr').empty(); isBeErr = false;
 
     if (!isValidAlasan || isBeErr) {
-      $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+      $('#btnSubmitTolakPasien').attr('disabled', true);
     } else {
-      $('#btnSubmitTolakRawatJalan').attr('disabled', false);
+      $('#btnSubmitTolakPasien').attr('disabled', false);
     }
   });
 
-  $('#btnSubmitTolakRawatJalan').click(function() {
+  $('#btnSubmitTolakPasien').click(function() {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan/tolak',
+      url     : $('.baseUrl').val() + '/api/penerimaan-pasien/tolak',
       headers : { 'Authorization': `Bearer ${token}` },
       type    : 'GET',
       data	  : { id: getId, alasan: $('#alasan').val() },
@@ -93,14 +93,14 @@ $(document).ready(function() {
         $('#msg-box').modal('show');
 
         setTimeout(() => {
-          $('#modal-tolak-rawat-jalan').modal('toggle');
-          refreshForm(); loadDokterRawatJalan();
+          $('#modal-tolak-pasien').modal('toggle');
+          refreshForm(); loadPenerimaanPasien();
         }, 1000);
 
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
         if (err.status === 422) {
-          let errText = ''; $('#beErr').empty(); $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+          let errText = ''; $('#beErr').empty(); $('#btnSubmitTolakPasien').attr('disabled', true);
           $.each(err.responseJSON.errors, function(idx, v) {
             errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
           });
@@ -115,23 +115,23 @@ $(document).ready(function() {
 
   function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
-		loadDokterRawatJalan();
+		loadPenerimaanPasien();
 	}
 
-  function loadDokterRawatJalan() {
+  function loadPenerimaanPasien() {
     getId = null;
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/dokter-rawat-jalan',
+			url     : $('.baseUrl').val() + '/api/penerimaan-pasien',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword},
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-				let listDokterRawatJalan = '';
-				$('#list-dokter-rawat-jalan tr').remove();
+				let listPenerimaanPasien = '';
+				$('#list-penerimaan-pasien tr').remove();
 
 				$.each(data, function(idx, v) {
-					listDokterRawatJalan += `<tr>`
+					listPenerimaanPasien += `<tr>`
 						+ `<td>${++idx}</td>`
 						+ `<td>${v.id_number}</td>`
             + `<td>${v.id_number_patient}</td>`
@@ -148,14 +148,14 @@ $(document).ready(function() {
 							</td>`
 						+ `</tr>`;
 				});
-				$('#list-dokter-rawat-jalan').append(listDokterRawatJalan);
+				$('#list-penerimaan-pasien').append(listPenerimaanPasien);
 
 				$('.openDetail').click(function() {
           const getObj = data.find(x => x.id == $(this).val());
           refreshForm();
 
-          $('.modal-title').text('Detail Pasien Rawat Jalan');
-          $('#detail-rawat-jalan').modal('show');
+          $('.modal-title').text('Detail Penerimaan Pasien');
+          $('#detail-penerimaan-pasien').modal('show');
 
           $('#nomorRegistrasiTxt').text(getObj.id_number); $('#keluhanTxt').text(getObj.complaint); $('#namaPendaftarTxt').text(getObj.registrant);
           $('#nomorPasienTxt').text(getObj.id_number_patient); $('#jenisHewanTxt').text(getObj.pet_category);
@@ -176,10 +176,10 @@ $(document).ready(function() {
         
         $('.openTolak').click(function() {
           getId = $(this).val(); refreshForm();
-          $('.modal-title').text('Konfirmasi Tolak Rawat Jalan Pasien');
-          $('#modal-tolak-rawat-jalan').modal('show');
+          $('.modal-title').text('Konfirmasi Tolak Pasien');
+          $('#modal-tolak-pasien').modal('show');
 
-          $('#btnSubmitTolakRawatJalan').attr('disabled', true);
+          $('#btnSubmitTolakPasien').attr('disabled', true);
         });
 
 			}, complete: function() { $('#loading-screen').hide(); },

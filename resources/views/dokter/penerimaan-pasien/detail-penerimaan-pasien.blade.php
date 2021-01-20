@@ -1,4 +1,4 @@
-<div class="modal fade" id="detail-rawat-jalan">
+<div class="modal fade" id="detail-penerimaan-pasien">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -8,7 +8,7 @@
 				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form class="detail-rawat-jalan">
+				<form class="detail-penerimaan-pasien">
 					<div class="box-body">
             <table>
 							<tr>
