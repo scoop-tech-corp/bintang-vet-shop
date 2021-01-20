@@ -69,7 +69,7 @@ Route::get('/pendaftaran', function () {
 	return view('pendaftaran.pendaftaran-pasien.index');
 });
 
-Route::get('/dokter', function () {
+Route::get('/penerimaan-pasien', function () {
 	return view('dokter.penerimaan-pasien.index');
 });
 
