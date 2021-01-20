@@ -35,7 +35,7 @@ class RegistrasiController extends Controller
         }
 
         if ($request->branch_id && $request->user()->role == 'admin') {
-            $user = $user->where('users.branch_id', '=', $request->branch_id);
+            $data = $data->where('users.branch_id', '=', $request->branch_id);
         }
 
         if ($request->keyword) {
