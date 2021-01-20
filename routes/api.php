@@ -91,27 +91,16 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('pembagian-harga-barang/kategori-barang', 'HargaBarangController@item_category');
         Route::get('pembagian-harga-barang/nama-barang', 'HargaBarangController@item_name');
 
-        //rawat jalan
-        Route::get('rawat-jalan', 'RawatJalanController@index');
-        Route::post('rawat-jalan', 'RawatJalanController@create');
-        Route::put('rawat-jalan', 'RawatJalanController@update');
-        Route::delete('rawat-jalan', 'RawatJalanController@delete');
+        //registrasi pasien
+        Route::get('registrasi-pasien', 'RegistrasiController@index');
+        Route::post('registrasi-pasien', 'RegistrasiController@create');
+        Route::put('registrasi-pasien', 'RegistrasiController@update');
+        Route::delete('registrasi-pasien', 'RegistrasiController@delete');
 
-        //rawat inap
-        Route::get('rawat-inap', 'RawatInapController@index');
-        Route::post('rawat-inap', 'RawatInapController@create');
-        Route::put('rawat-inap', 'RawatInapController@update');
-        Route::delete('rawat-inap', 'RawatInapController@delete');
-
-        //dokter rawat jalan
-        Route::get('dokter-rawat-jalan', 'DokterRawatJalanController@index');
-        Route::get('dokter-rawat-jalan/terima', 'DokterRawatJalanController@accept');
-        Route::get('dokter-rawat-jalan/tolak', 'DokterRawatJalanController@decline');
-
-        //dokter rawat inap
-        Route::get('dokter-rawat-inap', 'DokterRawatInapController@index');
-        Route::get('dokter-rawat-inap/terima', 'DokterRawatInapController@accept');
-        Route::get('dokter-rawat-inap/tolak', 'DokterRawatInapController@decline');
+        //penerimaan pasien
+        Route::get('penerimaan-pasien', 'PenerimaanDokterController@index');
+        Route::get('penerimaan-pasien/terima', 'PenerimaanDokterController@accept');
+        Route::get('penerimaan-pasien/tolak', 'PenerimaanDokterController@decline');
     });
 });
 

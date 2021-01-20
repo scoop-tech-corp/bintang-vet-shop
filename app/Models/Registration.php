@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OutPatient extends Model
+class Registration extends Model
 {
-    protected $table = "out_patients";
+    protected $table = "registrations";
 
     protected $dates = ['deleted_at'];
 
