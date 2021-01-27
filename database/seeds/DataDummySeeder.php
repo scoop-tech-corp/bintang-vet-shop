@@ -291,7 +291,7 @@ class DataDummySeeder extends Seeder
         //list_of_items
         DB::table('list_of_items')->insert([
             'item_name' => 'Vosea',
-            'total_item' => '3',
+            'total_item' => '5',
             'unit_item_id' => '3',
             'category_item_id' => '2',
             'branch_id' => '1',
@@ -301,7 +301,7 @@ class DataDummySeeder extends Seeder
 
         DB::table('list_of_items')->insert([
             'item_name' => 'Kaotin',
-            'total_item' => '4',
+            'total_item' => '7',
             'unit_item_id' => '2',
             'category_item_id' => '2',
             'branch_id' => '2',
@@ -311,7 +311,17 @@ class DataDummySeeder extends Seeder
 
         DB::table('list_of_items')->insert([
             'item_name' => 'Doxy',
-            'total_item' => '6',
+            'total_item' => '9',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Dexa',
+            'total_item' => '11',
             'unit_item_id' => '3',
             'category_item_id' => '2',
             'branch_id' => '3',

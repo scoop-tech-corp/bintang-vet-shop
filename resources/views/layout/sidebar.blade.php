@@ -24,7 +24,7 @@
 					<li><a href="{{ url('/rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li> --}}
-			<li class="menuDokter"><a href="{{ url('/penerimaan-pasien') }}"><i class="fa fa-stethoscope"></i> <span>Penerimaan Pasien</span></a></li>
+			<li class="menuDokter"><a href="{{ url('/penerimaan-pasien') }}"><i class="fa fa-id-card"></i> <span>Penerimaan Pasien</span></a></li>
 			{{-- <li class="treeview menuDokter">
 				<a href="#">
 					<i class="fa fa-stethoscope" aria-hidden="true"></i>

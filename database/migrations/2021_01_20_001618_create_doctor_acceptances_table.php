@@ -14,6 +14,7 @@ class CreateDoctorAcceptancesTable extends Migration
     public function up()
     {
         Schema::create('doctor_acceptances', function (Blueprint $table) {
+            $table->id();
             $table->integer('patient_registration_id');
             $table->integer('acceptance_status');
             $table->string('reason');

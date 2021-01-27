@@ -162,6 +162,13 @@ class DaftarBarangController extends Controller
 
         }
 
+        // $item_history = HistoryItemMovement::create([
+        //     'item_id' => $value_item['item_id'],
+        //     'quantity' => $value_item['quantity'],
+        //     'status' => 'kurang',
+        //     'user_id' => $request->user()->id,
+        // ]);
+
         $item->item_name = $request->nama_barang;
         $item->total_item = $request->jumlah_barang;
         $item->unit_item_id = $request->satuan_barang;

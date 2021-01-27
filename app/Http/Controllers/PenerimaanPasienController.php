@@ -1,13 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Registration;
+
+namespace App\Http\Controllers;
+
 use App\Models\DoctorAcceptance;
+use App\Models\Registration;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
 
-class PenerimaanDokterController extends Controller
+class PenerimaanPasienController extends Controller
 {
     public function index(Request $request)
     {
@@ -32,7 +35,7 @@ class PenerimaanDokterController extends Controller
             ->where('registrations.acceptance_status', '=', '0');
 
         if ($request->user()->role == 'dokter') {
-            $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
+            $data = $data->where('user_doctor.id', '=', $request->user()->id);
         }
 
         if ($request->keyword) {
@@ -85,6 +88,11 @@ class PenerimaanDokterController extends Controller
                 'message' => 'The data was invalid.',
                 'errors' => ['Data tidak dapat diubah karena sudah ditolak oleh dokter!'],
             ], 422);
+        } elseif ($registration->acceptance_status == 3) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak dapat diubah karena sudah selesai!'],
+            ], 422);
         }
 
         $registration->acceptance_status = 1;
@@ -129,6 +137,11 @@ class PenerimaanDokterController extends Controller
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data tidak dapat diubah karena sudah ditolak oleh dokter!'],
+            ], 422);
+        } elseif ($registration->acceptance_status == 3) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak dapat diubah karena sudah selesai!'],
             ], 422);
         }
 

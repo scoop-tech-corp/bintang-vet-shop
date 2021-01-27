@@ -42,6 +42,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pasien', 'PasienController@create');
         Route::put('pasien', 'PasienController@update');
         Route::delete('pasien', 'PasienController@delete');
+        Route::get('pasien/status-terima', 'PasienController@patient_accept_only');
 
         //kategori barang
         Route::get('kategori-barang', 'KategoriBarangController@index');
@@ -98,9 +99,16 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('registrasi-pasien', 'RegistrasiController@delete');
 
         //penerimaan pasien
-        Route::get('penerimaan-pasien', 'PenerimaanDokterController@index');
-        Route::get('penerimaan-pasien/terima', 'PenerimaanDokterController@accept');
-        Route::get('penerimaan-pasien/tolak', 'PenerimaanDokterController@decline');
+        Route::get('penerimaan-pasien', 'PenerimaanPasienController@index');
+        Route::get('penerimaan-pasien/terima', 'PenerimaanPasienController@accept');
+        Route::get('penerimaan-pasien/tolak', 'PenerimaanPasienController@decline');
+
+        //hasil pemeriksaan
+        Route::post('hasil-pemeriksaan', 'HasilPemeriksaanController@create');        
+        Route::get('hasil-pemeriksaan', 'HasilPemeriksaanController@index');
+        Route::get('hasil-pemeriksaan/detail', 'HasilPemeriksaanController@detail');
+        Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
+        Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
     });
 });
 

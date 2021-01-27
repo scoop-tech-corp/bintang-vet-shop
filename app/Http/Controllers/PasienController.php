@@ -193,4 +193,38 @@ class PasienController extends Controller
             'message' => 'Berhasil menghapus Pasien',
         ], 200);
     }
+
+    public function patient_accept_only(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $data = DB::table('registrations')
+            ->join('users', 'registrations.user_id', '=', 'users.id')
+            ->join('users as user_doctor', 'registrations.doctor_user_id', '=', 'user_doctor.id')
+            ->join('patients', 'registrations.patient_id', '=', 'patients.id')
+            ->join('branches', 'patients.branch_id', '=', 'branches.id')
+            ->select('registrations.id as id', 'registrations.id_number', 'registrations.patient_id',
+                'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
+                'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
+                'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
+                'user_doctor.username as username_doctor', 'users.fullname as created_by', 'registrations.acceptance_status',
+                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id')
+            ->where('registrations.acceptance_status', '=', '1');
+
+        if ($request->user()->role == 'dokter') {
+            $data = $data->where('users.branch_id', '=', $request->user()->branch_id)
+                ->where('registrations.doctor_user_id', '=', $request->user()->id);
+        }
+
+        $data = $data->orderBy('registrations.id', 'asc');
+
+        $data = $data->get();
+
+        return response()->json($data, 200);
+    }
 }
