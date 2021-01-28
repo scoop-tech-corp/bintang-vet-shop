@@ -38,7 +38,7 @@
 					<li><a href="{{ url('/dokter-rawat-inap') }}"><i class="fa fa-circle-o"></i> Rawat Inap</a></li>
 				</ul>
 			</li> --}}
-			<li class="menuPeriksa"><a href="{{ url('/periksa') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>
+			<li class="menuPeriksa"><a href="{{ url('/hasil-pemeriksaan') }}"><i class="fa fa-heartbeat" aria-hidden="true"></i> <span>Hasil Pemeriksaan</span></a></li>
 			{{-- <li class="menuTindakan"><a href="{{ url('/tindakan') }}"><i class="fa fa-medkit" aria-hidden="true"></i> <span>Tindakan</span></a></li> --}}
 			<li class="treeview menuLayanan">
 				<a href="#">
