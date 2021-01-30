@@ -77,7 +77,7 @@
 							<div id="diagnosaErr1" class="validate-error"></div>
             </div>
             
-            <div class="form-group">
+            <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
               <select id="selectedJasa" class="form-control" style="width: 100%" multiple="multiple"></select>
               <table class="table table-striped text-nowrap table-list-jasa">
@@ -94,7 +94,7 @@
               </table>
             </div>
 
-            <div class="form-group">
+            <div class="form-group">{{-- Barang Rawat Jalan --}}
               <label for="barang">Barang</label>
               <select id="selectedBarang" class="form-control" style="width: 100%" multiple="multiple"></select>
               <div class="table-responsive">
@@ -114,6 +114,57 @@
                   <tbody id="list-selected-barang"></tbody>
                 </table>
               </div>
+            </div>
+
+            <div class="form-group">
+              <label for="barang" style="margin-right: 76px;">Rawat Inap</label>
+              <span style="padding-right: 51px;"><input type="radio" name="radioRawatInap" value=1 /> Ya</span>
+              <span><input type="radio" name="radioRawatInap" value=0 /> Tidak</span>
+            </div>
+
+            <div class="form-group form-jasa-barang-rawat-inap">{{-- Jasa Rawat Inap --}}
+              <label for="jasa">Jasa</label>
+              <select id="selectedJasaRawatInap" class="form-control" style="width: 100%" multiple="multiple"></select>
+              <table class="table table-striped text-nowrap table-list-jasa-rawat-inap">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Jenis Layanan</th>
+                    <th>Kategori Jasa</th>
+                    <th>Harga</th>
+                    <th>Hapus</th>
+                  </tr>
+                </thead>
+                <tbody id="list-selected-jasa-rawat-inap"></tbody>
+              </table>
+            </div>
+
+            <div class="form-group form-jasa-barang-rawat-inap">{{-- Barang Rawat Inap --}}
+              <label for="barang">Barang</label>
+              <select id="selectedBarangRawatInap" class="form-control" style="width: 100%" multiple="multiple"></select>
+              <div class="table-responsive">
+                <table class="table table-striped text-nowrap table-list-barang-rawat-inap">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Barang</th>
+                      <th>Kategori Barang</th>
+                      <th>Satuan Barang</th>
+                      <th>Jumlah</th>
+                      <th>Harga Satuan</th>
+                      <th>Harga Keseluruhan</th>
+                      <th>Hapus</th>
+                    </tr>
+                  </thead>
+                  <tbody id="list-selected-barang-rawat-inap"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="barang" style="margin-right: 40px;">Status Pemeriksa</label>
+              <span style="padding-right: 23px;"><input type="radio" name="radioStatusPemeriksa" value=1 /> Selesai</span>
+              <span><input type="radio" name="radioStatusPemeriksa" value=0 /> Belum</span>
             </div>
 
 						<div class="form-group">

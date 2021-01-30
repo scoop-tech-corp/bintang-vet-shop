@@ -13,7 +13,7 @@
           <input type="text" class="form-control" placeholder="cari..">
           <i class="fa fa-search" aria-hidden="true"></i>
         </div>
-        {{-- <select id="filterCabang" style="width: 50%"></select> --}}
+        <select id="filterCabang" style="width: 50%"></select>
       </div>
     </div>
   </div>
@@ -23,12 +23,13 @@
       <thead>
         <tr>
           <th>No</th>
-          <th class="onOrdering" data='id_register' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='id_member' orderby="none">No. Pasien <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='registration_number' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='patient_number' orderby="none">No. Pasien <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='pet_category' orderby="none">Jenis Hewan <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='pet_name' orderby="none">Nama Hewan <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='complaint' orderby="none">Keluhan <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='' orderby="none">Status Pemeriksaan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='status_finish' orderby="none">Status Pemeriksaan <span class="fa fa-sort"></span></th>
+          <th class="onOrdering" data='status_outpatient_inpatient' orderby="none">Perawatan <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
           <th>Aksi</th>
@@ -39,6 +40,7 @@
   </div>
 
   @component('hasil-pemeriksaan.modal-hasil-pemeriksaan') @endcomponent
+  @component('hasil-pemeriksaan.detail-hasil-pemeriksaan') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 </div>
