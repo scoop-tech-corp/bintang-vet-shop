@@ -208,12 +208,13 @@ class PasienController extends Controller
             ->join('users as user_doctor', 'registrations.doctor_user_id', '=', 'user_doctor.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->join('branches', 'patients.branch_id', '=', 'branches.id')
-            ->select('registrations.id as id', 'registrations.id_number', 'registrations.patient_id',
+            ->select('registrations.id as id', 'registrations.id_number as registration_number', 'registrations.patient_id',
                 'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
                 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
                 'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
                 'user_doctor.username as username_doctor', 'users.fullname as created_by', 'registrations.acceptance_status',
-                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id')
+                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id',
+                'branches.id as branch_id','branches.branch_name as branch_name')
             ->where('registrations.acceptance_status', '=', '1');
 
         if ($request->user()->role == 'dokter') {
