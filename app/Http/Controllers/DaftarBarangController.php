@@ -162,12 +162,38 @@ class DaftarBarangController extends Controller
 
         }
 
-        // $item_history = HistoryItemMovement::create([
-        //     'item_id' => $value_item['item_id'],
-        //     'quantity' => $value_item['quantity'],
-        //     'status' => 'kurang',
-        //     'user_id' => $request->user()->id,
-        // ]);
+        $check_stock = DB::table('list_of_items')
+            ->select('total_item')
+            ->where('id', '=', $request->id)
+            ->first();
+
+        if (is_null($check_stock)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data stock not found!'],
+            ], 404);
+        }
+
+        if ($check_stock->total_item > $request->jumlah_barang) {
+            $qty_item = $check_stock->total_item - $request->jumlah_barang;
+
+            $item_history = HistoryItemMovement::create([
+                'item_id' => $request->id,
+                'quantity' => $qty_item,
+                'status' => 'tambah',
+                'user_id' => $request->user()->id,
+            ]);
+            
+        } elseif ($check_stock->total_item < $request->jumlah_barang) {
+            $qty_item = $request->jumlah_barang - $check_stock->total_item;
+
+            $item_history = HistoryItemMovement::create([
+                'item_id' => $request->id,
+                'quantity' => $qty_item,
+                'status' => 'kurang',
+                'user_id' => $request->user()->id,
+            ]);
+        }
 
         $item->item_name = $request->nama_barang;
         $item->total_item = $request->jumlah_barang;

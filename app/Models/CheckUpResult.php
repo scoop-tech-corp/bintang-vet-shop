@@ -25,10 +25,22 @@ class CheckUpResult extends Model
             ->join('list_of_services', 'list_of_services.id', '=', 'detail_service_out_patients.service_id');
     }
 
+    public function service_inpatient()
+    {
+        return $this->hasMany('App\Models\DetailServiceInPatient')
+            ->join('list_of_services', 'list_of_services.id', '=', 'detail_service_in_patients.service_id');
+    }
+
     public function item()
     {
         return $this->hasMany('App\Models\DetailItemOutPatient')
             ->join('list_of_items', 'list_of_items.id', '=', 'detail_item_out_patients.item_id');
+    }
+
+    public function item_inpatient()
+    {
+        return $this->hasMany('App\Models\DetailItemInPatient')
+            ->join('list_of_items', 'list_of_items.id', '=', 'detail_item_in_patients.item_id');
     }
 
     public function registration()
