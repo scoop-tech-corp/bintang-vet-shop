@@ -77,6 +77,9 @@ Route::get('/penerimaan-pasien', function () {
 // 	return view('dokter.rawat-inap.index');
 // });
 
+Route::get('/hasil-pemeriksaan', function () {
+	return view('hasil-pemeriksaan.index');
+});
 
 // Route::get('/cabang','BranchController@index');
 
@@ -98,10 +101,6 @@ Route::get('/penerimaan-pasien', function () {
 
 // Route::get('/dokter', function () {
 // 	return view('dokter.index');
-// });
-
-// Route::get('/periksa', function () {
-// 	return view('periksa.index');
 // });
 
 // Route::get('/tindakan', function () {
