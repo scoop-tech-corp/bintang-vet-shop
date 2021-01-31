@@ -356,9 +356,81 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
-        $data = CheckUpResult::with('service', 'service_inpatient', 'item', 'item_inpatient', 'registration', 'user')
-            ->where('id', '=', $request->id)
+        $data = CheckUpResult::find($request->id); //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
+
+        $registration = DB::table('registrations')
+            ->join('patients', 'registrations.patient_id', '=', 'patients.id')
+            ->select('registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category',
+                'patients.pet_name', 'patients.pet_gender', 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address', 'registrations.complaint',
+                'registrations.registrant')
+            ->where('registrations.id', '=', $data->patient_registration_id)
+            ->first();
+
+        $data->registration = $registration;
+
+        $user = DB::table('check_up_results')
+            ->join('users', 'check_up_results.user_id', '=', 'users.id')
+            ->select('users.id as user_id', 'users.username as username')
+            ->where('users.id', '=', $data->user_id)
+            ->first();
+
+        $data->user = $user;
+
+        $services = DB::table('detail_service_out_patients')
+            ->join('list_of_services', 'detail_service_out_patients.service_id', '=', 'list_of_services.id')
+            ->join('price_services', 'list_of_services.id', '=', 'price_services.list_of_services_id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_out_patients.user_id', '=', 'users.id')
+            ->select('detail_service_out_patients.id as detail_service_out_patient_id', 'list_of_services.id as service_id', 'list_of_services.service_name',
+                'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_out_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_service_out_patients.check_up_result_id', '=', $data->id)
             ->get();
+
+        $data['services'] = $services;
+
+        $services_inpatient = DB::table('detail_service_in_patients')
+            ->join('list_of_services', 'detail_service_in_patients.service_id', '=', 'list_of_services.id')
+            ->join('price_services', 'list_of_services.id', '=', 'price_services.list_of_services_id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_in_patients.user_id', '=', 'users.id')
+            ->select('detail_service_in_patients.id as detail_service_in_patient_id', 'list_of_services.id as service_id', 'list_of_services.service_name',
+                'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_in_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_service_in_patients.check_up_result_id', '=', $data->id)
+            ->get();
+
+        $data['services_inpatient'] = $services_inpatient;
+
+        $item = DB::table('detail_item_out_patients')
+            ->join('list_of_items', 'detail_item_out_patients.item_id', '=', 'list_of_items.id')
+            ->join('price_items', 'list_of_items.id', '=', 'price_items.list_of_items_id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('users', 'detail_item_out_patients.user_id', '=', 'users.id')
+            ->select('detail_item_out_patients.id as detail_item_out_patient_id', 'list_of_items.id as item_id', 'list_of_items.item_name', 'detail_item_out_patients.quantity',
+                DB::raw("TRIM(detail_item_out_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_out_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_item_out_patients.check_up_result_id', '=', $data->id)
+            ->get();
+
+        $data['item'] = $item;
+
+        $item_inpatient = DB::table('detail_item_in_patients')
+            ->join('list_of_items', 'detail_item_in_patients.item_id', '=', 'list_of_items.id')
+            ->join('price_items', 'list_of_items.id', '=', 'price_items.list_of_items_id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('users', 'detail_item_in_patients.user_id', '=', 'users.id')
+            ->select('detail_item_in_patients.id as detail_item_out_patient_id', 'list_of_items.id as item_id', 'list_of_items.item_name', 'detail_item_in_patients.quantity',
+                DB::raw("TRIM(detail_item_in_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_in_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_item_in_patients.check_up_result_id', '=', $data->id)
+            ->get();
+
+        $data['item_inpatient'] = $item_inpatient;
 
         return response()->json($data, 200);
     }
