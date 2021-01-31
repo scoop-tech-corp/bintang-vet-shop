@@ -77,8 +77,8 @@ class HasilPemeriksaanController extends Controller
             'anamnesa' => 'required|string|min:10',
             'sign' => 'required|string|min:10',
             'diagnosa' => 'required|string|min:10',
-            'status_finish' => 'required|numeric|min:1',
-            'status_outpatient_inpatient' => 'required|numeric|min:1',
+            'status_finish' => 'required|bool',
+            'status_outpatient_inpatient' => 'required|bool',
             'inpatient' => 'required|string|min:10',
         ]);
 
