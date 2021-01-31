@@ -27,8 +27,9 @@ class HargaBarangController extends Controller
             ->select('price_items.id', 'list_of_items.id as item_name_id', 'list_of_items.item_name',
                 'category_item.id as item_categories_id', 'category_item.category_name',
                 'list_of_items.unit_item_id as unit_item_id', 'unit_item.unit_name', 'list_of_items.total_item',
-                'branches.id as branch_id', 'branches.branch_name', 'price_items.selling_price',
-                'price_items.capital_price', 'price_items.doctor_fee', 'price_items.petshop_fee',
+                'branches.id as branch_id', 'branches.branch_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(price_items.capital_price)+0 as capital_price"), DB::raw("TRIM(price_items.doctor_fee)+0 as doctor_fee"),
+                DB::raw("TRIM(price_items.petshop_fee)+0 as petshop_fee"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(price_items.created_at, '%d %b %Y') as created_at"));
 
         if ($request->branch_id && $request->user()->role == 'admin') {
