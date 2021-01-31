@@ -12,6 +12,6 @@ class PriceService extends Model
 
     protected $guarded = ['id'];
 
-    protected $fillable = ['list_of_services_id','selling_price','capital_price',
-    'doctor_fee','petshop_fee','user_id'];
+    protected $fillable = ['list_of_services_id', 'selling_price', 'capital_price',
+        'doctor_fee', 'petshop_fee', 'user_id'];
 }

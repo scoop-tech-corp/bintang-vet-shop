@@ -252,6 +252,12 @@ class DataDummySeeder extends Seeder
 
         //category_item
         DB::table('category_item')->insert([
+            'category_name' => 'Git',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
             'category_name' => 'Antibiotik',
             'user_id' => '1',
             'created_at' => '2020-12-30'
@@ -264,7 +270,25 @@ class DataDummySeeder extends Seeder
         ]);
 
         DB::table('category_item')->insert([
+            'category_name' => 'Antiseptik & Densifektan',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
             'category_name' => 'Anti Radang',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
+            'category_name' => 'Parasit',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('category_item')->insert([
+            'category_name' => 'Jamur',
             'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
@@ -288,12 +312,19 @@ class DataDummySeeder extends Seeder
             'created_at' => '2020-12-30'
         ]);
 
+        DB::table('unit_item')->insert([
+            'unit_name' => 'Botol',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
         //list_of_items
+        //cabang alam sutera
         DB::table('list_of_items')->insert([
             'item_name' => 'Vosea',
             'total_item' => '3',
             'unit_item_id' => '3',
-            'category_item_id' => '2',
+            'category_item_id' => '1',
             'branch_id' => '1',
             'user_id' => '1',
             'created_at' => '2020-12-30'
@@ -302,9 +333,421 @@ class DataDummySeeder extends Seeder
         DB::table('list_of_items')->insert([
             'item_name' => 'Kaotin',
             'total_item' => '5',
-            'unit_item_id' => '2',
+            'unit_item_id' => '4',
+            'category_item_id' => '1',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Loperamide',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '1',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metronidazole',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Cefixime',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Doxy',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Zinc',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Imboost',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Fish Oil',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Betadine',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Alkohol',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'H2O2',
+            'total_item' => '10',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metil Prednisolone',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Dexa',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Revolution',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Caniverm',
+            'total_item' => '9',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Itraconazole',
+            'total_item' => '11',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'GRISEOFULVIN',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'TEOPILIN',
+            'total_item' => '4',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //cabang kembangan
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Vosea',
+            'total_item' => '3',
+            'unit_item_id' => '3',
+            'category_item_id' => '1',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Kaotin',
+            'total_item' => '5',
+            'unit_item_id' => '4',
+            'category_item_id' => '1',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Loperamide',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '1',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metronidazole',
+            'total_item' => '7',
+            'unit_item_id' => '3',
             'category_item_id' => '2',
             'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Cefixime',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Doxy',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Zinc',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Imboost',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Fish Oil',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Betadine',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Alkohol',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'H2O2',
+            'total_item' => '10',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metil Prednisolone',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Dexa',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Revolution',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Caniverm',
+            'total_item' => '9',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Itraconazole',
+            'total_item' => '11',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'GRISEOFULVIN',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'TEOPILIN',
+            'total_item' => '4',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        //cabang tanjung duren
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Vosea',
+            'total_item' => '3',
+            'unit_item_id' => '3',
+            'category_item_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Kaotin',
+            'total_item' => '5',
+            'unit_item_id' => '4',
+            'category_item_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Loperamide',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '1',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metronidazole',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+        
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Cefixime',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '2',
+            'branch_id' => '3',
             'user_id' => '1',
             'created_at' => '2020-12-30'
         ]);
@@ -320,10 +763,130 @@ class DataDummySeeder extends Seeder
         ]);
 
         DB::table('list_of_items')->insert([
+            'item_name' => 'Zinc',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Imboost',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Fish Oil',
+            'total_item' => '5',
+            'unit_item_id' => '3',
+            'category_item_id' => '3',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Betadine',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Alkohol',
+            'total_item' => '8',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'H2O2',
+            'total_item' => '10',
+            'unit_item_id' => '3',
+            'category_item_id' => '4',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Metil Prednisolone',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
             'item_name' => 'Dexa',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '5',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Revolution',
+            'total_item' => '2',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Caniverm',
+            'total_item' => '9',
+            'unit_item_id' => '3',
+            'category_item_id' => '6',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'Itraconazole',
             'total_item' => '11',
             'unit_item_id' => '3',
-            'category_item_id' => '2',
+            'category_item_id' => '7',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'GRISEOFULVIN',
+            'total_item' => '7',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
+            'branch_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-12-30'
+        ]);
+
+        DB::table('list_of_items')->insert([
+            'item_name' => 'TEOPILIN',
+            'total_item' => '4',
+            'unit_item_id' => '3',
+            'category_item_id' => '7',
             'branch_id' => '3',
             'user_id' => '1',
             'created_at' => '2020-12-30'
@@ -478,164 +1041,164 @@ class DataDummySeeder extends Seeder
         ]);
 
         //hasil pemeriksaan
-        DB::table('check_up_results')->insert([
-            'patient_registration_id' => '1',
-            'anamnesa' => 'ini adalah bentuk dari anamnesa',
-            'sign' => 'ini adalah bentuk dari sign',
-            'diagnosa' => 'ini adalah bentuk dari diagnosa',
-            'status_outpatient_inpatient' => '1',
-            'status_finish' => '1',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('check_up_results')->insert([
+        //     'patient_registration_id' => '1',
+        //     'anamnesa' => 'ini adalah bentuk dari anamnesa',
+        //     'sign' => 'ini adalah bentuk dari sign',
+        //     'diagnosa' => 'ini adalah bentuk dari diagnosa',
+        //     'status_outpatient_inpatient' => '1',
+        //     'status_finish' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        //detail item in patient
-        DB::table('detail_item_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '1',
-            'quantity' => '1',
-            'price_overall' => '20000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // //detail item in patient
+        // DB::table('detail_item_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '1',
+        //     'quantity' => '1',
+        //     'price_overall' => '20000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_item_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '2',
-            'quantity' => '1',
-            'price_overall' => '25000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_item_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '2',
+        //     'quantity' => '1',
+        //     'price_overall' => '25000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_item_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '3',
-            'quantity' => '1',
-            'price_overall' => '25000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_item_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '3',
+        //     'quantity' => '1',
+        //     'price_overall' => '25000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        //detail item out patient
-        DB::table('detail_item_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '1',
-            'quantity' => '1',
-            'price_overall' => '20000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // //detail item out patient
+        // DB::table('detail_item_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '1',
+        //     'quantity' => '1',
+        //     'price_overall' => '20000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_item_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '2',
-            'quantity' => '1',
-            'price_overall' => '25000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_item_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '2',
+        //     'quantity' => '1',
+        //     'price_overall' => '25000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_item_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'item_id' => '3',
-            'quantity' => '1',
-            'price_overall' => '25000',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_item_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'item_id' => '3',
+        //     'quantity' => '1',
+        //     'price_overall' => '25000',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        //detail service in patient
-        DB::table('detail_service_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '1',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // //detail service in patient
+        // DB::table('detail_service_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_service_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '2',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_service_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '2',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_service_in_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '3',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_service_in_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '3',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        //detail service out patient
-        DB::table('detail_service_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '1',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // //detail service out patient
+        // DB::table('detail_service_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_service_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '2',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_service_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '2',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('detail_service_out_patients')->insert([
-            'check_up_result_id' => '1',
-            'service_id' => '3',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('detail_service_out_patients')->insert([
+        //     'check_up_result_id' => '1',
+        //     'service_id' => '3',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        //history item hovement
-        DB::table('history_item_movements')->insert([
-            'item_id' => '1',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // //history item hovement
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '1',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('history_item_movements')->insert([
-            'item_id' => '2',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '2',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('history_item_movements')->insert([
-            'item_id' => '3',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '3',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('history_item_movements')->insert([
-            'item_id' => '4',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '4',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('history_item_movements')->insert([
-            'item_id' => '5',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '5',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
 
-        DB::table('history_item_movements')->insert([
-            'item_id' => '6',
-            'quantity' => '1',
-            'status' => 'kurang',
-            'user_id' => '1',
-            'created_at' => '2020-12-30'
-        ]);
+        // DB::table('history_item_movements')->insert([
+        //     'item_id' => '6',
+        //     'quantity' => '1',
+        //     'status' => 'kurang',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-12-30'
+        // ]);
     }
 }

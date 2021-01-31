@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DetailItemInPatient extends Model
+class DetailItemPatient extends Model
 {
-    protected $table = "detail_item_in_patients";
+    protected $table = "detail_item_patients";
 
     protected $dates = ['deleted_at'];
 

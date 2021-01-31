@@ -23,7 +23,7 @@ class HargaJasaController extends Controller
             ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
             ->join('branches', 'list_of_services.branch_id', '=', 'branches.id')
             ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
-            ->select('price_services.id', 'list_of_services.id as service_name_id', 'list_of_services.service_name',
+            ->select('price_services.id', 'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
                 'service_categories.id as service_categories_id', 'service_categories.category_name',
                 'branches.id as branch_id', 'branches.branch_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(price_services.capital_price)+0 as capital_price"), DB::raw("TRIM(price_services.doctor_fee)+0 as doctor_fee"),

@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CheckUpResult;
-use App\Models\DetailItemInPatient;
-use App\Models\DetailItemOutPatient;
-use App\Models\DetailServiceInPatient;
-use App\Models\DetailServiceOutPatient;
+use App\Models\DetailItemPatient;
+use App\Models\DetailServicePatient;
 use App\Models\HistoryItemMovement;
+use App\Models\InPatient;
 use App\Models\ListofItems;
 use App\Models\ListofServices;
 use App\Models\Registration;
@@ -59,10 +58,10 @@ class HasilPemeriksaanController extends Controller
         return response()->json($data, 200);
     }
 
-    public function test(Request $request)
-    {
-        return $request->service;
-    }
+    // public function test(Request $request)
+    // {
+    //     return $request->service;
+    // }
 
     public function create(Request $request)
     {
@@ -80,6 +79,7 @@ class HasilPemeriksaanController extends Controller
             'diagnosa' => 'required|string|min:10',
             'status_finish' => 'required|numeric|min:1',
             'status_outpatient_inpatient' => 'required|numeric|min:1',
+            'inpatient' => 'required|string|min:10',
         ]);
 
         if ($validate->fails()) {
@@ -163,81 +163,6 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //cek rawat inap atau tidak menggunakan rawat inap
-        if ($request->status_outpatient_inpatient == true) {
-            //validasi item
-            if (!(is_null($request->item_inpatient))) {
-
-                $temp_item = $request->item_inpatient;
-
-                $result_item_inpatient = json_decode(json_encode($temp_item), true);
-
-                foreach ($result_item_inpatient as $value_item) {
-
-                    $check_storage = DB::table('list_of_items')
-                        ->select('total_item')
-                        ->where('id', '=', $value_item['item_id'])
-                        ->first();
-
-                    if (is_null($check_storage)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data Total Item not found!'],
-                        ], 404);
-                    }
-
-                    $check_storage_name = DB::table('list_of_items')
-                        ->select('item_name')
-                        ->where('id', '=', $value_item['item_id'])
-                        ->first();
-
-                    if (is_null($check_storage_name)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data Total Item not found!'],
-                        ], 404);
-                    }
-
-                    if ($value_item['quantity'] > $check_storage->total_item) {
-                        return response()->json([
-                            'message' => 'The given data was invalid.',
-                            'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' pada rawat inap kurang atau habis!'],
-                        ], 422);
-                    }
-
-                    $list_of_items = ListofItems::find($value_item['item_id']);
-
-                    if (is_null($list_of_items)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data not found!'],
-                        ], 404);
-                    }
-                }
-            }
-
-            //validasi jasa
-            if (is_null($request->service_inpatient)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data Jasa Rawat Inap Harus dipilih minimal 1!'],
-                ], 404);
-            }
-
-            $services_inpatient = $request->service_inpatient;
-            foreach ($services_inpatient as $key_service) {
-
-                $check_service = ListofServices::find($key_service);
-
-                if (is_null($check_service)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data not found!'],
-                    ], 404);
-                }
-            }
-        }
-
         //insert data
         $item = CheckUpResult::create([
             'patient_registration_id' => $request->patient_registration_id,
@@ -260,9 +185,11 @@ class HasilPemeriksaanController extends Controller
 
         foreach ($services as $key_service) {
 
-            $service_list = DetailServiceOutPatient::create([
+            $service_list = DetailServicePatient::create([
                 'check_up_result_id' => $item->id,
-                'service_id' => $key_service,
+                'price_service_id' => $key_service['price_service_id'],
+                'quantity' => $key_service['quantity'],
+                'price_overall' => $key_service['price_overall'],
                 'user_id' => $request->user()->id,
             ]);
         }
@@ -271,7 +198,7 @@ class HasilPemeriksaanController extends Controller
 
             foreach ($result_item as $value_item) {
 
-                $item_list = DetailItemOutPatient::create([
+                $item_list = DetailItemPatient::create([
                     'check_up_result_id' => $item->id,
                     'item_id' => $value_item['item_id'],
                     'quantity' => $value_item['quantity'],
@@ -297,47 +224,13 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //simpan data rawat inap
         if ($request->status_outpatient_inpatient == true) {
 
-            foreach ($services_inpatient as $key_service_inpatient) {
-
-                $service_list = DetailServiceInPatient::create([
-                    'check_up_result_id' => $item->id,
-                    'service_id' => $key_service_inpatient,
-                    'user_id' => $request->user()->id,
-                ]);
-            }
-
-            if (!(is_null($request->item_inpatient))) {
-
-                foreach ($result_item_inpatient as $value_item_inpatient) {
-
-                    $item_list = DetailItemInPatient::create([
-                        'check_up_result_id' => $item->id,
-                        'item_id' => $value_item_inpatient['item_id'],
-                        'quantity' => $value_item_inpatient['quantity'],
-                        'price_overall' => $value_item_inpatient['price_overall'],
-                        'user_id' => $request->user()->id,
-                    ]);
-
-                    $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                    $count_item = $list_of_items->total_item - $value_item_inpatient['quantity'];
-
-                    $list_of_items->total_item = $count_item;
-                    $list_of_items->user_update_id = $request->user()->id;
-                    $list_of_items->updated_at = \Carbon\Carbon::now();
-                    $list_of_items->save();
-
-                    $item_history = HistoryItemMovement::create([
-                        'item_id' => $value_item_inpatient['item_id'],
-                        'quantity' => $value_item_inpatient['quantity'],
-                        'status' => 'kurang',
-                        'user_id' => $request->user()->id,
-                    ]);
-                }
-            }
+            $item_list = InPatient::create([
+                'check_up_result_id' => $item->id,
+                'description' => $request->inpatient,
+                'user_id' => $request->user()->id,
+            ]);
         }
 
         return response()->json(
@@ -376,61 +269,43 @@ class HasilPemeriksaanController extends Controller
 
         $data->user = $user;
 
-        $services = DB::table('detail_service_out_patients')
-            ->join('list_of_services', 'detail_service_out_patients.service_id', '=', 'list_of_services.id')
-            ->join('price_services', 'list_of_services.id', '=', 'price_services.list_of_services_id')
+        $services = DB::table('detail_service_patients')
+            ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+            ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
             ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
-            ->join('users', 'detail_service_out_patients.user_id', '=', 'users.id')
-            ->select('detail_service_out_patients.id as detail_service_out_patient_id', 'list_of_services.id as service_id', 'list_of_services.service_name',
+            ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
+            ->select('detail_service_patients.id as detail_service_patient_id', 'list_of_services.id as service_id', 'list_of_services.service_name',
+                'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_out_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_service_out_patients.check_up_result_id', '=', $data->id)
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
             ->get();
 
         $data['services'] = $services;
 
-        $services_inpatient = DB::table('detail_service_in_patients')
-            ->join('list_of_services', 'detail_service_in_patients.service_id', '=', 'list_of_services.id')
-            ->join('price_services', 'list_of_services.id', '=', 'price_services.list_of_services_id')
-            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
-            ->join('users', 'detail_service_in_patients.user_id', '=', 'users.id')
-            ->select('detail_service_in_patients.id as detail_service_in_patient_id', 'list_of_services.id as service_id', 'list_of_services.service_name',
-                'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_in_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_service_in_patients.check_up_result_id', '=', $data->id)
-            ->get();
-
-        $data['services_inpatient'] = $services_inpatient;
-
-        $item = DB::table('detail_item_out_patients')
-            ->join('list_of_items', 'detail_item_out_patients.item_id', '=', 'list_of_items.id')
+        $item = DB::table('detail_item_patients')
+            ->join('list_of_items', 'detail_item_patients.item_id', '=', 'list_of_items.id')
             ->join('price_items', 'list_of_items.id', '=', 'price_items.list_of_items_id')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
             ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-            ->join('users', 'detail_item_out_patients.user_id', '=', 'users.id')
-            ->select('detail_item_out_patients.id as detail_item_out_patient_id', 'list_of_items.id as item_id', 'list_of_items.item_name', 'detail_item_out_patients.quantity',
-                DB::raw("TRIM(detail_item_out_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+            ->select('detail_item_patients.id as detail_item_out_patient_id', 'list_of_items.id as item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_out_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_item_out_patients.check_up_result_id', '=', $data->id)
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
             ->get();
 
         $data['item'] = $item;
 
-        $item_inpatient = DB::table('detail_item_in_patients')
-            ->join('list_of_items', 'detail_item_in_patients.item_id', '=', 'list_of_items.id')
-            ->join('price_items', 'list_of_items.id', '=', 'price_items.list_of_items_id')
-            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
-            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-            ->join('users', 'detail_item_in_patients.user_id', '=', 'users.id')
-            ->select('detail_item_in_patients.id as detail_item_out_patient_id', 'list_of_items.id as item_id', 'list_of_items.item_name', 'detail_item_in_patients.quantity',
-                DB::raw("TRIM(detail_item_in_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_in_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_item_in_patients.check_up_result_id', '=', $data->id)
+        $inpatient = DB::table('in_patients')
+            ->join('users', 'in_patients.user_id', '=', 'users.id')
+            ->select('in_patients.description', DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"),
+                'users.fullname as created_by')
+            ->where('in_patients.check_up_result_id', '=', $data->id)
             ->get();
 
-        $data['item_inpatient'] = $item_inpatient;
+        $data['inpatient'] = $inpatient;
 
         return response()->json($data, 200);
     }

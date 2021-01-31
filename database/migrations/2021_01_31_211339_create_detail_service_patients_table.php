@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailServiceInPatientsTable extends Migration
+class CreateDetailServicePatientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateDetailServiceInPatientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_service_in_patients', function (Blueprint $table) {
+        Schema::create('detail_service_patients', function (Blueprint $table) {
             $table->id();
             $table->integer('check_up_result_id');
-            $table->integer('service_id');
+            $table->integer('price_service_id');
+            $table->integer('quantity');
+            $table->decimal('price_overall');
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
             $table->integer('user_update_id')->nullable();
@@ -33,6 +35,6 @@ class CreateDetailServiceInPatientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_service_in_patients');
+        Schema::dropIfExists('detail_service_patients');
     }
 }
