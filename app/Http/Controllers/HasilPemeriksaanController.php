@@ -92,7 +92,7 @@ class HasilPemeriksaanController extends Controller
         }
 
         //validasi item rawat jalan
-        if (!(is_null($request->item))) {
+        if ($request->item) {
 
             $temp_item = $request->item;
 
