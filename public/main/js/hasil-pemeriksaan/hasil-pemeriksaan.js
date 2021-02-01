@@ -5,6 +5,12 @@ $(document).ready(function() {
   let optBarang = '';
   let optCabang = '';
   let isValidSelectedPasien = false;
+  let isValidAnamnesa = false;
+  let isValidSign = false;
+  let isValidDiagnosa = false;
+  let isValidRadioRawatInap = false;
+  let isValidDescCondPasien = false;
+  let isValidRadioStatusPemeriksa = false;
   let listPasien = [];
 
   let listJasa = [];
@@ -12,9 +18,6 @@ $(document).ready(function() {
 
   let selectedListJasa = [];
   let selectedListBarang = [];
-
-  let selectedListJasaRawatInap = [];
-  let selectedListBarangRawatInap = [];
 
   let getId = null;
   let modalState = '';
@@ -74,18 +77,13 @@ $(document).ready(function() {
 		modalState = 'add';
     $('.modal-title').text('Tambah Hasil Pemeriksaan');
     $('.table-list-jasa').hide(); $('.table-list-barang').hide();
-    $('.table-list-jasa-rawat-inap').hide(); $('.table-list-barang-rawat-inap').hide();
+    $('.form-deskripsi-kondisi-pasien').hide(); $('.table-deskripsi-kondisi-pasien').hide();
+
 		refreshText(); refreshForm();
 		formConfigure();
   });
 
   $('#btnSubmitHasilPemeriksaan').click(function() {
-    console.log('selectedListJasa', selectedListJasa);
-    console.log('selectedListBarang', selectedListBarang);
-
-    console.log('selectedListJasa', selectedListJasaRawatInap);
-    console.log('selectedListBarang', selectedListBarangRawatInap);
-
     const getCheckedStatusPemeriksa = $("input[name='radioStatusPemeriksa']:checked").val();
 
     if (parseInt(getCheckedStatusPemeriksa)) {
@@ -95,8 +93,8 @@ $(document).ready(function() {
       $('#modal-confirmation').modal('show');
     } else {
 
-      if (modalState === 'Add') {
-
+      if (modalState === 'add') {
+        processSaved();
       } else {
         // process Edit
 
@@ -107,7 +105,6 @@ $(document).ready(function() {
   
   $('#selectedPasien').on('select2:select', function (e) {
     const getObj = listPasien.find(x => x.registration_id == $(this).val());
-    console.log('getObj', getObj);
 		if (getObj) {
 			$('#nomorPasienTxt').text(getObj.id_number_patient); $('#jenisHewanTxt').text(getObj.pet_category);
 			$('#namaHewanTxt').text(getObj.pet_name); $('#jenisKelaminTxt').text(getObj.pet_gender);
@@ -121,34 +118,67 @@ $(document).ready(function() {
 		validationForm();
   });
 
-  $('#selectedJasa').on('select2:select', function (e) { processSelectedJasa($(this).val()); });
-  $('#selectedJasa').on('select2:unselect', function(e) { processSelectedJasa($(this).val()); });
+  $('#anamnesa').keyup(function () { validationForm(); });
+  $('#sign').keyup(function () { validationForm(); });
+  $('#diagnosa').keyup(function () { validationForm(); });
+  $('#descriptionCondPasien').keyup(function () { validationForm(); });
 
-  $('#selectedJasaRawatInap').on('select2:select', function (e) { processSelectedJasaRawatInap($(this).val()); });
-  $('#selectedJasaRawatInap').on('select2:unselect', function(e) { processSelectedJasaRawatInap($(this).val()); });
+  $('#selectedJasa').on('select2:select', function (e) { processSelectedJasa(e.params.data.id, e.params.data.selected); });
+  $('#selectedJasa').on('select2:unselect', function(e) { processSelectedJasa(e.params.data.id, e.params.data.selected); });
 
   $('#selectedBarang').on('select2:select', function (e) { processSelectedBarang(e.params.data.id, e.params.data.selected); });
   $('#selectedBarang').on('select2:unselect', function (e) { processSelectedBarang(e.params.data.id, e.params.data.selected); });
 
-  $('#selectedBarangRawatInap').on('select2:select', function (e) { processSelectedBarangRawatInap(e.params.data.id, e.params.data.selected); });
-  $('#selectedBarangRawatInap').on('select2:unselect', function (e) { processSelectedBarangRawatInap(e.params.data.id, e.params.data.selected); });
-
   $('input:radio[name="radioRawatInap"]').change(function (e) {
     if (this.checked) {
       if (parseInt(this.value)) {
-        $('.form-jasa-barang-rawat-inap').show();
+        $('.form-deskripsi-kondisi-pasien').show();
+        if (!$('#descriptionCondPasien').val()) {
+          $('#descriptionCondPasienErr1').text('Deskripsi Kondisi Pasien harus di isi'); isValidDescCondPasien = false;
+        }
       } else {
-        $('.form-jasa-barang-rawat-inap').hide();
+        $('.form-deskripsi-kondisi-pasien').hide();
       }
     }
+    validationForm();
   });
+
+  $('input:radio[name="radioStatusPemeriksa"]').change(function (e) { validationForm(); });
 
   
   $('#submitConfirm').click(function() {
     if (modalState === 'add') {
+      processSaved();
+      $('#modal-confirmation .modal-title').text('Peringatan');
+      $('#modal-confirmation').modal('toggle');
+    } else if(modalState === 'edit') {
+      // process Edit
 
     } else {
-      // process Edit
+      // process delete
+			$.ajax({
+				url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
+				headers : { 'Authorization': `Bearer ${token}` },
+				type    : 'DELETE',
+				data	  : { id: getId },
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil menghapus data');
+					$('#msg-box').modal('show');
+
+					loadHasilPemeriksaan();
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
     }
   });
 
@@ -174,13 +204,116 @@ $(document).ready(function() {
     paramUrlSetup.branchId = value;
 		loadHasilPemeriksaan();
   }
+
+  function processSaved() {
+    const fd = new FormData();
+    fd.append('patient_registration_id', $('#selectedPasien').val());
+    fd.append('anamnesa', $('#anamnesa').val());
+    fd.append('sign', $('#sign').val());
+    fd.append('diagnosa', $('#diagnosa').val());
+    fd.append('status_finish', $("input[name='radioStatusPemeriksa']:checked").val());
+    fd.append('status_outpatient_inpatient', $("input[name='radioRawatInap']:checked").val());
+    fd.append('inpatient', $('#descriptionCondPasien').val());
+
+    let finalSelectedJasa = [];
+    let finalSelectedBarang = [];
+    
+    selectedListJasa.forEach(lj => {
+      finalSelectedJasa.push({ price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall });
+    });
+    selectedListBarang.forEach(lb => {
+      finalSelectedBarang.push({ item_id: lb.item_id, quantity: lb.quantity, price_overall: lb.price_overall});
+    });
+    fd.append('service', JSON.stringify(finalSelectedJasa));
+    fd.append('item', JSON.stringify(finalSelectedBarang));
+
+    $.ajax({
+      url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
+      type: 'POST',
+      dataType: 'JSON',
+      headers: { 'Authorization': `Bearer ${token}` },
+      data: fd, contentType: false, cache: false,
+      processData: false,
+      beforeSend: function() { $('#loading-screen').show(); },
+      success: function(resp) {
+
+        $("#msg-box .modal-body").text('Berhasil Menambah Data');
+        $('#msg-box').modal('show');
+
+        setTimeout(() => {
+          $('#modal-hasil-pemeriksaan').modal('toggle');
+          refreshForm(); loadHasilPemeriksaan();
+        }, 1000);
+      }, complete: function() { $('#loading-screen').hide(); }
+      , error: function(err) {
+        if (err.status === 422) {
+          let errText = ''; $('#beErr').empty(); $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
+          $.each(err.responseJSON.errors, function(idx, v) {
+            errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
+          });
+          $('#beErr').append(errText); isBeErr = true;
+        } else if (err.status == 401) {
+          localStorage.removeItem('vet-clinic');
+          location.href = $('.baseUrl').val() + '/masuk';
+        }
+      }
+    });
+  }
   
   function validationForm() {
     if (!$('#selectedPasien').val()) {
 			$('#pasienErr1').text('Pasien harus di isi'); isValidSelectedPasien = false;
 		} else { 
 			$('#pasienErr1').text(''); isValidSelectedPasien = true;
-		}
+    }
+
+    if (!$('#anamnesa').val()) {
+			$('#anamnesaErr1').text('Anamnesa harus di isi'); isValidAnamnesa = false;
+		} else { 
+			$('#anamnesaErr1').text(''); isValidAnamnesa = true;
+    }
+
+    if (!$('#sign').val()) {
+			$('#signErr1').text('Sign harus di isi'); isValidSign = false;
+		} else {
+			$('#signErr1').text(''); isValidSign = true;
+    }
+
+    if (!$('#diagnosa').val()) {
+			$('#diagnosaErr1').text('Sign harus di isi'); isValidDiagnosa = false;
+		} else {
+			$('#diagnosaErr1').text(''); isValidDiagnosa = true;
+    }
+
+    if (!$("input[name='radioRawatInap']:checked").val()) {
+			$('#rawatInapErr1').text('Rawat inap harus di isi'); isValidRadioRawatInap = false;
+		} else {
+			$('#rawatInapErr1').text(''); isValidRadioRawatInap = true;
+    }
+
+    if(parseInt($("input[name='radioRawatInap']:checked").val())) {
+      if (!$('#descriptionCondPasien').val()) {
+        $('#descriptionCondPasienErr1').text('Deskripsi Kondisi Pasien harus di isi'); isValidDescCondPasien = false;
+      } else {
+        $('#descriptionCondPasienErr1').text(''); isValidDescCondPasien = true;
+      }
+    }
+
+    if (!$("input[name='radioStatusPemeriksa']:checked").val()) {
+			$('#statusPemeriksaErr1').text('Status Pemeriksa harus di isi'); isValidRadioStatusPemeriksa = false;
+		} else {
+			$('#statusPemeriksaErr1').text(''); isValidRadioStatusPemeriksa = true;
+    }
+
+    $('#beErr').empty(); isBeErr = false;
+
+    if (!isValidSelectedPasien || !isValidAnamnesa || !isValidSign || !isValidDiagnosa 
+      || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || !isValidDescCondPasien || isBeErr) {
+      $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
+    } else {
+      $('#btnSubmitHasilPemeriksaan').attr('disabled', false);
+    }
+
   }
 
   function refreshText() {
@@ -193,10 +326,20 @@ $(document).ready(function() {
   }
 
   function refreshForm() {
-    $('#selectedPasien').val(null); 
     $('#selectedJasa').val(null); selectedListJasa = [];
     $('#selectedBarang').val(null); selectedListBarang = [];
+
+    $('#selectedPasien').val(null);
     $('#pasienErr1').text(''); isValidSelectedPasien = true;
+
+    $('#anamnesa').val(null);
+    $('#anamnesaErr1').text(''); isValidAnamnesa = true;
+
+    $('#sign').val(null);
+    $('#signErr1').text(''); isValidSign = true;
+
+    $('#diagnosa').val(null);
+    $('#diagnosaErr1').text(''); isValidDiagnosa = true;
 
     $('#beErr').empty(); isBeErr = false;
   }
@@ -204,14 +347,10 @@ $(document).ready(function() {
   function formConfigure() {
     $('#selectedPasien').select2();
     $('#selectedJasa').select2({ placeholder: 'Jenis Pelayanan - Kategori Jasa', allowClear: true });
-    $('#selectedJasaRawatInap').select2({ placeholder: 'Jenis Pelayanan - Kategori Jasa', allowClear: true });
     $('#selectedBarang').select2({ placeholder: 'Nama Barang - Kategori Barang', allowClear: true });
-    $('#selectedBarangRawatInap').select2({ placeholder: 'Nama Barang - Kategori Barang', allowClear: true });
 
     $('#modal-hasil-pemeriksaan').modal('show');
-
-    $('.form-jasa-barang-rawat-inap').hide();
-		// $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
+		$('#btnSubmitHasilPemeriksaan').attr('disabled', true);
   }
 
   function processAppendListSelectedJasa() {
@@ -224,13 +363,26 @@ $(document).ready(function() {
         + `<td>${no}</td>`
         + `<td>${lj.category_name}</td>`
         + `<td>${lj.service_name}</td>`
+        + `<td><input type="number" min="0" class="qty-input-jasa" index=${idx} value=${lj.quantity}></td>`
         + `<td>${lj.selling_price}</td>`
+        + `<td><span id="totalBarang-jasa-${idx}">${lj.price_overall ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>`;
         ++no;
     });
     $('#list-selected-jasa').append(rowSelectedListJasa);
+
+    $('.qty-input-jasa').on('input', function(e) {
+      const idx          = $(this).attr('index');
+      const value        = parseFloat($(this).val());
+      const sellingPrice = parseFloat(selectedListJasa[idx].selling_price);
+      let totalBarang    = value * sellingPrice;
+
+      selectedListJasa[idx].quantity = value;
+      selectedListJasa[idx].price_overall = totalBarang;
+      $('#totalBarang-jasa-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
 
     $('.btnRemoveSelectedListJasa').click(function() {
       const getIds = [];
@@ -240,35 +392,6 @@ $(document).ready(function() {
 
       $('#selectedJasa').val(getIds); $('#selectedJasa').trigger('change');
       processAppendListSelectedJasa();
-    });
-  }
-
-  function processAppendListSelectedJasaRawatInap() {
-    let rowSelectedListJasaRawatInap = '';
-    let no = 1;
-
-    $('#list-selected-jasa-rawat-inap tr').remove();
-    selectedListJasaRawatInap.forEach((lj, idx) => {
-      rowSelectedListJasaRawatInap += `<tr>`
-        + `<td>${no}</td>`
-        + `<td>${lj.category_name}</td>`
-        + `<td>${lj.service_name}</td>`
-        + `<td>${lj.selling_price}</td>`
-        + `<td>
-            <button type="button" class="btn btn-danger btnRemoveSelectedListJasaRawatInap" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
-        ++no;
-    });
-    $('#list-selected-jasa-rawat-inap').append(rowSelectedListJasaRawatInap);
-
-    $('.btnRemoveSelectedListJasaRawatInap').click(function() {
-      const getIds = [];
-      selectedListJasaRawatInap.splice($(this).val(), 1);
-      selectedListJasaRawatInap.forEach(lj => { getIds.push(lj.id); });
-      if (!selectedListJasaRawatInap.length) { $('.table-list-jasa-rawat-inap').hide(); }
-
-      $('#selectedJasaRawatInap').val(getIds); $('#selectedJasaRawatInap').trigger('change');
-      processAppendListSelectedJasaRawatInap();
     });
   }
 
@@ -315,78 +438,28 @@ $(document).ready(function() {
     });
   }
 
-  function processAppendListSelectedBarangRawatInap() {
-    let rowSelectedListBarangRawatInap = '';
-    let no = 1;
+  function processSelectedJasa(selectedId, selected) {
 
-    $('#list-selected-barang-rawat-inap tr').remove();
-    selectedListBarangRawatInap.forEach((lb, idx) => {
-      rowSelectedListBarangRawatInap += `<tr>`
-        + `<td>${no}</td>`
-        + `<td>${lb.item_name}</td>`
-        + `<td>${lb.category_name}</td>`
-        + `<td>${lb.unit_name}</td>`
-        + `<td><input type="number" min="0" class="qty-input-barang-rawat-inap" index=${idx} value=${lb.quantity}></td>`
-        + `<td>${lb.selling_price}</td>`
-        + `<td><span id="totalBarangRawatInap-${idx}">${lb.price_overall ? lb.price_overall : ''}</span></td>`
-        + `<td>
-            <button type="button" class="btn btn-danger btnRemoveSelectedListBarangRawatInap" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
-        ++no;
-    });
-    $('#list-selected-barang-rawat-inap').append(rowSelectedListBarangRawatInap);
-
-    $('.qty-input-barang-rawat-inap').on('input', function(e) {
-      const idx          = $(this).attr('index');
-      const value        = parseFloat($(this).val());
-      const sellingPrice = parseFloat(selectedListBarangRawatInap[idx].selling_price);
-      let totalBarang    = value * sellingPrice;
-
-      selectedListBarangRawatInap[idx].quantity = value;
-      selectedListBarangRawatInap[idx].price_overall = totalBarang;
-      $('#totalBarangRawatInap-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    });
-
-    $('.btnRemoveSelectedListBarangRawatInap').click(function() {
-      const getIds = [];
-      selectedListBarangRawatInap.splice($(this).val(), 1);
-      selectedListBarangRawatInap.forEach(lb => { getIds.push(lb.item_id); });
-      if (!selectedListBarangRawatInap.length) { $('.table-list-barang-rawat-inap').hide(); }
-
-      $('#selectedBarangRawatInap').val(getIds); $('#selectedBarangRawatInap').trigger('change');
-      processAppendListSelectedBarangRawatInap();
-    });
-  }
-
-  function processSelectedJasa(getIds) {
-    selectedListJasa = [];
-
-    if (getIds.length) {
-      getIds.forEach(id => {
-        const getObj = listJasa.find(x => x.id == parseInt(id));
-        selectedListJasa.push(getObj);
+    if (selected) {
+      const getObj = listJasa.find(x => x.id == parseInt(selectedId));
+      selectedListJasa.push({
+        price_service_id: getObj.id, 
+        category_name: getObj.category_name, 
+        service_name: getObj.service_name,
+        selling_price: getObj.selling_price,
+        quantity: null, price_overall: null
       });
-
-      processAppendListSelectedJasa();      
+      processAppendListSelectedJasa();
       $('.table-list-jasa').show();
     } else {
-      $('.table-list-jasa').hide();
-    }
-  }
+      const getIds = [];
+      const getIdx = selectedListJasa.findIndex(i => i.price_service_id == selectedId);
+      selectedListJasa.splice(getIdx, 1);
+      selectedListJasa.forEach(lj => { getIds.push(lj.price_service_id); });
+      if (!selectedListJasa.length) { $('.table-list-jasa').hide(); }
 
-  function processSelectedJasaRawatInap(getIds) {
-    selectedListJasaRawatInap = [];
-
-    if (getIds.length) {
-      getIds.forEach(id => {
-        const getObj = listJasa.find(x => x.id == parseInt(id));
-        selectedListJasaRawatInap.push(getObj);
-      });
-
-      processAppendListSelectedJasaRawatInap();      
-      $('.table-list-jasa-rawat-inap').show();
-    } else {
-      $('.table-list-jasa-rawat-inap').hide();
+      $('#selectedJasa').val(getIds); $('#selectedJasa').trigger('change');
+      processAppendListSelectedJasa();
     }
   }
 
@@ -394,7 +467,7 @@ $(document).ready(function() {
 
     if (selected) {
       const getObj = listBarang.find(x => x.id == parseInt(selectedId));
-      selectedListBarang.push({ 
+      selectedListBarang.push({
         item_id: getObj.id, 
         category_name: getObj.category_name, 
         item_name: getObj.item_name, 
@@ -407,39 +480,13 @@ $(document).ready(function() {
     } else {
 
       const getIds = [];
-      const getIdx = selectedListBarang.findIndex(i => i.item_id === selectedId);
+      const getIdx = selectedListBarang.findIndex(i => i.item_id == selectedId);
       selectedListBarang.splice(getIdx, 1);
       selectedListBarang.forEach(lb => { getIds.push(lb.item_id); });
       if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
 
       $('#selectedBarang').val(getIds); $('#selectedBarang').trigger('change');
       processAppendListSelectedBarang();
-    }
-  }
-
-  function processSelectedBarangRawatInap(selectedId, selected) {
-    if (selected) {
-      const getObj = listBarang.find(x => x.id == parseInt(selectedId));
-      selectedListBarangRawatInap.push({ 
-        item_id: getObj.id, 
-        category_name: getObj.category_name, 
-        item_name: getObj.item_name, 
-        unit_name: getObj.unit_name,
-        selling_price: getObj.selling_price,
-        quantity: null, price_overall: null
-      });
-      processAppendListSelectedBarangRawatInap();      
-      $('.table-list-barang-rawat-inap').show();
-    } else {
-
-      const getIds = [];
-      const getIdx = selectedListBarangRawatInap.findIndex(i => i.item_id === selectedId);
-      selectedListBarangRawatInap.splice(getIdx, 1);
-      selectedListBarangRawatInap.forEach(lb => { getIds.push(lb.item_id); });
-      if (!selectedListBarangRawatInap.length) { $('.table-list-barang-rawat-inap').hide(); }
-
-      $('#selectedBarangRawatInap').val(getIds); $('#selectedBarangRawatInap').trigger('change');
-      processAppendListSelectedBarangRawatInap();
     }
   }
 
@@ -455,7 +502,7 @@ $(document).ready(function() {
 			success: function(data) {
 				let listHasilPemeriksaan = '';
 				$('#list-hasil-pemeriksaan tr').remove();
-        console.log('data', data);
+
 				$.each(data, function(idx, v) {
 					listHasilPemeriksaan += `<tr>`
 						+ `<td>${++idx}</td>`
@@ -500,62 +547,71 @@ $(document).ready(function() {
               data	  : { id: $(this).val() },
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
-                console.log('detail', data);
-                const getData = data[0];
+                const getData = data;
 
                 $('.modal-title').text('Detail Hasil Pemeriksaan');
+                $('#nomorPasienDetailTxt').text(getData.registration.patient_number); $('#jenisHewanDetailTxt').text(getData.registration.pet_category);
+                $('#namaHewanDetailTxt').text(getData.registration.pet_name); $('#jenisKelaminDetailTxt').text(getData.registration.pet_gender);
+                $('#usiaHewanTahunDetailTxt').text(`${getData.registration.pet_year_age} Tahun`); $('#usiaHewanBulanDetailTxt').text(`${getData.registration.pet_month_age} Bulan`);
+                $('#namaPemilikDetailTxt').text(getData.registration.owner_name); $('#alamatPemilikDetailTxt').text(getData.registration.owner_address);
+                $('#nomorHpPemilikDetailTxt').text(getData.registration.owner_phone_number); $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number);
+                $('#keluhanDetailTxt').text(getData.registration.complaint); $('#namaPendaftarDetailTxt').text(getData.registration.registrant);
+                $('#anamnesaDetailTxt').text(getData.anamnesa); $('#diagnosaDetailTxt').text(getData.diagnosa);
+                $('#signDetailTxt').text(getData.sign); $('#rawatInapDetailTxt').text(getData.status_outpatient_inpatient ? 'Ya' : 'Tidak');
+                $('#statusPemeriksaanDetailTxt').text(getData.status_finish ? 'Selesai' : 'Belum');
 
-                $('#nomorPasienTxt').text('-'); $('#jenisHewanTxt').text(getData.pet_category);
-                $('#namaHewanTxt').text(getData.pet_name); $('#jenisKelaminTxt').text(getData.pet_gender);
-                $('#usiaHewanTahunTxt').text(`${getData.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getData.pet_month_age} Bulan`);
-                $('#namaPemilikTxt').text(getData.owner_name); $('#alamatPemilikTxt').text(getData.owner_address);
-                $('#nomorHpPemilikTxt').text(getData.owner_phone_number); $('#nomorRegistrasiTxt').text(getData.registration.id_number);
-                $('#keluhanTxt').text(getData.complaint); $('#namaPendaftarTxt').text(getData.registrant);
-                $('#anamnesaTxt').text(getData.anamnesa); $('#diagnosaTxt').text(getData.diagnosa);
-                $('#signTxt').text(getData.sign); $('#rawatInapTxt').text(getData.status_outpatient_inpatient ? 'Ya' : 'Tidak');
-                $('#statusPemeriksaanTxt').text(getData.status_finish ? 'Selesai' : 'Belum');
+                let rowListJasa = ''; let no1 = 1;
+                $('#detail-list-jasa tr').remove();
+                  getData.services.forEach((lj, idx) => {
+                    rowListJasa += `<tr>`
+                      + `<td>${no1}</td>`
+                      + `<td>${lj.created_at}</td>`
+                      + `<td>${lj.created_by}</td>`
+                      + `<td>${lj.category_name}</td>`
+                      + `<td>${lj.service_name}</td>`
+                      + `<td>${lj.price_overall}</td>`
+                      + `</tr>`;
+                      ++no1;
+                  });
+                  $('#detail-list-jasa').append(rowListJasa);
+
+                  let rowListBarang = ''; let no2 = 1;
+                $('#detail-list-barang tr').remove();
+                  getData.item.forEach((lj, idx) => {
+                    rowListBarang += `<tr>`
+                      + `<td>${no2}</td>`
+                      + `<td>${lj.created_at}</td>`
+                      + `<td>${lj.created_by}</td>`
+                      + `<td>${lj.item_name}</td>`
+                      + `<td>${lj.category_name}</td>`
+                      + `<td>${lj.unit_name}</td>`
+                      + `<td>${lj.quantity}</td>`
+                      + `<td>${lj.selling_price}</td>`
+                      + `<td>${lj.price_overall}</td>`
+                      + `</tr>`;
+                      ++no2;
+                  });
+                  $('#detail-list-barang').append(rowListBarang);
+
 
                 if (getData.status_outpatient_inpatient) {
 
-                  let rowSelectedListJasaRawatInap = '';
-                  let no1 = 1;
+                  let rowListDescription = '';
+                  let no = 1;
 
-                  $('#detail-selected-jasa-rawat-inap tr').remove();
-                  getData.service_inpatient.forEach((lj, idx) => {
-                    rowSelectedListJasaRawatInap += `<tr>`
-                      + `<td>${no1}</td>`
-                      + `<td>${lj.category_name}</td>`
-                      + `<td>${lj.service_name}</td>`
-                      + `<td>${lj.selling_price}</td>`;
-                      ++no1;
+                  $('#detail-list-inpatient tr').remove();
+                  getData.inpatient.forEach((lj, idx) => {
+                    rowListDescription += `<tr>`
+                      + `<td>${no}</td>`
+                      + `<td>${lj.description}</td>`
+                      + `</tr>`;
+                      ++no;
                   });
-                  $('#detail-selected-jasa-rawat-inap').append(rowSelectedListJasaRawatInap);
+                  $('#detail-list-inpatient').append(rowListDescription);
 
-
-                  let rowSelectedListBarangRawatInap = '';
-                  let no2 = 1;
-
-                  $('#detail-selected-barang-rawat-inap tr').remove();
-                  getData.item_inpatient.forEach((lb, idx) => {
-                    rowSelectedListBarangRawatInap += `<tr>`
-                      + `<td>${no2}</td>`
-                      + `<td>${lb.item_name}</td>`
-                      + `<td>${lb.category_name}</td>`
-                      + `<td>${lb.unit_name}</td>`
-                      + `<td>${lb.quantity}</td>`
-                      + `<td>${lb.selling_price}</td>`
-                      + `<td>${lb.price_overall ? lb.price_overall : ''}</td>`;
-                      ++no2;
-                  });
-                  $('#detail-selected-barang-rawat-inap').append(rowSelectedListBarangRawatInap);
-
-
-
-                  $('#table-list-jasa-rawat-inap').show();
-                  $('#table-list-barang-rawat-inap').show();
+                  $('#table-list-inpatient').show();
                 } else {
-                  $('#table-list-jasa-rawat-inap').hide();
-                  $('#table-list-barang-rawat-inap').hide();
+                  $('#table-list-inpatient').hide();
                 }
 
                 $('#detail-hasil-pemeriksaan').modal('show');
@@ -575,7 +631,7 @@ $(document).ready(function() {
 					const getObj = data.find(x => x.id == $(this).val());
 					if (getObj.status_finish != 1) {
 						modalState = 'edit';
-
+            $('.table-deskripsi-kondisi-pasien').show();
 						$('.modal-title').text('Edit Pendaftaran Pasien');
 						refreshForm();
 
@@ -646,14 +702,13 @@ $(document).ready(function() {
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-        // console.log('data JASA', data);
         listJasa = data; listJasaRawatInap = data;
 				if (listJasa.length) {
 					for (let i = 0 ; i < listJasa.length ; i++) {
 						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name}</option>`;
 					}
         }
-				$('#selectedJasa').append(optJasa); $('#selectedJasaRawatInap').append(optJasa);
+				$('#selectedJasa').append(optJasa);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
@@ -671,14 +726,13 @@ $(document).ready(function() {
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-        console.log('data Barang', data);
         listBarang = data;
 				if (listBarang.length) {
 					for (let i = 0 ; i < listBarang.length ; i++) {
 						optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name}</option>`;
 					}
         }
-				$('#selectedBarang').append(optBarang); $('#selectedBarangRawatInap').append(optBarang);
+				$('#selectedBarang').append(optBarang);
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
