@@ -58,11 +58,6 @@ class HasilPemeriksaanController extends Controller
         return response()->json($data, 200);
     }
 
-    // public function test(Request $request)
-    // {
-    //     return $request->service;
-    // }
-
     public function create(Request $request)
     {
         if ($request->user()->role == 'resepsionis') {
@@ -79,7 +74,6 @@ class HasilPemeriksaanController extends Controller
             'diagnosa' => 'required|string|min:10',
             'status_finish' => 'required|bool',
             'status_outpatient_inpatient' => 'required|bool',
-            'inpatient' => 'required|string|min:10',
         ]);
 
         if ($validate->fails()) {
@@ -91,12 +85,29 @@ class HasilPemeriksaanController extends Controller
             ], 422);
         }
 
+        if ($request->status_outpatient_inpatient == true) {
+
+            $validate2 = Validator::make($request->all(), [
+                'inpatient' => 'required|string|min:10',
+            ]);
+
+            if ($validate2->fails()) {
+                $errors = $validate2->errors()->all();
+
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => $errors,
+                ], 422);
+            }
+        }
+
         //validasi item rawat jalan
         if ($request->item) {
 
             $temp_item = $request->item;
 
-            $result_item = json_decode(json_encode($temp_item), true);
+            // $result_item = json_decode(json_encode($temp_item), true);
+            $result_item = json_decode($temp_item, true);
 
             foreach ($result_item as $value_item) {
 
@@ -151,7 +162,10 @@ class HasilPemeriksaanController extends Controller
         }
 
         $services = $request->service;
-        foreach ($services as $key_service) {
+
+        $result_item = json_decode($services, true);
+
+        foreach ($result_item as $key_service) {
 
             $check_service = ListofServices::find($key_service);
 
@@ -183,7 +197,7 @@ class HasilPemeriksaanController extends Controller
             $registration->save();
         }
 
-        foreach ($services as $key_service) {
+        foreach ($result_item as $key_service) {
 
             $service_list = DetailServicePatient::create([
                 'check_up_result_id' => $item->id,
@@ -195,6 +209,8 @@ class HasilPemeriksaanController extends Controller
         }
 
         if (!(is_null($request->item))) {
+
+            $result_item = json_decode($request->item, true);
 
             foreach ($result_item as $value_item) {
 
@@ -325,7 +341,8 @@ class HasilPemeriksaanController extends Controller
             'anamnesa' => 'required|string|min:10',
             'sign' => 'required|string|min:10',
             'diagnosa' => 'required|string|min:10',
-            'status_outpatient_inpatient' => 'required|numeric|min:1',
+            'status_outpatient_inpatient' => 'required|bool',
+            'status_finish' => 'required|bool',
         ]);
 
         if ($validate->fails()) {
@@ -335,6 +352,22 @@ class HasilPemeriksaanController extends Controller
                 'message' => 'The given data was invalid.',
                 'errors' => $errors,
             ], 422);
+        }
+
+        if ($request->status_outpatient_inpatient == true) {
+
+            $validate2 = Validator::make($request->all(), [
+                'inpatient' => 'required|string|min:10',
+            ]);
+
+            if ($validate2->fails()) {
+                $errors = $validate->errors()->all();
+
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => $errors,
+                ], 422);
+            }
         }
 
         //validasi data barang
@@ -543,214 +576,6 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //jika terdapat status rawat inap
-        if ($request->status_outpatient_inpatient == true) {
-            //validasi rawat inap
-            if (!(is_null($request->item_inpatient))) {
-
-                $temp_item_inpatient = $request->item_inpatient;
-
-                $result_item_inpatient = json_decode(json_encode($temp_item_inpatient), true);
-
-                foreach ($result_item_inpatient as $value_item_inpatient) {
-
-                    //cek untuk melakukan update atau create
-                    $detail_item_inpatient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                    if (is_null($detail_item_inpatient)) {
-                        //kalau data baru
-
-                        $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                        if (is_null($list_of_items)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data List of Item not found!'],
-                            ], 404);
-                        }
-
-                        $check_storage = DB::table('list_of_items')
-                            ->select('total_item')
-                            ->where('id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if (is_null($check_storage)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Total Item not found!'],
-                            ], 404);
-                        }
-
-                        $check_storage_name = DB::table('list_of_items')
-                            ->select('item_name')
-                            ->where('id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if (is_null($check_storage_name)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Total Item not found!'],
-                            ], 404);
-                        }
-
-                        if ($value_item_inpatient['quantity'] > $check_storage->total_item) {
-                            return response()->json([
-                                'message' => 'The given data was invalid.',
-                                'errors' => ['Jumlah stok ' . $check_storage_name->item_name . 'pada Rawat Inap kurang atau habis!'],
-                            ], 422);
-                        }
-
-                    } else {
-                        //kalau data yang sudah pernah ada
-
-                        //untuk mendapatkan data stok terupdate
-                        $check_stock = DB::table('list_of_items')
-                            ->select('total_item')
-                            ->where('id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if (is_null($check_stock)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data List of Item not found!'],
-                            ], 404);
-                        }
-
-                        $check_storage_name = DB::table('list_of_items')
-                            ->select('item_name')
-                            ->where('id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if (is_null($check_storage_name)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Total Item not found!'],
-                            ], 404);
-                        }
-
-                        //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
-                        $check_item_result = DB::table('detail_item_in_patients')
-                            ->select('quantity')
-                            ->where('check_up_result_id', '=', $request->id)
-                            ->where('item_id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if (is_null($check_item_result)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Item Check Up Result not found!'],
-                            ], 404);
-                        }
-
-                        //validasi kalau data input lebih dari data awal
-                        if ($value_item_inpatient['quantity'] > $check_item_result->quantity) {
-
-                            $res_value_item_inpatient = $value_item_inpatient['quantity'] - $check_item_result->quantity;
-
-                            if ($res_value_item_inpatient > $check_stock->total_item) {
-                                return response()->json([
-                                    'message' => 'The given data was invalid.',
-                                    'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
-                                ], 422);
-                            }
-
-                            $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                            if (is_null($list_of_items)) {
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data List of Item not found!'],
-                                ], 404);
-                            }
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            if (is_null($detail_item_in_patient)) {
-
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data not found!'],
-                                ], 404);
-                            }
-
-                        } elseif ($value_item_inpatient['quantity'] < $check_item_result->quantity) {
-
-                            $res_value_item = $check_item_result->quantity - $value_item_inpatient['quantity'];
-
-                            $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                            if (is_null($list_of_items)) {
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data not found!'],
-                                ], 404);
-                            }
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            if (is_null($detail_item_in_patient)) {
-
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data not found!'],
-                                ], 404);
-                            }
-                        } else {
-
-                            $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                            if (is_null($list_of_items)) {
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data not found!'],
-                                ], 404);
-                            }
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            if (is_null($detail_item_in_patient)) {
-
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data not found!'],
-                                ], 404);
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            //validasi data jasa
-            if (is_null($request->service_inpatient)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data Jasa Rawat Inap Harus dipilih minimal 1!'],
-                ], 404);
-            }
-
-            $temp_services_inpatient = $request->service_inpatient;
-
-            $services_inpatient = json_decode(json_encode($temp_services_inpatient), true);
-
-            foreach ($services_inpatient as $key_service_inpatient) {
-
-                $detail_service_in_patient = DetailServiceInPatient::find($key_service_inpatient['id']);
-
-                if (is_null($detail_service_in_patient)) {
-
-                    $check_service = ListofServices::find($key_service_inpatient['service_id']);
-
-                    if (is_null($check_service)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data not found!'],
-                        ], 404);
-                    }
-                }
-            }
-        }
-
         //update hasil pemeriksaan
 
         $check_up_result = CheckUpResult::find($request->id);
@@ -810,7 +635,7 @@ class HasilPemeriksaanController extends Controller
         }
 
         //update barang
-        if (!(is_null($request->item))) {
+        if ($request->item) {
 
             foreach ($result_item as $value_item) {
 
@@ -955,175 +780,11 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->status_outpatient_inpatient == true) {
 
-            foreach ($services_inpatient as $key_service_inpatient) {
-
-                $detail_service_in_patient = DetailServiceInPatient::find($key_service_inpatient['id']);
-
-                if (is_null($detail_service_in_patient)) {
-
-                    $service_list = DetailServiceInPatient::create([
-                        'check_up_result_id' => $check_up_result->id,
-                        'service_id' => $key_service_inpatient['service_id'],
-                        'user_id' => $request->user()->id,
-                    ]);
-
-                } elseif ($key_service_inpatient['status'] == 'del') {
-
-                    $detail_service_in_patient->delete();
-
-                } else {
-
-                    $detail_service_in_patient->check_up_result_id = $check_up_result->id;
-                    $detail_service_in_patient->service_id = $key_service_inpatient['service_id'];
-                    $detail_service_in_patient->user_update_id = $request->user()->id;
-                    $detail_service_in_patient->updated_at = \Carbon\Carbon::now();
-                    $detail_service_in_patient->save();
-
-                }
-            }
-
-            if (!(is_null($request->item_inpatient))) {
-
-                foreach ($result_item_inpatient as $value_item_inpatient) {
-
-                    $detail_item = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                    if (is_null($detail_item)) {
-
-                        $item_list = DetailItemInPatient::create([
-                            'check_up_result_id' => $check_up_result->id,
-                            'item_id' => $value_item_inpatient['item_id'],
-                            'quantity' => $value_item_inpatient['quantity'],
-                            'price_overall' => $value_item_inpatient['price_overall'],
-                            'user_id' => $request->user()->id,
-                        ]);
-
-                        $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                        $count_item = $list_of_items->total_item - $value_item_inpatient['quantity'];
-
-                        $list_of_items->total_item = $count_item;
-                        $list_of_items->user_update_id = $request->user()->id;
-                        $list_of_items->updated_at = \Carbon\Carbon::now();
-                        $list_of_items->save();
-
-                        $item_history = HistoryItemMovement::create([
-                            'item_id' => $value_item_inpatient['item_id'],
-                            'quantity' => $value_item_inpatient['quantity'],
-                            'status' => 'kurang',
-                            'user_id' => $request->user()->id,
-                        ]);
-
-                    } elseif ($value_item_inpatient['status'] == 'del' || $value_item_inpatient['quantity'] == 0) {
-
-                        $check_item_result_inpatient = DB::table('detail_item_in_patients')
-                            ->select('quantity')
-                            ->where('check_up_result_id', '=', $request->id)
-                            ->where('item_id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        $res_value_item_inpatient = $check_item_result_inpatient->quantity;
-
-                        $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                        $count_item = $list_of_items->total_item + $res_value_item_inpatient;
-
-                        $list_of_items->total_item = $count_item;
-                        $list_of_items->user_update_id = $request->user()->id;
-                        $list_of_items->updated_at = \Carbon\Carbon::now();
-                        $list_of_items->save();
-
-                        $item_history = HistoryItemMovement::create([
-                            'item_id' => $value_item_inpatient['item_id'],
-                            'quantity' => $res_value_item_inpatient,
-                            'status' => 'tambah',
-                            'user_id' => $request->user()->id,
-                        ]);
-
-                        $detail_item->delete();
-
-                    } else {
-
-                        //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
-                        $check_item_result = DB::table('detail_item_in_patients')
-                            ->select('quantity')
-                            ->where('check_up_result_id', '=', $request->id)
-                            ->where('item_id', '=', $value_item_inpatient['item_id'])
-                            ->first();
-
-                        if ($value_item_inpatient['quantity'] > $check_item_result->quantity) {
-
-                            $res_value_item = $value_item_inpatient['quantity'] - $check_item_result->quantity;
-
-                            $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                            $count_item = $list_of_items->total_item - $res_value_item;
-
-                            $list_of_items->total_item = $count_item;
-                            $list_of_items->user_update_id = $request->user()->id;
-                            $list_of_items->updated_at = \Carbon\Carbon::now();
-                            $list_of_items->save();
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            $detail_item_in_patient->item_id = $value_item_inpatient['item_id'];
-                            $detail_item_in_patient->quantity = $value_item_inpatient['quantity'];
-                            $detail_item_in_patient->price_overall = $value_item_inpatient['price_overall'];
-                            $detail_item_in_patient->user_update_id = $request->user()->id;
-                            $detail_item_in_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_in_patient->save();
-
-                            $item_history = HistoryItemMovement::create([
-                                'item_id' => $value_item_inpatient['item_id'],
-                                'quantity' => $res_value_item,
-                                'status' => 'kurang',
-                                'user_id' => $request->user()->id,
-                            ]);
-
-                        } elseif ($value_item_inpatient['quantity'] < $check_item_result->quantity) {
-
-                            $res_value_item = $check_item_result->quantity - $value_item_inpatient['quantity'];
-
-                            $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                            $count_item = $list_of_items->total_item + $res_value_item;
-
-                            $list_of_items->total_item = $count_item;
-                            $list_of_items->user_update_id = $request->user()->id;
-                            $list_of_items->updated_at = \Carbon\Carbon::now();
-                            $list_of_items->save();
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            $detail_item_in_patient->item_id = $value_item_inpatient['item_id'];
-                            $detail_item_in_patient->quantity = $value_item_inpatient['quantity'];
-                            $detail_item_in_patient->price_overall = $value_item_inpatient['price_overall'];
-                            $detail_item_in_patient->user_update_id = $request->user()->id;
-                            $detail_item_in_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_in_patient->save();
-
-                            $item_history = HistoryItemMovement::create([
-                                'item_id' => $value_item_inpatient['item_id'],
-                                'quantity' => $res_value_item,
-                                'status' => 'tambah',
-                                'user_id' => $request->user()->id,
-                            ]);
-
-                        } else {
-
-                            $detail_item_in_patient = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                            $detail_item_in_patient->item_id = $value_item_inpatient['item_id'];
-                            $detail_item_in_patient->quantity = $value_item_inpatient['quantity'];
-                            $detail_item_in_patient->price_overall = $value_item_inpatient['price_overall'];
-                            $detail_item_in_patient->user_update_id = $request->user()->id;
-                            $detail_item_in_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_in_patient->save();
-                        }
-
-                    }
-                }
-            }
+            $item_list = InPatient::create([
+                'check_up_result_id' => $item->id,
+                'description' => $request->inpatient,
+                'user_id' => $request->user()->id,
+            ]);
         }
 
         return response()->json(
@@ -1183,45 +844,6 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //hapus barang rawat inap
-        if (!(is_null($request->item_inpatient))) {
-
-            $temp_item_inpatient = $request->item_inpatient;
-
-            $result_item_inpatient = json_decode(json_encode($temp_item_inpatient), true);
-
-            foreach ($result_item_inpatient as $value_item_inpatient) {
-
-                $detail_item = DetailItemInPatient::find($value_item_inpatient['id']);
-
-                $check_item_result = DB::table('detail_item_in_patients')
-                    ->select('quantity')
-                    ->where('check_up_result_id', '=', $request->id)
-                    ->where('item_id', '=', $value_item_inpatient['item_id'])
-                    ->first();
-
-                $res_value_item = $check_item_result->quantity;
-
-                $list_of_items = ListofItems::find($value_item_inpatient['item_id']);
-
-                $count_item = $list_of_items->total_item + $res_value_item;
-
-                $list_of_items->total_item = $count_item;
-                $list_of_items->user_update_id = $request->user()->id;
-                $list_of_items->updated_at = \Carbon\Carbon::now();
-                $list_of_items->save();
-
-                $item_history = HistoryItemMovement::create([
-                    'item_id' => $value_item_inpatient['item_id'],
-                    'quantity' => $res_value_item,
-                    'status' => 'tambah',
-                    'user_id' => $request->user()->id,
-                ]);
-
-                $detail_item->delete();
-            }
-        }
-
         //hapus jasa rawat jalan
         if (!(is_null($request->service))) {
 
@@ -1236,17 +858,17 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //hapus jasa rawat inap
-        if (!(is_null($request->service_inpatient))) {
+        //hapus deksirpsi rawat inap
+        if (!(is_null($request->inpatient))) {
 
-            $temp_services = $request->service_inpatient;
+            $temp_inpatient = $request->inpatient;
 
-            $services_inpatient = json_decode(json_encode($temp_services), true);
+            $inpatients = json_decode(json_encode($temp_inpatient), true);
 
-            foreach ($services_inpatient as $key_service_inpatient) {
+            foreach ($inpatients as $key_inpatient) {
 
-                $detail_service_in_patient = DetailServiceInPatient::find($key_service_inpatient['id']);
-                $detail_service_in_patient->delete();
+                $in_patient = InPatient::find($key_inpatient['id']);
+                $in_patient->delete();
             }
         }
 
