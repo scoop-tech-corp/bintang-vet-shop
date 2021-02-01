@@ -18,7 +18,8 @@ class CreateDetailServicePatientsTable extends Migration
             $table->integer('check_up_result_id');
             $table->integer('price_service_id');
             $table->integer('quantity');
-            $table->decimal('price_overall');
+            // $table->decimal('price_overall');
+            $table->decimal('price_overall', $precision = 18, $scale = 2);
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
             $table->integer('user_update_id')->nullable();
