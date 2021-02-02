@@ -120,6 +120,8 @@
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Dibuat Oleh</th>
                   <th>Description</th>
                 </tr>
               </thead>

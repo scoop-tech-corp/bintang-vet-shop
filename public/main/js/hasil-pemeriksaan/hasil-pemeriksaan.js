@@ -76,7 +76,9 @@ $(document).ready(function() {
   $('.openFormAdd').click(function() {
 		modalState = 'add';
     $('.modal-title').text('Tambah Hasil Pemeriksaan');
+    $('.form-cari-pasien').show();
     $('.table-list-jasa').hide(); $('.table-list-barang').hide();
+    $('.tgl-edit').hide(); $('.dibuat-edit').hide();
     $('.form-deskripsi-kondisi-pasien').hide(); $('.table-deskripsi-kondisi-pasien').hide();
 
 		refreshText(); refreshForm();
@@ -222,7 +224,7 @@ $(document).ready(function() {
       finalSelectedJasa.push({ price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall });
     });
     selectedListBarang.forEach(lb => {
-      finalSelectedBarang.push({ item_id: lb.item_id, quantity: lb.quantity, price_overall: lb.price_overall});
+      finalSelectedBarang.push({ price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall});
     });
     fd.append('service', JSON.stringify(finalSelectedJasa));
     fd.append('item', JSON.stringify(finalSelectedBarang));
@@ -341,6 +343,24 @@ $(document).ready(function() {
     $('#diagnosa').val(null);
     $('#diagnosaErr1').text(''); isValidDiagnosa = true;
 
+    $('#descriptionCondPasien').val(null);
+    $('#descriptionCondPasienErr1').text(''); isValidDiagnosa = true;
+
+    $('input[name="radioRawatInap"]').prop('checked', false);
+    $('#rawatInapErr1').text(''); isValidRadioRawatInap = true;
+
+    $('input[name="radioStatusPemeriksa"]').prop('checked', false);
+    $('#statusPemeriksaErr1').text(''); isValidRadioStatusPemeriksa = true;
+
+    $('#nomorPasienDetailTxt').text('-'); $('#nomorRegistrasiDetailTxt').text('-');
+    $('#jenisHewanDetailTxt').text('-'); $('#namaHewanDetailTxt').text('-'); 
+    $('#jenisKelaminDetailTxt').text('-'); $('#nomorHpPemilikDetailTxt').text('-');
+    $('#usiaHewanTahunDetailTxt').text('-'); $('#usiaHewanBulanDetailTxt').text('-');
+    $('#namaPemilikDetailTxt').text('-'); $('#alamatPemilikDetailTxt').text('-');
+    $('#keluhanDetailTxt').text('-'); $('#namaPendaftarDetailTxt').text('-');
+    $('#anamnesaDetailTxt').text('-'); $('#diagnosaDetailTxt').text('-');
+    $('#signDetailTxt').text('-');
+
     $('#beErr').empty(); isBeErr = false;
   }
 
@@ -361,11 +381,13 @@ $(document).ready(function() {
     selectedListJasa.forEach((lj, idx) => {
       rowSelectedListJasa += `<tr>`
         + `<td>${no}</td>`
+        + `${(modalState) == 'edit' ? '<td>'+lj.created_at+'</td>' : '' }`
+        + `${(modalState) == 'edit' ? '<td>'+lj.created_by+'</td>' : '' }`
         + `<td>${lj.category_name}</td>`
         + `<td>${lj.service_name}</td>`
         + `<td><input type="number" min="0" class="qty-input-jasa" index=${idx} value=${lj.quantity}></td>`
         + `<td>${lj.selling_price}</td>`
-        + `<td><span id="totalBarang-jasa-${idx}">${lj.price_overall ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}</span></td>`
+        + `<td><span id="totalBarang-jasa-${idx}">${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>`;
@@ -381,7 +403,7 @@ $(document).ready(function() {
 
       selectedListJasa[idx].quantity = value;
       selectedListJasa[idx].price_overall = totalBarang;
-      $('#totalBarang-jasa-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+      $('#totalBarang-jasa-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
     });
 
     $('.btnRemoveSelectedListJasa').click(function() {
@@ -403,12 +425,14 @@ $(document).ready(function() {
     selectedListBarang.forEach((lb, idx) => {
       rowSelectedListBarang += `<tr>`
         + `<td>${no}</td>`
+        + `${(modalState) == 'edit' ? '<td>'+lb.created_at+'</td>' : '' }`
+        + `${(modalState) == 'edit' ? '<td>'+lb.created_by+'</td>' : '' }`
         + `<td>${lb.item_name}</td>`
         + `<td>${lb.category_name}</td>`
         + `<td>${lb.unit_name}</td>`
         + `<td><input type="number" min="0" class="qty-input-barang" index=${idx} value=${lb.quantity}></td>`
         + `<td>${lb.selling_price}</td>`
-        + `<td><span id="totalBarang-${idx}">${lb.price_overall ? lb.price_overall : ''}</span></td>`
+        + `<td><span id="totalBarang-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>`;
@@ -424,7 +448,7 @@ $(document).ready(function() {
 
       selectedListBarang[idx].quantity = value;
       selectedListBarang[idx].price_overall = totalBarang;
-      $('#totalBarang-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+      $('#totalBarang-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
     });
 
     $('.btnRemoveSelectedListBarang').click(function() {
@@ -468,19 +492,19 @@ $(document).ready(function() {
     if (selected) {
       const getObj = listBarang.find(x => x.id == parseInt(selectedId));
       selectedListBarang.push({
-        item_id: getObj.id, 
+        price_item_id: getObj.id, 
         category_name: getObj.category_name, 
         item_name: getObj.item_name, 
         unit_name: getObj.unit_name,
         selling_price: getObj.selling_price,
         quantity: null, price_overall: null
       });
-      processAppendListSelectedBarang();      
+      processAppendListSelectedBarang();
       $('.table-list-barang').show();
     } else {
 
       const getIds = [];
-      const getIdx = selectedListBarang.findIndex(i => i.item_id == selectedId);
+      const getIdx = selectedListBarang.findIndex(i => i.price_item_id == selectedId);
       selectedListBarang.splice(getIdx, 1);
       selectedListBarang.forEach(lb => { getIds.push(lb.item_id); });
       if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
@@ -548,17 +572,20 @@ $(document).ready(function() {
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
                 const getData = data;
+                console.log('getData', getData);
 
                 $('.modal-title').text('Detail Hasil Pemeriksaan');
-                $('#nomorPasienDetailTxt').text(getData.registration.patient_number); $('#jenisHewanDetailTxt').text(getData.registration.pet_category);
-                $('#namaHewanDetailTxt').text(getData.registration.pet_name); $('#jenisKelaminDetailTxt').text(getData.registration.pet_gender);
+                $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number); $('#nomorPasienDetailTxt').text(getData.registration.patient_number); 
+                $('#jenisHewanDetailTxt').text(getData.registration.pet_category); $('#namaHewanDetailTxt').text(getData.registration.pet_name); 
+                $('#jenisKelaminDetailTxt').text(getData.registration.pet_gender); 
                 $('#usiaHewanTahunDetailTxt').text(`${getData.registration.pet_year_age} Tahun`); $('#usiaHewanBulanDetailTxt').text(`${getData.registration.pet_month_age} Bulan`);
                 $('#namaPemilikDetailTxt').text(getData.registration.owner_name); $('#alamatPemilikDetailTxt').text(getData.registration.owner_address);
-                $('#nomorHpPemilikDetailTxt').text(getData.registration.owner_phone_number); $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number);
+                $('#nomorHpPemilikDetailTxt').text(getData.registration.owner_phone_number);
                 $('#keluhanDetailTxt').text(getData.registration.complaint); $('#namaPendaftarDetailTxt').text(getData.registration.registrant);
-                $('#anamnesaDetailTxt').text(getData.anamnesa); $('#diagnosaDetailTxt').text(getData.diagnosa);
-                $('#signDetailTxt').text(getData.sign); $('#rawatInapDetailTxt').text(getData.status_outpatient_inpatient ? 'Ya' : 'Tidak');
+                $('#rawatInapDetailTxt').text(getData.status_outpatient_inpatient ? 'Ya' : 'Tidak');
                 $('#statusPemeriksaanDetailTxt').text(getData.status_finish ? 'Selesai' : 'Belum');
+                $('#anamnesaDetailTxt').text(getData.anamnesa); $('#diagnosaDetailTxt').text(getData.diagnosa);
+                $('#signDetailTxt').text(getData.sign);
 
                 let rowListJasa = ''; let no1 = 1;
                 $('#detail-list-jasa tr').remove();
@@ -569,7 +596,7 @@ $(document).ready(function() {
                       + `<td>${lj.created_by}</td>`
                       + `<td>${lj.category_name}</td>`
                       + `<td>${lj.service_name}</td>`
-                      + `<td>${lj.price_overall}</td>`
+                      + `<td>${typeof(lj.price_overall) == 'number'  ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
                       + `</tr>`;
                       ++no1;
                   });
@@ -586,8 +613,8 @@ $(document).ready(function() {
                       + `<td>${lj.category_name}</td>`
                       + `<td>${lj.unit_name}</td>`
                       + `<td>${lj.quantity}</td>`
-                      + `<td>${lj.selling_price}</td>`
-                      + `<td>${lj.price_overall}</td>`
+                      + `<td>${typeof(lj.selling_price) == 'number'  ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+                      + `<td>${typeof(lj.price_overall) == 'number'  ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
                       + `</tr>`;
                       ++no2;
                   });
@@ -600,10 +627,12 @@ $(document).ready(function() {
                   let no = 1;
 
                   $('#detail-list-inpatient tr').remove();
-                  getData.inpatient.forEach((lj, idx) => {
+                  getData.inpatient.forEach((inp, idx) => {
                     rowListDescription += `<tr>`
                       + `<td>${no}</td>`
-                      + `<td>${lj.description}</td>`
+                      + `<td>${inp.created_at}</td>`
+                      + `<td>${inp.created_by}</td>`
+                      + `<td>${inp.description}</td>`
                       + `</tr>`;
                       ++no;
                   });
@@ -632,19 +661,106 @@ $(document).ready(function() {
 					if (getObj.status_finish != 1) {
 						modalState = 'edit';
             $('.table-deskripsi-kondisi-pasien').show();
-						$('.modal-title').text('Edit Pendaftaran Pasien');
-						refreshForm();
+            $('.modal-title').text('Edit Hasil Pemeriksaan');
+            $('.tgl-edit').show(); $('.dibuat-edit').show();
+            $('.form-cari-pasien').hide();
+            refreshForm();
 
-						formConfigure();
-						getId = getObj.id;
-						$('#namaPendaftar').val(getObj.registrant); $('#keluhan').val(getObj.complaint);
-						$('#selectedPasien').val(getObj.patient_id); $('#selectedPasien').trigger('change');
-						$('#selectedDokter').val(getObj.user_doctor_id); $('#selectedDokter').trigger('change');
-						$('#nomorPasienTxt').text(getObj.id_member); $('#jenisHewanTxt').text(getObj.pet_category);
-						$('#namaHewanTxt').text(getObj.pet_name); $('#jenisKelaminTxt').text(getObj.pet_gender);
-						$('#usiaHewanTahunTxt').text(`${getObj.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getObj.pet_month_age} Bulan`);
-						$('#namaPemilikTxt').text(getObj.owner_name); $('#alamatPemilikTxt').text(getObj.owner_address);
-						$('#nomorHpPemilikTxt').text(getObj.owner_phone_number);
+            getId = getObj.id;
+
+            $.ajax({
+              url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan/detail',
+              headers : { 'Authorization': `Bearer ${token}` },
+              type    : 'GET',
+              data	  : { id: $(this).val() },
+              beforeSend: function() { $('#loading-screen').show(); },
+              success: function(data) {
+                const getData = data;
+                console.log('getData', getData);
+
+                $('#nomorRegistrasiTxt').text(getData.registration.registration_number); $('#nomorPasienTxt').text(getData.registration.patient_number); 
+                $('#jenisHewanTxt').text(getData.registration.pet_category); $('#namaHewanTxt').text(getData.registration.pet_name); 
+                $('#jenisKelaminTxt').text(getData.registration.pet_gender); 
+                $('#usiaHewanTahunTxt').text(`${getData.registration.pet_year_age} Tahun`); $('#usiaHewanBulanTxt').text(`${getData.registration.pet_month_age} Bulan`);
+                $('#namaPemilikTxt').text(getData.registration.owner_name); $('#alamatPemilikTxt').text(getData.registration.owner_address);
+                $('#nomorHpPemilikTxt').text(getData.registration.owner_phone_number);
+                $('#keluhanTxt').text(getData.registration.complaint); $('#namaPendaftarTxt').text(getData.registration.registrant);
+
+                $('#anamnesa').val(getData.anamnesa); $('#diagnosa').val(getData.diagnosa);
+                $('#sign').val(getData.sign);
+
+                const getIdJasa = [];
+                if (getData.services.length) {
+                  getData.services.forEach(item => {
+                    selectedListJasa.push({
+                      price_service_id: item.price_service_id, 
+                      category_name: item.category_name, service_name: item.service_name,
+                      selling_price: item.selling_price,
+                      quantity: item.quantity, price_overall: item.price_overall,
+                      created_at: item.created_at, created_by: item.created_by
+                    });
+                    getIdJasa.push(item.price_service_id);
+                  });
+                  processAppendListSelectedJasa();
+                  $('.table-list-jasa').show();
+                } else {
+                  $('.table-list-jasa').hide();
+                }
+                $('#selectedJasa').val(getIdJasa); $('#selectedJasa').trigger('change');
+
+                const getIdBarang = [];
+                if (getData.item.length) {
+                  getData.item.forEach(item => {
+                    selectedListBarang.push({
+                      price_item_id: item.price_item_id,
+                      category_name: item.category_name,
+                      item_name: item.item_name, unit_name: item.unit_name,
+                      selling_price: item.selling_price,
+                      quantity: item.quantity, price_overall: item.price_overall,
+                      created_at: item.created_at, created_by: item.created_by
+                    });
+                    getIdBarang.push(item.price_item_id);
+                  });
+                  processAppendListSelectedBarang();
+                  $('.table-list-barang').show();
+                } else {
+                  $('.table-list-barang').hide();
+                }
+                $('#selectedBarang').val(getIdBarang); $('#selectedBarang').trigger('change');
+
+                $(`input[name=radioRawatInap][value=${getData.status_outpatient_inpatient}]`).prop('checked', true);
+                if (getData.status_outpatient_inpatient) {
+                  let rowListCondPasien = '';
+                  let no = 1;
+
+                  $('#list-deskripsi-kondisi-pasien tr').remove();
+                  getData.inpatient.forEach((lj, idx) => {
+                    rowListCondPasien += `<tr>`
+                      + `<td>${no}</td>`
+                      + `<td>${lj.created_at}</td>`
+                      + `<td>${lj.created_by}</td>`
+                      + `<td>${lj.description}</td>`
+                      + `</tr>`;
+                      ++no;
+                  });
+                  $('#list-deskripsi-kondisi-pasien').append(rowListCondPasien);
+
+                  $('.table-deskripsi-kondisi-pasien').show();
+                } else {
+                  $('.table-deskripsi-kondisi-pasien').hide();
+                }
+
+                $(`input[name=radioStatusPemeriksa][value=${getData.status_finish}]`).prop('checked', true);
+
+                formConfigure();
+              }, complete: function() { $('#loading-screen').hide(); },
+              error: function(err) {
+                if (err.status == 401) {
+                  localStorage.removeItem('vet-clinic');
+                  location.href = $('.baseUrl').val() + '/masuk';
+                }
+              }
+            });
 					}
 				});
 			
@@ -702,7 +818,7 @@ $(document).ready(function() {
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-        listJasa = data; listJasaRawatInap = data;
+        listJasa = data;
 				if (listJasa.length) {
 					for (let i = 0 ; i < listJasa.length ; i++) {
 						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name}</option>`;

@@ -10,7 +10,7 @@
 			<div class="modal-body">
 				<form class="form-hasil-pemeriksaan">
 					<div class="box-body">
-            <div class="form-group">
+            <div class="form-group form-cari-pasien">
 							<label for="selectedPasien">Cari Pasien</label>
 							<select id="selectedPasien" class="form-control" style="width: 100%">
 							</select>
@@ -85,6 +85,8 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th class="tgl-edit">Tanggal</th>
+                      <th class="dibuat-edit">Dibuat Oleh</th>
                       <th>Jenis Layanan</th>
                       <th>Kategori Jasa</th>
                       <th>Jumlah</th>
@@ -106,6 +108,8 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th class="tgl-edit">Tanggal</th>
+                      <th class="dibuat-edit">Dibuat Oleh</th>
                       <th>Nama Barang</th>
                       <th>Kategori Barang</th>
                       <th>Satuan Barang</th>
@@ -132,10 +136,12 @@
               <textarea id="descriptionCondPasien" class="form-control" placeholder="Masukan Deskripsi Kondisi Pasien"></textarea>
 							<div id="descriptionCondPasienErr1" class="validate-error"></div>
             </div>
-            <table class="table table-striped text-nowrap table-deskripsi-kondisi-pasien">
+            <table class="table table-striped text-nowrap table-deskripsi-kondisi-pasien" style="margin-bottom: 15px">
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Dibuat Oleh</th>
                   <th>Deskripsi</th>
                 </tr>
               </thead>
