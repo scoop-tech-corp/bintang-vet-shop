@@ -15,7 +15,7 @@ class CreateHistoryItemMovementsTable extends Migration
     {
         Schema::create('history_item_movements', function (Blueprint $table) {
             $table->id();
-            $table->integer('item_id');
+            $table->integer('price_item_id');
             $table->integer('quantity');
             $table->string('status');
             $table->boolean('isDeleted')->nullable()->default(false);
