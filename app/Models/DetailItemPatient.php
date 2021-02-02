@@ -12,5 +12,5 @@ class DetailItemPatient extends Model
 
     protected $guarded = ['id'];
 
-    protected $fillable = ['check_up_result_id', 'item_id', 'quantity', 'price_overall', 'user_id'];
+    protected $fillable = ['check_up_result_id', 'price_item_id', 'quantity', 'price_overall', 'user_id'];
 }

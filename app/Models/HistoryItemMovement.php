@@ -12,5 +12,5 @@ class HistoryItemMovement extends Model
 
     protected $guarded = ['id'];
 
-    protected $fillable = ['item_id', 'quantity', 'user_id','status'];
+    protected $fillable = ['price_item_id', 'quantity', 'user_id','status'];
 }
