@@ -270,8 +270,8 @@ class HasilPemeriksaanController extends Controller
         $registration = DB::table('registrations')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category',
-                'patients.pet_name', 'patients.pet_gender', 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address', 'registrations.complaint',
-                'registrations.registrant')
+                'patients.pet_name', 'patients.pet_gender', 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
+                'patients.owner_phone_number', 'registrations.complaint', 'registrations.registrant')
             ->where('registrations.id', '=', $data->patient_registration_id)
             ->first();
 
@@ -372,11 +372,11 @@ class HasilPemeriksaanController extends Controller
 
         //validasi data barang
 
-        if (!(is_null($request->item))) {
+        if ($request->item) {
 
             $temp_item = $request->item;
 
-            $result_item = json_decode(json_encode($temp_item), true);
+            $result_item = json_decode($temp_item, true);
 
             foreach ($result_item as $value_item) {
 
@@ -557,7 +557,7 @@ class HasilPemeriksaanController extends Controller
 
         $temp_services = $request->service;
 
-        $services = json_decode(json_encode($temp_services), true);
+        $services = json_decode($temp_services, true);
 
         foreach ($services as $key_service) {
 
@@ -636,6 +636,10 @@ class HasilPemeriksaanController extends Controller
 
         //update barang
         if ($request->item) {
+
+            $temp_item = $request->item;
+
+            $result_item = json_decode($temp_item, true);
 
             foreach ($result_item as $value_item) {
 
@@ -805,78 +809,56 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
-        //hapus barang rawat jalan
-        if (!(is_null($request->item))) {
-
-            $temp_item = $request->item;
-
-            $result_item = json_decode(json_encode($temp_item), true);
-
-            foreach ($result_item as $value_item) {
-
-                $detail_item = DetailItemOutPatient::find($value_item['id']);
-
-                $check_item_result = DB::table('detail_item_out_patients')
-                    ->select('quantity')
-                    ->where('check_up_result_id', '=', $request->id)
-                    ->where('item_id', '=', $value_item['item_id'])
-                    ->first();
-
-                $res_value_item = $check_item_result->quantity;
-
-                $list_of_items = ListofItems::find($value_item['item_id']);
-
-                $count_item = $list_of_items->total_item + $res_value_item;
-
-                $list_of_items->total_item = $count_item;
-                $list_of_items->user_update_id = $request->user()->id;
-                $list_of_items->updated_at = \Carbon\Carbon::now();
-                $list_of_items->save();
-
-                $item_history = HistoryItemMovement::create([
-                    'item_id' => $value_item['item_id'],
-                    'quantity' => $res_value_item,
-                    'status' => 'tambah',
-                    'user_id' => $request->user()->id,
-                ]);
-
-                $detail_item->delete();
-            }
-        }
-
-        //hapus jasa rawat jalan
-        if (!(is_null($request->service))) {
-
-            $temp_services = $request->service;
-
-            $services = json_decode(json_encode($temp_services), true);
-
-            foreach ($services as $key_service) {
-
-                $detail_service_out_patient = DetailServiceOutPatient::find($key_service['id']);
-                $detail_service_out_patient->delete();
-            }
-        }
-
-        //hapus deksirpsi rawat inap
-        if (!(is_null($request->inpatient))) {
-
-            $temp_inpatient = $request->inpatient;
-
-            $inpatients = json_decode(json_encode($temp_inpatient), true);
-
-            foreach ($inpatients as $key_inpatient) {
-
-                $in_patient = InPatient::find($key_inpatient['id']);
-                $in_patient->delete();
-            }
-        }
-
         $check_up_result = CheckUpResult::find($request->id);
+
+        if (is_null($check_up_result)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Check Up Result not found!'],
+            ], 404);
+        }
+
+        $detail_item = DetailItemPatient::where('check_up_result_id', '=', $request->id)
+            ->get();
+
+        if (is_null($detail_item)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Detail Item Patient not found!'],
+            ], 404);
+        }
+
+        $detail_service = DetailServicePatient::where('check_up_result_id', '=', $request->id)
+            ->get();
+
+        if (is_null($detail_service)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Detail Service Patient not found!'],
+            ], 404);
+        }
+
+        $inpatient = InPatient::where('check_up_result_id', '=', $request->id)
+            ->get();
+
+        if (is_null($inpatient)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Description Inpatient not found!'],
+            ], 404);
+        }
+
+        $inpatient_delete = InPatient::where('check_up_result_id', $request->id)->delete();
+
+        $detail_service_delete = DetailServicePatient::where('check_up_result_id', $request->id)->delete();
+
+        $detail_item_delete = DetailItemPatient::where('check_up_result_id', $request->id)->delete();
+
         $check_up_result->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',
         ], 200);
+
     }
 }
