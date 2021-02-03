@@ -87,16 +87,20 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->status_outpatient_inpatient == true) {
 
+            $messages = [
+                'inpatient.required' => 'Deskripsi Kondisi Pasien harus diisi',
+                'inpatient.min' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
+            ];
+
             $validate2 = Validator::make($request->all(), [
                 'inpatient' => 'required|string|min:10',
-            ]);
+            ], $messages);
 
             if ($validate2->fails()) {
                 $errors = $validate2->errors()->all();
-
                 return response()->json([
                     'message' => 'The given data was invalid.',
-                    'errors' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
+                    'errors' => $errors,
                 ], 422);
             }
         }
@@ -367,9 +371,14 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->status_outpatient_inpatient == true) {
 
+            $messages = [
+                'inpatient.required' => 'Deskripsi Kondisi Pasien harus diisi',
+                'inpatient.min' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
+            ];
+
             $validate2 = Validator::make($request->all(), [
                 'inpatient' => 'required|string|min:10',
-            ]);
+            ], $messages);
 
             if ($validate2->fails()) {
                 $errors = $validate2->errors()->all();
