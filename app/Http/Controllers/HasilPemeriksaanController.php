@@ -387,7 +387,7 @@ class HasilPemeriksaanController extends Controller
 
             $temp_item = $request->item;
 
-            $result_item = json_decode($temp_item, true);
+            $result_item = json_decode(json_encode($temp_item), true);
 
             foreach ($result_item as $value_item) {
 
@@ -636,7 +636,7 @@ class HasilPemeriksaanController extends Controller
 
         $temp_services = $request->service;
 
-        $services = json_decode($temp_services, true);
+        $services = json_decode(json_encode($temp_services), true);
 
         foreach ($services as $key_service) {
 
@@ -734,7 +734,7 @@ class HasilPemeriksaanController extends Controller
 
             $temp_item = $request->item;
 
-            $result_item = json_decode($temp_item, true);
+            $result_item = json_decode(json_encode($temp_item), true);
 
             foreach ($result_item as $value_item) {
 
