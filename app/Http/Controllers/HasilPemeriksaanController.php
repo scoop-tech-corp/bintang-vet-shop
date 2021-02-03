@@ -372,7 +372,7 @@ class HasilPemeriksaanController extends Controller
             ]);
 
             if ($validate2->fails()) {
-                $errors = $validate->errors()->all();
+                $errors = $validate2->errors()->all();
 
                 return response()->json([
                     'message' => 'The given data was invalid.',
