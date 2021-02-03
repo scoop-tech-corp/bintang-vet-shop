@@ -96,7 +96,7 @@ class HasilPemeriksaanController extends Controller
 
                 return response()->json([
                     'message' => 'The given data was invalid.',
-                    'errors' => $errors,
+                    'errors' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
                 ], 422);
             }
         }
@@ -376,7 +376,7 @@ class HasilPemeriksaanController extends Controller
 
                 return response()->json([
                     'message' => 'The given data was invalid.',
-                    'errors' => $errors,
+                    'errors' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
                 ], 422);
             }
         }
@@ -683,6 +683,7 @@ class HasilPemeriksaanController extends Controller
         $check_up_result->sign = $request->sign;
         $check_up_result->diagnosa = $request->diagnosa;
         $check_up_result->status_outpatient_inpatient = $request->status_outpatient_inpatient;
+        $check_up_result->status_finish = $request->status_finish;
         $check_up_result->user_update_id = $request->user()->id;
         $check_up_result->updated_at = \Carbon\Carbon::now();
         $check_up_result->save();
