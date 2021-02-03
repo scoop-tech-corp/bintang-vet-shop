@@ -385,7 +385,7 @@ class HasilPemeriksaanController extends Controller
 
                 return response()->json([
                     'message' => 'The given data was invalid.',
-                    'errors' => 'Deskripsi Kondisi Pasien harus minimal 10 karakter',
+                    'errors' => $errors,
                 ], 422);
             }
         }
