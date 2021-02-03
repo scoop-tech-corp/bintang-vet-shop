@@ -829,62 +829,101 @@ class HasilPemeriksaanController extends Controller
             ], 404);
         }
 
-        $detail_item = DetailItemPatient::where('check_up_result_id', '=', $request->id)
-            ->get();
+        $detail_item = DetailItemPatient::where('check_up_result_id', '=', $request->id)->get();
 
-        $data = [];
-
-        $data = $detail_item;
-
-        foreach ($data as $datas) {
-
-            $items = ListofItems::where('id', '=', $datas->item_id)
-                ->first();
-
-            $detail_item_count = DetailItemPatient::where('check_up_result_id', '=', $request->id)
-                ->first();
-
-            return $items;
+        if (is_null($detail_item)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Detail Item Patient not found!'],
+            ], 404);
         }
 
-        // if (is_null($detail_item)) {
-        //     return response()->json([
-        //         'message' => 'The data was invalid.',
-        //         'errors' => ['Data Detail Item Patient not found!'],
-        //     ], 404);
-        // }
+        $data_item = [];
 
-        // $detail_service = DetailServicePatient::where('check_up_result_id', '=', $request->id)
-        //     ->get();
+        $data_item = $detail_item;
 
-        // if (is_null($detail_service)) {
-        //     return response()->json([
-        //         'message' => 'The data was invalid.',
-        //         'errors' => ['Data Detail Service Patient not found!'],
-        //     ], 404);
-        // }
+        foreach ($data_item as $datas) {
 
-        // $inpatient = InPatient::where('check_up_result_id', '=', $request->id)
-        //     ->get();
+            $check_price_item = DB::table('price_items')
+                ->select('list_of_items_id')
+                ->where('id', '=', $datas->price_item_id)
+                ->first();
 
-        // if (is_null($inpatient)) {
-        //     return response()->json([
-        //         'message' => 'The data was invalid.',
-        //         'errors' => ['Data Description Inpatient not found!'],
-        //     ], 404);
-        // }
+            if (is_null($check_price_item)) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data Price Items not found!'],
+                ], 404);
+            }
 
-        // $inpatient_delete = InPatient::where('check_up_result_id', $request->id)->delete();
+            $check_list_of_item = DB::table('list_of_items')
+                ->where('id', '=', $check_price_item->list_of_items_id)
+                ->first();
 
-        // $detail_service_delete = DetailServicePatient::where('check_up_result_id', $request->id)->delete();
+            if (is_null($check_list_of_item)) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data Detail Item Patient not found!'],
+                ], 404);
+            }
 
-        // $detail_item_delete = DetailItemPatient::where('check_up_result_id', $request->id)->delete();
+            $find_prev_stock = DB::table('detail_item_patients')
+                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                ->select('detail_item_patients.quantity as quantity')
+                ->where('list_of_items.id', '=', $check_list_of_item->id)
+                ->where('price_items.id', '=', $datas->price_item_id)
+                ->first();
 
-        // $check_up_result->delete();
+            $res_total_item = $check_list_of_item->total_item + $find_prev_stock->quantity;
 
-        // return response()->json([
-        //     'message' => 'Berhasil menghapus Data',
-        // ], 200);
+            $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+            $list_of_items->total_item = $res_total_item;
+            $list_of_items->user_update_id = $request->user()->id;
+            $list_of_items->updated_at = \Carbon\Carbon::now();
+            $list_of_items->save();
+
+            $item_history = HistoryItemMovement::create([
+                'price_item_id' => $datas->price_item_id,
+                'quantity' => $find_prev_stock->quantity,
+                'status' => 'tambah',
+                'user_id' => $request->user()->id,
+            ]);
+
+            $delete_detail_item_patients = DB::table('detail_item_patients')
+                ->where('price_item_id', $datas->price_item_id)->delete();
+        }
+
+        $detail_service = DetailServicePatient::where('check_up_result_id', '=', $request->id)->get();
+
+        if (is_null($detail_service)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Detail Service Patient not found!'],
+            ], 404);
+        }
+
+        $delete_detail_service_patients = DB::table('detail_service_patients')
+            ->where('check_up_result_id', $request->id)->delete();
+
+        $inpatient = InPatient::where('check_up_result_id', '=', $request->id)->get();
+
+        if (is_null($inpatient)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Detail Inpatient not found!'],
+            ], 404);
+        }
+
+        $delete_inpatient = DB::table('in_patients')
+            ->where('check_up_result_id', $request->id)->delete();
+
+        $check_up_result = CheckUpResult::find($request->id);
+        $check_up_result->delete();
+
+        return response()->json([
+            'message' => 'Berhasil menghapus Data',
+        ], 200);
 
     }
 }
