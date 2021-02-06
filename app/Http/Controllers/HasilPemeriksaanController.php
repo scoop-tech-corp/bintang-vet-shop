@@ -404,7 +404,7 @@ class HasilPemeriksaanController extends Controller
 
                 if (is_null($value_item['id'])) {
                     //$detail_item
-                    //kalau data baru                   
+                    //kalau data baru
 
                     $check_price_item = DB::table('price_items')
                         ->select('list_of_items_id')
@@ -651,9 +651,9 @@ class HasilPemeriksaanController extends Controller
 
         foreach ($services as $key_service) {
 
-            $detail_service_patient = DetailServicePatient::find($key_service['id']);
+            if (is_null($key_service['id'])) {
 
-            if (is_null()) {
+                $detail_service_patient = DetailServicePatient::find($key_service['id']);
                 //$detail_service_patient
                 $check_price_service = DB::table('price_services')
                     ->select('list_of_services_id')
@@ -714,8 +714,8 @@ class HasilPemeriksaanController extends Controller
 
             $detail_service_patient = DetailServicePatient::find($key_service['id']);
 
-            if (is_null($detail_service_patient)) {
-
+            if (is_null($key_service['id'])) {
+                //$detail_service_patient
                 $service_list = DetailServicePatient::create([
                     'check_up_result_id' => $check_up_result->id,
                     'price_service_id' => $key_service['price_service_id'],
@@ -750,9 +750,9 @@ class HasilPemeriksaanController extends Controller
 
             foreach ($result_item as $value_item) {
 
-                $detail_item = DetailItemPatient::find($value_item['id']);
-
-                if (is_null($detail_item)) {
+                if (is_null($value_item['id'])) {
+                    //$detail_item
+                    $detail_item = DetailItemPatient::find($value_item['id']);
 
                     $item_list = DetailItemPatient::create([
                         'check_up_result_id' => $check_up_result->id,
