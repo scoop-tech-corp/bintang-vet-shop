@@ -10,7 +10,7 @@
 			<div class="modal-body">
 				<form class="form-hasil-pemeriksaan">
 					<div class="box-body">
-            <div class="form-group">
+            <div class="form-group form-cari-pasien">
 							<label for="selectedPasien">Cari Pasien</label>
 							<select id="selectedPasien" class="form-control" style="width: 100%">
 							</select>
@@ -80,18 +80,24 @@
             <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
               <select id="selectedJasa" class="form-control" style="width: 100%" multiple="multiple"></select>
-              <table class="table table-striped text-nowrap table-list-jasa">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Jenis Layanan</th>
-                    <th>Kategori Jasa</th>
-                    <th>Harga</th>
-                    <th>Hapus</th>
-                  </tr>
-                </thead>
-                <tbody id="list-selected-jasa"></tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-striped text-nowrap table-list-jasa">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th class="tgl-edit">Tanggal</th>
+                      <th class="dibuat-edit">Dibuat Oleh</th>
+                      <th>Jenis Layanan</th>
+                      <th>Kategori Jasa</th>
+                      <th>Jumlah</th>
+                      <th>Harga Satuan</th>
+                      <th>Harga Keseluruhan</th>
+                      <th>Hapus</th>
+                    </tr>
+                  </thead>
+                  <tbody id="list-selected-jasa"></tbody>
+                </table>
+              </div>
             </div>
 
             <div class="form-group">{{-- Barang Rawat Jalan --}}
@@ -102,6 +108,8 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th class="tgl-edit">Tanggal</th>
+                      <th class="dibuat-edit">Dibuat Oleh</th>
                       <th>Nama Barang</th>
                       <th>Kategori Barang</th>
                       <th>Satuan Barang</th>
@@ -117,54 +125,33 @@
             </div>
 
             <div class="form-group">
-              <label for="barang" style="margin-right: 76px;">Rawat Inap</label>
+              <label for="barang" style="margin-right: 93px;">Rawat Inap</label>
               <span style="padding-right: 51px;"><input type="radio" name="radioRawatInap" value=1 /> Ya</span>
               <span><input type="radio" name="radioRawatInap" value=0 /> Tidak</span>
+              <div id="rawatInapErr1" class="validate-error"></div>
             </div>
 
-            <div class="form-group form-jasa-barang-rawat-inap">{{-- Jasa Rawat Inap --}}
-              <label for="jasa">Jasa</label>
-              <select id="selectedJasaRawatInap" class="form-control" style="width: 100%" multiple="multiple"></select>
-              <table class="table table-striped text-nowrap table-list-jasa-rawat-inap">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Jenis Layanan</th>
-                    <th>Kategori Jasa</th>
-                    <th>Harga</th>
-                    <th>Hapus</th>
-                  </tr>
-                </thead>
-                <tbody id="list-selected-jasa-rawat-inap"></tbody>
-              </table>
+            <div class="form-group form-deskripsi-kondisi-pasien">
+              <label for="deskripsiKondisiPasien">Deskripsi Kondisi Pasien</label>
+              <textarea id="descriptionCondPasien" class="form-control" placeholder="Masukan Deskripsi Kondisi Pasien"></textarea>
+							<div id="descriptionCondPasienErr1" class="validate-error"></div>
             </div>
-
-            <div class="form-group form-jasa-barang-rawat-inap">{{-- Barang Rawat Inap --}}
-              <label for="barang">Barang</label>
-              <select id="selectedBarangRawatInap" class="form-control" style="width: 100%" multiple="multiple"></select>
-              <div class="table-responsive">
-                <table class="table table-striped text-nowrap table-list-barang-rawat-inap">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Barang</th>
-                      <th>Kategori Barang</th>
-                      <th>Satuan Barang</th>
-                      <th>Jumlah</th>
-                      <th>Harga Satuan</th>
-                      <th>Harga Keseluruhan</th>
-                      <th>Hapus</th>
-                    </tr>
-                  </thead>
-                  <tbody id="list-selected-barang-rawat-inap"></tbody>
-                </table>
-              </div>
-            </div>
-
+            <table class="table table-striped text-nowrap table-deskripsi-kondisi-pasien" style="margin-bottom: 15px">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Dibuat Oleh</th>
+                  <th>Deskripsi</th>
+                </tr>
+              </thead>
+              <tbody id="list-deskripsi-kondisi-pasien"></tbody>
+            </table>
             <div class="form-group">
-              <label for="barang" style="margin-right: 40px;">Status Pemeriksa</label>
+              <label for="barang" style="margin-right: 40px;">Status Pemeriksaan</label>
               <span style="padding-right: 23px;"><input type="radio" name="radioStatusPemeriksa" value=1 /> Selesai</span>
               <span><input type="radio" name="radioStatusPemeriksa" value=0 /> Belum</span>
+              <div id="statusPemeriksaErr1" class="validate-error"></div>
             </div>
 
 						<div class="form-group">

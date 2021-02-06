@@ -44,6 +44,9 @@
   @component('layout.message-box') @endcomponent
 </div>
 @endsection
+@section('css-content')
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/daftar-barang.css') }}">
+@endsection
 @section('script-content')
   <script src="{{ asset('main/js/gudang/daftar-barang/daftar-barang.js') }}"></script>  
 @endsection

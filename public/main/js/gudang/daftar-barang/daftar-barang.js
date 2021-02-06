@@ -254,8 +254,8 @@ $(document).ready(function() {
 					getId = getObj.id;
 					$('#namaBarang').val(getObj.item_name);
 					$('#jumlahBarang').val(getObj.total_item);
-					$('#selectedSatuanBarang').val(getObj.unit_goods_id); $('#selectedSatuanBarang').trigger('change');
-					$('#selectedKategoriBarang').val(getObj.category_goods_id); $('#selectedKategoriBarang').trigger('change');
+					$('#selectedSatuanBarang').val(getObj.unit_item_id); $('#selectedSatuanBarang').trigger('change');
+					$('#selectedKategoriBarang').val(getObj.category_item_id); $('#selectedKategoriBarang').trigger('change');
 					$('#selectedCabang').val(getObj.branch_id); $('#selectedCabang').trigger('change');
 				});
 			

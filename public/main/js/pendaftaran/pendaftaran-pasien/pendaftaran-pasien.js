@@ -250,6 +250,9 @@ $(document).ready(function() {
 						case 2:
 							bedge = '<span class="label label-danger">Ditolak</span>';
 							break;
+						case 3:
+							bedge = '<span class="label label-info">Selesai</span>';
+							break;
 						default:
 							bedge = '<span class="label label-warning">Menunggu Konfirmasi</span>';
 							break;

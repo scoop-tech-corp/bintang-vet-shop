@@ -13,86 +13,92 @@
             <table>
 							<tr>
                 <td class="detail-label">Nomor Registrasi</td>
-                <td id="nomorRegistrasiTxt" class="detail-value"></td>
+                <td id="nomorRegistrasiDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Nomor Pasien</td>
-                <td id="nomorPasienTxt" class="detail-value"></td>
+                <td id="nomorPasienDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Jenis Hewan</td>
-                <td id="jenisHewanTxt" class="detail-value"></td>
+                <td id="jenisHewanDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Nama Hewan</td>
-                <td id="namaHewanTxt" class="detail-value"></td>
+                <td id="namaHewanDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Jenis Kelamin</td>
-                <td id="jenisKelaminTxt" class="detail-value"></td>
+                <td id="jenisKelaminDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Usia Hewan</td>
-								<td id="usiaHewanTahunTxt" class="detail-value"></td>
-								<td id="usiaHewanBulanTxt" class="detail-value"></td>
+								<td id="usiaHewanTahunDetailTxt" class="detail-value"></td>
+								<td id="usiaHewanBulanDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Nama Pemilik</td>
-                <td id="namaPemilikTxt" class="detail-value"></td>
+                <td id="namaPemilikDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Alamat Pemilik</td>
-                <td id="alamatPemilikTxt" class="detail-value"></td>
+                <td id="alamatPemilikDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Nomor HP Pemilik</td>
-                <td id="nomorHpPemilikTxt" class="detail-value"></td>
+                <td id="nomorHpPemilikDetailTxt" class="detail-value"></td>
 							</tr>
 							<tr>
                 <td class="detail-label">Keluhan</td>
-                <td id="keluhanTxt" class="detail-value"></td>
+                <td id="keluhanDetailTxt" class="detail-value"></td>
 							</tr>
 							<tr>
                 <td class="detail-label">Nama Pendaftar</td>
-                <td id="namaPendaftarTxt" class="detail-value"></td>
+                <td id="namaPendaftarDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Anamnesa</td>
-                <td id="anamnesaTxt" class="detail-value"></td>
+                <td id="anamnesaDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Sign</td>
-                <td id="signTxt" class="detail-value"></td>
+                <td id="signDetailTxt" class="detail-value"></td>
               </tr>
               <tr>
                 <td class="detail-label">Diagnosa</td>
-                <td id="diagnosaTxt" class="detail-value"></td>
+                <td id="diagnosaDetailTxt" class="detail-value"></td>
               </tr>
             </table>
             <table>
               <tr>
-                <td class="detail-label">Rawat Inap</td>
-                <td id="rawatInapTxt" class="detail-value"></td>
+                <td class="detail-label">Jasa</td>
               </tr>
             </table>
-
-            <table class="table table-striped text-nowrap detail-list-jasa-rawat-inap">
+            <table class="table table-striped text-nowrap table-detail-jasa" style="margin-bottom: 15px">
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Dibuat Oleh</th>
                   <th>Jenis Layanan</th>
                   <th>Kategori Jasa</th>
                   <th>Harga</th>
                 </tr>
               </thead>
-              <tbody id="detail-selected-jasa-rawat-inap"></tbody>
+              <tbody id="detail-list-jasa"></tbody>
             </table>
-            <br>
-            <div class="table-responsive">
-              <table class="table table-striped text-nowrap detail-list-barang-rawat-inap">
+            <table>
+              <tr>
+                <td class="detail-label">Barang</td>
+              </tr>
+            </table>
+            <div class="table-responsive" style="margin-bottom: 15px">
+              <table class="table table-striped text-nowrap table-detail-barang">
                 <thead>
                   <tr>
                     <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Dibuat Oleh</th>
                     <th>Nama Barang</th>
                     <th>Kategori Barang</th>
                     <th>Satuan Barang</th>
@@ -101,14 +107,30 @@
                     <th>Harga Keseluruhan</th>
                   </tr>
                 </thead>
-                <tbody id="detail-selected-barang-rawat-inap"></tbody>
+                <tbody id="detail-list-barang"></tbody>
               </table>
             </div>
-            <br>
+            <table>
+              <tr>
+                <td class="detail-label">Rawat Inap</td>
+                <td id="rawatInapDetailTxt" class="detail-value"></td>
+              </tr>
+            </table>
+            <table class="table table-striped text-nowrap table-list-inpatient" style="margin-bottom: 15px">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Dibuat Oleh</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="detail-list-inpatient"></tbody>
+            </table>
             <table>
               <tr>
                 <td class="detail-label">Status Pemeriksaan</td>
-                <td id="statusPemeriksaanTxt" class="detail-value"></td>
+                <td id="statusPemeriksaanDetailTxt" class="detail-value"></td>
               </tr>
             </table>
 					</div>

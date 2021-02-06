@@ -1,0 +1,23 @@
+@media (max-width: 768px) {
+  .openFormUpload, .section-right-box-title .select2-container {
+    margin-top: 10px;
+  }
+
+  .section-right-box-title .select2-container {
+    width: 100% !important;
+  }
+
+  .input-search-section {
+    width: 100%;
+    margin-right: 0px;
+  }
+
+  .section-left-box-title {
+    margin-right: 10px;
+  }
+
+  .section-right-box-title {
+    display: block;
+  }
+
+}
