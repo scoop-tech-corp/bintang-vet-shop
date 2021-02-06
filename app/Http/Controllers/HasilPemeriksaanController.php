@@ -401,10 +401,10 @@ class HasilPemeriksaanController extends Controller
             foreach ($result_item as $value_item) {
 
                 //cek untuk melakukan update atau create
-                $detail_item = DetailItemPatient::find($value_item['id']);
 
-                if (is_null($detail_item)) {
-                    //kalau data baru
+                if (is_null($value_item['id'])) {
+                    //$detail_item
+                    //kalau data baru                   
 
                     $check_price_item = DB::table('price_items')
                         ->select('list_of_items_id')
@@ -459,6 +459,8 @@ class HasilPemeriksaanController extends Controller
                     }
 
                 } else {
+
+                    $detail_item = DetailItemPatient::find($value_item['id']);
                     //kalau data yang sudah pernah ada
 
                     //untuk mendapatkan data stok terupdate
@@ -651,8 +653,8 @@ class HasilPemeriksaanController extends Controller
 
             $detail_service_patient = DetailServicePatient::find($key_service['id']);
 
-            if (is_null($detail_service_patient)) {
-
+            if (is_null()) {
+                //$detail_service_patient
                 $check_price_service = DB::table('price_services')
                     ->select('list_of_services_id')
                     ->where('id', '=', $key_service['price_service_id'])
