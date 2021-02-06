@@ -41,6 +41,7 @@
   @component('layout.message-box') @endcomponent
 @endsection
 @section('script-content')
+  <script src="{{ asset('plugins/jquery.mask.js') }}"></script>
   <script src="{{ asset('main/js/layanan/pembagian-harga/harga-jasa.js') }}"></script>
 @endsection
 @section('vue-content') @endsection
