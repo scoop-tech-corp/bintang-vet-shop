@@ -45,25 +45,25 @@
 
             <div class="form-group">
 							<label for="hargaJualOnBarang">Harga Jual</label>
-							<input id="hargaJualOnBarang" type="number" class="form-control" min="0" placeholder="Masukan Harga Jual">
+							<input id="hargaJualOnBarang" type="text" class="form-control" min="0" placeholder="Masukan Harga Jual">
 							<div id="hargaJualOnBarangErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="hargaModalOnBarang">Harga Modal</label>
-							<input id="hargaModalOnBarang" type="number" class="form-control" min="0" placeholder="Masukan Harga Modal">
+							<input id="hargaModalOnBarang" type="text" class="form-control" min="0" placeholder="Masukan Harga Modal">
 							<div id="hargaModalOnBarangErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="feeDokterOnBarang">Fee Dokter</label>
-							<input id="feeDokterOnBarang" type="number" class="form-control" min="0" placeholder="Masukan Fee Dokter">
+							<input id="feeDokterOnBarang" type="text" class="form-control" min="0" placeholder="Masukan Fee Dokter">
 							<div id="feeDokterOnBarangErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="feePetshopOnBarang">Fee Petshop</label>
-							<input id="feePetshopOnBarang" type="number" class="form-control" min="0" placeholder="Masukan Fee Petshop">
+							<input id="feePetshopOnBarang" type="text" class="form-control" min="0" placeholder="Masukan Fee Petshop">
 							<div id="feePetshopOnBarangErr1" class="validate-error"></div>
 						</div>
             <div class="form-group">
