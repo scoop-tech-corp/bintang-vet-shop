@@ -16,10 +16,10 @@ class CreatePriceServicesTable extends Migration
         Schema::create('price_services', function (Blueprint $table) {
             $table->id();
             $table->integer('list_of_services_id');
-            $table->decimal('selling_price');
-            $table->decimal('capital_price');
-            $table->decimal('doctor_fee');
-            $table->decimal('petshop_fee');
+            $table->decimal('selling_price', $precision = 18, $scale = 2);
+            $table->decimal('capital_price', $precision = 18, $scale = 2);
+            $table->decimal('doctor_fee', $precision = 18, $scale = 2);
+            $table->decimal('petshop_fee', $precision = 18, $scale = 2);
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
             $table->integer('user_update_id')->nullable();
