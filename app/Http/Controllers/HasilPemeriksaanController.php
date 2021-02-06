@@ -350,8 +350,11 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
+        
+
         //validasi data hasil pemeriksaaan
         $validate = Validator::make($request->all(), [
+            'id' => 'required|numeric',
             'patient_registration_id' => 'required|numeric',
             'anamnesa' => 'required|string|min:10',
             'sign' => 'required|string|min:10',
@@ -367,6 +370,15 @@ class HasilPemeriksaanController extends Controller
                 'message' => 'The given data was invalid.',
                 'errors' => $errors,
             ], 422);
+        }
+
+        $check_up_result = CheckUpResult::find($request->id);
+
+        if (is_null($check_up_result)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Hasil Pemeriksaan tidak ada!'],
+            ], 404);
         }
 
         if ($request->status_outpatient_inpatient == true) {
@@ -651,7 +663,7 @@ class HasilPemeriksaanController extends Controller
 
         foreach ($services as $key_service) {
 
-            if (is_null($key_service['id'])) {
+            if (!(is_null($key_service['id']))) {
 
                 $detail_service_patient = DetailServicePatient::find($key_service['id']);
                 //$detail_service_patient
@@ -710,12 +722,10 @@ class HasilPemeriksaanController extends Controller
 
         //update jasa
 
-        foreach ($services as $key_service) {
-
-            $detail_service_patient = DetailServicePatient::find($key_service['id']);
+        foreach ($services as $key_service) {           
 
             if (is_null($key_service['id'])) {
-                //$detail_service_patient
+                
                 $service_list = DetailServicePatient::create([
                     'check_up_result_id' => $check_up_result->id,
                     'price_service_id' => $key_service['price_service_id'],
@@ -726,9 +736,12 @@ class HasilPemeriksaanController extends Controller
 
             } elseif ($key_service['status'] == 'del' || $value_item['quantity'] == 0) {
 
+                $detail_service_patient = DetailServicePatient::find($key_service['id']);
                 $detail_service_patient->delete();
 
             } else {
+
+                $detail_service_patient = DetailServicePatient::find($key_service['id']);
 
                 $detail_service_patient->check_up_result_id = $check_up_result->id;
                 $detail_service_patient->price_service_id = $key_service['price_service_id'];
@@ -785,6 +798,7 @@ class HasilPemeriksaanController extends Controller
 
                 } elseif ($value_item['status'] == 'del' || $value_item['quantity'] == 0) {
 
+                    $detail_item = DetailItemPatient::find($value_item['id']);
                     // $check_item_result = DB::table('detail_item_patients')
                     //     ->select('quantity')
                     //     ->where('check_up_result_id', '=', $request->id)
