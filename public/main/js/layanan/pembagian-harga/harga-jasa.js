@@ -83,10 +83,10 @@ $(document).ready(function() {
 
 			const fd = new FormData();
 			fd.append('ListOfServiceId', $('#selectedJenisPelayanan').val());
-			fd.append('HargaJual', $('#hargaJual').val());
-      fd.append('HargaModal', $('#hargaModal').val());
-      fd.append('FeeDokter', $('#feeDokter').val());
-      fd.append('FeePetShop', $('#feePetshop').val());
+			fd.append('HargaJual', $('#hargaJual').val().replaceAll('.', ''));
+      fd.append('HargaModal', $('#hargaModal').val().replaceAll('.', ''));
+      fd.append('FeeDokter', $('#feeDokter').val().replaceAll('.', ''));
+      fd.append('FeePetShop', $('#feePetshop').val().replaceAll('.', ''));
 
 			$.ajax({
 				url : $('.baseUrl').val() + '/api/pembagian-harga-jasa',
@@ -131,13 +131,14 @@ $(document).ready(function() {
   $('#submitConfirm').click(function() {
     if (modalState == 'edit') {
       // process edit
+
       const datas = {
         id: getId,
         ListOfServiceId: $('#selectedJenisPelayanan').val(),
-        HargaJual: $('#hargaJual').val(),
-        HargaModal: $('#hargaModal').val(),
-        FeeDokter: $('#feeDokter').val(),
-        FeePetShop: $('#feePetshop').val()
+        HargaJual: $('#hargaJual').val().replaceAll('.', ''),
+        HargaModal: $('#hargaModal').val().replaceAll('.', ''),
+        FeeDokter: $('#feeDokter').val().replaceAll('.', ''),
+        FeePetShop: $('#feePetshop').val().replaceAll('.', '')
       };
 
       $.ajax({
@@ -231,6 +232,12 @@ $(document).ready(function() {
   });
 
   $('#selectedJenisPelayanan').on('select2:select', function (e) { validationHargaJual(); validationForm(); });
+
+  $('#hargaJual').mask("#.##0", {reverse: true, maxlength: false});
+  $('#hargaModal').mask("#.##0", {reverse: true, maxlength: false});
+  $('#feeDokter').mask("#.##0", {reverse: true, maxlength: false});
+  $('#feePetshop').mask("#.##0", {reverse: true, maxlength: false});
+
   $('#hargaJual').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaModal').keyup(function () { validationHargaJual(); validationForm(); });
   $('#feeDokter').keyup(function () { validationHargaJual(); validationForm(); });
@@ -290,7 +297,7 @@ $(document).ready(function() {
           refreshForm();
 
           loadKategoriJasa(getObj.branch_id, getObj.service_categories_id);
-          loadJenisPelayanan(getObj.branch_id, getObj.service_categories_id, getObj.service_name_id);
+          loadJenisPelayanan(getObj.branch_id, getObj.service_categories_id, getObj.list_of_service_id);
           formConfigure();
 
 					getId = getObj.id;
@@ -491,10 +498,16 @@ $(document).ready(function() {
   }
 
   function validationHargaJual() {
-    const hargaJual  = $('#hargaJual').val();
-    const hargaModal = $('#hargaModal').val(); 
-    const feeDokter  = $('#feeDokter').val();
-    const feePetshop = $('#feePetshop').val();
+    let hargaJual  = $('#hargaJual').val();
+    let hargaModal = $('#hargaModal').val(); 
+    let feeDokter  = $('#feeDokter').val();
+    let feePetshop = $('#feePetshop').val();
+
+    hargaJual  = hargaJual.replaceAll('.', '');
+    hargaModal = hargaModal.replaceAll('.', '');
+    feeDokter  = feeDokter.replaceAll('.', '');
+    feePetshop = feePetshop.replaceAll('.', '');
+
     const totalHargaJual = parseInt(hargaModal) + parseInt(feeDokter) + parseInt(feePetshop);
 
     if (parseInt(hargaJual) !== totalHargaJual) {

@@ -34,25 +34,25 @@
 
             <div class="form-group">
 							<label for="hargaJual">Harga Jual</label>
-							<input id="hargaJual" type="number" class="form-control" min="0" placeholder="Masukan Harga Jual">
+							<input id="hargaJual" type="text" class="form-control" min="0" placeholder="Masukan Harga Jual">
 							<div id="hargaJualErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="hargaModal">Harga Modal</label>
-							<input id="hargaModal" type="number" class="form-control" min="0" placeholder="Masukan Harga Modal">
+							<input id="hargaModal" type="text" class="form-control" min="0" placeholder="Masukan Harga Modal">
 							<div id="hargaModalErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="feeDokter">Fee Dokter</label>
-							<input id="feeDokter" type="number" class="form-control" min="0" placeholder="Masukan Fee Dokter">
+							<input id="feeDokter" type="text" class="form-control" min="0" placeholder="Masukan Fee Dokter">
 							<div id="feeDokterErr1" class="validate-error"></div>
 						</div>
 
             <div class="form-group">
 							<label for="feePetshop">Fee Petshop</label>
-							<input id="feePetshop" type="number" class="form-control" min="0" placeholder="Masukan Fee Petshop">
+							<input id="feePetshop" type="text" class="form-control" min="0" placeholder="Masukan Fee Petshop">
 							<div id="feePetshopErr1" class="validate-error"></div>
 						</div>
             <div class="form-group">
