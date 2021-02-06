@@ -24,8 +24,8 @@ class DaftarBarangController extends Controller
             ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
             ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
-                'list_of_items.unit_item_id', 'unit_item.unit_name', 'list_of_items.category_item_id', 'category_item.category_name'
-                , 'list_of_items.branch_id', 'branches.branch_name', 'users.fullname as created_by',
+                'unit_item.id as unit_item_id', 'unit_item.unit_name', 'category_item.id as category_item_id', 'category_item.category_name'
+                , 'branches.id as branch_id', 'branches.branch_name', 'users.id as user_id', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
 
         if ($request->branch_id && $request->user()->role == 'admin') {

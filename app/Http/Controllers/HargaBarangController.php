@@ -88,14 +88,14 @@ class HargaBarangController extends Controller
         }
 
         $check_list_item = DB::table('price_items')
-            ->where('list_of_items_id', '=', $request->ListOfServiceId)
+            ->where('list_of_items_id', '=', $request->ListOfItemsId)
             ->count();
 
         if ($check_list_item > 0) {
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data yang dimasukkan sudah ada!'],
             ], 422);
         }
 
