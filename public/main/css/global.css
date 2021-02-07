@@ -48,6 +48,16 @@ body {
   display: none;
 }
 
+.label-detail-div {
+  font-weight: 700;
+  width: 25%;
+}
+
+.value-detail-div {
+  word-break: break-all;
+  width: 75%;
+}
+
 .detail-label {
   font-weight: 700;
   padding-bottom: 15px;
@@ -125,6 +135,10 @@ body {
   margin-left: 20px;
 }
 
+.m-b-10px { 
+	margin-bottom: 10px;
+}
+
 .m-b-15px { 
 	margin-bottom: 15px;
 }
@@ -132,4 +146,3 @@ body {
 .m-r-10px { 
 	margin-right: 10px;
 }
-

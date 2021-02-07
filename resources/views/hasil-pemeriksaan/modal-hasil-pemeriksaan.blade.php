@@ -15,52 +15,54 @@
 							<select id="selectedPasien" class="form-control" style="width: 100%">
 							</select>
 							<div id="pasienErr1" class="validate-error"></div>
-						</div>
-            <table style="width: 100%">
-              <tr>
-                <td class="detail-label">Nomor Registrasi</td>
-                <td id="nomorRegistrasiTxt" class="detail-value"></td>
-                <td class="detail-label">Nomor Pasien</td>
-                <td id="nomorPasienTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Jenis Hewan</td>
-                <td id="jenisHewanTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nama Hewan</td>
-                <td id="namaHewanTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Jenis Kelamin</td>
-                <td id="jenisKelaminTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Usia Hewan</td>
-								<td id="usiaHewanTahunTxt" class="detail-value"></td>
-                <td id="usiaHewanBulanTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nama Pemilik</td>
-                <td id="namaPemilikTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Alamat Pemilik</td>
-                <td id="alamatPemilikTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nomor HP Pemilik</td>
-                <td id="nomorHpPemilikTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Keluhan</td>
-                <td id="keluhanTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nama Pendaftar</td>
-                <td id="namaPendaftarTxt" class="detail-value"></td>
-              </tr>
-            </table>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor Registrasi</div>
+              <div id="nomorRegistrasiTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor Pasien</div>
+              <div id="nomorPasienTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Jenis Hewan</div>
+              <div id="jenisHewanTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Hewan</div>
+              <div id="namaHewanTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Jenis Kelamin</div>
+              <div id="jenisKelaminTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Usia Hewan</div>
+              <div>
+                <span id="usiaHewanTahunTxt"></span>&nbsp;&nbsp;
+                <span id="usiaHewanBulanTxt"></span>
+              </div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Pemilik</div>
+              <div id="namaPemilikTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Alamat Pemilik</div>
+              <div id="alamatPemilikTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor HP Pemilik</div>
+              <div id="nomorHpPemilikTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Keluhan</div>
+              <div id="keluhanTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Pendaftar</div>
+              <div id="namaPendaftarTxt"></div>
+            </div>
             <div class="form-group">
 							<label for="anamnesa">Anamnesa</label>
               <textarea id="anamnesa" class="form-control" placeholder="Masukan Anamnesa"></textarea>
@@ -76,7 +78,6 @@
               <textarea id="diagnosa" class="form-control" placeholder="Masukan Diagnosa"></textarea>
 							<div id="diagnosaErr1" class="validate-error"></div>
             </div>
-            
             <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
               <select id="selectedJasa" class="form-control" style="width: 100%" multiple="multiple"></select>
@@ -99,7 +100,6 @@
                 </table>
               </div>
             </div>
-
             <div class="form-group">{{-- Barang Rawat Jalan --}}
               <label for="barang">Barang</label>
               <select id="selectedBarang" class="form-control" style="width: 100%" multiple="multiple"></select>
