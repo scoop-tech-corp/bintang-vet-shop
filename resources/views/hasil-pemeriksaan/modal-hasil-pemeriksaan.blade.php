@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-hasil-pemeriksaan">
+<div class="modal fade" id="modal-hasil-pemeriksaan" style="overflow: auto">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
