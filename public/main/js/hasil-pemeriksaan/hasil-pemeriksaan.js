@@ -447,7 +447,7 @@ $(document).ready(function() {
         + `<td>${lj.category_name}</td>`
         + `<td>${lj.service_name}</td>`
         + `<td><input type="number" min="0" class="qty-input-jasa" index=${idx} value=${lj.quantity}></td>`
-        + `<td>${lj.selling_price}</td>`
+        + `<td>${typeof(lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
         + `<td><span id="totalBarang-jasa-${idx}">${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
@@ -464,6 +464,7 @@ $(document).ready(function() {
 
       selectedListJasa[idx].quantity = value;
       selectedListJasa[idx].price_overall = totalBarang;
+      validationForm();
       $('#totalBarang-jasa-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
     });
 
@@ -474,6 +475,7 @@ $(document).ready(function() {
       
       selectedListJasa.forEach(lj => { getIds.push(lj.price_service_id); });
       if (!selectedListJasa.length) { $('.table-list-jasa').hide(); }
+      validationForm();
 
       $('#selectedJasa').val(getIds); $('#selectedJasa').trigger('change');
       processAppendListSelectedJasa();
@@ -494,7 +496,7 @@ $(document).ready(function() {
         + `<td>${lb.category_name}</td>`
         + `<td>${lb.unit_name}</td>`
         + `<td><input type="number" min="0" class="qty-input-barang" index=${idx} value=${lb.quantity}></td>`
-        + `<td>${lb.selling_price}</td>`
+        + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
         + `<td><span id="totalBarang-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
@@ -511,6 +513,7 @@ $(document).ready(function() {
 
       selectedListBarang[idx].quantity = value;
       selectedListBarang[idx].price_overall = totalBarang;
+      validationForm();
       $('#totalBarang-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
     });
 
@@ -520,7 +523,7 @@ $(document).ready(function() {
       selectedListBarang.splice($(this).val(), 1);
       selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
       if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
-
+      validationForm();
       $('#selectedBarang').val(getIds); $('#selectedBarang').trigger('change');
       processAppendListSelectedBarang();
     });
