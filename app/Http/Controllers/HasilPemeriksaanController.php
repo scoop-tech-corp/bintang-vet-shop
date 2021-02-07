@@ -53,6 +53,8 @@ class HasilPemeriksaanController extends Controller
             $data = $data->orderBy($request->column, $request->orderby);
         }
 
+        $data = $data->orderBy('check_up_results.id', 'desc');
+
         $data = $data->get();
 
         return response()->json($data, 200);
@@ -67,6 +69,10 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
+        $message_patient = [
+            'patient_registration_id.unique' => 'Registrasi Pasien ini sudah pernah di input sebelumnya'
+        ];
+
         $validate = Validator::make($request->all(), [
             'patient_registration_id' => 'required|numeric|unique:check_up_results,patient_registration_id',
             'anamnesa' => 'required|string|min:10',
@@ -74,7 +80,7 @@ class HasilPemeriksaanController extends Controller
             'diagnosa' => 'required|string|min:10',
             'status_finish' => 'required|bool',
             'status_outpatient_inpatient' => 'required|bool',
-        ]);
+        ], $message_patient);
 
         if ($validate->fails()) {
             $errors = $validate->errors()->all();
@@ -105,6 +111,60 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
+        //validasi jasa
+        $services = $request->service;
+        $result_item = json_decode($services, true);
+
+        if (count($result_item) == 0) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => ['Data Jasa Harus dipilih minimal 1!'],
+            ], 422);
+        }
+
+        foreach ($result_item as $key_service) {
+
+            $check_service = ListofServices::find($key_service);
+
+            if (is_null($check_service)) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data not found!'],
+                ], 404);
+            }
+
+            $check_price_service = DB::table('price_services')
+                ->select('list_of_services_id')
+                ->where('id', '=', $key_service['price_service_id'])
+                ->first();
+
+            if (is_null($check_price_service)) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data Price Service not found!'],
+                ], 404);
+            }
+
+            $check_service_name = DB::table('list_of_services')
+                ->select('service_name')
+                ->where('id', '=', $check_price_service->list_of_services_id)
+                ->first();
+
+            if (is_null($check_service_name)) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data List of Services not found!'],
+                ], 404);
+            }
+
+            if ($key_service['quantity'] <= 0) {
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => ['Jumlah jasa ' . $check_service_name->service_name . ' belum diisi!'],
+                ], 422);
+            }
+        }
+
         //validasi item rawat jalan
         if ($request->item) {
 
@@ -115,14 +175,14 @@ class HasilPemeriksaanController extends Controller
 
             foreach ($result_item as $value_item) {
 
-                $check_price_item = DB::table('price_services')
-                    ->select('list_of_services_id')
+                $check_price_item = DB::table('price_items')
+                    ->select('list_of_items_id')
                     ->where('id', '=', $value_item['price_item_id'])
                     ->first();
 
                 $check_storage = DB::table('list_of_items')
                     ->select('total_item')
-                    ->where('id', '=', $check_price_item->list_of_services_id)
+                    ->where('id', '=', $check_price_item->list_of_items_id)
                     ->first();
 
                 if (is_null($check_storage)) {
@@ -134,7 +194,7 @@ class HasilPemeriksaanController extends Controller
 
                 $check_storage_name = DB::table('list_of_items')
                     ->select('item_name')
-                    ->where('id', '=', $check_price_item->list_of_services_id)
+                    ->where('id', '=', $check_price_item->list_of_items_id)
                     ->first();
 
                 if (is_null($check_storage_name)) {
@@ -144,6 +204,13 @@ class HasilPemeriksaanController extends Controller
                     ], 404);
                 }
 
+                if ($value_item['quantity'] <= 0) {
+                    return response()->json([
+                        'message' => 'The given data was invalid.',
+                        'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
+                    ], 422);
+                }
+
                 if ($value_item['quantity'] > $check_storage->total_item) {
                     return response()->json([
                         'message' => 'The given data was invalid.',
@@ -151,7 +218,7 @@ class HasilPemeriksaanController extends Controller
                     ], 422);
                 }
 
-                $list_of_items = ListofItems::find($check_price_item->list_of_services_id);
+                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
 
                 if (is_null($list_of_items)) {
                     return response()->json([
@@ -159,30 +226,6 @@ class HasilPemeriksaanController extends Controller
                         'errors' => ['Data not found!'],
                     ], 404);
                 }
-            }
-        }
-
-        //validasi jasa
-        if (is_null($request->service)) {
-            return response()->json([
-                'message' => 'The data was invalid.',
-                'errors' => ['Data Jasa Rawat Jalan Harus dipilih minimal 1!'],
-            ], 404);
-        }
-
-        $services = $request->service;
-
-        $result_item = json_decode($services, true);
-
-        foreach ($result_item as $key_service) {
-
-            $check_service = ListofServices::find($key_service);
-
-            if (is_null($check_service)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data not found!'],
-                ], 404);
             }
         }
 
@@ -205,6 +248,9 @@ class HasilPemeriksaanController extends Controller
             $registration->updated_at = \Carbon\Carbon::now();
             $registration->save();
         }
+
+        $services = $request->service;
+        $result_item = json_decode($services, true);
 
         foreach ($result_item as $key_service) {
 
@@ -231,12 +277,12 @@ class HasilPemeriksaanController extends Controller
                     'user_id' => $request->user()->id,
                 ]);
 
-                $check_price_item = DB::table('price_services')
-                    ->select('list_of_services_id')
+                $check_price_item = DB::table('price_items')
+                    ->select('list_of_items_id')
                     ->where('id', '=', $value_item['price_item_id'])
                     ->first();
 
-                $list_of_items = ListofItems::find($check_price_item->list_of_services_id);
+                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
 
                 $count_item = $list_of_items->total_item - $value_item['quantity'];
 
@@ -310,6 +356,7 @@ class HasilPemeriksaanController extends Controller
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
             ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->orderBy('detail_service_patients.id','desc')
             ->get();
 
         $data['services'] = $services;
@@ -325,6 +372,7 @@ class HasilPemeriksaanController extends Controller
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->orderBy('detail_item_patients.id','desc')
             ->get();
 
         $data['item'] = $item;
@@ -349,8 +397,6 @@ class HasilPemeriksaanController extends Controller
                 'errors' => ['Access is not allowed!'],
             ], 403);
         }
-
-        
 
         //validasi data hasil pemeriksaaan
         $validate = Validator::make($request->all(), [
@@ -399,6 +445,100 @@ class HasilPemeriksaanController extends Controller
                     'message' => 'The given data was invalid.',
                     'errors' => $errors,
                 ], 422);
+            }
+        }
+
+        //validasi data jasa
+
+        $temp_services = $request->service;
+
+        $services = json_decode(json_encode($temp_services), true);
+
+        if (count($services) == 0) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => ['Data Jasa Harus dipilih minimal 1!'],
+            ], 422);
+        }
+
+        foreach ($services as $key_service) {
+
+            if (!(is_null($key_service['id']))) {
+
+                //$detail_service_patient = DetailServicePatient::find($key_service['id']);
+
+                //$detail_service_patient
+                $check_price_service = DB::table('price_services')
+                    ->select('list_of_services_id')
+                    ->where('id', '=', $key_service['price_service_id'])
+                    ->first();
+
+                if (is_null($check_price_service)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data Price Service not found!'],
+                    ], 404);
+                }
+
+                $check_service = ListofServices::find($check_price_service->list_of_services_id);
+
+                if (is_null($check_service)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data List of Service not found!'],
+                    ], 404);
+                }
+
+                $check_service_name = DB::table('list_of_services')
+                    ->select('service_name')
+                    ->where('id', '=', $check_price_service->list_of_services_id)
+                    ->first();
+
+                if (is_null($check_service_name)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data List of Services not found!'],
+                    ], 404);
+                }
+
+                if ($key_service['quantity'] <= 0) {
+                    return response()->json([
+                        'message' => 'The given data was invalid.',
+                        'errors' => ['Jumlah jasa ' . $check_service_name->service_name . ' belum diisi!'],
+                    ], 422);
+                }
+            } else {
+
+                $check_price_service = DB::table('price_services')
+                    ->select('list_of_services_id')
+                    ->where('id', '=', $key_service['price_service_id'])
+                    ->first();
+
+                if (is_null($check_price_service)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data Price Service not found!'],
+                    ], 404);
+                }
+
+                $check_service_name = DB::table('list_of_services')
+                    ->select('service_name')
+                    ->where('id', '=', $check_price_service->list_of_services_id)
+                    ->first();
+
+                if (is_null($check_service_name)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data List of Services not found!'],
+                    ], 404);
+                }
+
+                if ($key_service['quantity'] <= 0) {
+                    return response()->json([
+                        'message' => 'The given data was invalid.',
+                        'errors' => ['Jumlah jasa ' . $check_service_name->service_name . ' belum diisi!'],
+                    ], 422);
+                }
             }
         }
 
@@ -451,6 +591,8 @@ class HasilPemeriksaanController extends Controller
                         ], 404);
                     }
 
+                    
+
                     $check_storage_name = DB::table('list_of_items')
                         ->select('item_name')
                         ->where('id', '=', $check_price_item->list_of_items_id)
@@ -467,6 +609,13 @@ class HasilPemeriksaanController extends Controller
                         return response()->json([
                             'message' => 'The given data was invalid.',
                             'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
+                        ], 422);
+                    }
+
+                    if ($value_item['quantity'] <= 0) {
+                        return response()->json([
+                            'message' => 'The given data was invalid.',
+                            'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
                         ], 422);
                     }
 
@@ -649,46 +798,7 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        //validasi data jasa
-        if (is_null($request->service)) {
-            return response()->json([
-                'message' => 'The data was invalid.',
-                'errors' => ['Data Jasa Harus dipilih minimal 1!'],
-            ], 404);
-        }
-
-        $temp_services = $request->service;
-
-        $services = json_decode(json_encode($temp_services), true);
-
-        foreach ($services as $key_service) {
-
-            if (!(is_null($key_service['id']))) {
-
-                $detail_service_patient = DetailServicePatient::find($key_service['id']);
-                //$detail_service_patient
-                $check_price_service = DB::table('price_services')
-                    ->select('list_of_services_id')
-                    ->where('id', '=', $key_service['price_service_id'])
-                    ->first();
-
-                if (is_null($check_price_service)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data Price Service not found!'],
-                    ], 404);
-                }
-
-                $check_service = ListofServices::find($check_price_service->list_of_services_id);
-
-                if (is_null($check_service)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Service not found!'],
-                    ], 404);
-                }
-            }
-        }
+        
 
         //update hasil pemeriksaan
 
@@ -722,10 +832,10 @@ class HasilPemeriksaanController extends Controller
 
         //update jasa
 
-        foreach ($services as $key_service) {           
+        foreach ($services as $key_service) {
 
             if (is_null($key_service['id'])) {
-                
+
                 $service_list = DetailServicePatient::create([
                     'check_up_result_id' => $check_up_result->id,
                     'price_service_id' => $key_service['price_service_id'],
@@ -736,8 +846,11 @@ class HasilPemeriksaanController extends Controller
 
             } elseif ($key_service['status'] == 'del' || $value_item['quantity'] == 0) {
 
-                $detail_service_patient = DetailServicePatient::find($key_service['id']);
-                $detail_service_patient->delete();
+                if (!is_null($key_service['id'])) {
+
+                    $detail_service_patient = DetailServicePatient::find($key_service['id']);
+                    $detail_service_patient->delete();
+                }
 
             } else {
 
