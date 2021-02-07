@@ -10,71 +10,69 @@
 			<div class="modal-body">
 				<form class="detail-penerimaan-pasien">
 					<div class="box-body">
-            <table>
-							<tr>
-                <td class="detail-label">Nomor Registrasi</td>
-                <td id="nomorRegistrasiDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nomor Pasien</td>
-                <td id="nomorPasienDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Jenis Hewan</td>
-                <td id="jenisHewanDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nama Hewan</td>
-                <td id="namaHewanDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Jenis Kelamin</td>
-                <td id="jenisKelaminDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Usia Hewan</td>
-								<td id="usiaHewanTahunDetailTxt" class="detail-value"></td>
-								<td id="usiaHewanBulanDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nama Pemilik</td>
-                <td id="namaPemilikDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Alamat Pemilik</td>
-                <td id="alamatPemilikDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Nomor HP Pemilik</td>
-                <td id="nomorHpPemilikDetailTxt" class="detail-value"></td>
-							</tr>
-							<tr>
-                <td class="detail-label">Keluhan</td>
-                <td id="keluhanDetailTxt" class="detail-value"></td>
-							</tr>
-							<tr>
-                <td class="detail-label">Nama Pendaftar</td>
-                <td id="namaPendaftarDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Anamnesa</td>
-                <td id="anamnesaDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Sign</td>
-                <td id="signDetailTxt" class="detail-value"></td>
-              </tr>
-              <tr>
-                <td class="detail-label">Diagnosa</td>
-                <td id="diagnosaDetailTxt" class="detail-value"></td>
-              </tr>
-            </table>
-            <table>
-              <tr>
-                <td class="detail-label">Jasa</td>
-              </tr>
-            </table>
-            <table class="table table-striped text-nowrap table-detail-jasa" style="margin-bottom: 15px">
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor Registrasi</div>
+              <div id="nomorRegistrasiDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor Pasien</div>
+              <div id="nomorPasienDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Jenis Hewan</div>
+              <div id="jenisHewanDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Hewan</div>
+              <div id="namaHewanDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Jenis Kelamin</div>
+              <div id="jenisKelaminDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Usia Hewan</div>
+              <div>
+                <span id="usiaHewanTahunDetailTxt"></span>&nbsp;&nbsp;
+                <span id="usiaHewanBulanDetailTxt"></span>
+              </div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Pemilik</div>
+              <div id="namaPemilikDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Alamat Pemilik</div>
+              <div id="alamatPemilikDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nomor HP Pemilik</div>
+              <div id="nomorHpPemilikDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Keluhan</div>
+              <div id="keluhanDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Nama Pendaftar</div>
+              <div id="namaPendaftarDetailTxt"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Anamnesa</div>
+              <div id="anamnesaDetailTxt" class="value-detail-div"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Sign</div>
+              <div id="signDetailTxt" class="value-detail-div"></div>
+            </div>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Diagnosa</div>
+              <div id="diagnosaDetailTxt" class="value-detail-div"></div>
+            </div>
+            <div class="m-b-10px">
+              <div class="label-detail-div">Jasa</div>
+            </div>
+            <table id="table-detail-jasa" class="table table-striped text-nowrap" style="margin-bottom: 15px">
               <thead>
                 <tr>
                   <th>No</th>
@@ -87,13 +85,11 @@
               </thead>
               <tbody id="detail-list-jasa"></tbody>
             </table>
-            <table>
-              <tr>
-                <td class="detail-label">Barang</td>
-              </tr>
-            </table>
+            <div class="m-b-10px">
+              <div class="label-detail-div">Barang</div>
+            </div>
             <div class="table-responsive" style="margin-bottom: 15px">
-              <table class="table table-striped text-nowrap table-detail-barang">
+              <table id="table-detail-barang" class="table table-striped text-nowrap">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -110,13 +106,11 @@
                 <tbody id="detail-list-barang"></tbody>
               </table>
             </div>
-            <table>
-              <tr>
-                <td class="detail-label">Rawat Inap</td>
-                <td id="rawatInapDetailTxt" class="detail-value"></td>
-              </tr>
-            </table>
-            <table class="table table-striped text-nowrap table-list-inpatient" style="margin-bottom: 15px">
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Rawat Inap</div>
+              <div id="rawatInapDetailTxt" class="value-detail-div"></div>
+            </div>
+            <table id="table-list-inpatient" class="table table-striped text-nowrap" style="margin-bottom: 15px">
               <thead>
                 <tr>
                   <th>No</th>
@@ -127,12 +121,10 @@
               </thead>
               <tbody id="detail-list-inpatient"></tbody>
             </table>
-            <table>
-              <tr>
-                <td class="detail-label">Status Pemeriksaan</td>
-                <td id="statusPemeriksaanDetailTxt" class="detail-value"></td>
-              </tr>
-            </table>
+            <div class="d-flex m-b-10px">
+              <div class="label-detail-div">Status Pemeriksaan</div>
+              <div id="statusPemeriksaanDetailTxt" class="value-detail-div"></div>
+            </div>
 					</div>
 				</form>
 			</div>
