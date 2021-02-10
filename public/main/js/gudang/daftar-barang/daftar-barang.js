@@ -82,7 +82,38 @@ $(document).ready(function() {
 	$('.openFormUpload').click(function() {
 		$('#modal-upload-daftar-barang .modal-title').text('Upload Barang Sekaligus');
 		$('#modal-upload-daftar-barang').modal('show');
-	});	
+	});
+
+	$('.btn-download-template').click(function() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/daftar-barang/download-template',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+
+	});
 
 	$('#btnSubmitDaftarBarang').click(function() {
 

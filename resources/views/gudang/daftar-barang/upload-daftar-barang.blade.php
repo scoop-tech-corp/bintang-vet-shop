@@ -15,7 +15,7 @@
             </div>
             <div class="box-body">
               <div>Gunakan Template untuk menambah barang secara sekaligus</div>
-              <button class="btn btn-info">Download Template</button>
+              <button class="btn btn-info btn-download-template">Download Template</button>
             </div>
           </div>
         </div>
