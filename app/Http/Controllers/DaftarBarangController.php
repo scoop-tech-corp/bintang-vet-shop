@@ -239,7 +239,7 @@ class DaftarBarangController extends Controller
         ], 200);
     }
 
-    public function download_template()
+    public function download_template(Request $request)
     {
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([

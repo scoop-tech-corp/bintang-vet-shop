@@ -3,7 +3,7 @@
 @section('content')
 <div class="box box-info" id="pendaftaran-pasien-app">
   <div class="box-header with-border">
-    <h3 class="box-title">Pendaftaran Pasien</h3>
+    <h3 class="box-title">Pendaftaran Berobat</h3>
     <div class="inner-box-title">
       <div class="section-left-box-title">
         <button class="btn btn-info openFormAdd">Tambah</button>
