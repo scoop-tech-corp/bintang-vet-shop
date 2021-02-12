@@ -9,8 +9,8 @@
 			<li class="header">MENU UTAMA</li>
 			<li class="menuCabang"><a href="{{ url('/cabang') }}"><i class="fa fa-code-fork"></i> <span>Cabang</span></a></li>
 			<li class="menuUser"><a href="{{ url('/user') }}"><i class="fa fa-users" aria-hidden="true"></i> <span>User Management</span></a></li>
-			<li class="menuPasien"><a href="{{ url('/pasien') }}"><i class="fa fa-bed"></i> <span>Pasien</span></a></li>
-			<li class="menuPendaftaran"><a href="{{ url('/pendaftaran') }}"><i class="fa fa-file-text-o"></i> <span>Pendaftaran</span></a></li>
+			<li class="menuPasien"><a href="{{ url('/pasien') }}"><i class="fa fa-bed"></i> <span>Pendaftaran Pasien</span></a></li>
+			<li class="menuPendaftaran"><a href="{{ url('/pendaftaran') }}"><i class="fa fa-file-text-o"></i> <span>Pendaftaran Berobat</span></a></li>
 			{{-- <li class="treeview menuPendaftaran">
 				<a href="#">
 					<i class="fa fa-file-text-o" aria-hidden="true"></i>
