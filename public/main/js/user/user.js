@@ -241,7 +241,7 @@ $(document).ready(function() {
 						+ `<td>${v.username}</td>`
 						+ `<td>${v.fullname}</td>`
 						+ `<td>${v.email}</td>`
-						+ `<td>${v.role} Tahun</td>`
+						+ `<td>${v.role}</td>`
 						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.status ? 'Aktif' : 'Non Aktif'}</td>`
 						+ `<td>${v.created_by}</td>`
