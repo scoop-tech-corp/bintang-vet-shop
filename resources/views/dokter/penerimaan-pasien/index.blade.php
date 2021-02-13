@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="penerimaan-pasien-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">Penerimaan Pasien</h3>
     <div class="inner-box-title pull-right">
       <div class="input-search-section">

@@ -81,6 +81,10 @@ Route::get('/hasil-pemeriksaan', function () {
 	return view('hasil-pemeriksaan.index');
 });
 
+Route::get('/pembayaran', function () {
+	return view('pembayaran.index');
+});
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {
@@ -105,10 +109,6 @@ Route::get('/hasil-pemeriksaan', function () {
 
 // Route::get('/tindakan', function () {
 // 	return view('tindakan.index');
-// });
-
-// Route::get('/pembayaran', function () {
-// 	return view('pembayaran.index');
 // });
 
 // Route::get('/kunjungan', function () {

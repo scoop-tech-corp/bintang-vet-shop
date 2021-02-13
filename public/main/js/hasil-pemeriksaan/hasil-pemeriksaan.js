@@ -451,7 +451,8 @@ $(document).ready(function() {
         + `<td><span id="totalBarang-jasa-${idx}">${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
+          </td>`
+        + `</tr>`;
         ++no;
     });
     $('#list-selected-jasa').append(rowSelectedListJasa);
@@ -500,7 +501,8 @@ $(document).ready(function() {
         + `<td><span id="totalBarang-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
+          </td>`
+        + `</tr>`;
         ++no;
     });
     $('#list-selected-barang').append(rowSelectedListBarang);
