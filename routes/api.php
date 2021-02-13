@@ -109,6 +109,10 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('hasil-pemeriksaan/detail', 'HasilPemeriksaanController@detail');
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
+
+        //pembayaran    DropDownPatient
+        Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
+        Route::get('pembayaran', 'PembayaranController@index');
     });
 });
 

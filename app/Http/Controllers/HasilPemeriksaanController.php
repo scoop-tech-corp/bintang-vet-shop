@@ -325,7 +325,8 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
-        $data = CheckUpResult::find($request->id); //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
+        $data = CheckUpResult::find($request->id); 
+        //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
 
         $registration = DB::table('registrations')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
