@@ -16,16 +16,17 @@ class CreateCheckUpResultsTable extends Migration
         Schema::create('check_up_results', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('patient_registration_id');
-            $table->string('anamnesa');
-            $table->string('sign');
-            $table->string('diagnosa');
+            $table->text('anamnesa');
+            $table->text('sign');
+            $table->text('diagnosa');
             $table->boolean('status_outpatient_inpatient');
             $table->boolean('status_finish');
+            $table->boolean('status_paid_off');
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->unsignedBigInteger('user_id');
             $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
-            $table->timestamp('deleted_at',0)->nullable();
+            $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
