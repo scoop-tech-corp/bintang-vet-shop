@@ -113,6 +113,9 @@ Route::group(['middleware' => ['api']], function () {
         //pembayaran    DropDownPatient
         Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
         Route::get('pembayaran', 'PembayaranController@index');
+        Route::post('pembayaran', 'PembayaranController@create');
+        Route::put('pembayaran', 'PembayaranController@update');
+        Route::get('pembayaran/detail', 'PembayaranController@detail');
     });
 });
 
