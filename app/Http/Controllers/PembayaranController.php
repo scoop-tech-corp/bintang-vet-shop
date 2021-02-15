@@ -27,7 +27,7 @@ class PembayaranController extends Controller
             ->join('users as user_doctor', 'registrations.doctor_user_id', '=', 'user_doctor.id')
             ->join('branches', 'user_doctor.branch_id', '=', 'branches.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
-            ->select('check_up_results.id', 'registrations.id_number as registration_number', 'patients.pet_name');
+            ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number', 'patients.pet_name');
 
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('user_doctor.branch_id', '=', $request->user()->branch_id);
