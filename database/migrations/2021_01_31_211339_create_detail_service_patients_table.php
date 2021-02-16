@@ -19,11 +19,12 @@ class CreateDetailServicePatientsTable extends Migration
             $table->integer('price_service_id');
             $table->integer('quantity');
             $table->decimal('price_overall', $precision = 18, $scale = 2);
+            $table->boolean('status_paid_off');
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
             $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
-            $table->timestamp('deleted_at',0)->nullable();
+            $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
         });
     }

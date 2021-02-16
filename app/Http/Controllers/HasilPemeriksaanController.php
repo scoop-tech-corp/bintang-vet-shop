@@ -70,7 +70,7 @@ class HasilPemeriksaanController extends Controller
         }
 
         $message_patient = [
-            'patient_registration_id.unique' => 'Registrasi Pasien ini sudah pernah di input sebelumnya'
+            'patient_registration_id.unique' => 'Registrasi Pasien ini sudah pernah di input sebelumnya',
         ];
 
         $validate = Validator::make($request->all(), [
@@ -237,6 +237,7 @@ class HasilPemeriksaanController extends Controller
             'diagnosa' => $request->diagnosa,
             'status_finish' => $request->status_finish,
             'status_outpatient_inpatient' => $request->status_outpatient_inpatient,
+            'status_paid_off' => 0,
             'user_id' => $request->user()->id,
         ]);
 
@@ -259,6 +260,7 @@ class HasilPemeriksaanController extends Controller
                 'price_service_id' => $key_service['price_service_id'],
                 'quantity' => $key_service['quantity'],
                 'price_overall' => $key_service['price_overall'],
+                'status_paid_off' => 0,
                 'user_id' => $request->user()->id,
             ]);
         }
@@ -274,6 +276,7 @@ class HasilPemeriksaanController extends Controller
                     'price_item_id' => $value_item['price_item_id'],
                     'quantity' => $value_item['quantity'],
                     'price_overall' => $value_item['price_overall'],
+                    'status_paid_off' => 0,
                     'user_id' => $request->user()->id,
                 ]);
 
@@ -325,7 +328,7 @@ class HasilPemeriksaanController extends Controller
             ], 403);
         }
 
-        $data = CheckUpResult::find($request->id); 
+        $data = CheckUpResult::find($request->id);
         //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
 
         $registration = DB::table('registrations')
@@ -357,7 +360,7 @@ class HasilPemeriksaanController extends Controller
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
             ->where('detail_service_patients.check_up_result_id', '=', $data->id)
-            ->orderBy('detail_service_patients.id','desc')
+            ->orderBy('detail_service_patients.id', 'desc')
             ->get();
 
         $data['services'] = $services;
@@ -373,7 +376,7 @@ class HasilPemeriksaanController extends Controller
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
-            ->orderBy('detail_item_patients.id','desc')
+            ->orderBy('detail_item_patients.id', 'desc')
             ->get();
 
         $data['item'] = $item;
@@ -592,8 +595,6 @@ class HasilPemeriksaanController extends Controller
                         ], 404);
                     }
 
-                    
-
                     $check_storage_name = DB::table('list_of_items')
                         ->select('item_name')
                         ->where('id', '=', $check_price_item->list_of_items_id)
@@ -798,8 +799,6 @@ class HasilPemeriksaanController extends Controller
                 }
             }
         }
-
-        
 
         //update hasil pemeriksaan
 
