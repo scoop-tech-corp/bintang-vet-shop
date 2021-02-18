@@ -222,7 +222,7 @@ class PasienController extends Controller
                 ->where('registrations.doctor_user_id', '=', $request->user()->id);
         }
 
-        $data = $data->orderBy('registrations.id', 'asc');
+        $data = $data->orderBy('registrations.id', 'desc');
 
         $data = $data->get();
 

@@ -52,7 +52,7 @@ class HargaJasaController extends Controller
             $price_services = $price_services->orderBy($request->column, $request->orderby);
         }
 
-        $price_services = $price_services->orderBy('price_services.id', 'asc');
+        $price_services = $price_services->orderBy('price_services.id', 'desc');
 
         $price_services = $price_services->get();
 

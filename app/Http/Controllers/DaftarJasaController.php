@@ -46,7 +46,7 @@ class DaftarJasaController extends Controller
             $list_of_services = $list_of_services->orderBy($request->column, $request->orderby);
         }
 
-        $list_of_services = $list_of_services->orderBy('list_of_services.id', 'asc');
+        $list_of_services = $list_of_services->orderBy('list_of_services.id', 'desc');
 
         $list_of_services = $list_of_services->get();
 
@@ -80,7 +80,7 @@ class DaftarJasaController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah pernah ada sebelumnya!'],
             ], 422);
         }
 
