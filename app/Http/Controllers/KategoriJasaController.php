@@ -32,6 +32,8 @@ class KategoriJasaController extends Controller
             $service_categories = $service_categories->orderBy($request->column, $request->orderby);
         }
 
+        $service_categories = $service_categories->orderBy('service_categories.id', 'desc');
+
         $service_categories = $service_categories->get();
 
         return response()->json($service_categories, 200);

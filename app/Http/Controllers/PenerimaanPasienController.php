@@ -55,7 +55,7 @@ class PenerimaanPasienController extends Controller
             $data = $data->orderBy($request->column, $request->orderby);
         }
 
-        $data = $data->orderBy('registrations.id', 'asc');
+        $data = $data->orderBy('registrations.id', 'desc');
 
         $data = $data->get();
 

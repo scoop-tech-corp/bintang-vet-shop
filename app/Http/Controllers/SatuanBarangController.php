@@ -35,6 +35,8 @@ class SatuanBarangController extends Controller
             $unit_item = $unit_item->orderBy($request->column, $request->orderby);
         }
 
+        $unit_item = $unit_item->orderBy('unit_item.id', 'desc');
+
         $unit_item = $unit_item->get();
 
         return response()->json($unit_item, 200);
