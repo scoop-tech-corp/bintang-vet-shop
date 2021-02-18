@@ -1,0 +1,7 @@
+.error-form-control {
+    border-color: red !important;
+    background-color: #fff6f7;
+}
+.validate-error {
+    color: red;
+}

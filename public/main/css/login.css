@@ -1,0 +1,22 @@
+
+.login-container {
+    width: 360px;
+    margin-top: 30px;
+}
+
+.header-login-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header-login-section > .title-login {
+    font-size: 36px;
+    text-align: center;
+}
+.header-login-section > img {
+    border-radius: 50%;
+    width: 200px;
+    margin-top: 30px
+}

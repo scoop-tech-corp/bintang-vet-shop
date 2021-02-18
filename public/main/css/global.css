@@ -1,0 +1,148 @@
+.menuCabang, .menuUser, .menuPasien, .menuPendaftaran, .menuDokter, .menuPeriksa,
+.menuTindakan, .menuGudang, .menuPembayaran, .menuKeuangan, .menuKunjungan {
+	display: none;
+}
+
+body { 
+   padding-right: 0 !important; /* too handle bug for modal bootstrap*/
+}
+
+.section-logo-vet-clinic {
+	padding: 10px 0px; text-align: center
+}
+
+.section-logo-vet-clinic > img {
+	width: 150px;
+	border-radius: 50%;
+}
+
+.fa-sort-asc, .fa-sort-desc {
+	opacity: 0.5;
+}
+
+.fa-sort {
+	opacity: 0.2;
+}
+
+.icon-password {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center; 
+}
+
+#loading-screen {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url('/assets/loading.gif') 50% 50% no-repeat rgb(249,249,249,0.5);
+  display: none;
+}
+
+.label-detail-div {
+  font-weight: 700;
+  width: 25%;
+}
+
+.value-detail-div {
+  word-break: break-all;
+  width: 75%;
+}
+
+.detail-label {
+  font-weight: 700;
+  padding-bottom: 15px;
+}
+
+.detail-value {
+  padding-bottom: 15px;
+  padding-left: 40px;
+}
+
+.inner-box-title {
+	display: flex;
+	justify-content: space-between;
+	margin: 20px 0px;
+}
+
+.input-search-section {
+	width: 200px;
+	position: relative;
+}
+
+.input-search-section > i {
+	position: absolute;
+	top: 10px;
+  left: 15px;
+  cursor: pointer;
+}
+
+.input-search-section > input {
+	padding: 6px 12px 6px 40px;
+}
+
+.section-right-box-title {
+  display: flex;
+}
+
+/* cursor pointer for icon sort in column (table) */
+.table > thead > tr > th > .fa {
+  cursor: pointer;
+}
+
+.select2-search--inline {
+  display: contents; /*this will make the container disappear, making the child the one who sets the width of the element*/
+}
+
+.select2-search__field:placeholder-shown {
+  width: 100% !important; /*makes the placeholder to be 100% of the width while there are no options selected*/
+}
+
+.width-350px {
+  width: 350px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.p-top-10px {
+  padding-top: 5px;
+}
+
+.p-right-42px {
+  padding-right: 42px;
+}
+
+.m-l-10px {
+  margin-left: 10px;
+}
+
+.m-l-20px {
+  margin-left: 20px;
+}
+
+.m-b-10px { 
+	margin-bottom: 10px;
+}
+
+.m-b-15px { 
+	margin-bottom: 15px;
+}
+
+.m-r-10px { 
+	margin-right: 10px;
+}
