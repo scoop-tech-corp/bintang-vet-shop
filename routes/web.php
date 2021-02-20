@@ -85,6 +85,14 @@ Route::get('/pembayaran', function () {
 	return view('pembayaran.index');
 });
 
+Route::get('/pembayaran/tambah', function () {
+	return view('pembayaran.pembayaran-tambah');
+});
+
+Route::get('/pembayaran/detail/{id}', function () {
+	return view('pembayaran.pembayaran-detail');
+});
+
 // Route::get('/cabang','BranchController@index');
 
 // Route::get('/register', function () {

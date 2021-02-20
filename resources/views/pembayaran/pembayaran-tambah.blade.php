@@ -1,3 +1,6 @@
+@extends('layout.master')
+
+@section('content')
 <div class="box box-info" id="tambah-pembayaran-app">
   <div class="box-header ">
     <h3 class="box-title">Tambah Pembayaran</h3>
@@ -8,7 +11,7 @@
       <span class="fa fa-arrow-left"></span> <span class="text">List Pembayaran</span>
     </div>
     <div class="m-t-25px">
-      <form class="form-hasil-pemeriksaan">
+      <form class="form-pembarayan-tambah">
         <div class="col-md-12 m-b-20px">
           <label for="selectedPasien">Cari Pasien</label>
           <select id="selectedPasien" class="form-control" style="width: 100%">
@@ -18,54 +21,52 @@
         <div class="col-md-6">
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nomor Registrasi</div>
-            <div id="nomorRegistrasiTxt" class="p-left-10px">BVC-RP-AS-001</div>
+            <div id="nomorRegistrasiTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nomor Pasien</div>
-            <div id="nomorPasienTxt" class="p-left-10px">BVC-P-AS-0001</div>
+            <div id="nomorPasienTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Jenis Hewan</div>
-            <div id="jenisHewanTxt" class="p-left-10px">Kucing</div>
+            <div id="jenisHewanTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nama Hewan</div>
-            <div id="namaHewanTxt" class="p-left-10px">KEMET</div>
+            <div id="namaHewanTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Jenis Kelamin</div>
-            <div id="jenisKelaminTxt" class="p-left-10px">Betina</div>
+            <div id="jenisKelaminTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nama Pendaftar</div>
-            <div id="namaPendaftarTxt" class="p-left-10px">Sucipto</div>
+            <div id="namaPendaftarTxt" class="p-left-10px"></div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Usia Hewan</div>
             <div class="p-left-10px">
-              <span id="usiaHewanTahunTxt">3 Tahun</span>&nbsp;&nbsp;
-              <span id="usiaHewanBulanTxt">3 Bulan</span>
+              <span id="usiaHewanTahunTxt"></span>&nbsp;&nbsp;
+              <span id="usiaHewanBulanTxt"></span>
             </div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nama Pemilik</div>
-            <div id="namaPemilikTxt" class="p-left-10px">Adiyansyah Dwi P</div>
+            <div id="namaPemilikTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Alamat Pemilik</div>
-            <div id="alamatPemilikTxt" class="p-left-10px">Jalan Perumahan Mahkota Simprug</div>
+            <div id="alamatPemilikTxt" class="p-left-10px"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Nomor HP Pemilik</div>
-            <div id="nomorHpPemilikTxt" class="p-left-10px" style="width: 75%">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+            <div id="nomorHpPemilikTxt" class="p-left-10px" style="width: 75%"></div>
           </div>
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Keluhan</div>
-            <div id="keluhanTxt" class="p-left-10px" style="width: 75%">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </div>
+            <div id="keluhanTxt" class="p-left-10px" style="width: 75%"></div>
           </div>
         </div>
         <div class="col-md-12 m-b-10px">
@@ -114,13 +115,13 @@
         <div class="col-md-6">
           <div class="d-flex m-b-10px">
             <div class="label-detail-div">Rawat Inap</div>
-            <div id="rawatInapTxt" class="p-left-10px">Ya</div>
+            <div id="rawatInapTxt" class="p-left-10px"></div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="d-flex">
             <div class="label-detail-div">Status Pemeriksaan</div>
-            <div id="statusPemeriksaanTxt" class="p-left-10px">Selesai</div>
+            <div id="statusPemeriksaanTxt" class="p-left-10px"></div>
           </div>
         </div>
       </form>
@@ -181,16 +182,27 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
-      <div id="beErr" class="validate-error">
-        - Pembayaran Jasa harus dipilih salah satu<br>
+      <div id="beErr" class="validate-error"></div>
+      {{-- - Pembayaran Jasa harus dipilih salah satu<br>
         - Pembayaran Barang harus dipilih salah satu<br>
-        - Status Pembayaran tidak dapat diselesaikan, karena terdapat barang atau jasa yang masih belum dibayarkan
-      </div>
+        - Status Pembayaran tidak dapat diselesaikan, karena terdapat barang atau jasa yang masih belum dibayarkan --}}
     </div>
     <div class="col-md-12 m-t-25px">
       <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right">Simpan & Cetak</button>
-      <button type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
+      <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
   </div>
   
 </div>
+
+@component('layout.message-box') @endcomponent
+@component('layout.modal-confirmation') @endcomponent
+
+@endsection
+@section('script-content')
+  <script src="{{ asset('main/js/pembayaran/pembayaran-tambah.js') }}"></script>  
+@endsection
+@section('css-content')
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/pembayaran.css') }}">
+@endsection
+@section('vue-content')@endsection

@@ -3,6 +3,10 @@
 	display: none;
 }
 
+.sidebar-menu li {
+  cursor: pointer;
+}
+
 body { 
    padding-right: 0 !important; /* too handle bug for modal bootstrap*/
 }
@@ -96,6 +100,7 @@ body {
 
 .table {
   border-top: 2px solid #f4f4f4;
+  margin-bottom: unset;
 }
 
 /* cursor pointer for icon sort in column (table) */
@@ -145,6 +150,10 @@ body {
 
 .m-l-20px {
   margin-left: 20px;
+}
+
+.m-t-10px { 
+	margin-top: 10px;
 }
 
 .m-t-25px { 

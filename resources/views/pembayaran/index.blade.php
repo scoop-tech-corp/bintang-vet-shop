@@ -35,9 +35,7 @@
   </div>
 </div>
 
-@component('pembayaran.tambah-pembayaran') @endcomponent
 @component('layout.modal-confirmation') @endcomponent
-@component('layout.message-box') @endcomponent
 
 @endsection
 @section('script-content')

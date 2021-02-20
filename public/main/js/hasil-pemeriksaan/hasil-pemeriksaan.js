@@ -285,7 +285,6 @@ $(document).ready(function() {
       service: finalSelectedJasa,
       item: finalSelectedBarang
     };
-    console.log('datas', datas);
 
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
@@ -643,7 +642,6 @@ $(document).ready(function() {
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
                 const getData = data;
-                console.log('getData', getData);
 
                 $('.modal-title').text('Detail Hasil Pemeriksaan');
                 $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number); $('#nomorPasienDetailTxt').text(getData.registration.patient_number); 
@@ -745,7 +743,7 @@ $(document).ready(function() {
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
                 const getData = data;
-                console.log('getData', getData);
+
                 getId = getData.id; getPatienRegistrationId = getData.patient_registration_id;
                 $('#nomorRegistrasiTxt').text(getData.registration.registration_number); $('#nomorPasienTxt').text(getData.registration.patient_number); 
                 $('#jenisHewanTxt').text(getData.registration.pet_category); $('#namaHewanTxt').text(getData.registration.pet_name); 
@@ -810,7 +808,7 @@ $(document).ready(function() {
                       + `<td>${no}</td>`
                       + `<td>${lj.created_at}</td>`
                       + `<td>${lj.created_by}</td>`
-                      + `<td>${lj.description}</td>`
+                      + `<td><div style="word-break: break-word;">${lj.description}</div></td>`
                       + `</tr>`;
                       ++no;
                   });
