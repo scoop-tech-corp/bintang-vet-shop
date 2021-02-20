@@ -52,7 +52,7 @@ class PembayaranController extends Controller
             ->join('branches', 'users.branch_id', '=', 'branches.id')
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
-            ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registrasion_number',
+            ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number',
                 'patients.id_member as patient_number', 'patients.pet_category', 'patients.pet_name', 'registrations.complaint',
                 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"));

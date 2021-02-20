@@ -52,7 +52,7 @@ class RawatInapController extends Controller
             $data = $data->orderBy($request->column, $request->orderby);
         }
 
-        $data = $data->orderBy('in_patients.id', 'asc');
+        $data = $data->orderBy('in_patients.id', 'desc');
 
         $data = $data->get();
 

@@ -54,7 +54,7 @@ class HargaBarangController extends Controller
             $price_items = $price_items->orderBy($request->column, $request->orderby);
         }
 
-        $price_items = $price_items->orderBy('price_items.id', 'asc');
+        $price_items = $price_items->orderBy('price_items.id', 'desc');
 
         $price_items = $price_items->get();
 

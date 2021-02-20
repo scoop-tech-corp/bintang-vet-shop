@@ -50,7 +50,7 @@ class DaftarBarangController extends Controller
             $item = $item->orderBy($request->column, $request->orderby);
         }
 
-        $item = $item->orderBy('list_of_items.id', 'asc');
+        $item = $item->orderBy('list_of_items.id', 'desc');
 
         $item = $item->get();
 
