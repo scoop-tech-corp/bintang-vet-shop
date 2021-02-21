@@ -39,7 +39,7 @@ $(document).ready(function() {
 
       listTagihanJasa.forEach(tj => calculationPay.push(tj));
       listTagihanBarang.forEach(tb => calculationPay.push(tb));
-      processCalculationTagihan();
+      processCalculationTagihan(data);
 
     }, complete: function() { $('#loading-screen').hide(); },
     error: function(err) {
@@ -142,13 +142,19 @@ $(document).ready(function() {
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 
-  function processCalculationTagihan() {
-    let total = 0;
+  function processCalculationTagihan(data) {
+    if (!data.status_paid_off) {
+      let total = 0;
 
-    calculationPay.forEach(calc => total += calc.price_overall );
+      calculationPay.forEach(calc => total += calc.price_overall );
 
-    let totalText = `Rp. ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')},00`;
-    $('#totalBayarTxt').text(totalText);
+      let totalText = `Rp. ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')},00`;
+      $('#label-tagihan').text('Total tagihan');
+      $('#totalBayarTxt').text(totalText);
+    } else {
+      $('#label-tagihan').text('Status tagihan');
+      $('#totalBayarTxt').text('Lunas');
+    }
   }
 
 });

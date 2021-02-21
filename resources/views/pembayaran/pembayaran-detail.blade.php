@@ -168,7 +168,7 @@
     </div>
     <div class="col-md-12 indented-detail-tagihan">
       <div class="d-flex m-b-10px">
-        <div style="font-weight: 700">Total tagihan</div>
+        <div style="font-weight: 700" id="label-tagihan"></div>
         <div id="totalBayarTxt" class="p-left-10px" style="word-break: break-all;"></div>
       </div>
     </div>
