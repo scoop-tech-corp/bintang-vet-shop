@@ -228,4 +228,9 @@ class PasienController extends Controller
 
         return response()->json($data, 200);
     }
+
+    public function HistoryPatient(Request $request)
+    {
+        # code...
+    }
 }
