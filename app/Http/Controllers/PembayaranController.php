@@ -430,7 +430,7 @@ class PembayaranController extends Controller
         }
 
         $services = $request->service_payment;
-        $result_services = json_decode($services, true);
+        $result_services = json_decode(json_encode($services), true);
 
         if (count($result_services) == 0) {
             return response()->json([
@@ -483,7 +483,7 @@ class PembayaranController extends Controller
         }
 
         $items = $request->item_payment;
-        $result_item = json_decode($items, true);
+        $result_item = json_decode(json_encode($items), true);
 
         if (count($result_item) == 0) {
             return response()->json([
