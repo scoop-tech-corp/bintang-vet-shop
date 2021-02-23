@@ -341,7 +341,7 @@ $(document).ready(function() {
     }
 
     if (!$('#diagnosa').val()) {
-			$('#diagnosaErr1').text('Sign harus di isi'); isValidDiagnosa = false;
+			$('#diagnosaErr1').text('Diagnosa harus di isi'); isValidDiagnosa = false;
 		} else {
 			$('#diagnosaErr1').text(''); isValidDiagnosa = true;
     }

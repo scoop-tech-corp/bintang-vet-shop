@@ -89,6 +89,10 @@ Route::get('/pembayaran/tambah', function () {
 	return view('pembayaran.pembayaran-tambah');
 });
 
+Route::get('/pembayaran/edit/{id}', function () {
+	return view('pembayaran.pembayaran-edit');
+});
+
 Route::get('/pembayaran/detail/{id}', function () {
 	return view('pembayaran.pembayaran-detail');
 });

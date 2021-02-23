@@ -62,7 +62,7 @@ $(document).ready(function() {
     } else {
       // additional custom url
       if (Value['href'] ==  origin + '/pembayaran' 
-        && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/detail'))) {
+        && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/edit') || pathName.includes('/pembayaran/detail'))) {
         $(Value).parent().addClass('active');
       }
     }
