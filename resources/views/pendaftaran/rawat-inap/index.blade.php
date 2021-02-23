@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="rawat-inap-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">Rawat Inap</h3>
     <div class="inner-box-title">
       <button class="btn btn-info openFormAdd">Tambah</button>

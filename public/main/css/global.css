@@ -3,6 +3,10 @@
 	display: none;
 }
 
+.sidebar-menu li {
+  cursor: pointer;
+}
+
 body { 
    padding-right: 0 !important; /* too handle bug for modal bootstrap*/
 }
@@ -94,6 +98,11 @@ body {
   display: flex;
 }
 
+.table {
+  border-top: 2px solid #f4f4f4;
+  margin-bottom: unset;
+}
+
 /* cursor pointer for icon sort in column (table) */
 .table > thead > tr > th > .fa {
   cursor: pointer;
@@ -127,6 +136,14 @@ body {
   padding-right: 42px;
 }
 
+.p-left-10px {
+  padding-left: 10px;
+}
+
+.p-bottom-50px {
+  padding-bottom: 50px;
+}
+
 .m-l-10px {
   margin-left: 10px;
 }
@@ -135,12 +152,24 @@ body {
   margin-left: 20px;
 }
 
+.m-t-10px { 
+	margin-top: 10px;
+}
+
+.m-t-25px { 
+	margin-top: 25px;
+}
+
 .m-b-10px { 
 	margin-bottom: 10px;
 }
 
 .m-b-15px { 
 	margin-bottom: 15px;
+}
+
+.m-b-20px { 
+	margin-bottom: 20px;
 }
 
 .m-r-10px { 

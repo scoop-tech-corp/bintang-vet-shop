@@ -42,9 +42,11 @@ $(document).ready(function() {
   }
 
   // set active class for current page
+  const origin = window.location.origin;
   const pathName = window.location.pathname;
+  const fullPath = origin + pathName;
   $('.sidebar-menu a').each(function(Key,Value) {
-    if (Value['href'] === window.location.origin + pathName) {
+    if ( Value['href'] === fullPath) {
       $(Value).parent().addClass('active');
 
       if (pathName === '/kategori-barang' || pathName === '/satuan-barang'  || pathName === '/daftar-barang'
@@ -57,12 +59,14 @@ $(document).ready(function() {
       } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {
         $('.menuDokter').addClass('active');
       }
+    } else {
+      // additional custom url
+      if (Value['href'] ==  origin + '/pembayaran' 
+        && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/edit') || pathName.includes('/pembayaran/detail'))) {
+        $(Value).parent().addClass('active');
+      }
     }
   });
-
-  // $('.menuCabang').click(function() {
-  //   $('#loading-screen').show();
-  // });
 
   $('#btn-logout').click(function() {
     const fd = new FormData();

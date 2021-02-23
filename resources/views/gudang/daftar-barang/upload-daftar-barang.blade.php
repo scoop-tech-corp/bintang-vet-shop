@@ -10,7 +10,7 @@
 			<div class="modal-body">
         <div class="content">
           <div class="box box-info">
-            <div class="box-header with-border">
+            <div class="box-header ">
               <h3 class="box-title">Download Template</h3>
             </div>
             <div class="box-body">
@@ -21,7 +21,7 @@
         </div>
         <div class="content">
           <div class="box box-info">
-            <div class="box-header with-border">
+            <div class="box-header ">
               <h3 class="box-title">Upload File</h3>
             </div>
             <div class="box-body">

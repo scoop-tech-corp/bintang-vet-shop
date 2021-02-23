@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="pembagian-harga-jasa-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">Harga Jasa</h3>
     <div class="inner-box-title">
       <div class="section-left-box-title"></div>

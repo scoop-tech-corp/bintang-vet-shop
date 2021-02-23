@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="dokter-rawat-inap-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">Pasien Rawat Inap</h3>
     <div class="inner-box-title pull-right">
       <div class="input-search-section">
