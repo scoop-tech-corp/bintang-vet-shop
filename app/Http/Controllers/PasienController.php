@@ -231,6 +231,84 @@ class PasienController extends Controller
 
     public function HistoryPatient(Request $request)
     {
-        # code...
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $data = DB::table('registrations')
+            ->join('users', 'registrations.user_id', '=', 'users.id')
+            ->join('users as user_doctor', 'registrations.doctor_user_id', '=', 'user_doctor.id')
+            ->join('patients', 'registrations.patient_id', '=', 'patients.id')
+            ->join('branches', 'patients.branch_id', '=', 'branches.id')
+            ->select('registrations.id as registration_id', 'registrations.id_number as registration_number', 'registrations.patient_id',
+                'patients.id_member as id_number_patient', 'patients.pet_category', 'patients.pet_name', 'patients.pet_gender',
+                'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
+                'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
+                'user_doctor.username as username_doctor', 'users.fullname as created_by', 'registrations.acceptance_status',
+                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id',
+                'branches.id as branch_id', 'branches.branch_name as branch_name')
+            ->where('registrations.acceptance_status', '=', '3')
+            ->where('patients.id', '=', $request->patient_id);
+
+        if ($request->user()->role == 'dokter') {
+            $data = $data->where('users.branch_id', '=', $request->user()->branch_id)
+                ->where('registrations.doctor_user_id', '=', $request->user()->id);
+        }
+
+        $data = $data->orderBy('registrations.id', 'desc');
+
+        $data = $data->get();
+
+    }
+
+    public function DetailHistoryPatient(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Access is not allowed!'],
+            ], 403);
+        }
+
+        $data = DB::table('check_up_results')
+            ->where('patient_registration_id', '=', $request->patient_registration_id)
+            ->first();
+
+        $services = DB::table('detail_service_patients')
+            ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+            ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
+            ->select('detail_service_patients.id as detail_service_patient_id', 'price_services.id as price_service_id',
+                'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
+                'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
+                'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->orderBy('detail_service_patients.id', 'desc')
+            ->get();
+
+        $data->services = $services;
+
+        $item = DB::table('detail_item_patients')
+            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+            ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->orderBy('detail_item_patients.id', 'desc')
+            ->get();
+
+        $data->item = $item;
+
+        return response()->json($data, 200);
     }
 }

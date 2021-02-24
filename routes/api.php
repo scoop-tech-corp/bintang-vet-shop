@@ -116,6 +116,10 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pembayaran', 'PembayaranController@create');
         Route::put('pembayaran', 'PembayaranController@update');
         Route::get('pembayaran/detail', 'PembayaranController@detail');
+
+        //riwayat pasien
+        Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
+        Route::get('pasien/detail-riwayat', 'PasienController@DetailHistoryPatient');
     });
 });
 

@@ -248,7 +248,7 @@ class DaftarBarangController extends Controller
             ], 403);
         }
 
-        return response()->download(public_path('source_download/cobadownload.xlsx'), 'Template Excel');
+        return response()->download(public_path('source_download/Template Upload Daftar Barang.xlsx'), 'Template Excel Upload Daftar Barang');
     }
 
     public function upload_template(Request $request)
