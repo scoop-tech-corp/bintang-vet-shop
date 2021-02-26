@@ -275,6 +275,12 @@ class PasienController extends Controller
         }
 
         $data = DB::table('check_up_results')
+        ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
+            ->join('users', 'check_up_results.user_id', '=', 'users.id')
+            ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number', 'check_up_results.anamnesa',
+                'check_up_results.sign', 'check_up_results.diagnosa', 'check_up_results.status_outpatient_inpatient',
+                'check_up_results.status_finish', 'check_up_results.status_paid_off', DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"),
+                'users.fullname as created_by')
             ->where('patient_registration_id', '=', $request->patient_registration_id)
             ->first();
 
@@ -288,7 +294,7 @@ class PasienController extends Controller
                 'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_service_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->orderBy('detail_service_patients.id', 'desc')
             ->get();
 
@@ -304,11 +310,21 @@ class PasienController extends Controller
                 DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->orderBy('detail_item_patients.id', 'desc')
             ->get();
 
         $data->item = $item;
+
+        $inpatient = DB::table('in_patients')
+            ->join('users', 'in_patients.user_id', '=', 'users.id')
+            ->select('in_patients.id as in_patient_id', 'in_patients.check_up_result_id', 'in_patients.description',
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('check_up_result_id', '=', $data->check_up_result_id)
+            ->orderBy('in_patients.id', 'desc')
+            ->get();
+
+        $data->inpatient = $inpatient;
 
         return response()->json($data, 200);
     }
