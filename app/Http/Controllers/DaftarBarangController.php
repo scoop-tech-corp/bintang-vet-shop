@@ -6,6 +6,8 @@ use App\Models\ListofItems;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
+use App\Exports\MultipleSheetUploadDaftarBarang;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DaftarBarangController extends Controller
 {
@@ -248,7 +250,9 @@ class DaftarBarangController extends Controller
             ], 403);
         }
 
-        return response()->download(public_path('source_download/Template Upload Daftar Barang.xlsx'), 'Template Excel Upload Daftar Barang');
+        return (new MultipleSheetUploadDaftarBarang())->download('Template Daftar Barang.xlsx');
+
+        // return response()->download(public_path('source_download/Template Upload Daftar Barang.xlsx'), 'Template Excel Upload Daftar Barang');
     }
 
     public function upload_template(Request $request)
