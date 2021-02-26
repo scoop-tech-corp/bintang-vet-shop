@@ -1039,6 +1039,17 @@ class DataDummySeeder extends Seeder
             'created_at' => '2020-12-30',
         ]);
 
+        DB::table('registrations')->insert([
+            'id_number' => 'BVC-RP-AS-0004',
+            'patient_id' => '1',
+            'complaint' => 'diare',
+            'registrant' => 'sartoni',
+            'user_id' => '1',
+            'doctor_user_id' => '3',
+            'acceptance_status' => '3',
+            'created_at' => '2020-12-30',
+        ]);
+
         //hasil pemeriksaan
         DB::table('check_up_results')->insert([
             'patient_registration_id' => '2',
@@ -1049,7 +1060,31 @@ class DataDummySeeder extends Seeder
             'status_finish' => '0',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2020-12-30',
+            'created_at' => '2021-02-26',
+        ]);
+
+        DB::table('check_up_results')->insert([
+            'patient_registration_id' => '3',
+            'anamnesa' => 'Ini adalah contoh anamnesa',
+            'sign' => 'Ini adalah contoh sign',
+            'diagnosa' => 'Ini adalah contoh diagnosa',
+            'status_outpatient_inpatient' => '0',
+            'status_finish' => '1',
+            'status_paid_off' => '0',
+            'user_id' => '1',
+            'created_at' => '2021-02-26',
+        ]);
+
+        DB::table('check_up_results')->insert([
+            'patient_registration_id' => '4',
+            'anamnesa' => 'Ini adalah contoh anamnesa',
+            'sign' => 'Ini adalah contoh sign',
+            'diagnosa' => 'Ini adalah contoh diagnosa',
+            'status_outpatient_inpatient' => '0',
+            'status_finish' => '1',
+            'status_paid_off' => '0',
+            'user_id' => '1',
+            'created_at' => '2021-02-26',
         ]);
 
         // //detail item patient
@@ -1060,7 +1095,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2020-12-30',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1070,7 +1105,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2020-12-30'
+            'created_at' => '2021-02-26'
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1080,7 +1115,47 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2020-12-30'
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_item_patients')->insert([
+            'check_up_result_id' => '2',
+            'price_item_id' => '2',
+            'quantity' => '2',
+            'price_overall' => '400000',
+            'status_paid_off' => '1',
+            'user_id' => '1',
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_item_patients')->insert([
+            'check_up_result_id' => '2',
+            'price_item_id' => '1',
+            'quantity' => '1',
+            'price_overall' => '200000',
+            'status_paid_off' => '1',
+            'user_id' => '1',
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_item_patients')->insert([
+            'check_up_result_id' => '3',
+            'price_item_id' => '2',
+            'quantity' => '1',
+            'price_overall' => '200000',
+            'status_paid_off' => '0',
+            'user_id' => '3',
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_item_patients')->insert([
+            'check_up_result_id' => '3',
+            'price_item_id' => '3',
+            'quantity' => '1',
+            'price_overall' => '200000',
+            'status_paid_off' => '0',
+            'user_id' => '3',
+            'created_at' => '2021-02-26'
         ]);
 
         // // //detail service patient
@@ -1091,7 +1166,27 @@ class DataDummySeeder extends Seeder
             'price_overall' => '100000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2020-12-30'
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_service_patients')->insert([
+            'check_up_result_id' => '2',
+            'price_service_id' => '1',
+            'quantity' => '1',
+            'price_overall' => '100000',
+            'status_paid_off' => '0',
+            'user_id' => '3',
+            'created_at' => '2021-02-26'
+        ]);
+
+        DB::table('detail_service_patients')->insert([
+            'check_up_result_id' => '3',
+            'price_service_id' => '1',
+            'quantity' => '1',
+            'price_overall' => '100000',
+            'status_paid_off' => '0',
+            'user_id' => '3',
+            'created_at' => '2021-02-26'
         ]);
 
         // DB::table('detail_service_patients')->insert([
