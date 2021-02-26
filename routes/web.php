@@ -33,6 +33,10 @@ Route::get('/pasien', function () {
 	return view('pasien.index');
 });
 
+Route::get('/riwayat-pameriksaan/{id}', function () {
+	return view('pasien.riwayat-pasien');
+});
+
 Route::get('/kategori-barang', function () {
 	return view('gudang.kategori-barang.index');
 });

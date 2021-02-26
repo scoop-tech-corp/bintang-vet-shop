@@ -64,6 +64,8 @@ $(document).ready(function() {
       if (Value['href'] ==  origin + '/pembayaran' 
         && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/edit') || pathName.includes('/pembayaran/detail'))) {
         $(Value).parent().addClass('active');
+      } else if (Value['href'] ==  origin + '/pasien' && pathName.includes('/riwayat-pameriksaan')) {
+        $(Value).parent().addClass('active');
       }
     }
   });
