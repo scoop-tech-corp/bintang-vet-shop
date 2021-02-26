@@ -37,7 +37,7 @@ $(document).ready(function() {
     data	  : { list_of_payment_id: id },
     beforeSend: function() { $('#loading-screen').show(); },
     success: function(data) {
-      console.log('data detail', data);
+
       getCheckUpResultId = data.check_up_result_id;
       $('#nomorPasienTxt').text(data.registration.patient_number); $('#jenisHewanTxt').text(data.registration.pet_category);
       $('#namaHewanTxt').text(data.registration.pet_name); $('#jenisKelaminTxt').text(data.registration.pet_gender);
@@ -50,20 +50,10 @@ $(document).ready(function() {
       selectedListJasa = data.services; selectedListBarang = data.item;
       processAppendListSelectedJasa(); processAppendListSelectedBarang();
 
-      // data.paid_services.forEach(ps => {
-      //   listTagihanJasa.push({id: ps.list_of_payment_service_id, paid_date: ps.paid_date, price_overall: ps.price_overall});
-      // });
       listTagihanJasa = data.paid_services;
-      // data.paid_item.forEach(pi => {
-      //   listTagihanBarang.push({id: pi.list_of_payment_item_id, paid_date: pi.paid_date, price_overall: pi.price_overall});
-      // });
       listTagihanBarang = data.paid_item;
 
       processAppendListTagihanJasa(); processAppendListTagihanBarang();
-
-      // listTagihanJasa.forEach(tj => calculationPay.push(tj));
-      // listTagihanBarang.forEach(tb => calculationPay.push(tb));
-      // processCalculationTagihan(data);
 
     }, complete: function() { $('#loading-screen').hide(); },
     error: function(err) {
@@ -233,7 +223,7 @@ $(document).ready(function() {
       item_payment: finalSelectedBarang.length ? finalSelectedBarang : [{detail_item_patient_id: null}]
     };
 
-    console.log('datas', datas);
+
     $.ajax({
       url : $('.baseUrl').val() + '/api/pembayaran',
       type: 'PUT',

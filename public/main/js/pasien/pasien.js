@@ -244,8 +244,9 @@ $(document).ready(function() {
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ ((role.toLowerCase() == 'resepsionis') ? `` : `<td>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-info openDetail" title="Riwayat Pasien" value=${v.id}><i class="fa fa-eye" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-warning openFormEdit" title="Edit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-danger openFormDelete" title="Delete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`)
 						+ `</tr>`;
 				});
@@ -278,6 +279,10 @@ $(document).ready(function() {
 					$('#modal-confirmation .modal-title').text('Peringatan');
 					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus data ini?');
 					$('#modal-confirmation').modal('show');
+				});
+
+				$('.openDetail').click(function() {
+					window.location.href = $('.baseUrl').val() + `/riwayat-pameriksaan/${$(this).val()}`;	
 				});
 
 			}, complete: function() { $('#loading-screen').hide(); },
