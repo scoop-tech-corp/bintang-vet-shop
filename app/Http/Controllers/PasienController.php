@@ -262,6 +262,7 @@ class PasienController extends Controller
 
         $data = $data->get();
 
+        return response()->json($data, 200);
     }
 
     public function DetailHistoryPatient(Request $request)
