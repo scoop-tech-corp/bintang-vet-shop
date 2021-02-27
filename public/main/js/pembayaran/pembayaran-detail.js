@@ -91,7 +91,7 @@ $(document).ready(function() {
           + `</tr>`;
           ++no;
       });
-    } else { rowListTagihanJasa += `<tr><td colspan="8">No data.</td></tr>` }
+    } else { rowListTagihanJasa += `<tr class="text-center"><td colspan="8">Tidak ada data.</td></tr>` }
     $('#list-tagihan-jasa').append(rowListTagihanJasa);
   }
 
@@ -138,7 +138,7 @@ $(document).ready(function() {
           + `</tr>`;
           ++no;
       });
-    } else { rowListTagihanBarang += `<tr><td colspan="9">No data.</td></tr>` }
+    } else { rowListTagihanBarang += `<tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>` }
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 

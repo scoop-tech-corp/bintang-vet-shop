@@ -9,6 +9,10 @@ $(document).ready(function() {
 
   loadRiwayatPasien();
 
+  $('#btnKembali').click(function() {
+    window.location.href = $('.baseUrl').val() + '/pasien';
+  });
+
   function loadRiwayatPasien() {
     $.ajax({
 			url     : $('.baseUrl').val() + '/api/pasien/riwayat',
@@ -35,7 +39,7 @@ $(document).ready(function() {
                 </td>`
               + `</tr>`;
           });
-        } else { listRiwayatPasien += `<tr><td colspan="7">Tidak ada data.</td></tr>` }
+        } else { listRiwayatPasien += `<tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>` }
 				$('#list-riwayat-pasien').append(listRiwayatPasien);
 
 				$('.openDetail').click(function() {
@@ -85,15 +89,19 @@ $(document).ready(function() {
     let no = 1;
     $('#list-deskripsi-kondisi-pasien tr').remove();
 
-    listDeskripsiPasien.forEach((desc) => {
-      rowListDeksripsiKondPasien += `<tr>`
-        + `<td>${no}</td>`
-        + `<td>${desc.created_at}</td>`
-        + `<td>${desc.created_by}</td>`
-        + `<td>${desc.description}</td>`
-        + `</tr>`;
-        ++no;
-    });
+    if (listDeskripsiPasien.length) {
+      listDeskripsiPasien.forEach((desc) => {
+        rowListDeksripsiKondPasien += `<tr>`
+          + `<td>${no}</td>`
+          + `<td>${desc.created_at}</td>`
+          + `<td>${desc.created_by}</td>`
+          + `<td>${desc.description}</td>`
+          + `</tr>`;
+          ++no;
+      });
+    } else {
+      rowListDeksripsiKondPasien += `<tr class="text-center"><td colspan="4">Tidak ada data.</td></tr>`;
+    }
     $('#list-deskripsi-kondisi-pasien').append(rowListDeksripsiKondPasien);
   }
 
@@ -102,17 +110,21 @@ $(document).ready(function() {
     let no = 1;
     $('#detail-list-jasa tr').remove();
 
-    listJasaDetail.forEach((lj, idx) => {
-      rowListJasaDetail += `<tr>`
-        + `<td>${no}</td>`
-        + `<td>${lj.created_at}</td>`
-        + `<td>${lj.created_by}</td>`
-        + `<td>${lj.category_name}</td>`
-        + `<td>${lj.service_name}</td>`
-        + `<td>${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-        + `</tr>`;
-        ++no;
-    });
+    if(listJasaDetail.length) {
+      listJasaDetail.forEach((lj) => {
+        rowListJasaDetail += `<tr>`
+          + `<td>${no}</td>`
+          + `<td>${lj.created_at}</td>`
+          + `<td>${lj.created_by}</td>`
+          + `<td>${lj.category_name}</td>`
+          + `<td>${lj.service_name}</td>`
+          + `<td>${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `</tr>`;
+          ++no;
+      });
+    } else {
+      rowListJasaDetail += `<tr class="text-center"><td colspan="6">Tidak ada data.</td></tr>`;
+    }
     $('#detail-list-jasa').append(rowListJasaDetail);
   }
 
@@ -121,18 +133,22 @@ $(document).ready(function() {
     let no = 1;
     $('#detail-list-barang tr').remove();
 
-    listBarangDetail.forEach((lb) => {
-      rowListBarangDetail += `<tr>`
-        + `<td>${no}</td>`
-        + `<td>${lb.created_at}</td>`
-        + `<td>${lb.created_by}</td>`
-        + `<td>${lb.item_name}</td>`
-        + `<td>${lb.category_name}</td>`
-        + `<td>${lb.unit_name}</td>`
-        + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-        + `</tr>`;
-        ++no;
-    });
+    if (listBarangDetail.length) {
+      listBarangDetail.forEach((lb) => {
+        rowListBarangDetail += `<tr>`
+          + `<td>${no}</td>`
+          + `<td>${lb.created_at}</td>`
+          + `<td>${lb.created_by}</td>`
+          + `<td>${lb.item_name}</td>`
+          + `<td>${lb.category_name}</td>`
+          + `<td>${lb.unit_name}</td>`
+          + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `</tr>`;
+          ++no;
+      });
+    } else {
+      rowListBarangDetail += `<tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>`;
+    }
     $('#detail-list-barang').append(rowListBarangDetail);
   }
 

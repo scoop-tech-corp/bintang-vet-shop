@@ -146,7 +146,7 @@
             </tr>
           </thead>
           <tbody id="list-tagihan-jasa">
-            <tr><td colspan="8">No data.</td></tr>
+            <tr class="text-center"><td colspan="8">Tidak ada data.</td></tr>
           </tbody>
         </table>
       </div>
@@ -169,7 +169,7 @@
             </tr>
           </thead>
           <tbody id="list-tagihan-barang">
-            <tr><td colspan="9">No data.</td></tr>
+            <tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>
           </tbody>
         </table>
       </div>
