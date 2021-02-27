@@ -35,6 +35,8 @@ class CabangController extends Controller
             $branch = $branch->orderBy($request->column, $request->orderby);
         }
 
+        $branch = $branch->orderBy('id', 'desc');
+
         $branch = $branch->get();
 
         return response()->json($branch, 200);

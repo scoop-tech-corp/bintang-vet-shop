@@ -63,6 +63,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('daftar-barang', 'DaftarBarangController@delete');
 
         Route::get('daftar-barang/download-template', 'DaftarBarangController@download_template');
+        Route::post('daftar-barang/upload', 'DaftarBarangController@upload_template');
 
         //kategori jasa
         Route::get('kategori-jasa', 'KategoriJasaController@index');

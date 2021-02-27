@@ -167,6 +167,8 @@ class UserController extends Controller
             $user = $user->orderBy($request->column, $request->orderby);
         }
 
+        $user = $user->orderBy('users.id', 'desc');
+
         $user = $user->get();
 
         return response()->json($user, 200);
@@ -293,7 +295,7 @@ class UserController extends Controller
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
         }
 
-        $data = $data->orderBy('users.id', 'asc');
+        $data = $data->orderBy('users.id', 'desc');
 
         $data = $data->get();
 

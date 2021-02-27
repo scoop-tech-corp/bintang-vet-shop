@@ -48,7 +48,7 @@ class PasienController extends Controller
             $patient = $patient->orderBy($request->column, $request->orderby);
         }
 
-        $patient = $patient->orderBy('id', 'asc');
+        $patient = $patient->orderBy('id', 'desc');
 
         $patient = $patient->get();
 

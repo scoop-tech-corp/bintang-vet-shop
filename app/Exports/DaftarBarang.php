@@ -18,6 +18,6 @@ class DaftarBarang implements ShouldAutoSize, WithHeadings, WithTitle
 
     public function title(): string
     {
-        return 'Daftar Kategori Barang';
+        return 'Daftar Barang';
     }
 }
