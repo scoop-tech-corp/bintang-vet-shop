@@ -33,6 +33,8 @@ class KategoriBarangController extends Controller
             $category_item = $category_item->orderBy($request->column, $request->orderby);
         }
 
+        $category_item = $category_item->orderBy('category_item.id', 'desc');
+
         $category_item = $category_item->get();
 
         return response()->json($category_item, 200);
