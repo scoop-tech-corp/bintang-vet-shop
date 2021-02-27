@@ -46,7 +46,7 @@ $(document).ready(function() {
             url     : $('.baseUrl').val() + '/api/pasien/detail-riwayat',
             headers : { 'Authorization': `Bearer ${token}` },
             type    : 'GET',
-            data    : { patient_registration_id: 2 },
+            data    : { patient_registration_id: $(this).val() },
             beforeSend: function() { $('#loading-screen').show(); },
             success: function(data) {
               console.log('console data detail', data);
