@@ -31,9 +31,12 @@
         </tr>
       </thead>
       <tbody id="list-riwayat-pasien">
-        <tr><td colspan="7">Tidak ada data.</td></tr>
+        <tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>
       </tbody>
     </table>
+    <div class="col-md-12 m-t-25px">
+      <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
+    </div>
   </div>
   <!-- /.box-body -->
 

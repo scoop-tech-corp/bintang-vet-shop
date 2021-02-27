@@ -40,7 +40,9 @@
                   <th>Jumlah</th>
                 </tr>
               </thead>
-              <tbody id="detail-list-jasa"></tbody>
+              <tbody id="detail-list-jasa">
+                <tr class="text-center"><td colspan="6">Tidak ada data.</td></tr>
+              </tbody>
             </table>
             <div class="m-b-10px m-t-10px">
               <div class="label-detail-div">Barang</div>
@@ -58,7 +60,9 @@
                     <th>Jumlah</th>
                   </tr>
                 </thead>
-                <tbody id="detail-list-barang"></tbody>
+                <tbody id="detail-list-barang">
+                  <tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>
+                </tbody>
               </table>
             </div>
             <div class="d-flex m-b-10px">
@@ -79,7 +83,9 @@
                     <th>Deskripsi</th>
                   </tr>
                 </thead>
-                <tbody id="list-deskripsi-kondisi-pasien"></tbody>
+                <tbody id="list-deskripsi-kondisi-pasien">
+                  <tr class="text-center"><td colspan="4">Tidak ada data.</td></tr>
+                </tbody>
               </table>
             </div>
             <div class="d-flex m-b-10px">
@@ -89,7 +95,9 @@
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer"></div>
+			<div class="modal-footer">
+        <button data-dismiss="modal" aria-label="Close" type="button" class="btn btn-default pull-right">Kembali</button>
+      </div>
 		</div>
 		<!-- /.modal-content -->
 	</div>
