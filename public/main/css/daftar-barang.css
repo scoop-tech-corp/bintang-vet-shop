@@ -1,3 +1,7 @@
+input[type='file'] {
+  color: #ffffff;
+}
+
 @media (max-width: 768px) {
   .openFormUpload, .section-right-box-title .select2-container {
     margin-top: 10px;

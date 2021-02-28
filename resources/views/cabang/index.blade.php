@@ -14,36 +14,38 @@
   </div>
   <!-- /.box-header -->
   <!-- form start -->
-  <div class="box-body table-responsive">
-    <table class="table table-striped text-nowrap">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th @click="onOrdering('branch_code')">Kode Cabang
-            <span v-if="columnStatus.branch_code == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.branch_code == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.branch_code == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th @click="onOrdering('branch_name')">Cabang
-            <span v-if="columnStatus.branch_name == 'desc'" class="fa fa-sort-desc"></span>
-            <span v-if="columnStatus.branch_name == 'asc'" class="fa fa-sort-asc"></span>
-            <span v-if="columnStatus.branch_name == 'none'" class="fa fa-sort"></span>
-          </th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in listCabang">
-          <td>@{{ index + 1 }}</td>
-          <td>@{{ item.branch_code }}</td>
-          <td>@{{ item.branch_name }}</td>
-          <td>
-            {{-- <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button> --}}
-            <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-striped text-nowrap">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th @click="onOrdering('branch_code')">Kode Cabang
+              <span v-if="columnStatus.branch_code == 'desc'" class="fa fa-sort-desc"></span>
+              <span v-if="columnStatus.branch_code == 'asc'" class="fa fa-sort-asc"></span>
+              <span v-if="columnStatus.branch_code == 'none'" class="fa fa-sort"></span>
+            </th>
+            <th @click="onOrdering('branch_name')">Cabang
+              <span v-if="columnStatus.branch_name == 'desc'" class="fa fa-sort-desc"></span>
+              <span v-if="columnStatus.branch_name == 'asc'" class="fa fa-sort-asc"></span>
+              <span v-if="columnStatus.branch_name == 'none'" class="fa fa-sort"></span>
+            </th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in listCabang">
+            <td>@{{ index + 1 }}</td>
+            <td>@{{ item.branch_code }}</td>
+            <td>@{{ item.branch_name }}</td>
+            <td>
+              {{-- <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button> --}}
+              <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <!-- /.box-body -->  
 
