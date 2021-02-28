@@ -11,12 +11,12 @@ class DaftarJasaController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $list_of_services = DB::table('list_of_services')
             ->join('users', 'list_of_services.user_id', '=', 'users.id')
@@ -55,6 +55,13 @@ class DaftarJasaController extends Controller
 
     public function create(Request $request)
     {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'NamaLayanan' => 'required|string|min:3|max:50',
             'KategoriJasa' => 'required|integer|max:50',

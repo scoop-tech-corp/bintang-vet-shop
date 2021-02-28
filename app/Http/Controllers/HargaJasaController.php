@@ -11,12 +11,12 @@ class HargaJasaController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $price_services = DB::table('price_services')
             ->join('users', 'price_services.user_id', '=', 'users.id')
