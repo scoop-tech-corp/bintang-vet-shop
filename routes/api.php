@@ -34,6 +34,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('user', 'UserController@index');
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
+        Route::delete('user', 'UserController@delete');
 
         Route::get('user/dokter', 'UserController@doctor');
 
