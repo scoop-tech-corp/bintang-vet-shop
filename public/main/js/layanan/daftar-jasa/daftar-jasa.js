@@ -162,7 +162,6 @@ $(document).ready(function() {
 			});
 		} else {
 			// process delete
-			console.log('delete id', getId);
 			$.ajax({
 				url     : $('.baseUrl').val() + '/api/daftar-jasa',
 				headers : { 'Authorization': `Bearer ${token}` },

@@ -34,7 +34,6 @@ $(document).ready(function() {
         data	  : { id: $(this).val() },
         beforeSend: function() { $('#loading-screen').show(); },
         success: function(data) {
-          console.log('data', data);
 
           $('#nomorPasienTxt').text(data.registration.patient_number); $('#jenisHewanTxt').text(data.registration.pet_category);
           $('#namaHewanTxt').text(data.registration.pet_name); $('#jenisKelaminTxt').text(data.registration.pet_gender);

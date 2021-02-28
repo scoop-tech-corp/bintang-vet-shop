@@ -21,7 +21,6 @@ $(document).ready(function() {
       data: { patient_id: id },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
-        console.log('data', data);
 				let listRiwayatPasien = '';
 				$('#list-riwayat-pasien tr').remove();
 
@@ -53,7 +52,6 @@ $(document).ready(function() {
             data    : { patient_registration_id: $(this).val() },
             beforeSend: function() { $('#loading-screen').show(); },
             success: function(data) {
-              console.log('console data detail', data);
               $('#nomorRegistrasiTxt').text(data.registration_number);
               $('#anamnesaTxt').text(data.anamnesa); $('#signTxt').text(data.sign);
               $('#diagnosaTxt').text(data.diagnosa);
