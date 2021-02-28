@@ -109,7 +109,7 @@ $(document).ready(function() {
 					.then(resp => {
 						const getRespData = resp.data;
 						getRespData.map(item => {
-							item.isRoleAccess = (role.toLowerCase() == 'dokter') ? false : true;
+							item.isRoleAccess = (role.toLowerCase() != 'admin') ? false : true;
 							return item;
 						});
 						this.listData = getRespData;

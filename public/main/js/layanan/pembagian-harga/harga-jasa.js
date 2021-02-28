@@ -280,7 +280,7 @@ $(document).ready(function() {
             + `<td>Rp ${typeof(v.petshop_fee) == 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
+						+ ((role.toLowerCase() != 'dokter') ? `` : `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`)
