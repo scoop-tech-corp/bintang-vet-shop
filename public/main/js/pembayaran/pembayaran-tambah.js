@@ -10,6 +10,10 @@ $(document).ready(function() {
 
   let isBeErr = false;
 
+  if (role.toLowerCase() == 'dokter') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	}
+
   loadPasien();
   refreshText(); 
   refreshForm();

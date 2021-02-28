@@ -6,9 +6,18 @@ $(document).ready(function() {
     branchId: ''
   };
 
-  loadPembayaran();
+	if (role.toLowerCase() == 'dokter') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	} else {
+		if (role.toLowerCase() != 'admin') {
+      $('#filterCabang').hide();
+    } else {
+      loadCabang();
+      $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+    }
+	}
 
-  $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+  loadPembayaran();
 
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
@@ -75,7 +84,31 @@ $(document).ready(function() {
 				}
 			}
 		});
-
   }
+
+	function loadCabang() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/cabang',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data) {
+				optCabang += `<option value=''>Cabang</option>`
+	
+				if (data.length) {
+					for (let i = 0 ; i < data.length ; i++) {
+						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
+					}
+				}
+				$('#filterCabang').append(optCabang);
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+	}
 
 });

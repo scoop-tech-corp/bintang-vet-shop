@@ -21,7 +21,7 @@ $(document).ready(function() {
 			}
 		},
 		mounted() {
-			if (role.toLowerCase() == 'dokter') {
+			if (role.toLowerCase() != 'admin') {
 				$('.columnAction').hide();
 				$('.section-left-box-title .btn').hide();
 			}

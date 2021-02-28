@@ -23,7 +23,7 @@ $(document).ready(function() {
     branchId: ''
   };
 
-  if (role.toLowerCase() == 'dokter') {
+  if (role.toLowerCase() != 'admin') {
     $('.columnAction').hide(); $('#filterCabang').hide();
   } else {
     $('#selectedCabangOnBarang').append(`<option value=''>Pilih Cabang</option>`);
@@ -31,7 +31,6 @@ $(document).ready(function() {
     $('#selectedNamaBarang').append(`<option value=''>Pilih Nama Barang</option>`);
 
     $('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
-		$('.section-right-box-title').addClass('width-350px');
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });

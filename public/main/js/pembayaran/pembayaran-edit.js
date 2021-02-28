@@ -11,6 +11,10 @@ $(document).ready(function() {
   let listTagihanBarang = [];
   let calculationPay = [];
 
+  if (role.toLowerCase() == 'dokter') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	}
+
   $('#totalBayarTxt').text('-');
   $('.btn-back-to-list .text, #btnKembali').click(function() {
     window.location.href = $('.baseUrl').val() + '/pembayaran';

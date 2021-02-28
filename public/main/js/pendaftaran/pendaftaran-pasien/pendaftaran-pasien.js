@@ -18,15 +18,19 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
+	if (role.toLowerCase() == 'admin') {
+		loadCabang();
+		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+	} else {
+		$('#filterCabang').hide();
+	}
+
   loadPendaftaranPasien();
 
   loadPasien();
 
 	loadDokter();
-
-	loadCabang();
 	
-	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
