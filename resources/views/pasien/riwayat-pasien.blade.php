@@ -17,25 +17,27 @@
     </div>
   </div>
 
-  <div class="box-body table-responsive">
-    <table class="table table-striped text-nowrap">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>No. Registrasi</th>
-          <th>Keluhan</th>
-          <th>Nama Pendaftar Pasien</th>
-          <th>Dibuat Oleh</th>
-          <th>Tanggal dibuat</th>
-          <th class="columnAction">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="list-riwayat-pasien">
-        <tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>
-      </tbody>
-    </table>
-    <div class="col-md-12 m-t-25px">
-      <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-striped text-nowrap">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>No. Registrasi</th>
+            <th>Keluhan</th>
+            <th>Nama Pendaftar Pasien</th>
+            <th>Dibuat Oleh</th>
+            <th>Tanggal dibuat</th>
+            <th class="columnAction">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="list-riwayat-pasien">
+          <tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="m-t-10px">
+      <button id="btnKembali" type="button" class="btn btn-default pull-right">Kembali</button>
     </div>
   </div>
   <!-- /.box-body -->

@@ -23,7 +23,7 @@ $(document).ready(function() {
 	if (role.toLowerCase() == 'resepsionis') {
 		$('.columnAction').hide(); // $('#filterCabang').hide();
 	} else if (role.toLowerCase() == 'admin') {
-		$('.section-right-box-title').addClass('width-350px');
+		// $('.section-right-box-title').addClass('width-350px');
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 		loadCabang();

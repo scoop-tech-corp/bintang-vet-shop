@@ -175,3 +175,21 @@ body {
 .m-r-10px { 
 	margin-right: 10px;
 }
+
+
+@media (max-width: 768px) {
+  .section-right-box-title {
+    display: block;
+  }
+
+  .section-right-box-title .select2-container {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+
+  .input-search-section {
+    width: 100%;
+    margin-right: 0px;
+  }
+
+}

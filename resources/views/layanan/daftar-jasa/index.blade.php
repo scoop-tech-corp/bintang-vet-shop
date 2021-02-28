@@ -15,21 +15,23 @@
     </div>
   </div>
 
-  <div class="box-body table-responsive">
-    <table class="table table-striped text-nowrap">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th class="onOrdering" data='service_name' orderby="none">Jenis Pelayanan <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='category_name' orderby="none">Kategori <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-          <th class="columnAction">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="list-daftar-jasa"></tbody>
-    </table>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-striped text-nowrap">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th class="onOrdering" data='service_name' orderby="none">Jenis Pelayanan <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='category_name' orderby="none">Kategori <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
+            <th class="columnAction">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="list-daftar-jasa"></tbody>
+      </table>
+    </div>
   </div>
   <!-- /.box-body -->
 
