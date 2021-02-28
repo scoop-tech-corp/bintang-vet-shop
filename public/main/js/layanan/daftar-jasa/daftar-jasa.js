@@ -16,7 +16,7 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
-	if (role.toLowerCase() == 'dokter') {
+	if (role.toLowerCase() != 'admin') {
     $('.columnAction').hide(); $('#filterCabang').hide();
   } else {
 		$('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);

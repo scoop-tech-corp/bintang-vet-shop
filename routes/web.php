@@ -101,32 +101,6 @@ Route::get('/pembayaran/detail/{id}', function () {
 	return view('pembayaran.pembayaran-detail');
 });
 
-// Route::get('/cabang','BranchController@index');
-
-// Route::get('/register', function () {
-// 	return view('/auth/register');
-// });
-
-// Route::get('/getDataBranch','BranchController@getDataBranch');
-
-// Route::get('/cabang/tambah','BranchController@tambah');
-
-// Route::post('/cabang/store','BranchController@store');
-
-// Route::get('/cabang/edit/{id}', 'BranchController@edit');
-
-// Route::post('/cabang/update', 'BranchController@update');
-
-// Route::post('/cabang/hapus', 'BranchController@delete');
-
-// Route::get('/dokter', function () {
-// 	return view('dokter.index');
-// });
-
-// Route::get('/tindakan', function () {
-// 	return view('tindakan.index');
-// });
-
-// Route::get('/kunjungan', function () {
-// 	return view('kunjungan.index');
-// });
+Route::get('/unauthorized', function () {
+	return view('unauthorized');
+});

@@ -32,18 +32,22 @@ $(document).ready(function() {
     keyword: '',
     branchId: ''
   };
-  
-  loadHasilPemeriksaan();
 
-  loadPasien();
-  
-  loadJasa();
+  if (role.toLowerCase() == 'resepsionis') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	} else {
+    if (role.toLowerCase() != 'admin') {
+      $('#filterCabang').hide();
+    } else {
+      loadCabang();
+      $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+    }
 
-  loadBarang();
-
-  loadCabang();
-
-  $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+		loadHasilPemeriksaan();
+    loadPasien();
+    loadJasa();
+    loadBarang();
+	}
 
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });

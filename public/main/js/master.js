@@ -33,11 +33,12 @@ $(document).ready(function() {
     } else if (role === 'resepsionis') {
       $('.menuPasien').show();   $('.menuPendaftaran').show();
       $('.menuTindakan').show(); $('.menuPembayaran').show();
-      $('.menuKunjungan').show();
+      $('.menuKunjungan').show(); $('.menuGudang').show();
     } else if (role === 'dokter') {
       $('.menuDokter').show();   $('.menuPasien').show();
       $('.menuTindakan').show(); $('.menuGudang').show();
       $('.menuKunjungan').show(); $('.menuPeriksa').show();
+      $('.menuPendaftaran').show();
     }
   }
 

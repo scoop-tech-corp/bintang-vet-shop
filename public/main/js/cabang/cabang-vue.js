@@ -28,6 +28,9 @@ $(document).ready(function() {
 			}
 		},
 		mounted() {
+			if (role.toLowerCase() !== 'admin') {
+				window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+			}
 			this.getData();
 		},
 		computed: {
