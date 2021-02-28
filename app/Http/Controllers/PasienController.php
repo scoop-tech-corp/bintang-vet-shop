@@ -218,8 +218,9 @@ class PasienController extends Controller
             ->where('registrations.acceptance_status', '=', '1');
 
         if ($request->user()->role == 'dokter') {
-            $data = $data->where('users.branch_id', '=', $request->user()->branch_id)
-                ->where('registrations.doctor_user_id', '=', $request->user()->id);
+            $data = $data
+            // ->where('users.branch_id', '=', $request->user()->branch_id)
+            ->where('registrations.doctor_user_id', '=', $request->user()->id);
         }
 
         $data = $data->orderBy('registrations.id', 'desc');
@@ -275,7 +276,7 @@ class PasienController extends Controller
         }
 
         $data = DB::table('check_up_results')
-        ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
+            ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('users', 'check_up_results.user_id', '=', 'users.id')
             ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number', 'check_up_results.anamnesa',
                 'check_up_results.sign', 'check_up_results.diagnosa', 'check_up_results.status_outpatient_inpatient',
