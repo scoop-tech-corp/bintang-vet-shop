@@ -134,7 +134,7 @@ class UserController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -166,6 +166,8 @@ class UserController extends Controller
 
             $user = $user->orderBy($request->column, $request->orderby);
         }
+
+        $user = $user->orderBy('users.id', 'desc');
 
         $user = $user->get();
 
@@ -209,7 +211,7 @@ class UserController extends Controller
         if (is_null($user)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -276,12 +278,12 @@ class UserController extends Controller
 
     public function doctor(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $data = DB::table('users')
             ->join('branches', 'users.branch_id', '=', 'branches.id')
@@ -293,7 +295,7 @@ class UserController extends Controller
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
         }
 
-        $data = $data->orderBy('users.id', 'asc');
+        $data = $data->orderBy('users.id', 'desc');
 
         $data = $data->get();
 

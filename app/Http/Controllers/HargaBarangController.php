@@ -11,12 +11,12 @@ class HargaBarangController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $price_items = DB::table('price_items')
             ->join('users', 'price_items.user_id', '=', 'users.id')
@@ -66,7 +66,7 @@ class HargaBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -120,7 +120,7 @@ class HargaBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -146,7 +146,7 @@ class HargaBarangController extends Controller
         if (is_null($price_items)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -159,7 +159,7 @@ class HargaBarangController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah ada!'],
             ], 422);
         }
 
@@ -182,7 +182,7 @@ class HargaBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -191,7 +191,7 @@ class HargaBarangController extends Controller
         if (is_null($price_items)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -212,7 +212,7 @@ class HargaBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -226,7 +226,7 @@ class HargaBarangController extends Controller
         if (is_null($list_of_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -238,7 +238,7 @@ class HargaBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -253,7 +253,7 @@ class HargaBarangController extends Controller
         if (is_null($list_of_items)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 

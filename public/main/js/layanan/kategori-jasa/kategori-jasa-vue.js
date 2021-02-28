@@ -21,7 +21,7 @@ $(document).ready(function() {
 			}
 		},
 		mounted() {
-			if (role.toLowerCase() == 'dokter') {
+			if (role.toLowerCase() != 'admin') {
 				$('.columnAction').hide();
 				$('.section-left-box-title .btn').hide();
 			}
@@ -109,7 +109,7 @@ $(document).ready(function() {
 					.then(resp => {
 						const getRespData = resp.data;
 						getRespData.map(item => {
-							item.isRoleAccess = (role.toLowerCase() == 'dokter') ? false : true;
+							item.isRoleAccess = (role.toLowerCase() != 'admin') ? false : true;
 							return item;
 						});
 						this.listData = getRespData;
@@ -203,7 +203,6 @@ $(document).ready(function() {
 					}
 				})
 				.catch(err => {
-					console.log(err);
 					if (err.response.status === 401) {
 						localStorage.removeItem('vet-clinic');
 	          location.href = $('.baseUrl').val() + '/masuk';

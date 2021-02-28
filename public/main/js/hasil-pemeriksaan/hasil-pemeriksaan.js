@@ -32,18 +32,22 @@ $(document).ready(function() {
     keyword: '',
     branchId: ''
   };
-  
-  loadHasilPemeriksaan();
 
-  loadPasien();
-  
-  loadJasa();
+  if (role.toLowerCase() == 'resepsionis') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	} else {
+    if (role.toLowerCase() != 'admin') {
+      $('#filterCabang').hide();
+    } else {
+      loadCabang();
+      $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+    }
 
-  loadBarang();
-
-  loadCabang();
-
-  $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+		loadHasilPemeriksaan();
+    loadPasien();
+    loadJasa();
+    loadBarang();
+	}
 
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
@@ -285,7 +289,6 @@ $(document).ready(function() {
       service: finalSelectedJasa,
       item: finalSelectedBarang
     };
-    console.log('datas', datas);
 
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
@@ -342,7 +345,7 @@ $(document).ready(function() {
     }
 
     if (!$('#diagnosa').val()) {
-			$('#diagnosaErr1').text('Sign harus di isi'); isValidDiagnosa = false;
+			$('#diagnosaErr1').text('Diagnosa harus di isi'); isValidDiagnosa = false;
 		} else {
 			$('#diagnosaErr1').text(''); isValidDiagnosa = true;
     }
@@ -451,7 +454,8 @@ $(document).ready(function() {
         + `<td><span id="totalBarang-jasa-${idx}">${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
+          </td>`
+        + `</tr>`;
         ++no;
     });
     $('#list-selected-jasa').append(rowSelectedListJasa);
@@ -500,7 +504,8 @@ $(document).ready(function() {
         + `<td><span id="totalBarang-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
             <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`;
+          </td>`
+        + `</tr>`;
         ++no;
     });
     $('#list-selected-barang').append(rowSelectedListBarang);
@@ -641,7 +646,6 @@ $(document).ready(function() {
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
                 const getData = data;
-                console.log('getData', getData);
 
                 $('.modal-title').text('Detail Hasil Pemeriksaan');
                 $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number); $('#nomorPasienDetailTxt').text(getData.registration.patient_number); 
@@ -743,7 +747,7 @@ $(document).ready(function() {
               beforeSend: function() { $('#loading-screen').show(); },
               success: function(data) {
                 const getData = data;
-                console.log('getData', getData);
+
                 getId = getData.id; getPatienRegistrationId = getData.patient_registration_id;
                 $('#nomorRegistrasiTxt').text(getData.registration.registration_number); $('#nomorPasienTxt').text(getData.registration.patient_number); 
                 $('#jenisHewanTxt').text(getData.registration.pet_category); $('#namaHewanTxt').text(getData.registration.pet_name); 
@@ -808,7 +812,7 @@ $(document).ready(function() {
                       + `<td>${no}</td>`
                       + `<td>${lj.created_at}</td>`
                       + `<td>${lj.created_by}</td>`
-                      + `<td>${lj.description}</td>`
+                      + `<td><div style="word-break: break-word;">${lj.description}</div></td>`
                       + `</tr>`;
                       ++no;
                   });

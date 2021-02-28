@@ -28,9 +28,11 @@ $(document).ready(function() {
 
 	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
-	loadUser();
-
-	loadCabang();
+	if (role.toLowerCase() !== 'admin') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	} else {
+		loadUser(); loadCabang();
+	}
 
 	$('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());

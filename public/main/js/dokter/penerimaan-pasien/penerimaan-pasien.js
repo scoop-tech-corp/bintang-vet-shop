@@ -8,8 +8,13 @@ $(document).ready(function() {
 		column: '',
 		keyword: ''
   };
-  
-  loadPenerimaanPasien();
+
+  if (role.toLowerCase() == 'resepsionis') {
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+	} else {
+		loadPenerimaanPasien();
+	}
+
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());

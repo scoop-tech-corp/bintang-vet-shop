@@ -16,7 +16,7 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
-	if (role.toLowerCase() == 'dokter') {
+	if (role.toLowerCase() != 'admin') {
     $('.columnAction').hide(); $('#filterCabang').hide();
   } else {
 		$('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
@@ -162,7 +162,6 @@ $(document).ready(function() {
 			});
 		} else {
 			// process delete
-			console.log('delete id', getId);
 			$.ajax({
 				url     : $('.baseUrl').val() + '/api/daftar-jasa',
 				headers : { 'Authorization': `Bearer ${token}` },
@@ -223,7 +222,7 @@ $(document).ready(function() {
 						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
+						+ ((role.toLowerCase() != 'admin') ? `` : `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`)

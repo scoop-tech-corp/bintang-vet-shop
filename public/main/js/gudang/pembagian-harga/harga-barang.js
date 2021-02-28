@@ -23,7 +23,7 @@ $(document).ready(function() {
     branchId: ''
   };
 
-  if (role.toLowerCase() == 'dokter') {
+  if (role.toLowerCase() != 'admin') {
     $('.columnAction').hide(); $('#filterCabang').hide();
   } else {
     $('#selectedCabangOnBarang').append(`<option value=''>Pilih Cabang</option>`);
@@ -31,7 +31,6 @@ $(document).ready(function() {
     $('#selectedNamaBarang').append(`<option value=''>Pilih Nama Barang</option>`);
 
     $('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
-		$('.section-right-box-title').addClass('width-350px');
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
@@ -295,7 +294,7 @@ $(document).ready(function() {
 						+ `<td>${v.branch_name}</td>`
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
+						+ ((role.toLowerCase() != 'admin') ? `` : `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`)

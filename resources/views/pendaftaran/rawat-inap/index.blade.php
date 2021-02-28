@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="rawat-inap-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">Rawat Inap</h3>
     <div class="inner-box-title">
       <button class="btn btn-info openFormAdd">Tambah</button>
@@ -13,24 +13,26 @@
     </div>
   </div>
 
-  <div class="box-body table-responsive">
-    <table class="table table-striped text-nowrap">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th class="onOrdering" data='id_register' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='id_member' orderby="none">No. Pasien <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='pet_name' orderby="none">Nama Hewan <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='complaint' orderby="none">Keluhan <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='registrant' orderby="none">Pendaftar <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='branch_name' orderby="none">Dokter yang menangani <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="list-rawat-inap"></tbody>
-    </table>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-striped text-nowrap">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th class="onOrdering" data='id_register' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='id_member' orderby="none">No. Pasien <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='pet_name' orderby="none">Nama Hewan <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='complaint' orderby="none">Keluhan <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='registrant' orderby="none">Pendaftar <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Dokter yang menangani <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="list-rawat-inap"></tbody>
+      </table>
+    </div>
   </div>
   <!-- /.box-body -->
 
