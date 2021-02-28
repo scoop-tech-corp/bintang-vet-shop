@@ -278,12 +278,12 @@ class UserController extends Controller
 
     public function doctor(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $data = DB::table('users')
             ->join('branches', 'users.branch_id', '=', 'branches.id')
