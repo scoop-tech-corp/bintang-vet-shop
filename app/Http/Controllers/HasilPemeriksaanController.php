@@ -321,12 +321,12 @@ class HasilPemeriksaanController extends Controller
 
     public function detail(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $data = CheckUpResult::find($request->id);
         //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
