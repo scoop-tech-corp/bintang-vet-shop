@@ -203,7 +203,6 @@ $(document).ready(function() {
 					}
 				})
 				.catch(err => {
-					console.log(err);
 					if (err.response.status === 401) {
 						localStorage.removeItem('vet-clinic');
 	          location.href = $('.baseUrl').val() + '/masuk';

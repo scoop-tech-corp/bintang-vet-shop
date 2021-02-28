@@ -43,7 +43,7 @@ $(document).ready(function() {
 			success: function(data) {
 				let listPembayaran = '';
 				$('#list-pembayaran tr').remove();
-        console.log('data', data);
+
 				$.each(data, function(idx, v) {
 					listPembayaran += `<tr>`
 						+ `<td>${++idx}</td>`

@@ -133,7 +133,6 @@ $(document).ready(function() {
 			data.submit();
 		}
 	}).on('fileuploaddone', function(e, data) {
-		// console.log('fileuploaddone', data);
 		$('#modal-confirmation').hide();
 
 		$("#msg-box .modal-body").text('Berhasil Upload Barang');
@@ -143,7 +142,6 @@ $(document).ready(function() {
 			loadDaftarBarang();
 		}, 1000);
 	}).on('fileuploadfail', function(e, data) {
-		// console.log('fileuploadprocessfail', data);
 		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
 			: data._response.jqXHR.responseJSON.errors;
 
@@ -153,7 +151,6 @@ $(document).ready(function() {
 		});
 		$('.validate-error').append(errText)
 	}).on('fileuploadprogressall', function(e,data) {
-		// console.log('fileuploadprogressall', data);
 	});
 
 	$('#btnSubmitDaftarBarang').click(function() {
