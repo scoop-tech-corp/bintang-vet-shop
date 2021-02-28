@@ -33,6 +33,10 @@ Route::get('/pasien', function () {
 	return view('pasien.index');
 });
 
+Route::get('/riwayat-pameriksaan/{id}', function () {
+	return view('pasien.riwayat-pasien');
+});
+
 Route::get('/kategori-barang', function () {
 	return view('gudang.kategori-barang.index');
 });
@@ -81,36 +85,22 @@ Route::get('/hasil-pemeriksaan', function () {
 	return view('hasil-pemeriksaan.index');
 });
 
-// Route::get('/cabang','BranchController@index');
+Route::get('/pembayaran', function () {
+	return view('pembayaran.index');
+});
 
-// Route::get('/register', function () {
-// 	return view('/auth/register');
-// });
+Route::get('/pembayaran/tambah', function () {
+	return view('pembayaran.pembayaran-tambah');
+});
 
-// Route::get('/getDataBranch','BranchController@getDataBranch');
+Route::get('/pembayaran/edit/{id}', function () {
+	return view('pembayaran.pembayaran-edit');
+});
 
-// Route::get('/cabang/tambah','BranchController@tambah');
+Route::get('/pembayaran/detail/{id}', function () {
+	return view('pembayaran.pembayaran-detail');
+});
 
-// Route::post('/cabang/store','BranchController@store');
-
-// Route::get('/cabang/edit/{id}', 'BranchController@edit');
-
-// Route::post('/cabang/update', 'BranchController@update');
-
-// Route::post('/cabang/hapus', 'BranchController@delete');
-
-// Route::get('/dokter', function () {
-// 	return view('dokter.index');
-// });
-
-// Route::get('/tindakan', function () {
-// 	return view('tindakan.index');
-// });
-
-// Route::get('/pembayaran', function () {
-// 	return view('pembayaran.index');
-// });
-
-// Route::get('/kunjungan', function () {
-// 	return view('kunjungan.index');
-// });
+Route::get('/unauthorized', function () {
+	return view('unauthorized');
+});

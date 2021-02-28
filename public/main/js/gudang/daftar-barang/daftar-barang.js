@@ -19,14 +19,13 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
-	if (role.toLowerCase() == 'dokter') {
+	if (role.toLowerCase() != 'admin') {
 		$('.columnAction').hide(); $('#filterCabang').hide();
 	} else {
 		$('.section-left-box-title').append(
 			`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
 			<button class="btn btn-info openFormUpload">Upload Sekaligus</button>`
 		);
-		$('.section-right-box-title').addClass('width-350px');
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
 		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
@@ -82,6 +81,7 @@ $(document).ready(function() {
 	$('.openFormUpload').click(function() {
 		$('#modal-upload-daftar-barang .modal-title').text('Upload Barang Sekaligus');
 		$('#modal-upload-daftar-barang').modal('show');
+		$('.validate-error').html('');
 	});
 
 	$('.btn-download-template').click(function() {
@@ -113,6 +113,44 @@ $(document).ready(function() {
 			}
 		});
 
+	});
+
+	$("#fileupload").fileupload({
+		url: $('.baseUrl').val() + '/api/daftar-barang/upload',
+		headers : { 'Authorization': `Bearer ${token}` },
+		dropZone: '#dropZone',
+		dataType: 'json',
+		autoUpload: false,
+	}).on('fileuploadadd', function (e, data) {
+		let fileTypeAllowed = /.\.(xlsx|xls)$/i;
+		let fileName = data.originalFiles[0]['name'];
+		let fileSize = data.originalFiles[0]['size'];
+		
+		if (!fileTypeAllowed.test(fileName)) {
+			$('.validate-error').html('File harus berformat .xlsx atau .xls');
+		} else {
+			$('.validate-error').html('');
+			data.submit();
+		}
+	}).on('fileuploaddone', function(e, data) {
+		$('#modal-confirmation').hide();
+
+		$("#msg-box .modal-body").text('Berhasil Upload Barang');
+		$('#msg-box').modal('show');
+		setTimeout(() => {
+			$('#modal-upload-daftar-barang').modal('toggle');
+			loadDaftarBarang();
+		}, 1000);
+	}).on('fileuploadfail', function(e, data) {
+		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
+			: data._response.jqXHR.responseJSON.errors;
+
+		let errText = '';
+		$.each(getResponsError, function(idx, v) {
+			errText += v + ((idx !== getResponsError.length - 1) ? '<br/>' : '');
+		});
+		$('.validate-error').append(errText)
+	}).on('fileuploadprogressall', function(e,data) {
 	});
 
 	$('#btnSubmitDaftarBarang').click(function() {
@@ -267,7 +305,7 @@ $(document).ready(function() {
 						<td>${v.branch_name}</td>
 						<td>${v.created_by}</td>
 						<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() == 'dokter') ? `` : `<td>
+						+ ((role.toLowerCase() != 'admin') ? `` : `<td>
 							<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 							<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 						</td>`)

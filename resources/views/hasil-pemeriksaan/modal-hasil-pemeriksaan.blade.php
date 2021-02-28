@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal-hasil-pemeriksaan" style="overflow: auto">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -80,8 +80,8 @@
             </div>
             <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
-              <select id="selectedJasa" class="form-control" style="width: 100%" multiple="multiple"></select>
-              <div class="table-responsive">
+              <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
+              <div class="table-responsive m-t-10px">
                 <table class="table table-striped text-nowrap table-list-jasa">
                   <thead>
                     <tr>
@@ -102,8 +102,8 @@
             </div>
             <div class="form-group">{{-- Barang Rawat Jalan --}}
               <label for="barang">Barang</label>
-              <select id="selectedBarang" class="form-control" style="width: 100%" multiple="multiple"></select>
-              <div class="table-responsive">
+              <select id="selectedBarang" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
+              <div class="table-responsive m-t-10px">
                 <table class="table table-striped text-nowrap table-list-barang">
                   <thead>
                     <tr>
@@ -136,17 +136,19 @@
               <textarea id="descriptionCondPasien" class="form-control" placeholder="Masukan Deskripsi Kondisi Pasien"></textarea>
 							<div id="descriptionCondPasienErr1" class="validate-error"></div>
             </div>
-            <table class="table table-striped text-nowrap table-deskripsi-kondisi-pasien" style="margin-bottom: 15px">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Dibuat Oleh</th>
-                  <th>Deskripsi</th>
-                </tr>
-              </thead>
-              <tbody id="list-deskripsi-kondisi-pasien"></tbody>
-            </table>
+            <div class="table-responsive form-group">
+              <table class="table table-striped table-deskripsi-kondisi-pasien">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Dibuat Oleh</th>
+                    <th>Deskripsi</th>
+                  </tr>
+                </thead>
+                <tbody id="list-deskripsi-kondisi-pasien"></tbody>
+              </table>
+            </div>
             <div class="form-group">
               <label for="barang" style="margin-right: 40px;">Status Pemeriksaan</label>
               <span style="padding-right: 23px;"><input type="radio" name="radioStatusPemeriksa" value=1 /> Selesai</span>

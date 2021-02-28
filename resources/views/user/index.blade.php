@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="box box-info" id="user-app">
-  <div class="box-header with-border">
+  <div class="box-header ">
     <h3 class="box-title">User Management</h3>
     <div class="inner-box-title">
       <div class="section-left-box-title">
@@ -19,25 +19,27 @@
   </div>
   <!-- /.box-header -->
 
-  <div class="box-body table-responsive">
-    <table class="table table-striped text-nowrap">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th class="onOrdering" data='staffing_number' orderby="none">No. Kepegawaian <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='username' orderby="none">Username <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='fullname' orderby="none">Nama Lengkap <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='email' orderby="none">Email <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='role' orderby="none">Role User <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='status' orderby="none">status <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_by' orderby="none">Dibuat oleh <span class="fa fa-sort"></span></th>
-          <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-          <th class="columnAction">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="list-user"></tbody>
-    </table>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-striped text-nowrap">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th class="onOrdering" data='staffing_number' orderby="none">No. Kepegawaian <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='username' orderby="none">Username <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='fullname' orderby="none">Nama Lengkap <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='email' orderby="none">Email <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='role' orderby="none">Role User <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='status' orderby="none">status <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_by' orderby="none">Dibuat oleh <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
+            <th class="columnAction">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="list-user"></tbody>
+      </table>
+    </div>
   </div>
   <!-- /.box-body -->
 

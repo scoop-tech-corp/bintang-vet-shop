@@ -11,12 +11,12 @@ class KategoriBarangController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $category_item = DB::table('category_item')
             ->join('users', 'category_item.user_id', '=', 'users.id')
@@ -33,6 +33,8 @@ class KategoriBarangController extends Controller
             $category_item = $category_item->orderBy($request->column, $request->orderby);
         }
 
+        $category_item = $category_item->orderBy('category_item.id', 'desc');
+
         $category_item = $category_item->get();
 
         return response()->json($category_item, 200);
@@ -43,7 +45,7 @@ class KategoriBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -75,7 +77,7 @@ class KategoriBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -97,7 +99,7 @@ class KategoriBarangController extends Controller
         if (is_null($category_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -111,7 +113,7 @@ class KategoriBarangController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah ada!'],
             ], 422);
 
         }
@@ -131,7 +133,7 @@ class KategoriBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -140,7 +142,7 @@ class KategoriBarangController extends Controller
         if (is_null($category_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 

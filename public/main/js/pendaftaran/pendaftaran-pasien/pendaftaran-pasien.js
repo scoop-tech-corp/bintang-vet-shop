@@ -18,15 +18,19 @@ $(document).ready(function() {
 		branchId: ''
 	};
 
+	if (role.toLowerCase() == 'admin') {
+		loadCabang();
+		$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
+	} else {
+		$('#filterCabang').hide();
+	}
+
   loadPendaftaranPasien();
 
   loadPasien();
 
 	loadDokter();
-
-	loadCabang();
 	
-	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -234,8 +238,8 @@ $(document).ready(function() {
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
-								<button type="button" class="btn btn-warning openFormEdit" ${v.acceptance_status == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" ${v.acceptance_status == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-warning openFormEdit" ${v.acceptance_status == 1 || v.acceptance_status == 3 ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-danger openFormDelete" ${v.acceptance_status == 1 || v.acceptance_status == 3 ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`
 						+ `</tr>`;
 				});
@@ -262,7 +266,7 @@ $(document).ready(function() {
 
 				$('.openFormEdit').click(function() {
 					const getObj = data.find(x => x.id == $(this).val());
-					if (getObj.acceptance_status != 1) {
+					if (getObj.acceptance_status != 1 && getObj.acceptance_status != 3) {
 						modalState = 'edit';
 
 						$('.modal-title').text('Edit Pendaftaran Pasien');
@@ -284,7 +288,7 @@ $(document).ready(function() {
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
 					const getObj = data.find(x => x.id == getId);
-					if (getObj.acceptance_status != 1) {
+					if (getObj.acceptance_status != 1 && getObj.acceptance_status != 3) {
 						modalState = 'delete';
 
 						$('#modal-confirmation .modal-title').text('Peringatan');

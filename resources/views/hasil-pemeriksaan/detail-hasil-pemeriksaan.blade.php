@@ -72,7 +72,7 @@
             <div class="m-b-10px">
               <div class="label-detail-div">Jasa</div>
             </div>
-            <table id="table-detail-jasa" class="table table-striped text-nowrap" style="margin-bottom: 15px">
+            <table id="table-detail-jasa" class="table table-striped text-nowrap m-b-15px">
               <thead>
                 <tr>
                   <th>No</th>

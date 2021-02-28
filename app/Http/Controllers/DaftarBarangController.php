@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MultipleSheetUploadDaftarBarang;
+use App\Imports\MultipleSheetImportDaftarBarang;
 use App\Models\ListofItems;
 use DB;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class DaftarBarangController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'resepsionis') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'resepsionis') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $item = DB::table('list_of_items')
             ->join('users', 'list_of_items.user_id', '=', 'users.id')
@@ -62,7 +65,7 @@ class DaftarBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -92,7 +95,7 @@ class DaftarBarangController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah ada!'],
             ], 422);
         }
 
@@ -117,7 +120,7 @@ class DaftarBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -143,7 +146,7 @@ class DaftarBarangController extends Controller
         if (is_null($item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -157,7 +160,7 @@ class DaftarBarangController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah ada!'],
             ], 422);
 
         }
@@ -170,7 +173,7 @@ class DaftarBarangController extends Controller
         if (is_null($check_stock)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data stock not found!'],
+                'errors' => ['Data stock tidak ditemukan!'],
             ], 404);
         }
 
@@ -183,7 +186,7 @@ class DaftarBarangController extends Controller
                 'status' => 'tambah',
                 'user_id' => $request->user()->id,
             ]);
-            
+
         } elseif ($check_stock->total_item < $request->jumlah_barang) {
             $qty_item = $request->jumlah_barang - $check_stock->total_item;
 
@@ -214,7 +217,7 @@ class DaftarBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -223,7 +226,7 @@ class DaftarBarangController extends Controller
         if (is_null($item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -244,15 +247,70 @@ class DaftarBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
-        return response()->download(public_path('source_download/cobadownload.xlsx'), 'Template Excel');
+        return (new MultipleSheetUploadDaftarBarang())->download('Template Daftar Barang.xlsx');
+
+        // return response()->download(public_path('source_download/Template Upload Daftar Barang.xlsx'), 'Template Excel Upload Daftar Barang');
     }
 
     public function upload_template(Request $request)
     {
-        # code...
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx',
+        ]);
+
+        //dd($request->file('file'));
+
+        $rows = Excel::toArray(new MultipleSheetImportDaftarBarang, $request->file('file'));
+        $result = $rows[0];
+        //response()->json(["rows"=>$rows]);
+
+        foreach ($result as $key_result) {
+
+            $check_branch = DB::table('list_of_items')
+                ->where('branch_id', '=', $key_result['kode_cabang_barang'])
+                ->where('item_name', '=', $key_result['nama_barang'])
+                ->count();
+
+            if ($check_branch > 0) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data ' . $key_result['nama_barang'] . ' sudah ada!'],
+                ], 422);
+            }
+        }
+
+        //return $res_rows[1];
+        // return $request->file('file')->store('import');
+
+        // // menangkap file excel
+        $file = $request->file('file');
+
+        // $import = new MultipleSheetImportDaftarBarang;
+        // $import->import($file);
+
+        // membuat nama file unik
+        //$nama_file = rand().$file->getClientOriginalName();
+
+        // upload ke folder file_siswa di dalam folder public
+        //$file->move('file_siswa',$nama_file);
+
+        // import data
+        Excel::import(new MultipleSheetImportDaftarBarang, $file);
+
+        return response()->json([
+            'message' => 'Berhasil mengupload Barang',
+        ], 200);
     }
 }
