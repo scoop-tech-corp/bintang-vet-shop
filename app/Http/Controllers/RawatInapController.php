@@ -14,7 +14,7 @@ class RawatInapController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -64,7 +64,7 @@ class RawatInapController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -124,7 +124,7 @@ class RawatInapController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -151,7 +151,7 @@ class RawatInapController extends Controller
         if (is_null($in_patient)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -176,7 +176,7 @@ class RawatInapController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -185,7 +185,7 @@ class RawatInapController extends Controller
         if (is_null($in_patient)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
