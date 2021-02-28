@@ -11,13 +11,6 @@ class RegistrasiController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
-
         $data = DB::table('registrations')
             ->join('users', 'registrations.user_id', '=', 'users.id')
             ->join('users as user_doctor', 'registrations.doctor_user_id', '=', 'user_doctor.id')
@@ -65,12 +58,12 @@ class RegistrasiController extends Controller
 
     public function create(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|numeric',
@@ -120,12 +113,12 @@ class RegistrasiController extends Controller
 
     public function update(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|numeric',
@@ -173,12 +166,12 @@ class RegistrasiController extends Controller
 
     public function delete(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $registration = Registration::find($request->id);
 
