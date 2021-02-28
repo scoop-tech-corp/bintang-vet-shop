@@ -14,7 +14,7 @@ class SatuanBarangController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -48,7 +48,7 @@ class SatuanBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -80,7 +80,7 @@ class SatuanBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -102,7 +102,7 @@ class SatuanBarangController extends Controller
         if (is_null($unit_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -116,7 +116,7 @@ class SatuanBarangController extends Controller
 
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data duplicate!'],
+                'errors' => ['Data sudah ada!'],
             ], 422);
 
         }
@@ -136,7 +136,7 @@ class SatuanBarangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -145,7 +145,7 @@ class SatuanBarangController extends Controller
         if (is_null($unit_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 

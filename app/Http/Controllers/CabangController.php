@@ -14,7 +14,7 @@ class CabangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -49,7 +49,7 @@ class CabangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -84,7 +84,7 @@ class CabangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -107,7 +107,7 @@ class CabangController extends Controller
         if (is_null($branch)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 
@@ -128,7 +128,7 @@ class CabangController extends Controller
         if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -137,7 +137,7 @@ class CabangController extends Controller
         if (is_null($branch)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         }
 

@@ -14,7 +14,7 @@ class RegistrasiController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -68,7 +68,7 @@ class RegistrasiController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -123,7 +123,7 @@ class RegistrasiController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -148,7 +148,7 @@ class RegistrasiController extends Controller
         if (is_null($registration)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         } elseif ($registration->acceptance_status == 1) {
             return response()->json([
@@ -176,7 +176,7 @@ class RegistrasiController extends Controller
         if ($request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -185,7 +185,7 @@ class RegistrasiController extends Controller
         if (is_null($registration)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data not found!'],
+                'errors' => ['Data tidak ditemukan!'],
             ], 404);
         } elseif ($registration->acceptance_status == 1) {
             return response()->json([

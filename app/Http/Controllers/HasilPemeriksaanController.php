@@ -21,7 +21,7 @@ class HasilPemeriksaanController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -65,7 +65,7 @@ class HasilPemeriksaanController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -129,7 +129,7 @@ class HasilPemeriksaanController extends Controller
             if (is_null($check_service)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data not found!'],
+                    'errors' => ['Data tidak ditemukan!'],
                 ], 404);
             }
 
@@ -141,7 +141,7 @@ class HasilPemeriksaanController extends Controller
             if (is_null($check_price_service)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data Price Service not found!'],
+                    'errors' => ['Data Daftar Harga Jasa tidak ditemukan!'],
                 ], 404);
             }
 
@@ -153,7 +153,7 @@ class HasilPemeriksaanController extends Controller
             if (is_null($check_service_name)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data List of Services not found!'],
+                    'errors' => ['Data Daftar Jasa tidak ditemukan!'],
                 ], 404);
             }
 
@@ -188,7 +188,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_storage)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data Total Item not found!'],
+                        'errors' => ['Data Jumlah Barang tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -200,7 +200,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_storage_name)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data Total Item not found!'],
+                        'errors' => ['Data Jumlah Barang tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -223,7 +223,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($list_of_items)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data not found!'],
+                        'errors' => ['Data tidak ditemukan!'],
                     ], 404);
                 }
             }
@@ -324,7 +324,7 @@ class HasilPemeriksaanController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -398,7 +398,7 @@ class HasilPemeriksaanController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -480,7 +480,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_price_service)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data Price Service not found!'],
+                        'errors' => ['Data Harga Jasa tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -489,7 +489,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_service)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Service not found!'],
+                        'errors' => ['Data Daftar Jasa tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -501,7 +501,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_service_name)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Services not found!'],
+                        'errors' => ['Data Daftar Jasa tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -521,7 +521,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_price_service)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data Price Service not found!'],
+                        'errors' => ['Data Harga Jasa Tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -533,7 +533,7 @@ class HasilPemeriksaanController extends Controller
                 if (is_null($check_service_name)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Services not found!'],
+                        'errors' => ['Data Daftar Jasa tidak ditemukan!'],
                     ], 404);
                 }
 
@@ -570,7 +570,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_price_item)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data Price Item not found!'],
+                            'errors' => ['Data Harga Barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -579,7 +579,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($list_of_items)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data List of Item not found!'],
+                            'errors' => ['Data Daftar Barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -591,7 +591,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_storage)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data Total Item not found!'],
+                            'errors' => ['Data jumlah barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -603,7 +603,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_storage_name)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data Total Item not found!'],
+                            'errors' => ['Data jumlah barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -647,7 +647,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_stock)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data List of Item not found!'],
+                            'errors' => ['Data Daftar Barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -659,7 +659,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_storage_name)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data Total Item not found!'],
+                            'errors' => ['Data jumlah barang tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -681,7 +681,7 @@ class HasilPemeriksaanController extends Controller
                     if (is_null($check_item_result)) {
                         return response()->json([
                             'message' => 'The data was invalid.',
-                            'errors' => ['Data Item Check Up Result not found!'],
+                            'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
                         ], 404);
                     }
 
@@ -705,7 +705,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($check_price_item)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data Price Item not found!'],
+                                'errors' => ['Data Harga Barang tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -714,7 +714,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($list_of_items)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data List of Item not found!'],
+                                'errors' => ['Data Daftar Barang tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -724,7 +724,7 @@ class HasilPemeriksaanController extends Controller
 
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data not found!'],
+                                'errors' => ['Data tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -740,7 +740,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($check_price_item)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data Price Item not found!'],
+                                'errors' => ['Data Harga Barang tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -749,7 +749,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($list_of_items)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data not found!'],
+                                'errors' => ['Data tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -759,7 +759,7 @@ class HasilPemeriksaanController extends Controller
 
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data not found!'],
+                                'errors' => ['Data tidak ditemukan!'],
                             ], 404);
                         }
                     } else {
@@ -772,7 +772,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($check_price_item)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data Price Item not found!'],
+                                'errors' => ['Data Harga Barang tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -781,7 +781,7 @@ class HasilPemeriksaanController extends Controller
                         if (is_null($list_of_items)) {
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data not found!'],
+                                'errors' => ['Data tidak ditemukan!'],
                             ], 404);
                         }
 
@@ -791,7 +791,7 @@ class HasilPemeriksaanController extends Controller
 
                             return response()->json([
                                 'message' => 'The data was invalid.',
-                                'errors' => ['Data not found!'],
+                                'errors' => ['Data tidak ditemukan!'],
                             ], 404);
                         }
                     }
@@ -807,7 +807,7 @@ class HasilPemeriksaanController extends Controller
         if (is_null($check_up_result)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data Check Up Result not found!'],
+                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
             ], 404);
         }
 
@@ -1066,7 +1066,7 @@ class HasilPemeriksaanController extends Controller
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
-                'errors' => ['Access is not allowed!'],
+                'errors' => ['Akses User tidak diizinkan!'],
             ], 403);
         }
 
@@ -1075,7 +1075,7 @@ class HasilPemeriksaanController extends Controller
         if (is_null($check_up_result)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data Check Up Result not found!'],
+                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
             ], 404);
         }
 
@@ -1084,7 +1084,7 @@ class HasilPemeriksaanController extends Controller
         if (is_null($detail_item)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data Detail Item Patient not found!'],
+                'errors' => ['Data Daftar Barang Pasien tidak ditemukan!'],
             ], 404);
         }
 
@@ -1102,7 +1102,7 @@ class HasilPemeriksaanController extends Controller
             if (is_null($check_price_item)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data Price Items not found!'],
+                    'errors' => ['Data Harga Barang tidak ditemukan!'],
                 ], 404);
             }
 
@@ -1113,7 +1113,7 @@ class HasilPemeriksaanController extends Controller
             if (is_null($check_list_of_item)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data Detail Item Patient not found!'],
+                    'errors' => ['Data Data Daftar Barang Pasien tidak ditemukan!'],
                 ], 404);
             }
 
@@ -1149,7 +1149,7 @@ class HasilPemeriksaanController extends Controller
         if (is_null($detail_service)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data Detail Service Patient not found!'],
+                'errors' => ['Data Jasa Pasien tidak ditemukan!'],
             ], 404);
         }
 
@@ -1161,7 +1161,7 @@ class HasilPemeriksaanController extends Controller
         if (is_null($inpatient)) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['Data Detail Inpatient not found!'],
+                'errors' => ['Data Rawat Inap tidak ditemukan!'],
             ], 404);
         }
 
