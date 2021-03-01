@@ -102,5 +102,5 @@ Route::get('/pembayaran/detail/{id}', function () {
 });
 
 Route::get('/unauthorized', function () {
-	return view('unauthorized');
+	return view('errors.unauthorized');
 });

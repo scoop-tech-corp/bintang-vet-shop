@@ -8,7 +8,7 @@
 				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form class="form-hasil-pemeriksaan">
+				<form class="form-hasil-pemeriksaan" action="/file-upload">
 					<div class="box-body">
             <div class="form-group form-cari-pasien">
 							<label for="selectedPasien">Cari Pasien</label>
@@ -78,6 +78,12 @@
               <textarea id="diagnosa" class="form-control" placeholder="Masukan Diagnosa"></textarea>
 							<div id="diagnosaErr1" class="validate-error"></div>
             </div>
+            {{-- <div class="form-group">
+              <label for="foto">Foto Kondisi Pasien</label>
+              <div class="dropzone" id="fotoKondisiPasien">
+
+              </div>
+            </div> --}}
             <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
               <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
