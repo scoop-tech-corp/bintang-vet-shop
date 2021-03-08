@@ -14,7 +14,7 @@ class KelompokObatController extends Controller
         $medicine_groups = DB::table('medicine_groups')
             ->join('users', 'medicine_groups.user_id', '=', 'users.id')
             ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
-            ->select('medicine_groups.id','branches.branch_name', 'group_name', 'users.fullname as created_by',
+            ->select('medicine_groups.id', 'branches.id as branch_id','branches.branch_name', 'group_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"));
 
         if ($request->keyword) {
@@ -124,7 +124,7 @@ class KelompokObatController extends Controller
 
         $find_duplicate = db::table('medicine_groups')
             ->select('group_name')
-            ->where('group_name', '=',$request->NamaGrup)
+            ->where('group_name', '=', $request->NamaGrup)
             ->where('branch_id', '=', $request->Cabang)
             ->where('id', '!=', $request->id)
             ->count();
