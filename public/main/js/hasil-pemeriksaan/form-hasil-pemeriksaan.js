@@ -40,7 +40,7 @@ $(document).ready(function() {
     loadPasien();
     loadJasa();
     loadBarang();
-    loadDropzone();
+    // loadDropzone();
 
     if (lastUrl == 'tambah') {
       formState = 'add';
@@ -115,27 +115,27 @@ $(document).ready(function() {
 
   $('input:radio[name="radioStatusPemeriksa"]').change(function (e) { validationForm(); });
 
-  function loadDropzone() {
-    dropzone = new Dropzone('#fotoKondisiPasien', {
-      url: 'somethingUrl',
-      uploadMultiple: true,
-      addRemoveLinks: true,
-      acceptedFiles: '.png',
-      autoProcessQueue: false,
-      maxFiles: 5,
-      maxFilesize: 0.1, // MB
-      init: function() {
-        this.on('error', function(file, response) {
-            // do stuff here.
-            console.log('eror upload meessage', response, file);
-        });
-      }
-    });
-  }
+  // function loadDropzone() {
+  //   dropzone = new Dropzone('#fotoKondisiPasien', {
+  //     url: 'somethingUrl',
+  //     uploadMultiple: true,
+  //     addRemoveLinks: true,
+  //     acceptedFiles: '.png',
+  //     autoProcessQueue: false,
+  //     maxFiles: 5,
+  //     maxFilesize: 0.1, // MB
+  //     init: function() {
+  //       this.on('error', function(file, response) {
+  //           // do stuff here.
+  //           console.log('eror upload meessage', response, file);
+  //       });
+  //     }
+  //   });
+  // }
 
-  $('#testUpload').click(function() {
-    dropzone.processQueue();
-  });
+  // $('#testUpload').click(function() {
+  //   dropzone.processQueue();
+  // });
 
   $('#submitConfirm').click(function() {
     if (formState === 'add') {

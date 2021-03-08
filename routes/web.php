@@ -109,6 +109,10 @@ Route::get('/pembayaran/detail/{id}', function () {
 	return view('pembayaran.pembayaran-detail');
 });
 
+Route::get('/kelompok-obat', function () {
+	return view('gudang.kelompok-obat.index');
+});
+
 Route::get('/unauthorized', function () {
 	return view('errors.unauthorized');
 });

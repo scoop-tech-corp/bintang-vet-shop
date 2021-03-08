@@ -84,10 +84,10 @@
           <textarea id="diagnosa" class="form-control" placeholder="Masukan Diagnosa"></textarea>
           <div id="diagnosaErr1" class="validate-error"></div>
         </div>
-        <div class="col-md-12 m-b-10px">
+        {{-- <div class="col-md-12 m-b-10px">
           <label for="foto">Foto Kondisi Pasien</label>
           <div class="dropzone" id="fotoKondisiPasien"></div>
-        </div>
+        </div> --}}
         <div class="col-md-12 m-b-10px">
           <div class="label-detail-div m-b-10px">Jasa</div>
           <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
