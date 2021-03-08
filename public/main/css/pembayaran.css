@@ -1,9 +1,3 @@
-.btn-back-to-list {
-  cursor: pointer;
-}
-.btn-back-to-list:hover {
-  text-decoration: underline;
-}
 
 .indented-detail-tagihan {
   padding: 0px 30px;

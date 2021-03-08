@@ -103,6 +103,17 @@ body {
   margin-bottom: unset;
 }
 
+.dropzone {
+  border: 1px solid #d2d6de !important;
+}
+
+.btn-back-to-list .fa, .btn-back-to-list .text {
+  cursor: pointer;
+}
+.btn-back-to-list .text:hover {
+  text-decoration: underline;
+}
+
 /* cursor pointer for icon sort in column (table) */
 .table > thead > tr > th > .fa {
   cursor: pointer;

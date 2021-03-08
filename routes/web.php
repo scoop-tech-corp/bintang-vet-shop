@@ -85,6 +85,14 @@ Route::get('/hasil-pemeriksaan', function () {
 	return view('hasil-pemeriksaan.index');
 });
 
+Route::get('/hasil-pemeriksaan/tambah', function () {
+	return view('hasil-pemeriksaan.form-hasil-pemeriksaan');
+});
+
+Route::get('/hasil-pemeriksaan/edit/{id}', function () {
+	return view('hasil-pemeriksaan.form-hasil-pemeriksaan');
+});
+
 Route::get('/pembayaran', function () {
 	return view('pembayaran.index');
 });
