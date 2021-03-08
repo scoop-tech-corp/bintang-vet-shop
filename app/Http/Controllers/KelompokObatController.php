@@ -66,7 +66,7 @@ class KelompokObatController extends Controller
 
         $find_duplicate = db::table('medicine_groups')
             ->select('group_name')
-            ->where('group_name', 'like', '%' . $request->NamaGrup . '%')
+            ->where('group_name', '=', $request->NamaGrup)
             ->where('branch_id', '=', $request->Cabang)
             ->count();
 
@@ -124,7 +124,7 @@ class KelompokObatController extends Controller
 
         $find_duplicate = db::table('medicine_groups')
             ->select('group_name')
-            ->where('group_name', 'like', '%' . $request->NamaGrup . '%')
+            ->where('group_name', '=',$request->NamaGrup)
             ->where('branch_id', '=', $request->Cabang)
             ->where('id', '!=', $request->id)
             ->count();
