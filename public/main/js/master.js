@@ -67,6 +67,8 @@ $(document).ready(function() {
         $(Value).parent().addClass('active');
       } else if (Value['href'] ==  origin + '/pasien' && pathName.includes('/riwayat-pameriksaan')) {
         $(Value).parent().addClass('active');
+      } else if (Value['href'] ==  origin + '/hasil-pemeriksaan' && (pathName == '/hasil-pemeriksaan/tambah')) {
+        $(Value).parent().addClass('active');
       }
     }
   });
