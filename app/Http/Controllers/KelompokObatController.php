@@ -14,13 +14,20 @@ class KelompokObatController extends Controller
         $medicine_groups = DB::table('medicine_groups')
             ->join('users', 'medicine_groups.user_id', '=', 'users.id')
             ->join('branches', 'medicine_groups.branch_id', '=', 'users.id')
-            ->select('medicine_groups.id', 'group_name', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false');
+            ->select('medicine_groups.id','branches.branch_name', 'group_name', 'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"));
 
         if ($request->keyword) {
             $medicine_groups = $medicine_groups->where('group_name', 'like', '%' . $request->keyword . '%')
                 ->orwhere('created_by', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $medicine_groups = $medicine_groups->where('branches.id', '=', $request->branch_id);
+        }
+
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            $medicine_groups = $medicine_groups->where('branches.id', '=', $request->user()->branch_id);
         }
 
         if ($request->orderby) {
