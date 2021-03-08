@@ -13,7 +13,7 @@ class KelompokObatController extends Controller
     {
         $medicine_groups = DB::table('medicine_groups')
             ->join('users', 'medicine_groups.user_id', '=', 'users.id')
-            ->join('branches', 'medicine_groups.branch_id', '=', 'users.id')
+            ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
             ->select('medicine_groups.id','branches.branch_name', 'group_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"));
 
