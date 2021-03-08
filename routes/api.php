@@ -112,6 +112,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
 
+        Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+
         //pembayaran    DropDownPatient
         Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
         Route::get('pembayaran', 'PembayaranController@index');
@@ -122,6 +124,12 @@ Route::group(['middleware' => ['api']], function () {
         //riwayat pasien
         Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
         Route::get('pasien/detail-riwayat', 'PasienController@DetailHistoryPatient');
+
+        //kategori obat
+        Route::get('kelompok-obat', 'KelompokObatController@index');
+        Route::post('kelompok-obat', 'KelompokObatController@create');
+        Route::put('kelompok-obat', 'KelompokObatController@update');
+        Route::delete('kelompok-obat', 'KelompokObatController@delete');
     });
 });
 
