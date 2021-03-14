@@ -1,9 +1,10 @@
 Dropzone.autoDiscover = false;
+let arrayKelompokObat = [];
+let formState = '';
 $(document).ready(function() {
-
+  
   let optPasien = '';
   let optJasa = '';
-  let optBarang = '';
 
   let isValidSelectedPasien = false;
   let isValidAnamnesa = false;
@@ -15,16 +16,10 @@ $(document).ready(function() {
   let listPasien = [];
 
   let listJasa = [];
-  let listBarang = [];
-
   let selectedListJasa = [];
-  let selectedListBarang = [];
-
   let deletedUpdateListJasa = [];
-  let deletedUpdateListBarang = [];
 
   let getId = null;
-  let formState = '';
   let dropzone = null;
   
   let isBeErr = false;
@@ -39,7 +34,6 @@ $(document).ready(function() {
     formConfigure();
     loadPasien();
     loadJasa();
-    loadBarang();
     // loadDropzone();
 
     if (lastUrl == 'tambah') {
@@ -161,16 +155,16 @@ $(document).ready(function() {
     fd.append('inpatient', $('#descriptionCondPasien').val());
 
     let finalSelectedJasa = [];
-    let finalSelectedBarang = [];
+    // let finalSelectedBarang = [];
     
     selectedListJasa.forEach(lj => {
       finalSelectedJasa.push({ price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall });
     });
-    selectedListBarang.forEach(lb => {
-      finalSelectedBarang.push({ price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall});
-    });
+    // selectedListBarang.forEach(lb => {
+    //   finalSelectedBarang.push({ price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall});
+    // });
     fd.append('service', JSON.stringify(finalSelectedJasa));
-    fd.append('item', JSON.stringify(finalSelectedBarang));
+    // fd.append('item', JSON.stringify(finalSelectedBarang));
 
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
@@ -186,7 +180,7 @@ $(document).ready(function() {
         $('#msg-box').modal('show');
 
         setTimeout(() => {
-          // window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
+          window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
         }, 1000);
       }, complete: function() { $('#loading-screen').hide(); }
       , error: function(err) {
@@ -206,7 +200,7 @@ $(document).ready(function() {
 
   function processEdit() {
     let finalSelectedJasa = [];
-    let finalSelectedBarang = [];
+    // let finalSelectedBarang = [];
     
     selectedListJasa.forEach(lj => {
       finalSelectedJasa.push({ id: lj.id, price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall, status: '' });
@@ -215,12 +209,12 @@ $(document).ready(function() {
       finalSelectedJasa.push({ id: ulj.id, price_service_id: ulj.price_service_id, quantity: ulj.quantity, price_overall: ulj.price_overall, status: 'del' });
     });
 
-    selectedListBarang.forEach(lb => {
-      finalSelectedBarang.push({ id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: '' });
-    });
-    deletedUpdateListBarang.forEach(ulb => {
-      finalSelectedBarang.push({ id: ulb.id, price_item_id: ulb.price_item_id, quantity: ulb.quantity, price_overall: ulb.price_overall, status: 'del' });
-    });
+    // selectedListBarang.forEach(lb => {
+    //   finalSelectedBarang.push({ id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: '' });
+    // });
+    // deletedUpdateListBarang.forEach(ulb => {
+    //   finalSelectedBarang.push({ id: ulb.id, price_item_id: ulb.price_item_id, quantity: ulb.quantity, price_overall: ulb.price_overall, status: 'del' });
+    // });
 
     const datas = {
       id: getId,
@@ -232,7 +226,7 @@ $(document).ready(function() {
       status_outpatient_inpatient: parseInt($("input[name='radioRawatInap']:checked").val()),
       inpatient: $('#descriptionCondPasien').val(),
       service: finalSelectedJasa,
-      item: finalSelectedBarang
+      // item: finalSelectedBarang
     };
 
     $.ajax({
@@ -313,7 +307,7 @@ $(document).ready(function() {
       const getIds = [];
       const getIdx = selectedListBarang.findIndex(i => i.price_item_id == selectedId);
       selectedListBarang.splice(getIdx, 1);
-      selectedListBarang.forEach(lb => { getIds.push(lb.item_id); });
+      selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
       if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
 
       $('#selectedBarang').val(getIds); $('#selectedBarang').trigger('change');
@@ -325,7 +319,7 @@ $(document).ready(function() {
     let rowSelectedListJasa = '';
     let no = 1;
     $('#list-selected-jasa tr').remove();
-
+    console.log('selectedListJasa', selectedListJasa);
     selectedListJasa.forEach((lj, idx) => {
       rowSelectedListJasa += `<tr>`
         + `<td>${no}</td>`
@@ -579,36 +573,10 @@ $(document).ready(function() {
 		});
   }
 
-  function loadBarang() {
-    $.ajax({
-			url     : $('.baseUrl').val() + '/api/pembagian-harga-barang',
-			headers : { 'Authorization': `Bearer ${token}` },
-			type    : 'GET',
-			beforeSend: function() { $('#loading-screen').show(); },
-			success: function(data) {
-        listBarang = data;
-				if (listBarang.length) {
-					for (let i = 0 ; i < listBarang.length ; i++) {
-						optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name}</option>`;
-					}
-        }
-				$('#selectedBarang').append(optBarang);
-			}, complete: function() { $('#loading-screen').hide(); },
-			error: function(err) {
-				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
-					location.href = $('.baseUrl').val() + '/masuk';
-				}
-			}
-		});
-  }
-
   function formConfigure() {
     $('#selectedPasien').select2();
     $('#selectedJasa').select2({ placeholder: 'Jenis Pelayanan - Kategori Jasa', allowClear: true });
-    $('#selectedBarang').select2({ placeholder: 'Nama Barang - Kategori Barang', allowClear: true });
 
-    $('#modal-hasil-pemeriksaan').modal('show');
 		$('#btnSubmitHasilPemeriksaan').attr('disabled', true);
   }
 
