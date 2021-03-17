@@ -6,6 +6,7 @@ use App\Models\CheckUpResult;
 use App\Models\DetailItemPatient;
 use App\Models\DetailServicePatient;
 use App\Models\HistoryItemMovement;
+use App\Models\images_check_up_result;
 use App\Models\InPatient;
 use App\Models\ListofItems;
 use App\Models\ListofServices;
@@ -62,6 +63,7 @@ class HasilPemeriksaanController extends Controller
 
     public function create(Request $request)
     {
+
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
@@ -173,61 +175,88 @@ class HasilPemeriksaanController extends Controller
             // $result_item = json_decode(json_encode($temp_item), true);
             $result_item = json_decode($temp_item, true);
 
-            foreach ($result_item as $value_item) {
+            foreach ($result_item as $res_group) {
 
-                $check_price_item = DB::table('price_items')
-                    ->select('list_of_items_id')
-                    ->where('id', '=', $value_item['price_item_id'])
+                $check_medicine_group = DB::table('medicine_groups')
+                    ->select('id')
+                    ->where('id', '=', $res_group['medicine_group_id'])
                     ->first();
 
-                $check_storage = DB::table('list_of_items')
-                    ->select('total_item')
-                    ->where('id', '=', $check_price_item->list_of_items_id)
-                    ->first();
-
-                if (is_null($check_storage)) {
+                if (is_null($check_medicine_group)) {
                     return response()->json([
                         'message' => 'The data was invalid.',
-                        'errors' => ['Data Jumlah Barang tidak ditemukan!'],
+                        'errors' => ['Data Kelompok Obat tidak ditemukan!'],
                     ], 404);
                 }
 
-                $check_storage_name = DB::table('list_of_items')
-                    ->select('item_name')
-                    ->where('id', '=', $check_price_item->list_of_items_id)
-                    ->first();
+                //return $res_group;
 
-                if (is_null($check_storage_name)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data Jumlah Barang tidak ditemukan!'],
-                    ], 404);
-                }
+                // return $res_group['list_of_medicine'];
 
-                if ($value_item['quantity'] <= 0) {
-                    return response()->json([
-                        'message' => 'The given data was invalid.',
-                        'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
-                    ], 422);
-                }
+                foreach ($res_group['list_of_medicine'] as $value_item) {
 
-                if ($value_item['quantity'] > $check_storage->total_item) {
-                    return response()->json([
-                        'message' => 'The given data was invalid.',
-                        'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' pada rawat jalan kurang atau habis!'],
-                    ], 422);
-                }
+                    // return $res_detail_group;
 
-                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+                    $check_price_item = DB::table('price_items')
+                        ->select('list_of_items_id')
+                        ->where('id', '=', $value_item['price_item_id'])
+                        ->first();
 
-                if (is_null($list_of_items)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data tidak ditemukan!'],
-                    ], 404);
+                    $check_storage = DB::table('list_of_items')
+                        ->select('total_item')
+                        ->where('id', '=', $check_price_item->list_of_items_id)
+                        ->first();
+
+                    if (is_null($check_storage)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data Jumlah Barang tidak ditemukan!'],
+                        ], 404);
+                    }
+
+                    $check_storage_name = DB::table('list_of_items')
+                        ->select('item_name')
+                        ->where('id', '=', $check_price_item->list_of_items_id)
+                        ->first();
+
+                    if (is_null($check_storage_name)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data Jumlah Barang tidak ditemukan!'],
+                        ], 404);
+                    }
+
+                    if ($value_item['quantity'] <= 0) {
+                        return response()->json([
+                            'message' => 'The given data was invalid.',
+                            'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
+                        ], 422);
+                    }
+
+                    if ($value_item['quantity'] > $check_storage->total_item) {
+                        return response()->json([
+                            'message' => 'The given data was invalid.',
+                            'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' pada rawat jalan kurang atau habis!'],
+                        ], 422);
+                    }
+
+                    $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                    if (is_null($list_of_items)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data tidak ditemukan!'],
+                        ], 404);
+                    }
                 }
             }
+
+            // foreach ($result_item as $value_item) {
+
+            // }
         }
+
+        //return "berhasil";
 
         //insert data
         $item = CheckUpResult::create([
@@ -269,37 +298,44 @@ class HasilPemeriksaanController extends Controller
 
             $result_item = json_decode($request->item, true);
 
-            foreach ($result_item as $value_item) {
+            foreach ($result_item as $res_group) {
 
-                $item_list = DetailItemPatient::create([
-                    'check_up_result_id' => $item->id,
-                    'price_item_id' => $value_item['price_item_id'],
-                    'quantity' => $value_item['quantity'],
-                    'price_overall' => $value_item['price_overall'],
-                    'status_paid_off' => 0,
-                    'user_id' => $request->user()->id,
-                ]);
+                foreach ($res_group['list_of_medicine'] as $value_item) {
 
-                $check_price_item = DB::table('price_items')
-                    ->select('list_of_items_id')
-                    ->where('id', '=', $value_item['price_item_id'])
-                    ->first();
+                    // foreach ($result_item as $value_item) {
 
-                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+                    $item_list = DetailItemPatient::create([
+                        'check_up_result_id' => $item->id,
+                        'medicine_group_id' => $res_group['medicine_group_id'],
+                        'price_item_id' => $value_item['price_item_id'],
+                        'quantity' => $value_item['quantity'],
+                        'price_overall' => $value_item['price_overall'],
+                        'status_paid_off' => 0,
+                        'user_id' => $request->user()->id,
+                    ]);
 
-                $count_item = $list_of_items->total_item - $value_item['quantity'];
+                    $check_price_item = DB::table('price_items')
+                        ->select('list_of_items_id')
+                        ->where('id', '=', $value_item['price_item_id'])
+                        ->first();
 
-                $list_of_items->total_item = $count_item;
-                $list_of_items->user_update_id = $request->user()->id;
-                $list_of_items->updated_at = \Carbon\Carbon::now();
-                $list_of_items->save();
+                    $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
 
-                $item_history = HistoryItemMovement::create([
-                    'price_item_id' => $value_item['price_item_id'],
-                    'quantity' => $value_item['quantity'],
-                    'status' => 'kurang',
-                    'user_id' => $request->user()->id,
-                ]);
+                    $count_item = $list_of_items->total_item - $value_item['quantity'];
+
+                    $list_of_items->total_item = $count_item;
+                    $list_of_items->user_update_id = $request->user()->id;
+                    $list_of_items->updated_at = \Carbon\Carbon::now();
+                    $list_of_items->save();
+
+                    $item_history = HistoryItemMovement::create([
+                        'price_item_id' => $value_item['price_item_id'],
+                        'quantity' => $value_item['quantity'],
+                        'status' => 'kurang',
+                        'user_id' => $request->user()->id,
+                    ]);
+                    // }
+                }
             }
         }
 
@@ -315,6 +351,7 @@ class HasilPemeriksaanController extends Controller
         return response()->json(
             [
                 'message' => 'Tambah Data Berhasil!',
+                'id' => $item->id,
             ], 200
         );
     }
@@ -365,19 +402,46 @@ class HasilPemeriksaanController extends Controller
 
         $data['services'] = $services;
 
+        // $item = DB::table('detail_item_patients')
+        //     ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+        //     ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+        //     ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+        //     ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+        //     ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+        //     ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+        //         DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+        //         'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+        //         'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+        //     ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+        //     ->orderBy('detail_item_patients.id', 'desc')
+        //     ->get();
+
         $item = DB::table('detail_item_patients')
-            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
-            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
-            ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
-                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+            ->join('medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'medicine_groups.id')
+            ->select('detail_item_patients.medicine_group_id as medicine_group_id', 'medicine_groups.group_name')
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
-            ->orderBy('detail_item_patients.id', 'desc')
+            ->groupBy('detail_item_patients.medicine_group_id', 'medicine_groups.group_name')
             ->get();
+
+        foreach ($item as $value) {
+
+            $detail_item = DB::table('detail_item_patients')
+                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+                ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+                ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+                ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+                    DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                    'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+                ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+                ->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
+                ->orderBy('detail_item_patients.id', 'desc')
+                ->get();
+
+            $value->ListofMedicine = $detail_item;
+        }
 
         $data['item'] = $item;
 
@@ -1174,6 +1238,46 @@ class HasilPemeriksaanController extends Controller
         return response()->json([
             'message' => 'Berhasil menghapus Data',
         ], 200);
+
+    }
+
+    public function upload_images(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+
+        }
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->messages()->first(),
+            ], 200);
+            //return sendCustomResponse($validator->messages()->first(), 'error', 500);
+        }
+
+        if ($file = $request->file('file')) {
+            $path = $file->store('public/files');
+            $name = $file->getClientOriginalName();
+
+            //store your file into directory and db
+            $save = new images_check_up_result();
+            $save->name = $file;
+            $save->store_path = $path;
+            $save->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "File successfully uploaded",
+                "file" => $file,
+            ]);
+
+        }
 
     }
 }
