@@ -302,18 +302,45 @@ class PasienController extends Controller
         $data->services = $services;
 
         $item = DB::table('detail_item_patients')
-            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
-            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
-            ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
-                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+            ->join('medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'medicine_groups.id')
+            ->select('detail_item_patients.medicine_group_id as medicine_group_id', 'medicine_groups.group_name')
             ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
-            ->orderBy('detail_item_patients.id', 'desc')
+            ->groupBy('detail_item_patients.medicine_group_id', 'medicine_groups.group_name')
             ->get();
+
+        foreach ($item as $value) {
+
+            $detail_item = DB::table('detail_item_patients')
+                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+                ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+                ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+                ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+                    DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                    'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+                ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
+                ->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
+                ->orderBy('detail_item_patients.id', 'desc')
+                ->get();
+
+            $value->ListofMedicine = $detail_item;
+        }
+
+        // $item = DB::table('detail_item_patients')
+        //     ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+        //     ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+        //     ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+        //     ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+        //     ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+        //     ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
+        //         DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+        //         'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+        //         'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+        //     ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
+        //     ->orderBy('detail_item_patients.id', 'desc')
+        //     ->get();
 
         $data->item = $item;
 
