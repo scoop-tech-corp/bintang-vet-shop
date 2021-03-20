@@ -440,7 +440,7 @@ class HasilPemeriksaanController extends Controller
                 ->orderBy('detail_item_patients.id', 'desc')
                 ->get();
 
-            $value->ListofMedicine = $detail_item;
+            $value->list_of_medicine = $detail_item;
         }
 
         $data['item'] = $item;
