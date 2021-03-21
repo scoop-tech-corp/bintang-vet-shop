@@ -12,8 +12,8 @@
     </div>
     <div class="nav-tabs-custom m-t-25px">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#general" data-toggle="tab">General</a></li>
-        <li><a href="#kelompok_obat" data-toggle="tab">Kelompok Obat</a></li>
+        <li class="active"><a href="#general" data-toggle="tab">Utama</a></li>
+        <li><a href="#kelompok_obat" data-toggle="tab">Obat</a></li>
       </ul>
       <div id="tab-content" class="tab-content">
         <div class="tab-pane fade in active" id="general">
@@ -172,7 +172,6 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
-      <button id="btnKelompokObat" type="button" class="btn btn-primary pull-right">cek Obat</button>
       <button id="btnSubmitHasilPemeriksaan" type="button" class="btn btn-primary pull-right">Simpan</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
