@@ -303,9 +303,11 @@ class PasienController extends Controller
 
         $item = DB::table('detail_item_patients')
             ->join('medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'medicine_groups.id')
-            ->select('detail_item_patients.medicine_group_id as medicine_group_id', 'medicine_groups.group_name')
-            ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
-            ->groupBy('detail_item_patients.medicine_group_id', 'medicine_groups.group_name')
+            ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
+            ->select('detail_item_patients.medicine_group_id as medicine_group_id', 'medicine_groups.group_name',
+                'branches.id as branch_id', 'branches.branch_name')
+            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->groupBy('detail_item_patients.medicine_group_id', 'medicine_groups.group_name', 'branches.id', 'branches.branch_name')
             ->get();
 
         foreach ($item as $value) {
