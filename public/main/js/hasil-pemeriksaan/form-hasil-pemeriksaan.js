@@ -35,7 +35,7 @@ $(document).ready(function() {
     loadJasa();
     // loadDropzone();
     loadKelompokObat(); loadBarang();
-
+    refreshText();
     if (lastUrl == 'tambah') {
       formState = 'add';
       loadFormAdd();
@@ -440,7 +440,7 @@ $(document).ready(function() {
 
   function loadFormEdit() {
     $('.table-deskripsi-kondisi-pasien').show();
-    $('.title-form-hasil-pemeriksaan').text('Edit Hasil Pemeriksaan');
+    $('.title-form-hasil-pemeriksaan').text('Ubah Hasil Pemeriksaan');
     $('.tgl-edit').show(); $('.dibuat-edit').show();
     $('.form-cari-pasien').hide(); $('input[name="radioRawatInap"]').prop('disabled', true);
 

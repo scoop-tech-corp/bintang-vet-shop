@@ -8,7 +8,7 @@
 
   <div class="box-body">
     <div class="btn-back-to-list">
-      <span class="fa fa-arrow-left"></span> <span class="text">List Hasil Pemeriksaan</span>
+      <span class="fa fa-arrow-left"></span> <span class="text">Daftar Hasil Pemeriksaan</span>
     </div>
     <div class="nav-tabs-custom m-t-25px">
       <ul class="nav nav-tabs">
@@ -46,17 +46,21 @@
                   <div id="jenisKelaminTxt" class="p-left-10px"></div>
                 </div>
                 <div class="d-flex m-b-10px">
-                  <div class="label-detail-div">Nama Pendaftar</div>
-                  <div id="namaPendaftarTxt" class="p-left-10px"></div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex m-b-10px">
                   <div class="label-detail-div">Usia Hewan</div>
                   <div class="p-left-10px">
                     <span id="usiaHewanTahunTxt"></span>&nbsp;&nbsp;
                     <span id="usiaHewanBulanTxt"></span>
                   </div>
+                </div>
+                <div class="d-flex m-b-10px">
+                  <div class="label-detail-div">Keluhan</div>
+                  <div id="keluhanTxt" class="p-left-10px" style="width: 75%"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex m-b-10px">
+                  <div class="label-detail-div">Nama Pendaftar</div>
+                  <div id="namaPendaftarTxt" class="p-left-10px"></div>
                 </div>
                 <div class="d-flex m-b-10px">
                   <div class="label-detail-div">Nama Pemilik</div>
@@ -69,10 +73,6 @@
                 <div class="d-flex m-b-10px">
                   <div class="label-detail-div">Nomor HP Pemilik</div>
                   <div id="nomorHpPemilikTxt" class="p-left-10px" style="width: 75%"></div>
-                </div>
-                <div class="d-flex m-b-10px">
-                  <div class="label-detail-div">Keluhan</div>
-                  <div id="keluhanTxt" class="p-left-10px" style="width: 75%"></div>
                 </div>
               </div>
               <div class="col-md-12 m-b-10px">

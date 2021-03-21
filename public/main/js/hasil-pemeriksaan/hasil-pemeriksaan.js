@@ -54,11 +54,7 @@ $(document).ready(function() {
   });
 
   $('.openFormAdd').click(function() {
-    window.location.href = $('.baseUrl').val() + `/hasil-pemeriksaan/tambah`;		
-		// modalState = 'add';
-
-		// refreshText(); refreshForm();
-		// formConfigure();
+    window.location.href = $('.baseUrl').val() + `/hasil-pemeriksaan/tambah`;
   });
 
   function onSearch(keyword) {
@@ -97,45 +93,6 @@ $(document).ready(function() {
       }
     });
   });
-
-
-  function refreshForm() {
-    $('#selectedJasa').val(null); selectedListJasa = [];
-    $('#selectedBarang').val(null); selectedListBarang = [];
-
-    $('#selectedPasien').val(null);
-    $('#pasienErr1').text(''); isValidSelectedPasien = true;
-
-    $('#anamnesa').val(null);
-    $('#anamnesaErr1').text(''); isValidAnamnesa = true;
-
-    $('#sign').val(null);
-    $('#signErr1').text(''); isValidSign = true;
-
-    $('#diagnosa').val(null);
-    $('#diagnosaErr1').text(''); isValidDiagnosa = true;
-
-    $('#descriptionCondPasien').val(null);
-    $('#descriptionCondPasienErr1').text(''); isValidDiagnosa = true;
-
-    $('input[name="radioRawatInap"]').prop('checked', false);
-    $('#rawatInapErr1').text(''); isValidRadioRawatInap = true;
-
-    $('input[name="radioStatusPemeriksa"]').prop('checked', false);
-    $('#statusPemeriksaErr1').text(''); isValidRadioStatusPemeriksa = true;
-
-    $('#nomorPasienDetailTxt').text('-'); $('#nomorRegistrasiDetailTxt').text('-');
-    $('#jenisHewanDetailTxt').text('-'); $('#namaHewanDetailTxt').text('-'); 
-    $('#jenisKelaminDetailTxt').text('-'); $('#nomorHpPemilikDetailTxt').text('-');
-    $('#usiaHewanTahunDetailTxt').text('-'); $('#usiaHewanBulanDetailTxt').text('-');
-    $('#namaPemilikDetailTxt').text('-'); $('#alamatPemilikDetailTxt').text('-');
-    $('#keluhanDetailTxt').text('-'); $('#namaPendaftarDetailTxt').text('-');
-    $('#anamnesaDetailTxt').text('-'); $('#diagnosaDetailTxt').text('-');
-    $('#signDetailTxt').text('-');
-
-    getId = null; getPatienRegistrationId = null;
-    $('#beErr').empty(); isBeErr = false;
-  }
 
   function loadHasilPemeriksaan() {
     getId = null; modalState = '';
@@ -187,94 +144,7 @@ $(document).ready(function() {
         $('.openDetail').click(function() {
           const getObj = data.find(x => x.id == $(this).val());
 					if (getObj.status_finish != 0) {
-            $.ajax({
-              url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan/detail',
-              headers : { 'Authorization': `Bearer ${token}` },
-              type    : 'GET',
-              data	  : { id: $(this).val() },
-              beforeSend: function() { $('#loading-screen').show(); },
-              success: function(data) {
-                const getData = data;
-
-                $('.modal-title').text('Detail Hasil Pemeriksaan');
-                $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number); $('#nomorPasienDetailTxt').text(getData.registration.patient_number); 
-                $('#jenisHewanDetailTxt').text(getData.registration.pet_category); $('#namaHewanDetailTxt').text(getData.registration.pet_name); 
-                $('#jenisKelaminDetailTxt').text(getData.registration.pet_gender); 
-                $('#usiaHewanTahunDetailTxt').text(`${getData.registration.pet_year_age} Tahun`); $('#usiaHewanBulanDetailTxt').text(`${getData.registration.pet_month_age} Bulan`);
-                $('#namaPemilikDetailTxt').text(getData.registration.owner_name); $('#alamatPemilikDetailTxt').text(getData.registration.owner_address);
-                $('#nomorHpPemilikDetailTxt').text(getData.registration.owner_phone_number);
-                $('#keluhanDetailTxt').text(getData.registration.complaint); $('#namaPendaftarDetailTxt').text(getData.registration.registrant);
-                $('#rawatInapDetailTxt').text(getData.status_outpatient_inpatient ? 'Ya' : 'Tidak');
-                $('#statusPemeriksaanDetailTxt').text(getData.status_finish ? 'Selesai' : 'Belum');
-                $('#anamnesaDetailTxt').text(getData.anamnesa); $('#diagnosaDetailTxt').text(getData.diagnosa);
-                $('#signDetailTxt').text(getData.sign);
-
-                let rowListJasa = ''; let no1 = 1;
-                $('#detail-list-jasa tr').remove();
-                  getData.services.forEach((lj, idx) => {
-                    rowListJasa += `<tr>`
-                      + `<td>${no1}</td>`
-                      + `<td>${lj.created_at}</td>`
-                      + `<td>${lj.created_by}</td>`
-                      + `<td>${lj.category_name}</td>`
-                      + `<td>${lj.service_name}</td>`
-                      + `<td>${typeof(lj.price_overall) == 'number'  ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-                      + `</tr>`;
-                      ++no1;
-                  });
-                  $('#detail-list-jasa').append(rowListJasa);
-
-                  let rowListBarang = ''; let no2 = 1;
-                $('#detail-list-barang tr').remove();
-                  getData.item.forEach((lj, idx) => {
-                    rowListBarang += `<tr>`
-                      + `<td>${no2}</td>`
-                      + `<td>${lj.created_at}</td>`
-                      + `<td>${lj.created_by}</td>`
-                      + `<td>${lj.item_name}</td>`
-                      + `<td>${lj.category_name}</td>`
-                      + `<td>${lj.unit_name}</td>`
-                      + `<td>${lj.quantity}</td>`
-                      + `<td>${typeof(lj.selling_price) == 'number'  ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-                      + `<td>${typeof(lj.price_overall) == 'number'  ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-                      + `</tr>`;
-                      ++no2;
-                  });
-                  $('#detail-list-barang').append(rowListBarang);
-
-
-                if (getData.status_outpatient_inpatient) {
-
-                  let rowListDescription = '';
-                  let no = 1;
-
-                  $('#detail-list-inpatient tr').remove();
-                  getData.inpatient.forEach((inp, idx) => {
-                    rowListDescription += `<tr>`
-                      + `<td>${no}</td>`
-                      + `<td>${inp.created_at}</td>`
-                      + `<td>${inp.created_by}</td>`
-                      + `<td>${inp.description}</td>`
-                      + `</tr>`;
-                      ++no;
-                  });
-                  $('#detail-list-inpatient').append(rowListDescription);
-
-                  $('#table-list-inpatient').show();
-                } else {
-                  $('#table-list-inpatient').hide();
-                }
-
-                $('#detail-hasil-pemeriksaan').modal('show');
-
-              }, complete: function() { $('#loading-screen').hide(); },
-              error: function(err) {
-                if (err.status == 401) {
-                  localStorage.removeItem('vet-clinic');
-                  location.href = $('.baseUrl').val() + '/masuk';
-                }
-              }
-            });
+            window.location.href = $('.baseUrl').val() + `/hasil-pemeriksaan/detail/${$(this).val()}`;
           }
         });
 
