@@ -41,8 +41,7 @@
     </div>
   </div>
 
-  {{-- @component('hasil-pemeriksaan.modal-hasil-pemeriksaan') @endcomponent --}}
-  @component('hasil-pemeriksaan.detail-hasil-pemeriksaan') @endcomponent
+  {{-- @component('hasil-pemeriksaan.detail-hasil-pemeriksaan') @endcomponent --}}
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 </div>

@@ -93,6 +93,10 @@ Route::get('/hasil-pemeriksaan/edit/{id}', function () {
 	return view('hasil-pemeriksaan.form-hasil-pemeriksaan');
 });
 
+Route::get('/hasil-pemeriksaan/detail/{id}', function () {
+	return view('hasil-pemeriksaan.detail-hasil-pemeriksaan');
+});
+
 Route::get('/pembayaran', function () {
 	return view('pembayaran.index');
 });

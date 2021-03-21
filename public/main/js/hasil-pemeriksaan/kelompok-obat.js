@@ -56,8 +56,7 @@ function drawListKelompokObat() {
       ++no;
   });
   $('#locateDrawKelompokBarang').append(rowKelompokObat);
-  appendDropdownKelompokObat();
-  appendDropdownSelectBarang();
+  appendDropdownKelompokObat(); appendDropdownSelectBarang();
 
   $('.selectedKelompokObat').on('select2:select', function (e) {
     const getIdx = parseInt(e.target.getAttribute('idx'));
@@ -79,7 +78,6 @@ function drawListKelompokObat() {
   $('.list-selected-barang').on('input', '.qty-input-barang', function() {
     const idx             = $(this).attr('index');
     const idxKelompokObat = $(this).attr('idxKelompokObat');
-    console.log('qty-input-barang', idxKelompokObat);
     const value        = parseFloat($(this).val());
     const sellingPrice = parseFloat(
         arrayKelompokObat[idxKelompokObat].selectedListBarang[idx].selling_price);
@@ -97,7 +95,6 @@ function drawListKelompokObat() {
     const idx             = $(this).attr('index');
     const idxKelompokObat = $(this).attr('idxKelompokObat');
 
-    console.log('btnRemoveSelectedListBarang', idxKelompokObat, ' ', idx);
     arrayKelompokObat[idxKelompokObat].deletedUpdateListBarang.push(arrayKelompokObat[idxKelompokObat].selectedListBarang[idx]);
     arrayKelompokObat[idxKelompokObat].selectedListBarang.splice(idx, 1);
     arrayKelompokObat[idxKelompokObat].selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
@@ -149,8 +146,8 @@ function appendDropdownSelectBarang() {
 }
 
 function appendListSelectBarang(arrSelectedListBarang, idxKelompokObat) {
-  let = rowSelectedListBarang = '';
-  let no = 1;
+  let = rowSelectedListBarang = ''; let no = 1;
+
   arrSelectedListBarang.forEach((lb, idx) => {
     rowSelectedListBarang += `<tr>`
       + `<td>${no}</td>`
@@ -228,5 +225,4 @@ function processAppendListSelectedBarang(idxKelompokObat) {
       ++no;
   });
   $(`#list-selected-barang-${idxKelompokObat}`).append(rowSelectedListBarang);
-
 }
