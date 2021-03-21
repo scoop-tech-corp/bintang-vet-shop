@@ -116,7 +116,7 @@
                   <th>No</th>
                   <th>Tanggal</th>
                   <th>Dibuat Oleh</th>
-                  <th>Description</th>
+                  <th>Deskripsi</th>
                 </tr>
               </thead>
               <tbody id="detail-list-inpatient"></tbody>
