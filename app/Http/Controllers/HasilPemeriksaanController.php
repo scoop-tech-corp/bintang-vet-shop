@@ -368,6 +368,14 @@ class HasilPemeriksaanController extends Controller
         $data = CheckUpResult::find($request->id);
         //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
 
+        if (is_null($data)) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
+            ], 404);
+        }
+
         $registration = DB::table('registrations')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category',
