@@ -285,6 +285,14 @@ class PasienController extends Controller
             ->where('patient_registration_id', '=', $request->patient_registration_id)
             ->first();
 
+        if (is_null($data)) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
+            ], 404);
+        }
+
         $services = DB::table('detail_service_patients')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
