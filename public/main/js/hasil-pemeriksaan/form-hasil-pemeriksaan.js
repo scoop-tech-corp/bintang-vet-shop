@@ -244,7 +244,6 @@ $(document).ready(function() {
       service: finalSelectedJasa,
       item: finalSelectedBarang
     };
-    console.log('datas', datas);
 
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
@@ -452,7 +451,6 @@ $(document).ready(function() {
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(data) {
         const getData = data;
-        console.log('getData', getData);
 
         getId = getData.id; getPatienRegistrationId = getData.patient_registration_id;
         $('#nomorRegistrasiTxt').text(getData.registration.registration_number); $('#nomorPasienTxt').text(getData.registration.patient_number); 

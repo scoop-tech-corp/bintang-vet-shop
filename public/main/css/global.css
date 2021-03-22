@@ -139,6 +139,10 @@ body {
   position: relative;
 }
 
+.font-weight-700 {
+  font-weight: 700;
+}
+
 .p-top-10px {
   padding-top: 5px;
 }

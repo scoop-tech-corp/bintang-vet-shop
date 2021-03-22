@@ -24,7 +24,7 @@ function drawListKelompokObat() {
     let rowSelectedListBarang = appendListSelectBarang(ko.selectedListBarang, idx);
 
     rowKelompokObat += `<div class="target" style="margin-bottom: 30px">`
-      + `<div class="label-detail-div m-b-10px">Kelompok Obat ${no} `
+      + `<div class="font-weight-700 m-b-10px">Kelompok Obat ${no} `
       + `<button type="button" class="btn btn-xs btn-danger btnRemoveKelompokObat" title="Hapus Kelompok Obat" value=${idx} style="margin-left: 5px;"><i class="fa fa-trash-o" aria-hidden="true"></i></button>`
       + `</div>`
       + `<div class="m-b-10px">`
