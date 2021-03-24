@@ -7,6 +7,7 @@ $(document).ready(function() {
   let listBarangDetail = [];
   let listDeskripsiPasien = [];
 
+  refreshText();
   loadRiwayatPasien();
 
   $('#btnKembali').click(function() {
@@ -61,6 +62,8 @@ $(document).ready(function() {
 
               processAppendListJasaDetail(); processAppendListBarangDetail();
               processAppendListDeskripsiKondisiPasien();
+
+              drawListKelompokObatDetail(data.item);
 
             }, complete: function() { $('#loading-screen').hide(); },
             error: function(err) {
@@ -148,6 +151,78 @@ $(document).ready(function() {
       rowListBarangDetail += `<tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>`;
     }
     $('#detail-list-barang').append(rowListBarangDetail);
+  }
+
+  function drawListKelompokObatDetail(listItem) {
+    if (listItem.length) {
+
+      let rowKelompokObat = ''; let no = 1;
+      $('#locateDrawKelompokBarang .target').remove();
+      listItem.forEach((li, idx) => {
+        let rowSelectedListBarang = appendListSelectBarang(li.list_of_medicine);
+
+        rowKelompokObat += `<div class="target" style="margin-bottom: 30px">`
+        + `<div class="m-b-10px" style="font-weight: 700">Kelompok Obat ${no}</div>`
+        + `<div class="m-b-10px">`
+        + `${li.group_name} - ${li.branch_name}`
+        + `</div>`
+        + `<div class="table-responsive" id="table-list-barang-${idx}">`
+        +   `<table class="table table-striped text-nowrap">`
+        +    `<thead>`
+        +      `<tr>`
+        +        `<th>No</th>`
+        +        `<th>Tanggal</th>`
+        +        `<th>Dibuat Oleh</th>`
+        +        `<th>Nama Barang</th>`
+        +        `<th>Kategori Barang</th>`
+        +        `<th>Satuan Barang</th>`
+        +        `<th>Jumlah</th>`
+        +        `<th>Harga Satuan</th>`
+        +        `<th>Harga Keseluruhan</th>`
+        +      `</tr>`
+        +    `</thead>`
+        +    `<tbody id="list-selected-barang-${idx}" class="list-selected-barang">${rowSelectedListBarang}</tbody>`
+        +  `</table>`
+        + `</div>`
+        + `</div>`;
+        ++no;
+      });
+      $('#locateDrawKelompokBarang').append(rowKelompokObat);
+
+    } else {
+      $('#locateDrawKelompokBarang').append('Tidak ada kelompok obat.');
+    }
+  }
+
+  function appendListSelectBarang(arrSelectedListBarang) {
+    let = rowSelectedListBarang = ''; let no = 1;
+
+    if (arrSelectedListBarang.length) {
+      arrSelectedListBarang.forEach((lb) => {
+        rowSelectedListBarang += `<tr>`
+          + `<td>${no}</td>`
+          + `<td>${lb.created_at ? lb.created_at : '-'}</td>`
+          + `<td>${lb.created_by ? lb.created_by : '-'}</td>`
+          + `<td>${lb.item_name}</td>`
+          + `<td>${lb.category_name}</td>`
+          + `<td>${lb.unit_name}</td>`
+          + `<td>${lb.quantity}</td>`
+          + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `</tr>`;
+          ++no;
+      });
+    } else {
+      rowSelectedListBarang += '<tr><td colspan="9" class="text-center">Tidak ada data.</td></tr>';
+    }
+  
+    return rowSelectedListBarang;
+  }
+
+  function refreshText() {
+    $('#nomorRegistrasiTxt').text('-'); $('#diagnosaTxt').text('-');
+    $('#anamnesaTxt').text('-'); $('#signTxt').text('-');
+    $('#rawatInapTxt').text('-'); $('#statusPemeriksaanTxt').text('-');
   }
 
 });
