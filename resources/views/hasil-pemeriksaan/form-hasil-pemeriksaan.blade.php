@@ -97,8 +97,8 @@
               <div class="col-md-12 m-b-10px">
                 <div class="label-detail-div m-b-10px">Jasa</div>
                 <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
-                <div class="table-responsive">
-                  <table class="table table-striped text-nowrap table-list-jasa">
+                <div class="table-responsive table-list-jasa">
+                  <table class="table table-striped text-nowrap">
                     <thead>
                       <tr>
                         <th>No</th>
@@ -125,14 +125,14 @@
               </div>
       
               <div class="col-md-12 m-b-10px form-deskripsi-kondisi-pasien">
-                <div class="label-detail-div">Deskripsi Kondisi Pasien</div>
+                <div class="m-b-10px" style="font-weight: 700;">Deskripsi Kondisi Pasien</div>
                 <textarea id="descriptionCondPasien" class="form-control" placeholder="Masukan Deskripsi Kondisi Pasien"></textarea>
                 <div id="descriptionCondPasienErr1" class="validate-error"></div>
               </div>
       
-              <div class="col-md-12 m-b-10px">
+              <div class="col-md-12 m-b-10px table-deskripsi-kondisi-pasien">
                 <div class="table-responsive form-group">
-                  <table class="table table-striped table-deskripsi-kondisi-pasien">
+                  <table class="table table-striped">
                     <thead>
                       <tr>
                         <th>No</th>
@@ -157,8 +157,8 @@
         </div>
         <div class="tab-pane fade" id="kelompok_obat">
           <div class="row">
-            <div class="col-md-12 m-t-25px">
-              <button id="btnTambahKelompokObat" type="button" class="btn btn-primary pull-right">Tambah Kelompok Obat</button>
+            <div class="col-md-12 section-add-kelompok-obat text-right">
+              <button id="btnTambahKelompokObat" type="button" class="btn btn-primary">Tambah Kelompok Obat</button>
             </div>
             <div class="col-md-12 m-b-10px" id="locateDrawKelompokBarang">
             </div>
