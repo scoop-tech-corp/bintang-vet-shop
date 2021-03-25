@@ -942,7 +942,7 @@ class HasilPemeriksaanController extends Controller
                     'user_id' => $request->user()->id,
                 ]);
 
-            } elseif ($key_service['status'] == 'del' || $value_item['quantity'] == 0) {
+            } elseif ($key_service['status'] == 'del' || $key_service['quantity'] == 0) {
 
                 if (!is_null($key_service['id'])) {
 
