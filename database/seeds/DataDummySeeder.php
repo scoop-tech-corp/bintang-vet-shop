@@ -1240,6 +1240,68 @@ class DataDummySeeder extends Seeder
             'created_at' => '2021-03-13'
         ]);
 
+        //price medicine group
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '1',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '2',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '3',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '4',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '5',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
+        DB::table('price_medicine_groups')->insert([
+            'medicine_group_id' => '6',
+            'selling_price' => 100000,
+            'capital_price' => 0,
+            'doctor_fee' => 70000,
+            'petshop_fee' => 30000,
+            'user_id' => '1',
+            'created_at' => '2021-03-27',
+        ]);
+
         // DB::table('detail_service_patients')->insert([
         //     'check_up_result_id' => '1',
         //     'price_service_id' => '2',
