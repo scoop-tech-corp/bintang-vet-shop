@@ -130,6 +130,12 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('kelompok-obat', 'KelompokObatController@create');
         Route::put('kelompok-obat', 'KelompokObatController@update');
         Route::delete('kelompok-obat', 'KelompokObatController@delete');
+
+        //harga kelompok obat
+        Route::get('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@index');
+        Route::post('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@create');
+        Route::put('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@update');
+        Route::delete('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@delete');
     });
 });
 
