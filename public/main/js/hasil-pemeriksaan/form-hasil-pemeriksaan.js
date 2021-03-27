@@ -609,7 +609,7 @@ $(document).ready(function() {
 
   function loadKelompokObat() {
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/kelompok-obat',
+			url     : $('.baseUrl').val() + '/api/pembagian-harga-kelompok-obat',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },

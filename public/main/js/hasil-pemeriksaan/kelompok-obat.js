@@ -122,7 +122,7 @@ function appendDropdownKelompokObat() {
 
     if (listKelompokObat.length) {
       for (let i = 0 ; i < listKelompokObat.length ; i++) {
-        optKelompokObat += `<option value=${listKelompokObat[i].id}>${listKelompokObat[i].group_name} - ${listKelompokObat[i].branch_name}</option>`;
+        optKelompokObat += `<option value=${listKelompokObat[i].id}>${listKelompokObat[i].group_name} - ${listKelompokObat[i].branch_name} - ${listKelompokObat[i].selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</option>`;
       }
     } 
     $(this).append(optKelompokObat);
