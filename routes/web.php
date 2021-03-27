@@ -53,6 +53,10 @@ Route::get('/pembagian-harga-barang', function () {
 	return view('gudang.pembagian-harga.index');
 });
 
+Route::get('/pembagian-harga-kelompok-obat', function () {
+	return view('gudang.pembagian-harga-kelompok-obat.index');
+});
+
 Route::get('/kategori-jasa', function () {
 	return view('layanan.kategori-jasa.index');
 });
