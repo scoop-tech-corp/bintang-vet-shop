@@ -194,4 +194,30 @@ class HargaKelompokObatController extends Controller
             'message' => 'Berhasil menghapus Data',
         ], 200);
     }
+
+    public function branch_medicine(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $price_medicine_groups = DB::table('medicine_groups')
+            //->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
+            ->select('id as medicine_group_id', 'medicine_groups.group_name')
+            ->where('branch_id', '=', $request->branch_id)
+            ->distinct('id')
+            ->get();
+
+        if (is_null($price_medicine_groups)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak ditemukan!'],
+            ], 404);
+        }
+
+        return response()->json($price_medicine_groups, 200);
+    }
 }
