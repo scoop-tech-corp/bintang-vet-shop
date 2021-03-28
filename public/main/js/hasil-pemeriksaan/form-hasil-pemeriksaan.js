@@ -486,7 +486,8 @@ $(document).ready(function() {
 
         if (getData.item.length) {
           getData.item.forEach(item => {
-            let newObj = { kelompokObatId: null, selectDropdownBarang: [], selectedListBarang: [], deletedUpdateListBarang: [] };
+            let newObj = { id: null, kelompokObatId: null, selectDropdownBarang: [], selectedListBarang: [], deletedUpdateListBarang: [] };
+            newObj.id = item.medicine_group_id; // untuk membedakan data lama dan baru
             newObj.kelompokObatId = item.medicine_group_id;
             item.list_of_medicine.forEach(lom => {
               newObj.selectDropdownBarang.push(lom.price_item_id);
