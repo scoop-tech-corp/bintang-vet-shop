@@ -987,6 +987,7 @@ class HasilPemeriksaanController extends Controller
                             'medicine_group_id' => $res_group['medicine_group_id'],
                             'quantity' => $value_item['quantity'],
                             'price_overall' => $value_item['price_overall'],
+                            'status_paid_off' => 0,
                             'user_id' => $request->user()->id,
                         ]);
 
