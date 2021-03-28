@@ -428,7 +428,7 @@ class HasilPemeriksaanController extends Controller
             ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
             ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
             ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
-            ->select('price_medicine_groups.id as price_medicine_group_id', 'price_medicine_groups.selling_price', 'detail_item_patients.medicine_group_id as medicine_group_id',
+            ->select('price_medicine_groups.id as price_medicine_group_id', DB::raw("TRIM(price_medicine_groups.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
                 'medicine_groups.group_name', 'branches.id as branch_id', 'branches.branch_name')
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
             ->groupBy('price_medicine_groups.id', 'price_medicine_groups.selling_price', 'detail_item_patients.medicine_group_id', 'medicine_groups.group_name', 'branches.id', 'branches.branch_name')
