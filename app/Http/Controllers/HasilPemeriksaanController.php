@@ -973,55 +973,23 @@ class HasilPemeriksaanController extends Controller
 
             $result_item = json_decode(json_encode($temp_item), true);
 
+            // info($result_item);
+
             foreach ($result_item as $res_group) {
 
-                foreach ($res_group['list_of_medicine'] as $value_item) {
+                if ($res_group['status'] == 'del') {
 
-                    if (is_null($value_item['id'])) {
-                        //$detail_item
-                        $detail_item = DetailItemPatient::find($value_item['id']);
+                    $find_child = DB::table('detail_item_patients')
+                        ->where('medicine_group_id', '=', $res_group['medicine_group_id'])
+                        ->get();
 
-                        $item_list = DetailItemPatient::create([
-                            'check_up_result_id' => $check_up_result->id,
-                            'price_item_id' => $value_item['price_item_id'],
-                            'medicine_group_id' => $res_group['medicine_group_id'],
-                            'quantity' => $value_item['quantity'],
-                            'price_overall' => $value_item['price_overall'],
-                            'status_paid_off' => 0,
-                            'user_id' => $request->user()->id,
-                        ]);
+                    foreach ($find_child as $res_child) {
 
-                        $check_price_item = DB::table('price_items')
-                            ->select('list_of_items_id')
-                            ->where('id', '=', $value_item['price_item_id'])
-                            ->first();
-
-                        $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
-
-                        $count_item = $list_of_items->total_item - $value_item['quantity'];
-
-                        $list_of_items->total_item = $count_item;
-                        $list_of_items->user_update_id = $request->user()->id;
-                        $list_of_items->updated_at = \Carbon\Carbon::now();
-                        $list_of_items->save();
-
-                        $item_history = HistoryItemMovement::create([
-                            'price_item_id' => $value_item['price_item_id'],
-                            'quantity' => $value_item['quantity'],
-                            'status' => 'kurang',
-                            'user_id' => $request->user()->id,
-                        ]);
-
-                    } elseif ($value_item['status'] == 'del' || $value_item['quantity'] == 0) {
-
-                        // $check_item_result = DB::table('detail_item_patients')
-                        //     ->select('quantity')
-                        //     ->where('check_up_result_id', '=', $request->id)
-                        //     ->where('item_id', '=', $value_item['item_id'])
-                        //     ->first();
-                        $check_price_item = DB::table('price_items')
-                            ->select('list_of_items_id')
-                            ->where('id', '=', $value_item['price_item_id'])
+                        $check_price_item = DB::table('detail_item_patients')
+                            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                            ->select('list_of_items.id as list_of_items_id')
+                            ->where('price_items.id', '=', $res_child->price_item_id)
                             ->first();
 
                         $check_item_result = DB::table('detail_item_patients')
@@ -1029,7 +997,7 @@ class HasilPemeriksaanController extends Controller
                             ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
                             ->select('detail_item_patients.quantity as quantity')
                             ->where('list_of_items.id', '=', $check_price_item->list_of_items_id)
-                            ->where('price_items.id', '=', $value_item['price_item_id'])
+                            ->where('price_items.id', '=', $res_child->price_item_id)
                             ->first();
 
                         $res_value_item = $check_item_result->quantity;
@@ -1044,67 +1012,91 @@ class HasilPemeriksaanController extends Controller
                         $list_of_items->save();
 
                         $item_history = HistoryItemMovement::create([
-                            'price_item_id' => $value_item['price_item_id'],
+                            'price_item_id' => $res_child->price_item_id,
                             'quantity' => $res_value_item,
                             'status' => 'tambah',
                             'user_id' => $request->user()->id,
                         ]);
 
                         $detail_item = DB::table('detail_item_patients')
-                            ->where('id', $value_item['id'])->delete();
+                            ->where('id', $res_child->id)->delete();
+                    }
 
-                    } else {
+                } else {
 
-                        //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
-                        $check_item_result = DB::table('detail_item_patients')
-                            ->select('quantity')
-                            ->where('check_up_result_id', '=', $request->id)
-                            ->where('price_item_id', '=', $value_item['price_item_id'])
-                            ->first();
+                    foreach ($res_group['list_of_medicine'] as $value_item) {
 
-                        if ($value_item['quantity'] > $check_item_result->quantity) {
+                        if (is_null($value_item['id'])) {
+                            //$detail_item
 
-                            $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
+                            $detail_item = DetailItemPatient::find($value_item['id']);
 
-                            $check_price_item = DB::table('price_items')
-                                ->select('list_of_items_id')
-                                ->where('id', '=', $value_item['price_item_id'])
+                            $item_list = DetailItemPatient::create([
+                                'check_up_result_id' => $check_up_result->id,
+                                'price_item_id' => $value_item['price_item_id'],
+                                'medicine_group_id' => $res_group['medicine_group_id'],
+                                'quantity' => $value_item['quantity'],
+                                'price_overall' => $value_item['price_overall'],
+                                'status_paid_off' => 0,
+                                'user_id' => $request->user()->id,
+                            ]);
+
+                            // $check_price_item = DB::table('price_items')
+                            //     ->select('list_of_items_id')
+                            //     ->where('id', '=', $value_item['price_item_id'])
+                            //     ->first();
+
+                            $check_price_item = DB::table('detail_item_patients')
+                                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                                ->select('list_of_items.id as list_of_items_id')
+                                ->where('price_items.id', '=', $value_item['price_item_id'])
                                 ->first();
 
                             $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
 
-                            $count_item = $list_of_items->total_item - $res_value_item;
+                            $count_item = $list_of_items->total_item - $value_item['quantity'];
 
                             $list_of_items->total_item = $count_item;
                             $list_of_items->user_update_id = $request->user()->id;
                             $list_of_items->updated_at = \Carbon\Carbon::now();
                             $list_of_items->save();
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
-
-                            $detail_item_patient->price_item_id = $value_item['price_item_id'];
-                            $detail_item_patient->quantity = $value_item['quantity'];
-                            $detail_item_patient->price_overall = $value_item['price_overall'];
-                            $detail_item_patient->user_update_id = $request->user()->id;
-                            $detail_item_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
-                            $detail_item_patient->save();
-
                             $item_history = HistoryItemMovement::create([
                                 'price_item_id' => $value_item['price_item_id'],
-                                'quantity' => $res_value_item,
+                                'quantity' => $value_item['quantity'],
                                 'status' => 'kurang',
                                 'user_id' => $request->user()->id,
                             ]);
 
-                        } elseif ($value_item['quantity'] < $check_item_result->quantity) {
+                        } elseif ($value_item['status'] == 'del' || $value_item['quantity'] == 0) {
 
-                            $res_value_item = $check_item_result->quantity - $value_item['quantity'];
-
-                            $check_price_item = DB::table('price_items')
-                                ->select('list_of_items_id')
-                                ->where('id', '=', $value_item['price_item_id'])
+                            // $check_item_result = DB::table('detail_item_patients')
+                            //     ->select('quantity')
+                            //     ->where('check_up_result_id', '=', $request->id)
+                            //     ->where('item_id', '=', $value_item['item_id'])
+                            //     ->first();
+                            // $check_price_item = DB::table('detail_item_patients')
+                            //     ->select('price_item_id')
+                            //     ->where('id', '=', $value_item['price_item_id'])
+                            //     ->first();
+                            
+                            $check_price_item = DB::table('detail_item_patients')
+                                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                                ->select('list_of_items.id as list_of_items_id')
+                                ->where('price_items.id', '=', $value_item['price_item_id'])
                                 ->first();
+
+                            $check_item_result = DB::table('detail_item_patients')
+                                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                                ->select('detail_item_patients.quantity as quantity')
+                                ->where('list_of_items.id', '=', $check_price_item->list_of_items_id)
+                                ->where('price_items.id', '=', $value_item['price_item_id'])
+                                ->first();
+
+                            $res_value_item = $check_item_result->quantity;
 
                             $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
 
@@ -1115,16 +1107,6 @@ class HasilPemeriksaanController extends Controller
                             $list_of_items->updated_at = \Carbon\Carbon::now();
                             $list_of_items->save();
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
-
-                            $detail_item_patient->price_item_id = $value_item['price_item_id'];
-                            $detail_item_patient->quantity = $value_item['quantity'];
-                            $detail_item_patient->price_overall = $value_item['price_overall'];
-                            $detail_item_patient->user_update_id = $request->user()->id;
-                            $detail_item_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
-                            $detail_item_patient->save();
-
                             $item_history = HistoryItemMovement::create([
                                 'price_item_id' => $value_item['price_item_id'],
                                 'quantity' => $res_value_item,
@@ -1132,21 +1114,105 @@ class HasilPemeriksaanController extends Controller
                                 'user_id' => $request->user()->id,
                             ]);
 
+                            $detail_item = DB::table('detail_item_patients')
+                                ->where('id', $value_item['id'])->delete();
+
                         } else {
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
+                            //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
+                            $check_item_result = DB::table('detail_item_patients')
+                                ->select('quantity')
+                                ->where('check_up_result_id', '=', $request->id)
+                                ->where('price_item_id', '=', $value_item['price_item_id'])
+                                ->first();
 
-                            $detail_item_patient->price_item_id = $value_item['price_item_id'];
-                            $detail_item_patient->quantity = $value_item['quantity'];
-                            $detail_item_patient->price_overall = $value_item['price_overall'];
-                            $detail_item_patient->user_update_id = $request->user()->id;
-                            $detail_item_patient->updated_at = \Carbon\Carbon::now();
-                            $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
-                            $detail_item_patient->save();
+                            if ($value_item['quantity'] > $check_item_result->quantity) {
+
+                                $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
+
+                                $check_price_item = DB::table('price_items')
+                                    ->select('list_of_items_id')
+                                    ->where('id', '=', $value_item['price_item_id'])
+                                    ->first();
+
+                                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                                $count_item = $list_of_items->total_item - $res_value_item;
+
+                                $list_of_items->total_item = $count_item;
+                                $list_of_items->user_update_id = $request->user()->id;
+                                $list_of_items->updated_at = \Carbon\Carbon::now();
+                                $list_of_items->save();
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                $detail_item_patient->price_item_id = $value_item['price_item_id'];
+                                $detail_item_patient->quantity = $value_item['quantity'];
+                                $detail_item_patient->price_overall = $value_item['price_overall'];
+                                $detail_item_patient->user_update_id = $request->user()->id;
+                                $detail_item_patient->updated_at = \Carbon\Carbon::now();
+                                $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
+                                $detail_item_patient->save();
+
+                                $item_history = HistoryItemMovement::create([
+                                    'price_item_id' => $value_item['price_item_id'],
+                                    'quantity' => $res_value_item,
+                                    'status' => 'kurang',
+                                    'user_id' => $request->user()->id,
+                                ]);
+
+                            } elseif ($value_item['quantity'] < $check_item_result->quantity) {
+
+                                $res_value_item = $check_item_result->quantity - $value_item['quantity'];
+
+                                $check_price_item = DB::table('price_items')
+                                    ->select('list_of_items_id')
+                                    ->where('id', '=', $value_item['price_item_id'])
+                                    ->first();
+
+                                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                                $count_item = $list_of_items->total_item + $res_value_item;
+
+                                $list_of_items->total_item = $count_item;
+                                $list_of_items->user_update_id = $request->user()->id;
+                                $list_of_items->updated_at = \Carbon\Carbon::now();
+                                $list_of_items->save();
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                $detail_item_patient->price_item_id = $value_item['price_item_id'];
+                                $detail_item_patient->quantity = $value_item['quantity'];
+                                $detail_item_patient->price_overall = $value_item['price_overall'];
+                                $detail_item_patient->user_update_id = $request->user()->id;
+                                $detail_item_patient->updated_at = \Carbon\Carbon::now();
+                                $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
+                                $detail_item_patient->save();
+
+                                $item_history = HistoryItemMovement::create([
+                                    'price_item_id' => $value_item['price_item_id'],
+                                    'quantity' => $res_value_item,
+                                    'status' => 'tambah',
+                                    'user_id' => $request->user()->id,
+                                ]);
+
+                            } else {
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                $detail_item_patient->price_item_id = $value_item['price_item_id'];
+                                $detail_item_patient->quantity = $value_item['quantity'];
+                                $detail_item_patient->price_overall = $value_item['price_overall'];
+                                $detail_item_patient->user_update_id = $request->user()->id;
+                                $detail_item_patient->updated_at = \Carbon\Carbon::now();
+                                $detail_item_patient->medicine_group_id = $res_group['medicine_group_id'];
+                                $detail_item_patient->save();
+                            }
+
                         }
-
                     }
                 }
+
             }
         }
 
