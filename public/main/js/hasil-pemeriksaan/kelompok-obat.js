@@ -25,7 +25,7 @@ function drawListKelompokObat() {
 
     rowKelompokObat += `<div class="target" style="margin-bottom: 30px">`
       + `<div class="font-weight-700 m-b-10px">Kelompok Obat ${no} `
-      + `${formState == 'edit' && ko.id ? '' : `<button type="button" class="btn btn-xs btn-danger btnRemoveKelompokObat" title="Hapus Kelompok Obat" value=${idx} style="margin-left: 5px;"><i class="fa fa-trash-o" aria-hidden="true"></i></button>`}`
+      + `<button type="button" class="btn btn-xs btn-danger btnRemoveKelompokObat" title="Hapus Kelompok Obat" value=${idx} style="margin-left: 5px;"><i class="fa fa-trash-o" aria-hidden="true"></i></button>`
       + `</div>`
       + `<div class="m-b-10px">`
       +  `<select class="selectedKelompokObat" class="form-control" style="width: 100%" idx=${idx}></select>`
@@ -107,7 +107,9 @@ function drawListKelompokObat() {
   });
 
   $('.btnRemoveKelompokObat').click(function() {
-    console.log('$(this).val()', $(this).val());
+    let getObjDel = arrayKelompokObat[$(this).val()];
+
+    arrayKelompokObatDelete.push(getObjDel);
     arrayKelompokObat.splice($(this).val(), 1);
     drawListKelompokObat();
   });

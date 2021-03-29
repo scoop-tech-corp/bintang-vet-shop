@@ -1,5 +1,6 @@
 Dropzone.autoDiscover = false;
 let arrayKelompokObat = [];
+let arrayKelompokObatDelete = [];
 let formState = '';
 let isValidSelectedPasien = false;
 let isValidAnamnesa = false;
@@ -218,7 +219,22 @@ $(document).ready(function() {
     });
 
     arrayKelompokObat.forEach(ko => {
-      let newObj = {medicine_group_id: null, list_of_medicine: []};
+      let newObj = {medicine_group_id: null, list_of_medicine: [], status: ''};
+      newObj.medicine_group_id = ko.kelompokObatId;
+
+      ko.selectedListBarang.forEach(lb => {
+        newObj.list_of_medicine.push({id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: ''});
+      });
+
+      ko.deletedUpdateListBarang.forEach(dul => {
+        newObj.list_of_medicine.push({id: dul.id, price_item_id: dul.price_item_id, quantity: dul.quantity, price_overall: dul.price_overall, status: 'del'});
+      });
+
+      finalSelectedBarang.push(newObj);
+    });
+
+    arrayKelompokObatDelete.forEach(ko => {
+      let newObj = {medicine_group_id: null, list_of_medicine: [], status: 'del'};
       newObj.medicine_group_id = ko.kelompokObatId;
 
       ko.selectedListBarang.forEach(lb => {
