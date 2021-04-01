@@ -190,7 +190,7 @@ class HasilPemeriksaanController extends Controller
                 return response()->json([
                     'message' => 'The data was invalid.',
                     'errors' => ['Data Kelompok Obat terdapat duplikat!'],
-                ], 404);
+                ], 422);
             }
 
             foreach ($result_item as $res_group) {
@@ -708,6 +708,22 @@ class HasilPemeriksaanController extends Controller
             $temp_item = $request->item;
 
             $result_item = json_decode(json_encode($temp_item), true);
+
+            $keys = array();
+
+            foreach ($result_item as $res_test) {
+
+                $keys[$res_test['medicine_group_id']] = 1;
+
+            }
+
+            if (count($keys) != count($result_item)) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data Kelompok Obat terdapat duplikat!'],
+                ], 422);
+            }
 
             foreach ($result_item as $res_group) {
 
