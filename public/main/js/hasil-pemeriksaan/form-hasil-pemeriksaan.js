@@ -7,7 +7,6 @@ let isValidAnamnesa = false;
 let isValidSign = false;
 let isValidDiagnosa = false;
 let isValidRadioRawatInap = false;
-let isValidDescCondPasien = false;
 let isValidRadioStatusPemeriksa = false;
 let isBeErr = false;
 
@@ -98,9 +97,6 @@ $(document).ready(function() {
     if (this.checked) {
       if (parseInt(this.value)) {
         $('.form-deskripsi-kondisi-pasien').show();
-        if (!$('#descriptionCondPasien').val()) {
-          $('#descriptionCondPasienErr1').text('Deskripsi Kondisi Pasien harus di isi'); isValidDescCondPasien = false;
-        }
       } else {
         $('.form-deskripsi-kondisi-pasien').hide();
       }
@@ -695,14 +691,6 @@ function validationForm() {
     $('#rawatInapErr1').text(''); isValidRadioRawatInap = true;
   }
 
-  if(parseInt($("input[name='radioRawatInap']:checked").val())) {
-    if (!$('#descriptionCondPasien').val()) {
-      $('#descriptionCondPasienErr1').text('Deskripsi Kondisi Pasien harus di isi'); isValidDescCondPasien = false;
-    } else {
-      $('#descriptionCondPasienErr1').text(''); isValidDescCondPasien = true;
-    }
-  } else { isValidDescCondPasien = true; }
-
   if (!$("input[name='radioStatusPemeriksa']:checked").val()) {
     $('#statusPemeriksaErr1').text('Status Pemeriksa harus di isi'); isValidRadioStatusPemeriksa = false;
   } else {
@@ -712,7 +700,7 @@ function validationForm() {
   $('#beErr').empty(); isBeErr = false;
 
   if (!isValidSelectedPasien || !isValidAnamnesa || !isValidSign || !isValidDiagnosa 
-    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || !isValidDescCondPasien || isBeErr) {
+    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || isBeErr) {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
   } else {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', false);
