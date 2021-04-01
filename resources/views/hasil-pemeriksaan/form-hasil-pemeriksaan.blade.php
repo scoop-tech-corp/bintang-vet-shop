@@ -127,7 +127,6 @@
               <div class="col-md-12 m-b-10px form-deskripsi-kondisi-pasien">
                 <div class="m-b-10px" style="font-weight: 700;">Deskripsi Kondisi Pasien</div>
                 <textarea id="descriptionCondPasien" class="form-control" placeholder="Masukan Deskripsi Kondisi Pasien"></textarea>
-                <div id="descriptionCondPasienErr1" class="validate-error"></div>
               </div>
       
               <div class="col-md-12 m-b-10px table-deskripsi-kondisi-pasien">
