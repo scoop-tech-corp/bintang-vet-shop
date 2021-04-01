@@ -11,6 +11,7 @@ use App\Models\InPatient;
 use App\Models\ListofItems;
 use App\Models\ListofServices;
 use App\Models\Registration;
+use App\Models\TempCountItem;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -93,7 +94,7 @@ class HasilPemeriksaanController extends Controller
             ], 422);
         }
 
-        if ($request->status_outpatient_inpatient == true) {
+        if ($request->status_outpatient_inpatient == true && $request->inpatient != "") {
 
             $messages = [
                 'inpatient.required' => 'Deskripsi Kondisi Pasien harus diisi',
@@ -173,7 +174,24 @@ class HasilPemeriksaanController extends Controller
             $temp_item = $request->item;
 
             // $result_item = json_decode(json_encode($temp_item), true);
+            //cek duplikat kelompok obat
             $result_item = json_decode($temp_item, true);
+
+            $keys = array();
+
+            foreach ($result_item as $res_test) {
+
+                $keys[$res_test['medicine_group_id']] = 1;
+
+            }
+
+            if (count($keys) != count($result_item)) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data Kelompok Obat terdapat duplikat!'],
+                ], 404);
+            }
 
             foreach ($result_item as $res_group) {
 
@@ -236,7 +254,7 @@ class HasilPemeriksaanController extends Controller
                     if ($value_item['quantity'] > $check_storage->total_item) {
                         return response()->json([
                             'message' => 'The given data was invalid.',
-                            'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' pada rawat jalan kurang atau habis!'],
+                            'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
                         ], 422);
                     }
 
@@ -251,12 +269,78 @@ class HasilPemeriksaanController extends Controller
                 }
             }
 
-            // foreach ($result_item as $value_item) {
+            //disini
+            foreach ($result_item as $value_data) {
 
-            // }
+                foreach ($value_data['list_of_medicine'] as $value_item) {
+
+                    $check_temp_count_items = DB::table('temp_count_items')
+                        ->where('price_item_id', '=', $value_item['price_item_id'])
+                        ->where('user_id', '=', $request->user()->id)
+                        ->sum('temp_count_items.quantity');
+
+                    $check_temp_item = DB::table('temp_count_items')
+                        ->where('price_item_id', '=', $value_item['price_item_id'])
+                        ->where('user_id', '=', $request->user()->id)
+                        ->first();
+
+                    if (is_null($check_temp_item)) {
+
+                        $service_list = TempCountItem::create([
+                            'price_item_id' => $value_item['price_item_id'],
+                            'quantity' => $value_item['quantity'],
+                            'user_id' => $request->user()->id,
+                        ]);
+
+                    } else {
+
+                        $adding_value = $check_temp_count_items;
+
+                        $find_id = DB::table('temp_count_items')
+                            ->select('id', 'quantity')
+                            ->where('price_item_id', '=', $value_item['price_item_id'])
+                            ->where('user_id', '=', $request->user()->id)
+                            ->first();
+
+                        $res_adding = $adding_value + $value_item['quantity'];
+
+                        $find_price_item = TempCountItem::find($find_id->id);
+                        $find_price_item->quantity = $res_adding;
+                        $find_price_item->save();
+                    }
+
+                }
+            }
+
+            $find_temp = TempCountItem::where('user_id', '=', $request->user()->id)->get();
+
+            $data_item = [];
+
+            $data_item = $find_temp;
+
+            foreach ($data_item as $find_stock) {
+
+                $check_price_item = DB::table('price_items')
+                    ->select('list_of_items_id')
+                    ->where('id', '=', $find_stock['price_item_id'])
+                    ->first();
+
+                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                $count_item = $list_of_items->total_item - $find_stock['quantity'];
+
+                if ($count_item < 0) {
+
+                    $detail_item = DB::table('temp_count_items')
+                        ->where('user_id', $request->user()->id)->delete();
+
+                    return response()->json([
+                        'message' => 'The given data was invalid.',
+                        'errors' => ['Jumlah stok ' . $list_of_items->item_name . ' kurang atau habis!'],
+                    ], 422);
+                }
+            }
         }
-
-        //return "berhasil";
 
         //insert data
         $item = CheckUpResult::create([
@@ -339,7 +423,7 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        if ($request->status_outpatient_inpatient == true) {
+        if ($request->status_outpatient_inpatient == true && $request->inpatient != "") {
 
             $item_list = InPatient::create([
                 'check_up_result_id' => $item->id,
@@ -347,6 +431,9 @@ class HasilPemeriksaanController extends Controller
                 'user_id' => $request->user()->id,
             ]);
         }
+
+        $detail_item = DB::table('temp_count_items')
+            ->where('user_id', $request->user()->id)->delete();
 
         return response()->json(
             [
@@ -358,13 +445,6 @@ class HasilPemeriksaanController extends Controller
 
     public function detail(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $data = CheckUpResult::find($request->id);
         //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
 
@@ -506,7 +586,7 @@ class HasilPemeriksaanController extends Controller
             ], 404);
         }
 
-        if ($request->status_outpatient_inpatient == true) {
+        if ($request->status_outpatient_inpatient == true && $request->inpatient != "") {
 
             $messages = [
                 'inpatient.required' => 'Deskripsi Kondisi Pasien harus diisi',
@@ -897,6 +977,82 @@ class HasilPemeriksaanController extends Controller
                     }
                 }
             }
+
+            //disini
+            foreach ($result_item as $value_data) {
+
+                foreach ($value_data['list_of_medicine'] as $value_item) {
+
+                    if ($value_item['status'] == "") {
+
+                        $check_temp_count_items = DB::table('temp_count_items')
+                            ->where('price_item_id', '=', $value_item['price_item_id'])
+                            ->where('user_id', '=', $request->user()->id)
+                            ->sum('temp_count_items.quantity');
+
+                        $check_temp_item = DB::table('temp_count_items')
+                            ->where('price_item_id', '=', $value_item['price_item_id'])
+                            ->where('user_id', '=', $request->user()->id)
+                            ->first();
+
+                        if (is_null($check_temp_item)) {
+
+                            $service_list = TempCountItem::create([
+                                'price_item_id' => $value_item['price_item_id'],
+                                'quantity' => $value_item['quantity'],
+                                'user_id' => $request->user()->id,
+                            ]);
+
+                        } else {
+
+                            $adding_value = $check_temp_count_items;
+
+                            $find_id = DB::table('temp_count_items')
+                                ->select('id', 'quantity')
+                                ->where('price_item_id', '=', $value_item['price_item_id'])
+                                ->where('user_id', '=', $request->user()->id)
+                                ->first();
+
+                            $res_adding = $adding_value + $value_item['quantity'];
+
+                            $find_price_item = TempCountItem::find($find_id->id);
+                            $find_price_item->quantity = $res_adding;
+                            $find_price_item->save();
+                        }
+
+                    }
+
+                }
+            }
+
+            $find_temp = TempCountItem::where('user_id', '=', $request->user()->id)->get();
+
+            $data_item = [];
+
+            $data_item = $find_temp;
+
+            foreach ($data_item as $find_stock) {
+
+                $check_price_item = DB::table('price_items')
+                    ->select('list_of_items_id')
+                    ->where('id', '=', $find_stock['price_item_id'])
+                    ->first();
+
+                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                $count_item = $list_of_items->total_item - $find_stock['quantity'];
+
+                if ($count_item < 0) {
+
+                    $detail_item = DB::table('temp_count_items')
+                        ->where('user_id', $request->user()->id)->delete();
+
+                    return response()->json([
+                        'message' => 'The given data was invalid.',
+                        'errors' => ['Jumlah stok ' . $list_of_items->item_name . ' kurang atau habis!'],
+                    ], 422);
+                }
+            }
         }
 
         //update hasil pemeriksaan
@@ -1080,7 +1236,7 @@ class HasilPemeriksaanController extends Controller
                             //     ->select('price_item_id')
                             //     ->where('id', '=', $value_item['price_item_id'])
                             //     ->first();
-                            
+
                             $check_price_item = DB::table('detail_item_patients')
                                 ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
                                 ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
@@ -1216,7 +1372,7 @@ class HasilPemeriksaanController extends Controller
             }
         }
 
-        if ($request->status_outpatient_inpatient == true) {
+        if ($request->status_outpatient_inpatient == true && $request->inpatient != "") {
 
             $item_list = InPatient::create([
                 'check_up_result_id' => $request->id,
@@ -1224,6 +1380,9 @@ class HasilPemeriksaanController extends Controller
                 'user_id' => $request->user()->id,
             ]);
         }
+
+        $detail_item = DB::table('temp_count_items')
+            ->where('user_id', $request->user()->id)->delete();
 
         return response()->json(
             [
