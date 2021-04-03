@@ -11,18 +11,11 @@ class SatuanBarangController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $unit_item = DB::table('unit_item')
             ->join('users', 'unit_item.user_id', '=', 'users.id')
             ->select('unit_item.id', 'unit_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(unit_item.created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false');
+            ->where('unit_item.isDeleted', '=', 'false');
 
         if ($request->keyword) {
             $unit_item = $unit_item->where('isDeleted', '=', 'false')
