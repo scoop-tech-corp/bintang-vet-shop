@@ -550,6 +550,9 @@ class HasilPemeriksaanController extends Controller
 
     public function update(Request $request)
     {
+
+        //info($request);
+
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
@@ -709,21 +712,28 @@ class HasilPemeriksaanController extends Controller
 
             $result_item = json_decode(json_encode($temp_item), true);
 
-            $keys = array();
+            // $keys = array();
 
-            foreach ($result_item as $res_test) {
+            // foreach ($result_item as $res_test) {
 
-                $keys[$res_test['medicine_group_id']] = 1;
+            //     info($res_test['status']);
 
-            }
+            //     if ($res_test['status'] == 'del') {
 
-            if (count($keys) != count($result_item)) {
+            //         $keys[$res_test['medicine_group_id']] = 1;
+            //     }
+            // }
 
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data Kelompok Obat terdapat duplikat!'],
-                ], 422);
-            }
+            // info(count($keys));
+            // info(count($result_item));
+
+            // if (count($keys) != count($result_item)) {
+
+            //     return response()->json([
+            //         'message' => 'The data was invalid.',
+            //         'errors' => ['Data Kelompok Obat terdapat duplikat!'],
+            //     ], 422);
+            // }
 
             foreach ($result_item as $res_group) {
 
@@ -741,7 +751,15 @@ class HasilPemeriksaanController extends Controller
 
                 //return $res_group;
 
-                // return $res_group['list_of_medicine'];
+                //info(is_object($res_group['list_of_medicine']));
+
+                // if (!is_object($res_group['list_of_medicine'])) {
+
+                //     return response()->json([
+                //         'message' => 'The data was invalid.',
+                //         'errors' => ['Isi Kelompok Obat Harus diisi!'],
+                //     ], 422);
+                // }
 
                 foreach ($res_group['list_of_medicine'] as $value_item) {
 
@@ -992,6 +1010,7 @@ class HasilPemeriksaanController extends Controller
 
                     }
                 }
+
             }
 
             //disini
@@ -999,7 +1018,7 @@ class HasilPemeriksaanController extends Controller
 
                 foreach ($value_data['list_of_medicine'] as $value_item) {
 
-                    if ($value_item['status'] == "") {
+                    if (is_null($value_item['status'])) {
 
                         $check_temp_count_items = DB::table('temp_count_items')
                             ->where('price_item_id', '=', $value_item['price_item_id'])
@@ -1194,14 +1213,11 @@ class HasilPemeriksaanController extends Controller
                             ->where('id', $res_child->id)->delete();
                     }
 
-                } else {
+                } else if (is_null($res_group['status'])) {
 
                     foreach ($res_group['list_of_medicine'] as $value_item) {
 
                         if (is_null($value_item['id'])) {
-                            //$detail_item
-
-                            $detail_item = DetailItemPatient::find($value_item['id']);
 
                             $item_list = DetailItemPatient::create([
                                 'check_up_result_id' => $check_up_result->id,
@@ -1390,7 +1406,7 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->status_outpatient_inpatient == true && $request->inpatient != "") {
 
-            $item_list = InPatient::create([
+            $inpatient = InPatient::create([
                 'check_up_result_id' => $request->id,
                 'description' => $request->inpatient,
                 'user_id' => $request->user()->id,
