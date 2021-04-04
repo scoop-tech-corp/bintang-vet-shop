@@ -8,6 +8,7 @@ let isValidSign = false;
 let isValidDiagnosa = false;
 let isValidRadioRawatInap = false;
 let isValidRadioStatusPemeriksa = false;
+let customErr1 = false;
 let isBeErr = false;
 
 $(document).ready(function() {
@@ -89,9 +90,6 @@ $(document).ready(function() {
 
   $('#selectedJasa').on('select2:select', function (e) { processSelectedJasa(e.params.data.id, e.params.data.selected); validationForm(); });
   $('#selectedJasa').on('select2:unselect', function(e) { processSelectedJasa(e.params.data.id, e.params.data.selected); validationForm(); });
-
-  $('#selectedBarang').on('select2:select', function (e) { processSelectedBarang(e.params.data.id, e.params.data.selected); validationForm(); });
-  $('#selectedBarang').on('select2:unselect', function (e) { processSelectedBarang(e.params.data.id, e.params.data.selected); validationForm(); });
 
   $('input:radio[name="radioRawatInap"]').change(function (e) {
     if (this.checked) {
@@ -207,38 +205,39 @@ $(document).ready(function() {
     let finalSelectedJasa = [];
     let finalSelectedBarang = [];
     
-    selectedListJasa.forEach(lj => {
-      finalSelectedJasa.push({ id: lj.id, price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall, status: '' });
-    });
     deletedUpdateListJasa.forEach(ulj => {
       finalSelectedJasa.push({ id: ulj.id, price_service_id: ulj.price_service_id, quantity: ulj.quantity, price_overall: ulj.price_overall, status: 'del' });
     });
 
-    arrayKelompokObat.forEach(ko => {
-      let newObj = {medicine_group_id: null, list_of_medicine: [], status: ''};
-      newObj.medicine_group_id = ko.kelompokObatId;
-
-      ko.selectedListBarang.forEach(lb => {
-        newObj.list_of_medicine.push({id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: ''});
-      });
-
-      ko.deletedUpdateListBarang.forEach(dul => {
-        newObj.list_of_medicine.push({id: dul.id, price_item_id: dul.price_item_id, quantity: dul.quantity, price_overall: dul.price_overall, status: 'del'});
-      });
-
-      finalSelectedBarang.push(newObj);
+    selectedListJasa.forEach(lj => {
+      finalSelectedJasa.push({ id: lj.id, price_service_id: lj.price_service_id, quantity: lj.quantity, price_overall: lj.price_overall, status: '' });
     });
 
     arrayKelompokObatDelete.forEach(ko => {
       let newObj = {medicine_group_id: null, list_of_medicine: [], status: 'del'};
       newObj.medicine_group_id = ko.kelompokObatId;
 
+      ko.deletedUpdateListBarang.forEach(dul => {
+        newObj.list_of_medicine.push({id: dul.id, price_item_id: dul.price_item_id, quantity: dul.quantity, price_overall: dul.price_overall, status: 'del'});
+      });
+
       ko.selectedListBarang.forEach(lb => {
         newObj.list_of_medicine.push({id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: ''});
       });
 
+      finalSelectedBarang.push(newObj);
+    });
+
+    arrayKelompokObat.forEach(ko => {
+      let newObj = {medicine_group_id: null, list_of_medicine: [], status: ''};
+      newObj.medicine_group_id = ko.kelompokObatId;
+
       ko.deletedUpdateListBarang.forEach(dul => {
         newObj.list_of_medicine.push({id: dul.id, price_item_id: dul.price_item_id, quantity: dul.quantity, price_overall: dul.price_overall, status: 'del'});
+      });
+
+      ko.selectedListBarang.forEach(lb => {
+        newObj.list_of_medicine.push({id: lb.id, price_item_id: lb.price_item_id, quantity: lb.quantity, price_overall: lb.price_overall, status: ''});
       });
 
       finalSelectedBarang.push(newObj);
@@ -306,40 +305,14 @@ $(document).ready(function() {
     } else {
       const getIds = [];
       const getIdx = selectedListJasa.findIndex(i => i.price_service_id == selectedId);
+
+      deletedUpdateListJasa.push(selectedListJasa[getIdx]);
       selectedListJasa.splice(getIdx, 1);
       selectedListJasa.forEach(lj => { getIds.push(lj.price_service_id); });
       if (!selectedListJasa.length) { $('.table-list-jasa').hide(); }
 
       $('#selectedJasa').val(getIds); $('#selectedJasa').trigger('change');
       processAppendListSelectedJasa();
-    }
-  }
-
-  function processSelectedBarang(selectedId, selected) {
-
-    if (selected) {
-      const getObj = listBarang.find(x => x.id == parseInt(selectedId));
-      selectedListBarang.push({
-        id: null,
-        price_item_id: getObj.id, 
-        category_name: getObj.category_name, 
-        item_name: getObj.item_name, 
-        unit_name: getObj.unit_name,
-        selling_price: getObj.selling_price,
-        quantity: null, price_overall: null
-      });
-      processAppendListSelectedBarang();
-      $('.table-list-barang').show();
-    } else {
-
-      const getIds = [];
-      const getIdx = selectedListBarang.findIndex(i => i.price_item_id == selectedId);
-      selectedListBarang.splice(getIdx, 1);
-      selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
-      if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
-
-      $('#selectedBarang').val(getIds); $('#selectedBarang').trigger('change');
-      processAppendListSelectedBarang();
     }
   }
 
@@ -389,54 +362,6 @@ $(document).ready(function() {
 
       $('#selectedJasa').val(getIds); $('#selectedJasa').trigger('change');
       processAppendListSelectedJasa();
-    });
-  }
-
-  function processAppendListSelectedBarang() {
-    let rowSelectedListBarang = '';
-    let no = 1;
-
-    $('#list-selected-barang tr').remove();
-    selectedListBarang.forEach((lb, idx) => {
-      rowSelectedListBarang += `<tr>`
-        + `<td>${no}</td>`
-        + `${(formState) == 'edit' ? '<td>'+(lb.created_at ? lb.created_at : '-')+'</td>' : '' }`
-        + `${(formState) == 'edit' ? '<td>'+(lb.created_by ? lb.created_by : '-')+'</td>' : '' }`
-        + `<td>${lb.item_name}</td>`
-        + `<td>${lb.category_name}</td>`
-        + `<td>${lb.unit_name}</td>`
-        + `<td><input type="number" min="0" class="qty-input-barang" index=${idx} value=${lb.quantity}></td>`
-        + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-        + `<td><span id="totalBarang-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
-        + `<td>
-            <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          </td>`
-        + `</tr>`;
-        ++no;
-    });
-    $('#list-selected-barang').append(rowSelectedListBarang);
-
-    $('.qty-input-barang').on('input', function(e) {
-      const idx          = $(this).attr('index');
-      const value        = parseFloat($(this).val());
-      const sellingPrice = parseFloat(selectedListBarang[idx].selling_price);
-      let totalBarang    = value * sellingPrice;
-
-      selectedListBarang[idx].quantity = value;
-      selectedListBarang[idx].price_overall = totalBarang;
-      validationForm();
-      $('#totalBarang-'+idx).text(totalBarang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-    });
-
-    $('.btnRemoveSelectedListBarang').click(function() {
-      const getIds = [];
-      deletedUpdateListBarang.push(selectedListBarang[$(this).val()]);
-      selectedListBarang.splice($(this).val(), 1);
-      selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
-      if (!selectedListBarang.length) { $('.table-list-barang').hide(); }
-      validationForm();
-      $('#selectedBarang').val(getIds); $('#selectedBarang').trigger('change');
-      processAppendListSelectedBarang();
     });
   }
 
@@ -697,10 +622,23 @@ function validationForm() {
     $('#statusPemeriksaErr1').text(''); isValidRadioStatusPemeriksa = true;
   }
 
+  let isValidKelompokObat = true;
+  for (let i = 0; i < arrayKelompokObat.length; i++) {
+    if (!arrayKelompokObat[i].kelompokObatId || !arrayKelompokObat[i].selectedListBarang.length) {
+      $('#customErr1').text('Terdapat Kelompok Obat atau Daftar Barang yang belum diisi, harap dicek kembali!'); 
+      customErr1 = true; isValidKelompokObat = false;
+      break;
+    }
+  }
+
+  if(isValidKelompokObat) {
+    $('#customErr1').empty(); customErr1 = false;
+  }
+  
   $('#beErr').empty(); isBeErr = false;
 
   if (!isValidSelectedPasien || !isValidAnamnesa || !isValidSign || !isValidDiagnosa 
-    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || isBeErr) {
+    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || isBeErr || customErr1) {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
   } else {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', false);
