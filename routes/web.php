@@ -53,6 +53,10 @@ Route::get('/pembagian-harga-barang', function () {
 	return view('gudang.pembagian-harga.index');
 });
 
+Route::get('/pembagian-harga-kelompok-obat', function () {
+	return view('gudang.pembagian-harga-kelompok-obat.index');
+});
+
 Route::get('/kategori-jasa', function () {
 	return view('layanan.kategori-jasa.index');
 });
@@ -85,6 +89,18 @@ Route::get('/hasil-pemeriksaan', function () {
 	return view('hasil-pemeriksaan.index');
 });
 
+Route::get('/hasil-pemeriksaan/tambah', function () {
+	return view('hasil-pemeriksaan.form-hasil-pemeriksaan');
+});
+
+Route::get('/hasil-pemeriksaan/edit/{id}', function () {
+	return view('hasil-pemeriksaan.form-hasil-pemeriksaan');
+});
+
+Route::get('/hasil-pemeriksaan/detail/{id}', function () {
+	return view('hasil-pemeriksaan.detail-hasil-pemeriksaan');
+});
+
 Route::get('/pembayaran', function () {
 	return view('pembayaran.index');
 });
@@ -101,6 +117,10 @@ Route::get('/pembayaran/detail/{id}', function () {
 	return view('pembayaran.pembayaran-detail');
 });
 
+Route::get('/kelompok-obat', function () {
+	return view('gudang.kelompok-obat.index');
+});
+
 Route::get('/unauthorized', function () {
-	return view('unauthorized');
+	return view('errors.unauthorized');
 });

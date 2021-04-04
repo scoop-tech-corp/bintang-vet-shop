@@ -22,7 +22,7 @@ class KategoriBarangController extends Controller
             ->join('users', 'category_item.user_id', '=', 'users.id')
             ->select('category_item.id', 'category_name', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(category_item.created_at, '%d %b %Y') as created_at"))
-            ->where('isDeleted', '=', 'false');
+            ->where('category_item.isDeleted', '=', 'false');
 
         if ($request->keyword) {
             $category_item = $category_item->where('category_name', 'like', '%' . $request->keyword . '%')

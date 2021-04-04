@@ -34,6 +34,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('user', 'UserController@index');
         Route::post('user', 'UserController@register');
         Route::put('user', 'UserController@update');
+        Route::delete('user', 'UserController@delete');
 
         Route::get('user/dokter', 'UserController@doctor');
 
@@ -111,6 +112,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
 
+        Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+
         //pembayaran    DropDownPatient
         Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
         Route::get('pembayaran', 'PembayaranController@index');
@@ -121,6 +124,20 @@ Route::group(['middleware' => ['api']], function () {
         //riwayat pasien
         Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
         Route::get('pasien/detail-riwayat', 'PasienController@DetailHistoryPatient');
+
+        //kategori obat
+        Route::get('kelompok-obat', 'KelompokObatController@index');
+        Route::post('kelompok-obat', 'KelompokObatController@create');
+        Route::put('kelompok-obat', 'KelompokObatController@update');
+        Route::delete('kelompok-obat', 'KelompokObatController@delete');
+
+        //harga kelompok obat
+        Route::get('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@index');
+        Route::post('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@create');
+        Route::put('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@update');
+        Route::delete('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@delete');
+
+        Route::get('pembagian-harga-kelompok-obat/cabang-obat', 'HargaKelompokObatController@branch_medicine');
     });
 });
 

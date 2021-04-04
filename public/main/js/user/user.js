@@ -210,7 +210,32 @@ $(document).ready(function() {
           }
         }
       });
-    }
+    } else if(modalState == 'delete') {
+			// process delete
+			$.ajax({
+				url     : $('.baseUrl').val() + '/api/user',
+				headers : { 'Authorization': `Bearer ${token}` },
+				type    : 'DELETE',
+				data	  : { user_id: getId },
+				beforeSend: function() { $('#loading-screen').show(); },
+				success: function(data) {
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation').modal('toggle');
+
+					$("#msg-box .modal-body").text('Berhasil menghapus user');
+					$('#msg-box').modal('show');
+
+					loadUser();
+
+				}, complete: function() { $('#loading-screen').hide(); }
+				, error: function(err) {
+					if (err.status == 401) {
+						localStorage.removeItem('vet-clinic');
+						location.href = $('.baseUrl').val() + '/masuk';
+					}
+				}
+			});
+		}
 	});
 
 	function onFilterCabang(value) {
@@ -250,6 +275,7 @@ $(document).ready(function() {
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
 								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`
 						+ `</tr>`;
 				});
@@ -273,6 +299,15 @@ $(document).ready(function() {
 					$('#selectRole').val(getObj.role); $('#selectRole').trigger('change');
 					$('#selectCabang').val(getObj.branch_id); $('#selectCabang').trigger('change');
 					$('#selectStatus').val(getObj.status); $('#selectStatus').trigger('change');
+				});
+
+				$('.openFormDelete').click(function() {
+					getId = $(this).val();
+					modalState = 'delete';
+
+					$('#modal-confirmation .modal-title').text('Peringatan');
+					$('#modal-confirmation .box-body').text('Anda yakin ingin menghapus User ini?');
+					$('#modal-confirmation').modal('show');
 				});
 
 			}, complete: function() { $('#loading-screen').hide(); },
