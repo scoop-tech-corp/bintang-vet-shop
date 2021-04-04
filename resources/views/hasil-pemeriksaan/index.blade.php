@@ -41,14 +41,14 @@
     </div>
   </div>
 
-  @component('hasil-pemeriksaan.modal-hasil-pemeriksaan') @endcomponent
-  @component('hasil-pemeriksaan.detail-hasil-pemeriksaan') @endcomponent
+  {{-- @component('hasil-pemeriksaan.detail-hasil-pemeriksaan') @endcomponent --}}
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 </div>
 @endsection
 @section('script-content')
-  <script src="{{ asset('main/js/hasil-pemeriksaan/hasil-pemeriksaan.js') }}"></script>  
+  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+  <script src="{{ asset('main/js/hasil-pemeriksaan/hasil-pemeriksaan.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/hasil-pemeriksaan.css') }}">

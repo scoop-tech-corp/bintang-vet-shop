@@ -85,6 +85,14 @@ class PembayaranController extends Controller
 
         $data = ListofPayments::find($request->list_of_payment_id);
 
+        if (is_null($data)) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Pembayaran Tidak Ditemukan!'],
+            ], 404);
+        }
+
         $data_check_up_result = CheckUpResult::find($data->check_up_result_id);
 
         $data->check_up_result = $data_check_up_result;
@@ -128,11 +136,13 @@ class PembayaranController extends Controller
             ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
             ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+            ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
             ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
             ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
                 DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'detail_item_patients.status_paid_off', 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
+                'medicine_groups.group_name', 'detail_item_patients.status_paid_off', 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
             ->orderBy('detail_item_patients.id', 'desc')
             ->get();
@@ -165,12 +175,14 @@ class PembayaranController extends Controller
             ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
             ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
             ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+            ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
             ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
             ->select('list_of_payment_items.id as list_of_payment_item_id', 'detail_item_patients.id as detail_item_patients_id',
                 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name',
                 'detail_item_patients.quantity', DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"),
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
+                'medicine_groups.group_name', 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"),
                 DB::raw("DATE_FORMAT(list_of_payment_items.created_at, '%d %b %Y') as paid_date"))
             ->where('detail_item_patients.check_up_result_id', '=', $data->id)
             ->where('detail_item_patients.status_paid_off', '=', 1)
@@ -234,7 +246,7 @@ class PembayaranController extends Controller
             if (is_null($check_service)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data tidak ditemukan!'],
+                    'errors' => ['Data Hasil Pemeriksaan Layanan Pasien tidak ditemukan!'],
                 ], 404);
             }
 
@@ -284,7 +296,7 @@ class PembayaranController extends Controller
             if (is_null($check_item)) {
                 return response()->json([
                     'message' => 'The data was invalid.',
-                    'errors' => ['Data tidak ditemukan!'],
+                    'errors' => ['Data barang pasien tidak ditemukan!'],
                 ], 404);
             }
 

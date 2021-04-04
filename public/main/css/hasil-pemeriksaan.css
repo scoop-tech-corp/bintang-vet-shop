@@ -16,3 +16,13 @@
   box-shadow: none;
 }
 
+.section-add-kelompok-obat {
+  margin-top: 25px;
+}
+
+@media (max-width: 768px) {
+  .section-add-kelompok-obat {
+    margin-bottom: 20px;
+  }
+}
+

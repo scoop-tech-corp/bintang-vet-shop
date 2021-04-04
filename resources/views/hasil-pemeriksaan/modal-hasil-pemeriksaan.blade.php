@@ -78,6 +78,12 @@
               <textarea id="diagnosa" class="form-control" placeholder="Masukan Diagnosa"></textarea>
 							<div id="diagnosaErr1" class="validate-error"></div>
             </div>
+            <div class="form-group">
+              <label for="foto">Foto Kondisi Pasien</label>
+              <div class="dropzone" id="fotoKondisiPasien">
+
+              </div>
+            </div>
             <div class="form-group"> {{-- Jasa Rawat Jalan --}}
               <label for="jasa">Jasa</label>
               <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
@@ -163,6 +169,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="testUpload">Test Upload</button>
 				<button type="button" class="btn btn-primary" id="btnSubmitHasilPemeriksaan">Simpan</button>
 			</div>
 		</div>

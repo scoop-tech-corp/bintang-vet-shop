@@ -53,6 +53,11 @@ class UserController extends Controller
                 'message' => 'Akun yang anda gunakan tidak aktif!',
                 'errors' => ['Akses tidak diijinkan!'],
             ], 403);
+        } elseif ($user->isDeleted == 1) {
+            return response()->json([
+                'message' => 'Akun yang anda gunakan sudah dihapus!',
+                'errors' => ['Akses tidak diijinkan!'],
+            ], 403);
         }
 
         return response()->json(
@@ -142,7 +147,8 @@ class UserController extends Controller
             ->join('branches', 'users.branch_id', '=', 'branches.id')
             ->select('users.id', 'users.branch_id', 'users.staffing_number', 'users.username', 'users.fullname', 'users.email'
                 , 'users.role', 'users.phone_number', 'branches.branch_name', 'users.status', 'users.created_by',
-                DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"));
+                DB::raw("DATE_FORMAT(users.created_at, '%d %b %Y') as created_at"))
+            ->where('users.isDeleted', '=', 0);
 
         if ($request->keyword) {
 
@@ -249,6 +255,36 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function delete(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'User yang dimasukkan tidak valid!',
+                'errors' => ['Akses tidak diijinkan!'],
+            ], 403);
+        }
+
+        $user = User::find($request->user_id);
+
+        if (is_null($user)) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data tidak ditemukan!'],
+            ], 404);
+        }
+
+        $user->isDeleted = true;
+        $user->deleted_by = $request->user()->fullname;
+        $user->deleted_at = \Carbon\Carbon::now();
+        $user->save();
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Berhasil menghapus User',
+        ], 200);
+    }
+
     public function logout(Request $request)
     {
 
@@ -289,7 +325,7 @@ class UserController extends Controller
             ->join('branches', 'users.branch_id', '=', 'branches.id')
             ->select('users.id', 'users.username', 'users.role', 'branches.id as branch_id', 'branches.branch_name')
             ->where('users.role', '=', 'dokter')
-            ->where('users.status','=','1');
+            ->where('users.status', '=', '1');
 
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
