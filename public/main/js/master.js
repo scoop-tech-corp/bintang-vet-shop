@@ -51,7 +51,7 @@ $(document).ready(function() {
       $(Value).parent().addClass('active');
 
       if (pathName === '/kategori-barang' || pathName === '/satuan-barang'  || pathName === '/daftar-barang'
-        || pathName === '/pembagian-harga-barang') {
+        || pathName === '/pembagian-harga-barang' || pathName === '/kelompok-obat' || pathName === '/pembagian-harga-kelompok-obat') {
         $('.menuGudang').addClass('active');
       } else if(pathName === '/kategori-jasa' || pathName === '/daftar-jasa' || pathName === '/pembagian-harga-jasa') {
         $('.menuLayanan').addClass('active');
