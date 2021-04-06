@@ -132,7 +132,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('kelompok-obat', 'KelompokObatController@delete');
 
         Route::get('kelompok-obat/download-template', 'KelompokObatController@download_template');
-        Route::get('kelompok-obat/upload-template', 'KelompokObatController@upload_template');
+        Route::post('kelompok-obat/upload-template', 'KelompokObatController@upload_template');
 
         //harga kelompok obat
         Route::get('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@index');
@@ -141,6 +141,11 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@delete');
 
         Route::get('pembagian-harga-kelompok-obat/cabang-obat', 'HargaKelompokObatController@branch_medicine');
+
+        //laporan keuangan
+
+        //harian
+        Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
     });
 });
 
