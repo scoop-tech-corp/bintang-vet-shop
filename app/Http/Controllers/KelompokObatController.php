@@ -6,6 +6,9 @@ use App\Models\MedicineGroup;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
+use App\Exports\MultipleSheetUploadKelompokObat;
+use App\Imports\MultipleSheetImportKelompokObat;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelompokObatController extends Controller
 {
@@ -176,6 +179,61 @@ class KelompokObatController extends Controller
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Barang',
+        ], 200);
+    }
+
+    public function download_template(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        return (new MultipleSheetUploadKelompokObat())->download('Template Kelompok Obat.xlsx');
+    }
+
+    public function upload_template(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx',
+        ]);
+
+        $rows = Excel::toArray(new MultipleSheetImportKelompokObat, $request->file('file'));
+        $result = $rows[0];
+
+        info($result);
+
+        foreach ($result as $key_result) {
+
+            $check_branch = DB::table('medicine_groups')
+                ->where('branch_id', '=', $key_result['kode_cabang'])
+                ->where('group_name', '=', $key_result['nama_kelompok'])
+                ->count();
+
+            if ($check_branch > 0) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Data ' . $key_result['nama_kelompok'] . ' sudah ada!'],
+                ], 422);
+            }
+        }
+
+        $file = $request->file('file');
+
+        Excel::import(new MultipleSheetImportKelompokObat, $file);
+
+        return response()->json([
+            'message' => 'Berhasil mengupload Kelompok Obat',
         ], 200);
     }
 }
