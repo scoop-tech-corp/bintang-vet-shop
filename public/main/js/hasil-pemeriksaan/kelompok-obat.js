@@ -3,14 +3,13 @@ let listKelompokObat = [];
 let optBarang = '';
 let listBarang = [];
 let selectedListBarang = [];
-let deletedUpdateListBarang = [];
 
 $(document).ready(function() {
 
   $('#btnTambahKelompokObat').click(function() {
-    validationForm();
     arrayKelompokObat.push({ id: null, kelompokObatId: null, selectDropdownBarang: [], selectedListBarang: [], deletedUpdateListBarang: [] });
     drawListKelompokObat();
+    validationForm();
   });
 
 });
@@ -71,6 +70,7 @@ function drawListKelompokObat() {
 
   $('.selectedBarang').on('select2:unselect', function (e) {
     const getIdx = parseInt(e.target.getAttribute('idx'));
+
     processSelectedBarang(e.params.data.id, e.params.data.selected, getIdx);
     validationForm();
   });
@@ -111,6 +111,7 @@ function drawListKelompokObat() {
 
     arrayKelompokObatDelete.push(getObjDel);
     arrayKelompokObat.splice($(this).val(), 1);
+    validationForm();
     drawListKelompokObat();
   });
 }
@@ -196,6 +197,8 @@ function processSelectedBarang(selectedId, selected, idx) {
     const getIdx2 = arrayKelompokObat[idx].selectDropdownBarang.findIndex(i => i == selectedId);
 
     arrayKelompokObat[idx].selectedListBarang.splice(getIdx1, 1);
+    arrayKelompokObat[idx].deletedUpdateListBarang.push(arrayKelompokObat[idx].selectedListBarang[getIdx1]);
+
     arrayKelompokObat[idx].selectDropdownBarang.splice(getIdx2, 1);
 
     arrayKelompokObat[idx].selectedListBarang.forEach(lb => { getIds.push(lb.price_item_id); });
