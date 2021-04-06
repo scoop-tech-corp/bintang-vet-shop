@@ -151,7 +151,7 @@ class KategoriBarangController extends Controller
         $category_item->deleted_at = \Carbon\Carbon::now();
         $category_item->save();
 
-        $category_item->delete();
+        //$category_item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Barang',

@@ -131,6 +131,9 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('kelompok-obat', 'KelompokObatController@update');
         Route::delete('kelompok-obat', 'KelompokObatController@delete');
 
+        Route::get('kelompok-obat/download-template', 'KelompokObatController@download_template');
+        Route::get('kelompok-obat/upload-template', 'KelompokObatController@upload_template');
+
         //harga kelompok obat
         Route::get('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@index');
         Route::post('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@create');

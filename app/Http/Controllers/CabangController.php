@@ -21,8 +21,9 @@ class CabangController extends Controller
         $branch = DB::table('branches')
             ->join('users', 'branches.user_id', '=', 'users.id')
             ->select('branches.id', 'branch_code', 'branch_name',
-             'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"));
+                'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"))
+            ->where('branches.isDeleted', '=', 0);
 
         if ($request->keyword) {
             $branch = $branch->where('branch_code', 'like', '%' . $request->keyword . '%')
@@ -146,7 +147,7 @@ class CabangController extends Controller
         $branch->deleted_at = \Carbon\Carbon::now();
         $branch->save();
 
-        $branch->delete();
+        //$branch->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Cabang',
