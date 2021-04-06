@@ -35,11 +35,18 @@
   <!-- /.box-body -->
 
   @component('gudang.kelompok-obat.modal-kelompok-obat') @endcomponent
+  @component('gudang.kelompok-obat.upload-kelompok-obat') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 </div>
 @endsection
 @section('script-content')
+  <script src="{{ asset('plugins/jquery.ui.widget.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.iframe-transport.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-ui.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-process.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-validate.js') }}"></script>
   <script src="{{ asset('main/js/gudang/kelompok-obat/kelompok-obat.js') }}"></script>  
 @endsection
 @section('vue-content')@endsection
