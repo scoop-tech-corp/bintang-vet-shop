@@ -187,7 +187,7 @@ class PasienController extends Controller
         $patient->deleted_at = \Carbon\Carbon::now();
         $patient->save();
 
-        $patient->delete();
+        //$patient->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Pasien',
