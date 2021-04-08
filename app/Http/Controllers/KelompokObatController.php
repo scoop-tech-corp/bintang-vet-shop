@@ -18,7 +18,8 @@ class KelompokObatController extends Controller
             ->join('users', 'medicine_groups.user_id', '=', 'users.id')
             ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
             ->select('medicine_groups.id', 'branches.id as branch_id','branches.branch_name', 'group_name', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"));
+                DB::raw("DATE_FORMAT(medicine_groups.created_at, '%d %b %Y') as created_at"))
+                ->where('medicine_groups.isDeleted', '=', 0);
 
         if ($request->keyword) {
             $medicine_groups = $medicine_groups->where('group_name', 'like', '%' . $request->keyword . '%')
@@ -175,7 +176,7 @@ class KelompokObatController extends Controller
         $medicine_groups->deleted_at = \Carbon\Carbon::now();
         $medicine_groups->save();
 
-        $medicine_groups->delete();
+        //$medicine_groups->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Barang',

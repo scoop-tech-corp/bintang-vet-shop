@@ -11,13 +11,6 @@ class HargaBarangController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $price_items = DB::table('price_items')
             ->join('users', 'price_items.user_id', '=', 'users.id')
             ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
@@ -30,7 +23,8 @@ class HargaBarangController extends Controller
                 'branches.id as branch_id', 'branches.branch_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(price_items.capital_price)+0 as capital_price"), DB::raw("TRIM(price_items.doctor_fee)+0 as doctor_fee"),
                 DB::raw("TRIM(price_items.petshop_fee)+0 as petshop_fee"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_items.created_at, '%d %b %Y') as created_at"));
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_items.created_at, '%d %b %Y') as created_at"))
+            ->where('price_items.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $price_items = $price_items->where('branches.id', '=', $request->branch_id);
@@ -200,7 +194,7 @@ class HargaBarangController extends Controller
         $price_items->deleted_at = \Carbon\Carbon::now();
         $price_items->save();
 
-        $price_items->delete();
+        //$price_items->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',
