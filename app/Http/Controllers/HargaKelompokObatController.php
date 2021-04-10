@@ -26,7 +26,7 @@ class HargaKelompokObatController extends Controller
             $price_medicine_groups = $price_medicine_groups->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $price_medicine_groups = $price_medicine_groups->where('branches.id', '=', $request->user()->branch_id);
         }
 
