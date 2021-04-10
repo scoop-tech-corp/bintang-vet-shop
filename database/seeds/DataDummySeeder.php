@@ -1329,6 +1329,41 @@ class DataDummySeeder extends Seeder
             'created_at' => '2020-12-30'
         ]);
 
+        DB::table('list_of_payments')->insert([
+            'check_up_result_id' => '1',
+            //'description' => 'ini adalah contoh kondisi pasien',
+            'user_id' => '1',
+            'created_at' => '2020-04-04'
+        ]);
+
+        DB::table('list_of_payment_items')->insert([
+            'check_up_result_id' => '1',
+            'detail_item_patient_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-04-04'
+        ]);
+
+        DB::table('list_of_payment_items')->insert([
+            'check_up_result_id' => '1',
+            'detail_item_patient_id' => '2',
+            'user_id' => '1',
+            'created_at' => '2020-04-04'
+        ]);
+
+        DB::table('list_of_payment_items')->insert([
+            'check_up_result_id' => '1',
+            'detail_item_patient_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-04-04'
+        ]);
+
+        DB::table('list_of_payment_services')->insert([
+            'check_up_result_id' => '1',
+            'detail_service_patient_id' => '1',
+            'user_id' => '1',
+            'created_at' => '2020-04-04'
+        ]);
+
         // //history item hovement
         // DB::table('history_item_movements')->insert([
         //     'item_id' => '1',

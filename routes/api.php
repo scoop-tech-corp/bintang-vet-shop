@@ -106,13 +106,15 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('penerimaan-pasien/tolak', 'PenerimaanPasienController@decline');
 
         //hasil pemeriksaan
-        Route::post('hasil-pemeriksaan', 'HasilPemeriksaanController@create');        
+        Route::post('hasil-pemeriksaan', 'HasilPemeriksaanController@create');
         Route::get('hasil-pemeriksaan', 'HasilPemeriksaanController@index');
         Route::get('hasil-pemeriksaan/detail', 'HasilPemeriksaanController@detail');
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
 
         Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+
+        Route::get('hasil-pemeriksaan/pembayaran', 'HasilPemeriksaanController@payment');
 
         //pembayaran    DropDownPatient
         Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
@@ -146,6 +148,7 @@ Route::group(['middleware' => ['api']], function () {
 
         //harian
         Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
+        Route::get('laporan-keuangan/harian/detail', 'LaporanKeuanganHarianController@detail');
     });
 });
 

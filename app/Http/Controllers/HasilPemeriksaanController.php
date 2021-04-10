@@ -1580,4 +1580,104 @@ class HasilPemeriksaanController extends Controller
         }
 
     }
+
+    public function payment(Request $request)
+    {
+        if ($request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $data = CheckUpResult::find($request->id);
+        //, 'registration', 'user' 'service', 'service_inpatient', 'item', 'item_inpatient'
+
+        if (is_null($data)) {
+
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
+            ], 404);
+        }
+
+        $registration = DB::table('registrations')
+            ->join('patients', 'registrations.patient_id', '=', 'patients.id')
+            ->select('registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category',
+                'patients.pet_name', 'patients.pet_gender', 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
+                'patients.owner_phone_number', 'registrations.complaint', 'registrations.registrant')
+            ->where('registrations.id', '=', $data->patient_registration_id)
+            ->first();
+
+        $data->registration = $registration;
+
+        $user = DB::table('check_up_results')
+            ->join('users', 'check_up_results.user_id', '=', 'users.id')
+            ->select('users.id as user_id', 'users.username as username')
+            ->where('users.id', '=', $data->user_id)
+            ->first();
+
+        $data->user = $user;
+
+        $services = DB::table('detail_service_patients')
+            ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+            ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
+            ->select('detail_service_patients.id as detail_service_patient_id', 'price_services.id as price_service_id',
+                'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
+                'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
+                'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->orderBy('detail_service_patients.id', 'desc')
+            ->get();
+
+        $data['services'] = $services;
+
+        // $item = DB::table('detail_item_patients')
+        //     ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+        //     ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
+        //     ->join('branches', 'medicine_groups.branch_id', '=', 'branches.id')
+        //     ->select('price_medicine_groups.id as price_medicine_group_id', DB::raw("TRIM(price_medicine_groups.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
+        //         'medicine_groups.group_name', 'branches.id as branch_id', 'branches.branch_name')
+        //     ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+        //     ->groupBy('price_medicine_groups.id', 'price_medicine_groups.selling_price', 'detail_item_patients.medicine_group_id', 'medicine_groups.group_name', 'branches.id', 'branches.branch_name')
+        //     ->get();
+
+        $item = DB::table('detail_item_patients')
+            ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+            ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
+            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+            ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'medicine_groups.group_name', 'list_of_items.item_name', 'detail_item_patients.quantity',
+                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
+                'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+        //->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
+            ->orderBy('detail_item_patients.id', 'desc')
+            ->get();
+
+        // foreach ($item as $value) {
+
+        //     $value->list_of_medicine = $detail_item;
+        // }
+
+        $data['item'] = $item;
+
+        $inpatient = DB::table('in_patients')
+            ->join('users', 'in_patients.user_id', '=', 'users.id')
+            ->select('in_patients.description', DB::raw("DATE_FORMAT(in_patients.created_at, '%d %b %Y') as created_at"),
+                'users.fullname as created_by')
+            ->where('in_patients.check_up_result_id', '=', $data->id)
+            ->get();
+
+        $data['inpatient'] = $inpatient;
+
+        return response()->json($data, 200);
+    }
 }
