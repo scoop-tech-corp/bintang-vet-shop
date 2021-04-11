@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+	let optCabang = '';
   let paramUrlSetup = {
 		orderby:'',
 		column: '',
