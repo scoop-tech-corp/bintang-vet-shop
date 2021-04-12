@@ -22,6 +22,21 @@ class PembayaranController extends Controller
             ], 403);
         }
 
+        $data_check = DB::table('list_of_payments')
+            ->select('list_of_payments.check_up_result_id')
+            ->get();
+
+        $res = "";
+        $res2 = "";
+
+        foreach ($data_check as $dat) {
+            $res = $res . (string) $dat->check_up_result_id . ",";
+        }
+
+        $res = rtrim($res, ", ");
+
+        $myArray = explode(',', $res);
+
         $data = DB::table('check_up_results')
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('users', 'registrations.user_id', '=', 'users.id')
@@ -29,6 +44,8 @@ class PembayaranController extends Controller
             ->join('branches', 'user_doctor.branch_id', '=', 'branches.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number', 'patients.pet_name');
+
+        $data = $data->whereNotIn('check_up_results.id', $myArray);
 
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('user_doctor.branch_id', '=', $request->user()->branch_id);

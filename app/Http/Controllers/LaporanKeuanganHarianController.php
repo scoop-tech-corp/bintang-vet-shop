@@ -41,10 +41,26 @@ class LaporanKeuanganHarianController extends Controller
                 DB::raw("TRIM(SUM(price_items.doctor_fee) + SUM(price_services.doctor_fee))+0 as doctor_fee"),
                 DB::raw("TRIM(SUM(price_items.petshop_fee) + SUM(price_services.petshop_fee))+0 as petshop_fee"),
 
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"))
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(list_of_payments.created_at, '%d %b %Y') as created_at"))
             ->groupBy('list_of_payments.id', 'check_up_results.id', 'registrations.id_number', 'patients.id_member', 'patients.pet_category', 'patients.pet_name',
-                'registrations.complaint', 'users.fullname', 'check_up_results.created_at')
-            ->get();
+                'registrations.complaint', 'users.fullname', 'list_of_payments.created_at');
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $data = $data->where('branches.id', '=', $request->branch_id);
+        }
+
+        if ($request->date) {
+            $data = $data->where('list_of_payments.created_at', '=', $request->date);
+        }
+
+        if ($request->orderby) {
+
+            $data = $data->orderBy($request->column, $request->orderby);
+        } else {
+            $data = $data->orderBy('list_of_payments.id', 'desc');
+        }
+
+        $data = $data->get();
 
         $price_overall = DB::table('list_of_payments')
             ->join('check_up_results', 'list_of_payments.check_up_result_id', '=', 'check_up_results.id')
@@ -57,8 +73,12 @@ class LaporanKeuanganHarianController extends Controller
             ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->select(
-                DB::raw("TRIM(SUM(detail_item_patients.price_overall) + SUM(detail_service_patients.price_overall))+0 as price_overall"))
-            ->get();
+                DB::raw("TRIM(SUM(detail_item_patients.price_overall) + SUM(detail_service_patients.price_overall))+0 as price_overall"));
+
+        if ($request->date) {
+            $price_overall = $price_overall->where('list_of_payments.created_at', '=', $request->date);
+        }
+        $price_overall = $price_overall->first();
 
         $capital_price = DB::table('list_of_payments')
             ->join('check_up_results', 'list_of_payments.check_up_result_id', '=', 'check_up_results.id')
@@ -71,8 +91,12 @@ class LaporanKeuanganHarianController extends Controller
             ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->select(
-                DB::raw("TRIM(SUM(price_items.capital_price) + SUM(price_services.capital_price))+0 as capital_price"))
-            ->get();
+                DB::raw("TRIM(SUM(price_items.capital_price) + SUM(price_services.capital_price))+0 as capital_price"));
+
+        if ($request->date) {
+            $capital_price = $capital_price->where('list_of_payments.created_at', '=', $request->date);
+        }
+        $capital_price = $capital_price->first();
 
         $doctor_fee = DB::table('list_of_payments')
             ->join('check_up_results', 'list_of_payments.check_up_result_id', '=', 'check_up_results.id')
@@ -85,8 +109,12 @@ class LaporanKeuanganHarianController extends Controller
             ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->select(
-                DB::raw("TRIM(SUM(price_items.doctor_fee) + SUM(price_services.doctor_fee))+0 as doctor_fee"))
-            ->get();
+                DB::raw("TRIM(SUM(price_items.doctor_fee) + SUM(price_services.doctor_fee))+0 as doctor_fee"));
+
+        if ($request->date) {
+            $doctor_fee = $doctor_fee->where('list_of_payments.created_at', '=', $request->date);
+        }
+        $doctor_fee = $doctor_fee->first();
 
         $petshop_fee = DB::table('list_of_payments')
             ->join('check_up_results', 'list_of_payments.check_up_result_id', '=', 'check_up_results.id')
@@ -99,17 +127,19 @@ class LaporanKeuanganHarianController extends Controller
             ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->select(
-                DB::raw("TRIM(SUM(price_items.petshop_fee) + SUM(price_services.petshop_fee))+0 as petshop_fee"))
-            ->get();
+                DB::raw("TRIM(SUM(price_items.petshop_fee) + SUM(price_services.petshop_fee))+0 as petshop_fee"));
 
-        $result['price_overall'] = $price_overall;
-        $result['capital_price'] = $capital_price;
-        $result['doctor_fee'] = $doctor_fee;
-        $result['petshop_fee'] = $petshop_fee;
+        if ($request->date) {
+            $petshop_fee = $petshop_fee->where('list_of_payments.created_at', '=', $request->date);
+        }
+        $petshop_fee = $petshop_fee->first();
 
         return response()->json([
             'data' => $data,
-            'result' => $result,
+            'price_overall' => $price_overall->price_overall,
+            'capital_price' => $capital_price->capital_price,
+            'doctor_fee' => $doctor_fee->doctor_fee,
+            'petshop_fee' => $petshop_fee->petshop_fee,
         ], 200);
     }
 
