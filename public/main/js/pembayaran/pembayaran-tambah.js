@@ -28,7 +28,7 @@ $(document).ready(function() {
 
     if ( $(this).val()) {
       $.ajax({
-        url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan/detail',
+        url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan/pembayaran',
         headers : { 'Authorization': `Bearer ${token}` },
         type    : 'GET',
         data	  : { id: $(this).val() },
@@ -201,6 +201,7 @@ $(document).ready(function() {
         + `<td>${no}</td>`
         + `<td>${lb.created_at}</td>`
         + `<td>${lb.created_by}</td>`
+        + `<td>${lb.group_name}</td>`
         + `<td>${lb.item_name}</td>`
         + `<td>${lb.category_name}</td>`
         + `<td>${lb.unit_name}</td>`
@@ -246,6 +247,7 @@ $(document).ready(function() {
           + `<td>${no}</td>`
           + `<td>${lb.created_at}</td>`
           + `<td>${lb.created_by}</td>`
+          + `<td>${lb.group_name}</td>`
           + `<td>${lb.item_name}</td>`
           + `<td>${lb.category_name}</td>`
           + `<td>${lb.unit_name}</td>`
