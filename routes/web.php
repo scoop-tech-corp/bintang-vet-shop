@@ -121,6 +121,14 @@ Route::get('/kelompok-obat', function () {
 	return view('gudang.kelompok-obat.index');
 });
 
+Route::get('/laporan-keuangan-harian', function () {
+	return view('laporan-keuangan.harian.index');
+});
+
+Route::get('/laporan-keuangan-harian/detail/{id}', function () {
+	return view('laporan-keuangan.harian.detail-harian');
+});
+
 Route::get('/unauthorized', function () {
 	return view('errors.unauthorized');
 });

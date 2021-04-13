@@ -81,7 +81,7 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a><i class="fa fa-circle-o"></i> Harian</a></li>
+					<li><a href="{{ url('/laporan-keuangan-harian') }}"><i class="fa fa-circle-o"></i> Harian</a></li>
 					<li><a><i class="fa fa-circle-o"></i> Mingguan</a></li>
 					<li><a><i class="fa fa-circle-o"></i> Bulanan</a></li>
 					<li><a><i class="fa fa-circle-o"></i> Tahunan</a></li>
