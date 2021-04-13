@@ -19,7 +19,8 @@ $(document).ready(function() {
     $('#datepicker').datepicker({
       autoclose: true,
 			clearBtn: true,
-			format: 'yyyy-mm-dd',  
+			format: 'yyyy-mm-dd',
+			todayHighlight: true,
     }).on('changeDate', function(e) {
 			paramUrlSetup.date = e.format();
 			loadLaporanKeuanganHarian();
