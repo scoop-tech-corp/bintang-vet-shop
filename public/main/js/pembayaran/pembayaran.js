@@ -57,8 +57,8 @@ $(document).ready(function() {
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
             + `<td>
-                <button type="button" class="btn btn-info openDetail" value=${v.check_up_result_id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.check_up_result_id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-info openDetail" value=${v.list_of_payment_id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-warning openFormEdit" value=${v.list_of_payment_id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
 							</td>`
 						+ `</tr>`;
 						// <button type="button" class="btn btn-danger openFormDelete" value=${v.check_up_result_id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>

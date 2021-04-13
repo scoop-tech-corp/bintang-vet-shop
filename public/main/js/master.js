@@ -46,7 +46,8 @@ $(document).ready(function() {
   const origin = window.location.origin;
   const pathName = window.location.pathname;
   const fullPath = origin + pathName;
-  $('.sidebar-menu a').each(function(Key,Value) {
+  $('.sidebar-menu a').each(function(Key, Value) {
+
     if ( Value['href'] === fullPath) {
       $(Value).parent().addClass('active');
 
@@ -59,6 +60,8 @@ $(document).ready(function() {
         $('.menuPendaftaran').addClass('active');
       } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {
         $('.menuDokter').addClass('active');
+      } else if (pathName === '/laporan-keuangan-harian') {
+        $('.menuKeuangan').addClass('active');
       }
     } else {
       // additional custom url
@@ -70,6 +73,8 @@ $(document).ready(function() {
       } else if (Value['href'] ==  origin + '/hasil-pemeriksaan' && (pathName == '/hasil-pemeriksaan/tambah'
         || pathName.includes('/hasil-pemeriksaan/edit') || pathName.includes('/hasil-pemeriksaan/detail'))) {
         $(Value).parent().addClass('active');
+      } else if (Value['href'] ==  origin + '/laporan-keuangan-harian' && (pathName.includes('/laporan-keuangan-harian/detail')) ) {
+        $('.menuKeuangan').addClass('active'); $(Value).parent().addClass('active');
       }
     }
   });
