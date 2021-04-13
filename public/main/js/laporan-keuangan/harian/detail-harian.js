@@ -22,8 +22,6 @@ $(document).ready(function() {
       data	  : { id: paramId },
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(data) {
-
-      console.log('detail harian', data);
       const getData = data;
 
       $('#nomorRegistrasiDetailTxt').text(getData.registration.registration_number); $('#nomorPasienDetailTxt').text(getData.registration.patient_number); 
