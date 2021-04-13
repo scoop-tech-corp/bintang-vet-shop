@@ -52,7 +52,7 @@ $(document).ready(function() {
               + `<td>${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
               + `<td>${typeof(lj.capital_price) == 'number' ? lj.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
               + `<td>${typeof(lj.doctor_fee) == 'number' ? lj.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-              + `<td>${typeof(lj.petshop_fee) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>${typeof(lj.petshop_fee) == 'number' ? lj.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
               + `</tr>`;
               ++no1;
           });
@@ -116,6 +116,9 @@ $(document).ready(function() {
         +        `<th>Jumlah</th>`
         +        `<th>Harga Satuan</th>`
         +        `<th>Harga Keseluruhan</th>`
+        +        `<th>Harga Modal</th>`
+        +        `<th>Fee Dokter</th>`
+        +        `<th>Fee Petshop</th>`
         +      `</tr>`
         +    `</thead>`
         +    `<tbody id="list-selected-barang-${idx}" class="list-selected-barang">${rowSelectedListBarang}</tbody>`
@@ -146,6 +149,9 @@ $(document).ready(function() {
           + `<td>${lb.quantity}</td>`
           + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
           + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof(lb.capital_price) == 'number' ? lb.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof(lb.doctor_fee) == 'number' ? lb.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof(lb.petshop_fee) == 'number' ? lb.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
           + `</tr>`;
           ++no;
       });
