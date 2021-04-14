@@ -196,11 +196,11 @@ class LaporanKeuanganHarianController extends Controller
                 'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
                 'detail_service_patients.quantity',
                 'service_categories.category_name',
-                DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
+                DB::raw("TRIM(detail_service_patients.price_overall )+0 as price_overall"),
                 DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
-                DB::raw("TRIM(price_services.capital_price)+0 as capital_price"),
-                DB::raw("TRIM(price_services.doctor_fee)+0 as doctor_fee"),
-                DB::raw("TRIM(price_services.petshop_fee)+0 as petshop_fee"),
+                DB::raw("TRIM(price_services.capital_price * detail_service_patients.quantity)+0 as capital_price"),
+                DB::raw("TRIM(price_services.doctor_fee * detail_service_patients.quantity)+0 as doctor_fee"),
+                DB::raw("TRIM(price_services.petshop_fee * detail_service_patients.quantity)+0 as petshop_fee"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
             ->where('list_of_payment_services.check_up_result_id', '=', $data->check_up_result_id)
             ->orderBy('list_of_payment_services.id', 'desc')
@@ -233,9 +233,9 @@ class LaporanKeuanganHarianController extends Controller
                     'category_item.category_name',
                     DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"),
                     DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                    DB::raw("TRIM(price_items.capital_price)+0 as capital_price"),
-                    DB::raw("TRIM(price_items.doctor_fee)+0 as doctor_fee"),
-                    DB::raw("TRIM(price_items.petshop_fee)+0 as petshop_fee"),
+                    DB::raw("TRIM(price_items.capital_price * detail_item_patients.quantity)+0 as capital_price"),
+                    DB::raw("TRIM(price_items.doctor_fee * detail_item_patients.quantity)+0 as doctor_fee"),
+                    DB::raw("TRIM(price_items.petshop_fee * detail_item_patients.quantity)+0 as petshop_fee"),
                     'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
                 ->where('list_of_payment_items.check_up_result_id', '=', $data->check_up_result_id)
                 ->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
