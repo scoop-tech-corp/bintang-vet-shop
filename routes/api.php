@@ -148,7 +148,7 @@ Route::group(['middleware' => ['api']], function () {
 
         //harian
         Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
-        Route::get('laporan-keuangan/harian/detail', 'LaporanKeuanganHarianController@detail');
+        Route::get('laporan-keuangan/detail', 'LaporanKeuanganHarianController@detail');
 
         //mingguan
         Route::get('laporan-keuangan/mingguan', 'LaporanKeuanganMingguanController@index');
