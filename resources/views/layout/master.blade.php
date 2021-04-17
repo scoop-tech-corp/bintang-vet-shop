@@ -94,7 +94,7 @@
 								</li> --}}
 								<!-- Menu Footer-->
 								<li class="user-footer">
-									<div class="pull-left">
+									<div class="pull-left" id="btn-profil">
 										<a href="#" class="btn btn-default btn-flat">Profil</a>
 									</div>
 									<div class="pull-right" id="btn-logout">

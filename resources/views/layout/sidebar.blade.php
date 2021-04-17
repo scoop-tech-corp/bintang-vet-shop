@@ -82,9 +82,9 @@
 				</a>
 				<ul class="treeview-menu">
 					<li><a href="{{ url('/laporan-keuangan-harian') }}"><i class="fa fa-circle-o"></i> Harian</a></li>
-					<li><a><i class="fa fa-circle-o"></i> Mingguan</a></li>
-					<li><a><i class="fa fa-circle-o"></i> Bulanan</a></li>
-					<li><a><i class="fa fa-circle-o"></i> Tahunan</a></li>
+					<li><a href="{{ url('/laporan-keuangan-mingguan') }}"><i class="fa fa-circle-o"></i> Mingguan</a></li>
+					<li><a href="{{ url('/laporan-keuangan-bulanan') }}"><i class="fa fa-circle-o"></i> Bulanan</a></li>
+					{{-- <li><a><i class="fa fa-circle-o"></i> Tahunan</a></li> --}}
 				</ul>
 			</li>
 			{{-- <li class="menuKunjungan"><a href="{{ url('/kunjungan') }}"><i class="fa fa-wheelchair" aria-hidden="true"></i> <span>Kunjungan</span></a></li> --}}

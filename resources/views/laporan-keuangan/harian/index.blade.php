@@ -46,19 +46,19 @@
       </table>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan-harian">Total Keseluruhan</label>
+      <label class="label-support-laporan">Total Keseluruhan</label>
       <span id="total-keseluruhan-txt">Rp. -</span>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan-harian">Harga Modal</label>
+      <label class="label-support-laporan">Harga Modal</label>
       <span id="harga-modal-txt">Rp. -</span>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan-harian">Fee Dokter</label>
+      <label class="label-support-laporan">Fee Dokter</label>
       <span id="fee-dokter-txt">Rp. -</span>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan-harian">Fee Petshop</label>
+      <label class="label-support-laporan">Fee Petshop</label>
       <span id="fee-petshop-txt">Rp. -</span>
     </div>
   </div>
@@ -70,7 +70,7 @@
   <script src="{{ asset('bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 @endsection
 @section('css-content')
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/laporan-keuangan-harian.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/laporan-keuangan.css') }}">
   <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endsection
 @section('vue-content')@endsection
