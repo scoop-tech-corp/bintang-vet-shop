@@ -149,6 +149,14 @@ Route::group(['middleware' => ['api']], function () {
         //harian
         Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
         Route::get('laporan-keuangan/harian/detail', 'LaporanKeuanganHarianController@detail');
+
+        //mingguan
+        Route::get('laporan-keuangan/mingguan', 'LaporanKeuanganMingguanController@index');
+        Route::get('laporan-keuangan/mingguan/detail', 'LaporanKeuanganMingguanController@detail');
+
+        //bulanan
+        Route::get('laporan-keuangan/bulanan', 'LaporanKeuanganBulananController@index');
+        Route::get('laporan-keuangan/bulanan/detail', 'LaporanKeuanganBulananController@detail');
     });
 });
 

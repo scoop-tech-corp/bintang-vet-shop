@@ -6,11 +6,10 @@ use App\Models\ListofPayments;
 use DB;
 use Illuminate\Http\Request;
 
-class LaporanKeuanganHarianController extends Controller
+class LaporanKeuanganMingguanController extends Controller
 {
     public function index(Request $request)
     {
-
         if ($request->user()->role == 'resepsionis' && $request->user()->role == 'dokter') {
             return response()->json([
                 'message' => 'The user role was invalid.',
@@ -49,8 +48,8 @@ class LaporanKeuanganHarianController extends Controller
             $data = $data->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->date) {
-            $data = $data->where('list_of_payments.created_at', '=', $request->date);
+        if ($request->date_from && $request->date_to) {
+            $data = $data->whereBetween('list_of_payments.created_at', [$request->date_from, $request->date_to]);
         }
 
         if ($request->orderby) {
@@ -75,9 +74,10 @@ class LaporanKeuanganHarianController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(detail_item_patients.price_overall) + SUM(detail_service_patients.price_overall))+0 as price_overall"));
 
-        if ($request->date) {
-            $price_overall = $price_overall->where('list_of_payments.created_at', '=', $request->date);
+        if ($request->date_from && $request->date_to) {
+            $price_overall = $price_overall->whereBetween('list_of_payments.created_at', [$request->date_from, $request->date_to]);
         }
+
         $price_overall = $price_overall->first();
 
         $capital_price = DB::table('list_of_payments')
@@ -93,9 +93,10 @@ class LaporanKeuanganHarianController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.capital_price * detail_item_patients.quantity) + SUM(price_services.capital_price * detail_service_patients.quantity))+0 as capital_price"));
 
-        if ($request->date) {
-            $capital_price = $capital_price->where('list_of_payments.created_at', '=', $request->date);
+        if ($request->date_from && $request->date_to) {
+            $capital_price = $capital_price->whereBetween('list_of_payments.created_at', [$request->date_from, $request->date_to]);
         }
+
         $capital_price = $capital_price->first();
 
         $doctor_fee = DB::table('list_of_payments')
@@ -111,9 +112,10 @@ class LaporanKeuanganHarianController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.doctor_fee * detail_item_patients.quantity) + SUM(price_services.doctor_fee * detail_service_patients.quantity))+0 as doctor_fee"));
 
-        if ($request->date) {
-            $doctor_fee = $doctor_fee->where('list_of_payments.created_at', '=', $request->date);
+        if ($request->date_from && $request->date_to) {
+            $doctor_fee = $doctor_fee->whereBetween('list_of_payments.created_at', [$request->date_from, $request->date_to]);
         }
+
         $doctor_fee = $doctor_fee->first();
 
         $petshop_fee = DB::table('list_of_payments')
@@ -129,9 +131,10 @@ class LaporanKeuanganHarianController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.petshop_fee * detail_item_patients.quantity) + SUM(price_services.petshop_fee * detail_service_patients.quantity))+0 as petshop_fee"));
 
-        if ($request->date) {
-            $petshop_fee = $petshop_fee->where('list_of_payments.created_at', '=', $request->date);
+        if ($request->date_from && $request->date_to) {
+            $petshop_fee = $petshop_fee->whereBetween('list_of_payments.created_at', [$request->date_from, $request->date_to]);
         }
+
         $petshop_fee = $petshop_fee->first();
 
         return response()->json([
@@ -257,6 +260,5 @@ class LaporanKeuanganHarianController extends Controller
         $data['inpatient'] = $inpatient;
 
         return response()->json($data, 200);
-
     }
 }
