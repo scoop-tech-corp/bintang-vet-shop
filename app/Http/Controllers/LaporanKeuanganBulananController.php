@@ -48,8 +48,9 @@ class LaporanKeuanganBulananController extends Controller
             $data = $data->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->month) {
-            $data = $data->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month);
+        if ($request->month && $request->year) {
+            $data = $data->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month)
+                ->where(DB::raw("YEAR(list_of_payments.created_at)"), $request->year);
         }
 
         if ($request->orderby) {
@@ -74,8 +75,9 @@ class LaporanKeuanganBulananController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(detail_item_patients.price_overall) + SUM(detail_service_patients.price_overall))+0 as price_overall"));
 
-        if ($request->month) {
-            $price_overall = $price_overall->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month);
+        if ($request->month && $request->year) {
+            $price_overall = $price_overall->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month)
+                ->where(DB::raw("YEAR(list_of_payments.created_at)"), $request->year);
         }
         $price_overall = $price_overall->first();
 
@@ -92,8 +94,9 @@ class LaporanKeuanganBulananController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.capital_price * detail_item_patients.quantity) + SUM(price_services.capital_price * detail_service_patients.quantity))+0 as capital_price"));
 
-        if ($request->month) {
-            $capital_price = $capital_price->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month);
+        if ($request->month && $request->year) {
+            $capital_price = $capital_price->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month)
+                ->where(DB::raw("YEAR(list_of_payments.created_at)"), $request->year);
         }
         $capital_price = $capital_price->first();
 
@@ -110,8 +113,9 @@ class LaporanKeuanganBulananController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.doctor_fee * detail_item_patients.quantity) + SUM(price_services.doctor_fee * detail_service_patients.quantity))+0 as doctor_fee"));
 
-        if ($request->month) {
-            $doctor_fee = $doctor_fee->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month);
+        if ($request->month && $request->year) {
+            $doctor_fee = $doctor_fee->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month)
+                ->where(DB::raw("YEAR(list_of_payments.created_at)"), $request->year);
         }
         $doctor_fee = $doctor_fee->first();
 
@@ -128,8 +132,9 @@ class LaporanKeuanganBulananController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(price_items.petshop_fee * detail_item_patients.quantity) + SUM(price_services.petshop_fee * detail_service_patients.quantity))+0 as petshop_fee"));
 
-        if ($request->month) {
-            $petshop_fee = $petshop_fee->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month);
+        if ($request->month && $request->year) {
+            $petshop_fee = $petshop_fee->where(DB::raw("MONTH(list_of_payments.created_at)"), $request->month)
+                ->where(DB::raw("YEAR(list_of_payments.created_at)"), $request->year);
         }
         $petshop_fee = $petshop_fee->first();
 
