@@ -32,7 +32,7 @@ class HasilPemeriksaanController extends Controller
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('check_up_results.id', 'registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category', 'patients.pet_name',
-                'registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
+                'patients.owner_name','registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"));
 
         if ($request->user()->role == 'dokter') {
