@@ -14,6 +14,17 @@ $(document).ready(function() {
     window.location.href = $('.baseUrl').val() + '/pasien';
   });
 
+  $('.btn-kembali-modal-riwayat-pemeriksaan').click(function() {
+    $('#modal-detail-riwayat-pasien .nav-tabs li').remove();
+    $('#modal-detail-riwayat-pasien .nav-tabs').append(`
+      <li class="active"><a href="#general" data-toggle="tab">Utama</a></li>
+      <li><a href="#kelompok_obat" data-toggle="tab">Obat</a></li>
+    `);
+    
+    $('#modal-detail-riwayat-pasien #general').addClass('active in');
+    $('#modal-detail-riwayat-pasien #kelompok_obat').removeClass('active in');
+  });
+
   function loadRiwayatPasien() {
     $.ajax({
 			url     : $('.baseUrl').val() + '/api/pasien/riwayat',

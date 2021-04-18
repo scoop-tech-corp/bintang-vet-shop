@@ -11,7 +11,7 @@
           <div class="input-group-addon">
             <i class="fa fa-calendar"></i>
           </div>
-          <input type="text" class="form-control" id="datepicker" placeholder="yyyy-mm-dd - yyyy-mm-dd">
+          <input type="text" class="form-control" id="datepicker" placeholder="yyyy-mm-dd - yyyy-mm-dd" autocomplete="off">
         </div>
 
       </div>
