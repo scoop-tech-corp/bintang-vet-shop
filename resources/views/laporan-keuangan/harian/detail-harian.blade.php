@@ -169,6 +169,6 @@
   <script src="{{ asset('main/js/laporan-keuangan/harian/detail-harian.js') }}"></script>
 @endsection
 @section('css-content')
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/laporan-keuangan-harian.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/laporan-keuangan.css') }}">
 @endsection
 @section('vue-content')@endsection

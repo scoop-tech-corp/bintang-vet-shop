@@ -114,6 +114,7 @@ $(document).ready(function() {
 						+ `<td>${v.patient_number}</td>`
             + `<td>${v.pet_category}</td>`
             + `<td>${v.pet_name}</td>`
+            + `<td>${v.owner_name}</td>`
 						+ `<td>${v.complaint}</td>`
             + `<td>${generateBedge(v.status_finish)}</td>`
             + `<td>${(v.status_outpatient_inpatient == 1) ? 'Rawat Inap' : 'Rawat Jalan'}</td>`

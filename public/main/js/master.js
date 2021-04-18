@@ -19,9 +19,14 @@ $(document).ready(function() {
     userId   = getAuthUser.user_id;
     token    = getAuthUser.token;
     email    = getAuthUser.email;
-    
+
     $('.username-txt').append(username);
     $('.nameAndRole-txt').append(fullname + ' - ' + role);
+
+    const getUrl = window.location.pathname;
+    if (getUrl.includes('profil')) {
+      $('.content-header').append('<h3>User Profil</h3>')
+    }
 
     if (role === 'admin') {
       $('.menuPasien').show();   $('.menuPendaftaran').show();
@@ -60,7 +65,7 @@ $(document).ready(function() {
         $('.menuPendaftaran').addClass('active');
       } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {
         $('.menuDokter').addClass('active');
-      } else if (pathName === '/laporan-keuangan-harian') {
+      } else if (pathName === '/laporan-keuangan-harian' || pathName === '/laporan-keuangan-mingguan' || pathName === '/laporan-keuangan-bulanan') {
         $('.menuKeuangan').addClass('active');
       }
     } else {
@@ -73,10 +78,15 @@ $(document).ready(function() {
       } else if (Value['href'] ==  origin + '/hasil-pemeriksaan' && (pathName == '/hasil-pemeriksaan/tambah'
         || pathName.includes('/hasil-pemeriksaan/edit') || pathName.includes('/hasil-pemeriksaan/detail'))) {
         $(Value).parent().addClass('active');
-      } else if (Value['href'] ==  origin + '/laporan-keuangan-harian' && (pathName.includes('/laporan-keuangan-harian/detail')) ) {
+      } else if ((Value['href'] ==  origin + '/laporan-keuangan-harian' && (pathName.includes('/laporan-keuangan-harian/detail')))
+        || (Value['href'] ==  origin + '/laporan-keuangan-mingguan' && (pathName.includes('/laporan-keuangan-mingguan/detail')))
+        || (Value['href'] ==  origin + '/laporan-keuangan-bulanan' && (pathName.includes('/laporan-keuangan-bulanan/detail'))) ) {
         $('.menuKeuangan').addClass('active'); $(Value).parent().addClass('active');
       }
     }
+  });
+  $('#btn-profil').click(function() {
+    window.location.href = $('.baseUrl').val() + `/profil/${userId}`;
   });
 
   $('#btn-logout').click(function() {

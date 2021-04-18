@@ -1,4 +1,4 @@
-.label-support-laporan-harian {
+.label-support-laporan {
   width: 10%;
 }
 .section-left-box-title {
@@ -9,11 +9,14 @@
 }
 .label-date {
   align-self: center;
-  width: 35%;
+  margin-right: 20px;
+}
+.section-daterangepicker {
+  width: 223px;
 }
 
 @media (max-width: 768px) {
-  .label-support-laporan-harian {
+  .label-support-laporan {
     width: 40%;
   }
   #laporan-keuangan-harian-app .section-right-box-title .select2-container {

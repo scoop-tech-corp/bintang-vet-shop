@@ -16,7 +16,7 @@ $(document).ready(function() {
 
   function loadDetailLaporanKeuanganHarian(paramId) {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/laporan-keuangan/harian/detail',
+      url     : $('.baseUrl').val() + '/api/laporan-keuangan/detail',
       headers : { 'Authorization': `Bearer ${token}` },
       type    : 'GET',
       data	  : { id: paramId },
@@ -91,10 +91,11 @@ $(document).ready(function() {
   }
 
   function drawListKelompokObatDetail(listItem) {
-    if (listItem.length) {
+    $('#locateDrawKelompokBarang .target').remove();
 
+    if (listItem.length) {
       let rowKelompokObat = ''; let no = 1;
-      $('#locateDrawKelompokBarang .target').remove();
+
       listItem.forEach((li, idx) => {
         let rowSelectedListBarang = appendListSelectBarang(li.list_of_medicine);
 
@@ -130,7 +131,7 @@ $(document).ready(function() {
       $('#locateDrawKelompokBarang').append(rowKelompokObat);
 
     } else {
-      $('#locateDrawKelompokBarang').append('Tidak ada kelompok obat.');
+      $('#locateDrawKelompokBarang').append(`<div class="target">Tidak ada kelompok obat.</div>`);
     }
   }
 
