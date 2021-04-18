@@ -2,7 +2,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close btn-kembali-modal-riwayat-pemeriksaan" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<h4 class="modal-title"></h4>
@@ -99,7 +99,8 @@
         </div>
 			</div>
 			<div class="modal-footer">
-        <button data-dismiss="modal" aria-label="Close" type="button" class="btn btn-default pull-right">Kembali</button>
+        <button data-dismiss="modal" aria-label="Close" type="button"
+          class="btn btn-default pull-right btn-kembali-modal-riwayat-pemeriksaan">Kembali</button>
       </div>
 		</div>
 		<!-- /.modal-content -->

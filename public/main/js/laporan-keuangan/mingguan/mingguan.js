@@ -24,7 +24,7 @@ $(document).ready(function() {
       opens: openDatePicker,
       applyClass: 'btn-info',
       // showDropdowns: true,
-      dateLimit: { days: 6 },
+      dateLimit: { days: 7 },
       drops: 'auto',
       locale: {format: 'YYYY-MM-DD', cancelLabel: 'Clear'}
     });
