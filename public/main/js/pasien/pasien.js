@@ -238,6 +238,7 @@ $(document).ready(function() {
 						+ `<td>${v.id_member}</td>`
 						+ `<td>${v.pet_category}</td>`
 						+ `<td>${v.pet_name}</td>`
+            + `<td>${v.owner_name}</td>`
 						+ `<td>${v.pet_gender}</td>`
 						+ `<td>${v.pet_year_age} Tahun</td>`
 						+ `<td>${v.branch_name}</td>`

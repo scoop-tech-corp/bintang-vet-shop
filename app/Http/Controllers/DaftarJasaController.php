@@ -11,20 +11,14 @@ class DaftarJasaController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $list_of_services = DB::table('list_of_services')
             ->join('users', 'list_of_services.user_id', '=', 'users.id')
             ->join('branches', 'list_of_services.branch_id', '=', 'branches.id')
             ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
             ->select('list_of_services.id', 'list_of_services.service_name', 'list_of_services.service_category_id', 'service_categories.category_name'
                 , 'list_of_services.branch_id', 'branches.branch_name', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(list_of_services.created_at, '%d %b %Y') as created_at"));
+                DB::raw("DATE_FORMAT(list_of_services.created_at, '%d %b %Y') as created_at"))
+                ->where('list_of_services.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $list_of_services = $list_of_services->where('list_of_services.branch_id', '=', $request->branch_id);
@@ -189,7 +183,7 @@ class DaftarJasaController extends Controller
         $list_of_services->deleted_at = \Carbon\Carbon::now();
         $list_of_services->save();
 
-        $list_of_services->delete();
+        //$list_of_services->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Barang',

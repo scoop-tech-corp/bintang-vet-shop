@@ -6,8 +6,8 @@ use App\Models\Branch;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
 class Cabang implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
@@ -16,7 +16,7 @@ class Cabang implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle,
      */
     public function collection()
     {
-        return Branch::all();
+        return Branch::where('isDeleted', '=', 0)->get();
     }
 
     public function headings(): array
@@ -35,7 +35,7 @@ class Cabang implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle,
     {
         return [
             $branch->id,
-            $branch->branch_name
+            $branch->branch_name,
         ];
     }
 }

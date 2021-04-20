@@ -147,7 +147,7 @@ class SatuanBarangController extends Controller
         $unit_item->deleted_at = \Carbon\Carbon::now();
         $unit_item->save();
 
-        $unit_item->delete();
+        //$unit_item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Unit Barang',

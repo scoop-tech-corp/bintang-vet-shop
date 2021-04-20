@@ -8,7 +8,7 @@
       <div class="section-left-box-title">
         <button class="btn btn-info openFormAdd">Tambah</button>
       </div>
-      <div class="section-right-box-title width-350px">
+      <div class="section-right-box-title">
         <div class="input-search-section m-r-10px">
           <input type="text" class="form-control" placeholder="cari..">
           <i class="fa fa-search" aria-hidden="true"></i>

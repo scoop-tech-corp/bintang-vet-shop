@@ -19,13 +19,14 @@ class HargaKelompokObatController extends Controller
                 'branches.id as branch_id', 'branches.branch_name', DB::raw("TRIM(price_medicine_groups.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(price_medicine_groups.capital_price)+0 as capital_price"), DB::raw("TRIM(price_medicine_groups.doctor_fee)+0 as doctor_fee"),
                 DB::raw("TRIM(price_medicine_groups.petshop_fee)+0 as petshop_fee"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_medicine_groups.created_at, '%d %b %Y') as created_at"));
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_medicine_groups.created_at, '%d %b %Y') as created_at"))
+                ->where('price_medicine_groups.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $price_medicine_groups = $price_medicine_groups->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $price_medicine_groups = $price_medicine_groups->where('branches.id', '=', $request->user()->branch_id);
         }
 
@@ -188,7 +189,7 @@ class HargaKelompokObatController extends Controller
         $price_medicine_groups->deleted_at = \Carbon\Carbon::now();
         $price_medicine_groups->save();
 
-        $price_medicine_groups->delete();
+        //$price_medicine_groups->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',

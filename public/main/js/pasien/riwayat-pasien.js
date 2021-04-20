@@ -14,6 +14,17 @@ $(document).ready(function() {
     window.location.href = $('.baseUrl').val() + '/pasien';
   });
 
+  $('.btn-kembali-modal-riwayat-pemeriksaan').click(function() {
+    $('#modal-detail-riwayat-pasien .nav-tabs li').remove();
+    $('#modal-detail-riwayat-pasien .nav-tabs').append(`
+      <li class="active"><a href="#general" data-toggle="tab">Utama</a></li>
+      <li><a href="#kelompok_obat" data-toggle="tab">Obat</a></li>
+    `);
+    
+    $('#modal-detail-riwayat-pasien #general').addClass('active in');
+    $('#modal-detail-riwayat-pasien #kelompok_obat').removeClass('active in');
+  });
+
   function loadRiwayatPasien() {
     $.ajax({
 			url     : $('.baseUrl').val() + '/api/pasien/riwayat',
@@ -154,10 +165,11 @@ $(document).ready(function() {
   }
 
   function drawListKelompokObatDetail(listItem) {
-    if (listItem.length) {
+    $('#locateDrawKelompokBarang .target').remove();
 
+    if (listItem.length) {
       let rowKelompokObat = ''; let no = 1;
-      $('#locateDrawKelompokBarang .target').remove();
+
       listItem.forEach((li, idx) => {
         let rowSelectedListBarang = appendListSelectBarang(li.list_of_medicine);
 
@@ -190,7 +202,7 @@ $(document).ready(function() {
       $('#locateDrawKelompokBarang').append(rowKelompokObat);
 
     } else {
-      $('#locateDrawKelompokBarang').append('Tidak ada kelompok obat.');
+      $('#locateDrawKelompokBarang').append(`<div class="target">Tidak ada kelompok obat.</div>`);
     }
   }
 

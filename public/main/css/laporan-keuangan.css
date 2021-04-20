@@ -1,0 +1,35 @@
+.label-support-laporan {
+  width: 10%;
+}
+.section-left-box-title {
+  display: flex;
+}
+.section-right-box-title {
+  width: 150px;
+}
+.label-date {
+  align-self: center;
+  margin-right: 20px;
+}
+.section-daterangepicker {
+  width: 223px;
+}
+
+@media (max-width: 768px) {
+  .label-support-laporan {
+    width: 40%;
+  }
+  #laporan-keuangan-harian-app .section-right-box-title .select2-container {
+    margin-top: 0px;
+  }
+
+  .inner-box-title {
+    display: block;
+  }
+  .section-left-box-title {
+    margin-bottom: 10px;
+  }
+  .section-right-box-title {
+    width: 100%;
+  }
+}

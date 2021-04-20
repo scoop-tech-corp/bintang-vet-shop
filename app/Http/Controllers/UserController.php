@@ -278,7 +278,7 @@ class UserController extends Controller
         $user->deleted_at = \Carbon\Carbon::now();
         $user->save();
 
-        $user->delete();
+        //$user->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus User',

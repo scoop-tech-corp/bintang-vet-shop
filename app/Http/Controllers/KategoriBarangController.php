@@ -11,13 +11,6 @@ class KategoriBarangController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $category_item = DB::table('category_item')
             ->join('users', 'category_item.user_id', '=', 'users.id')
             ->select('category_item.id', 'category_name', 'users.fullname as created_by',
@@ -151,7 +144,7 @@ class KategoriBarangController extends Controller
         $category_item->deleted_at = \Carbon\Carbon::now();
         $category_item->save();
 
-        $category_item->delete();
+        //$category_item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Barang',
