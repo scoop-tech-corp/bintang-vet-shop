@@ -8,4 +8,7 @@
   .label-detail-div {
     width: 27%;
   }
+  #pembayaran-app .section-right-box-title .select2-container {
+    margin-top: 0px;
+  }
 }

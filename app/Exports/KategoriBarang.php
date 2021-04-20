@@ -6,8 +6,8 @@ use App\Models\CategoryItem;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
 class KategoriBarang implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
@@ -16,7 +16,7 @@ class KategoriBarang implements FromCollection, ShouldAutoSize, WithHeadings, Wi
      */
     public function collection()
     {
-        return CategoryItem::all();
+        return CategoryItem::where('isDeleted', '=', 0)->get();
     }
 
     public function headings(): array
@@ -35,7 +35,7 @@ class KategoriBarang implements FromCollection, ShouldAutoSize, WithHeadings, Wi
     {
         return [
             $categoryitem->id,
-            $categoryitem->category_name
+            $categoryitem->category_name,
         ];
     }
 }

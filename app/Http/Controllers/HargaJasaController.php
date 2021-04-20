@@ -28,7 +28,8 @@ class HargaJasaController extends Controller
                 'branches.id as branch_id', 'branches.branch_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(price_services.capital_price)+0 as capital_price"), DB::raw("TRIM(price_services.doctor_fee)+0 as doctor_fee"),
                 DB::raw("TRIM(price_services.petshop_fee)+0 as petshop_fee"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_services.created_at, '%d %b %Y') as created_at"));
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(price_services.created_at, '%d %b %Y') as created_at"))
+                ->where('price_services.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $price_services = $price_services->where('branches.id', '=', $request->branch_id);
@@ -199,7 +200,7 @@ class HargaJasaController extends Controller
         $price_services->deleted_at = \Carbon\Carbon::now();
         $price_services->save();
 
-        $price_services->delete();
+        //$price_services->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',

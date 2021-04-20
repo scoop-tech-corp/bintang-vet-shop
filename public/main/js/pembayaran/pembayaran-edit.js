@@ -41,7 +41,6 @@ $(document).ready(function() {
     data	  : { list_of_payment_id: id },
     beforeSend: function() { $('#loading-screen').show(); },
     success: function(data) {
-
       getCheckUpResultId = data.check_up_result_id;
       $('#nomorPasienTxt').text(data.registration.patient_number); $('#jenisHewanTxt').text(data.registration.pet_category);
       $('#namaHewanTxt').text(data.registration.pet_name); $('#jenisKelaminTxt').text(data.registration.pet_gender);
@@ -143,6 +142,7 @@ $(document).ready(function() {
         + `<td>${no}</td>`
         + `<td>${lb.created_at}</td>`
         + `<td>${lb.created_by}</td>`
+        + `<td>${lb.group_name}</td>`
         + `<td>${lb.item_name}</td>`
         + `<td>${lb.category_name}</td>`
         + `<td>${lb.unit_name}</td>`
@@ -187,6 +187,7 @@ $(document).ready(function() {
           + `${'<td>'+(lb.paid_date ? lb.paid_date : '-')+'</td>'}`
           + `<td>${lb.created_at}</td>`
           + `<td>${lb.created_by}</td>`
+          + `<td>${lb.group_name}</td>`
           + `<td>${lb.item_name}</td>`
           + `<td>${lb.category_name}</td>`
           + `<td>${lb.unit_name}</td>`

@@ -21,7 +21,8 @@ class RegistrasiController extends Controller
                 'patients.pet_year_age', 'patients.pet_month_age', 'patients.owner_name', 'patients.owner_address',
                 'patients.owner_phone_number', 'complaint', 'registrant', 'user_doctor.id as user_doctor_id',
                 'user_doctor.username as username_doctor', 'registrations.acceptance_status', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id');
+                DB::raw("DATE_FORMAT(registrations.created_at, '%d %b %Y') as created_at"), 'users.branch_id as user_branch_id')
+                ->where('registrations.isDeleted', '=', 0);
 
         if ($request->user()->role == 'resepsionis') {
             $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
@@ -192,7 +193,7 @@ class RegistrasiController extends Controller
         $registration->deleted_at = \Carbon\Carbon::now();
         $registration->save();
 
-        $registration->delete();
+        //$registration->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',

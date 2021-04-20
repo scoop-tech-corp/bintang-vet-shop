@@ -121,6 +121,35 @@ Route::get('/kelompok-obat', function () {
 	return view('gudang.kelompok-obat.index');
 });
 
+Route::get('/laporan-keuangan-harian', function () {
+	return view('laporan-keuangan.harian.index');
+});
+
+Route::get('/laporan-keuangan-harian/detail/{id}', function () {
+	return view('laporan-keuangan.harian.detail-harian');
+});
+
+Route::get('/laporan-keuangan-mingguan', function () {
+	return view('laporan-keuangan.mingguan.index');
+});
+
+Route::get('/laporan-keuangan-mingguan/detail/{id}', function () {
+	return view('laporan-keuangan.mingguan.detail-mingguan');
+});
+
+Route::get('/laporan-keuangan-bulanan', function () {
+	return view('laporan-keuangan.bulanan.index');
+});
+
+Route::get('/laporan-keuangan-bulanan/detail/{id}', function () {
+	return view('laporan-keuangan.bulanan.detail-bulanan');
+});
+
+
+Route::get('/profil/{id}', function () {
+	return view('profil.index');
+});
+
 Route::get('/unauthorized', function () {
 	return view('errors.unauthorized');
 });

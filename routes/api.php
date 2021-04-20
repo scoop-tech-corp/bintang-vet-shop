@@ -106,13 +106,15 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('penerimaan-pasien/tolak', 'PenerimaanPasienController@decline');
 
         //hasil pemeriksaan
-        Route::post('hasil-pemeriksaan', 'HasilPemeriksaanController@create');        
+        Route::post('hasil-pemeriksaan', 'HasilPemeriksaanController@create');
         Route::get('hasil-pemeriksaan', 'HasilPemeriksaanController@index');
         Route::get('hasil-pemeriksaan/detail', 'HasilPemeriksaanController@detail');
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
 
         Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+
+        Route::get('hasil-pemeriksaan/pembayaran', 'HasilPemeriksaanController@payment');
 
         //pembayaran    DropDownPatient
         Route::get('pembayaran/pasien', 'PembayaranController@DropDownPatient');
@@ -131,6 +133,9 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('kelompok-obat', 'KelompokObatController@update');
         Route::delete('kelompok-obat', 'KelompokObatController@delete');
 
+        Route::get('kelompok-obat/download-template', 'KelompokObatController@download_template');
+        Route::post('kelompok-obat/upload-template', 'KelompokObatController@upload_template');
+
         //harga kelompok obat
         Route::get('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@index');
         Route::post('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@create');
@@ -138,6 +143,20 @@ Route::group(['middleware' => ['api']], function () {
         Route::delete('pembagian-harga-kelompok-obat', 'HargaKelompokObatController@delete');
 
         Route::get('pembagian-harga-kelompok-obat/cabang-obat', 'HargaKelompokObatController@branch_medicine');
+
+        //laporan keuangan
+
+        //harian
+        Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
+        Route::get('laporan-keuangan/detail', 'LaporanKeuanganHarianController@detail');
+
+        //mingguan
+        Route::get('laporan-keuangan/mingguan', 'LaporanKeuanganMingguanController@index');
+        Route::get('laporan-keuangan/mingguan/detail', 'LaporanKeuanganMingguanController@detail');
+
+        //bulanan
+        Route::get('laporan-keuangan/bulanan', 'LaporanKeuanganBulananController@index');
+        Route::get('laporan-keuangan/bulanan/detail', 'LaporanKeuanganBulananController@detail');
     });
 });
 

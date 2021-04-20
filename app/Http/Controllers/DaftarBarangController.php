@@ -14,12 +14,6 @@ class DaftarBarangController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
 
         $item = DB::table('list_of_items')
             ->join('users', 'list_of_items.user_id', '=', 'users.id')
@@ -29,7 +23,8 @@ class DaftarBarangController extends Controller
             ->select('list_of_items.id', 'list_of_items.item_name', 'list_of_items.total_item',
                 'unit_item.id as unit_item_id', 'unit_item.unit_name', 'category_item.id as category_item_id', 'category_item.category_name'
                 , 'branches.id as branch_id', 'branches.branch_name', 'users.id as user_id', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
+                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+            ->where('list_of_items.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
@@ -235,7 +230,7 @@ class DaftarBarangController extends Controller
         $item->deleted_at = \Carbon\Carbon::now();
         $item->save();
 
-        $item->delete();
+        //$item->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Barang',

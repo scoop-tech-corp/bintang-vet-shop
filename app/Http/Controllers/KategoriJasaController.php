@@ -11,17 +11,11 @@ class KategoriJasaController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $service_categories = DB::table('service_categories')
             ->join('users', 'service_categories.user_id', '=', 'users.id')
             ->select('service_categories.id', 'category_name', 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(service_categories.created_at, '%d %b %Y') as created_at"));
+                DB::raw("DATE_FORMAT(service_categories.created_at, '%d %b %Y') as created_at"))
+                ->where('service_categories.isDeleted', '=', 0);
 
         if ($request->keyword) {
             $service_categories = $service_categories->where('category_name', 'like', '%' . $request->keyword . '%')
@@ -150,7 +144,7 @@ class KategoriJasaController extends Controller
         $service_categories->deleted_at = \Carbon\Carbon::now();
         $service_categories->save();
 
-        $service_categories->delete();
+        //$service_categories->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Jasa',

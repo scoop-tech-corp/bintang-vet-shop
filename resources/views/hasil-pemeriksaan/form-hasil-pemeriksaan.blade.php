@@ -167,6 +167,7 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
+      <div id="customErr1" class="validate-error"></div>
       <div id="beErr" class="validate-error"></div>
     </div>
 
