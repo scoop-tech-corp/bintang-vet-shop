@@ -299,49 +299,50 @@ class PembayaranController extends Controller
         $items = $request->item_payment;
         $result_item = json_decode($items, true);
 
-        if (count($result_item) == 0) {
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Barang Harus dipilih minimal 1!'],
-            ], 422);
-        }
+        if (count($result_item) != 0) {
 
-        foreach ($result_item as $value_item) {
+            // return response()->json([
+            //     'message' => 'The given data was invalid.',
+            //     'errors' => ['Data Barang Harus dipilih minimal 1!'],
+            // ], 422);
 
-            $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+            foreach ($result_item as $value_item) {
 
-            if (is_null($check_item)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data barang pasien tidak ditemukan!'],
-                ], 404);
-            }
+                $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
 
-            $check_item_name = DB::table('detail_item_patients')
-                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-                ->select('list_of_items.item_name as item_name')
-                ->where('detail_item_patients.id', '=', $value_item['detail_item_patient_id'])
-                ->first();
+                if (is_null($check_item)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data barang pasien tidak ditemukan!'],
+                    ], 404);
+                }
 
-            if (is_null($check_item_name)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data List of Item not found!'],
-                ], 404);
-            }
+                $check_item_name = DB::table('detail_item_patients')
+                    ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                    ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                    ->select('list_of_items.item_name as item_name')
+                    ->where('detail_item_patients.id', '=', $value_item['detail_item_patient_id'])
+                    ->first();
 
-            $check_detail_item = DB::table('detail_item_patients')
-                ->select('id')
-                ->where('status_paid_off', '=', 1)
-                ->where('id', '=', $value_item['detail_item_patient_id'])
-                ->first();
+                if (is_null($check_item_name)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data List of Item not found!'],
+                    ], 404);
+                }
 
-            if ($check_detail_item) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
-                ], 404);
+                $check_detail_item = DB::table('detail_item_patients')
+                    ->select('id')
+                    ->where('status_paid_off', '=', 1)
+                    ->where('id', '=', $value_item['detail_item_patient_id'])
+                    ->first();
+
+                if ($check_detail_item) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
+                    ], 404);
+                }
             }
         }
 
@@ -362,21 +363,24 @@ class PembayaranController extends Controller
             $check_service->save();
         }
 
-        //simpan data barang
-        foreach ($result_item as $value_item) {
+        if (count($result_item) == 0) {
 
-            $item = ListofPaymentItem::create([
-                'detail_item_patient_id' => $value_item['detail_item_patient_id'],
-                'check_up_result_id' => $request->check_up_result_id,
-                'user_id' => $request->user()->id,
-            ]);
+            //simpan data barang
+            foreach ($result_item as $value_item) {
 
-            $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+                $item = ListofPaymentItem::create([
+                    'detail_item_patient_id' => $value_item['detail_item_patient_id'],
+                    'check_up_result_id' => $request->check_up_result_id,
+                    'user_id' => $request->user()->id,
+                ]);
 
-            $check_item->status_paid_off = 1;
-            $check_item->user_update_id = $request->user()->id;
-            $check_item->updated_at = \Carbon\Carbon::now();
-            $check_item->save();
+                $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+
+                $check_item->status_paid_off = 1;
+                $check_item->user_update_id = $request->user()->id;
+                $check_item->updated_at = \Carbon\Carbon::now();
+                $check_item->save();
+            }
         }
 
         //cek kelunasan jasa
@@ -514,53 +518,53 @@ class PembayaranController extends Controller
         $items = $request->item_payment;
         $result_item = json_decode(json_encode($items), true);
 
-        if (count($result_item) == 0) {
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Barang Harus dipilih minimal 1!'],
-            ], 422);
-        }
+        if (count($result_item) != 0) {
+            // return response()->json([
+            //     'message' => 'The given data was invalid.',
+            //     'errors' => ['Data Barang Harus dipilih minimal 1!'],
+            // ], 422);
 
-        foreach ($result_item as $value_item) {
+            foreach ($result_item as $value_item) {
 
-            if ($value_item['detail_item_patient_id']) {
+                if ($value_item['detail_item_patient_id']) {
 
-                $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+                    $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
 
-                if (is_null($check_item)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data tidak ditemukan!'],
-                    ], 404);
+                    if (is_null($check_item)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data tidak ditemukan!'],
+                        ], 404);
+                    }
+
+                    $check_item_name = DB::table('detail_item_patients')
+                        ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                        ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                        ->select('list_of_items.item_name as item_name')
+                        ->where('detail_item_patients.id', '=', $value_item['detail_item_patient_id'])
+                        ->first();
+
+                    if (is_null($check_item_name)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data List of Item not found!'],
+                        ], 404);
+                    }
+
+                    $check_detail_item = DB::table('detail_item_patients')
+                        ->select('id')
+                        ->where('status_paid_off', '=', 1)
+                        ->where('id', '=', $value_item['detail_item_patient_id'])
+                        ->first();
+
+                    if ($check_detail_item) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
+                        ], 404);
+                    }
+
                 }
-
-                $check_item_name = DB::table('detail_item_patients')
-                    ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-                    ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-                    ->select('list_of_items.item_name as item_name')
-                    ->where('detail_item_patients.id', '=', $value_item['detail_item_patient_id'])
-                    ->first();
-
-                if (is_null($check_item_name)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Item not found!'],
-                    ], 404);
-                }
-
-                $check_detail_item = DB::table('detail_item_patients')
-                    ->select('id')
-                    ->where('status_paid_off', '=', 1)
-                    ->where('id', '=', $value_item['detail_item_patient_id'])
-                    ->first();
-
-                if ($check_detail_item) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
-                    ], 404);
-                }
-
             }
         }
 
@@ -585,23 +589,25 @@ class PembayaranController extends Controller
         }
 
         //simpan data barang
-        foreach ($result_item as $value_item) {
+        if (count($result_item) != 0) {
+            foreach ($result_item as $value_item) {
 
-            if ($value_item['detail_item_patient_id']) {
+                if ($value_item['detail_item_patient_id']) {
 
-                $item = ListofPaymentItem::create([
-                    'detail_item_patient_id' => $value_item['detail_item_patient_id'],
-                    'check_up_result_id' => $request->check_up_result_id,
-                    'user_id' => $request->user()->id,
-                ]);
+                    $item = ListofPaymentItem::create([
+                        'detail_item_patient_id' => $value_item['detail_item_patient_id'],
+                        'check_up_result_id' => $request->check_up_result_id,
+                        'user_id' => $request->user()->id,
+                    ]);
 
-                $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+                    $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
 
-                $check_item->status_paid_off = 1;
-                $check_item->user_update_id = $request->user()->id;
-                $check_item->updated_at = \Carbon\Carbon::now();
-                $check_item->save();
+                    $check_item->status_paid_off = 1;
+                    $check_item->user_update_id = $request->user()->id;
+                    $check_item->updated_at = \Carbon\Carbon::now();
+                    $check_item->save();
 
+                }
             }
         }
 
