@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ListofPayments;
 use DB;
 use Illuminate\Http\Request;
+use App\Exports\LaporanKeuanganMingguan;
 
 class LaporanKeuanganMingguanController extends Controller
 {
@@ -260,5 +261,17 @@ class LaporanKeuanganMingguanController extends Controller
         $data['inpatient'] = $inpatient;
 
         return response()->json($data, 200);
+    }
+
+    public function download_excel(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis' && $request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        return (new LaporanKeuanganMingguan())->download('Laporan Keuangan Mingguan.xlsx');
     }
 }
