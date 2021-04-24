@@ -4,6 +4,7 @@ $(document).ready(function() {
 	let optCabang = '';
   let optCabang1 = '';
 
+  let isValidBranch = false;
 	let isValidAnimalType = false;
   let isValidAnimalName = false;
   let isValidAnimalSex = false;
@@ -75,6 +76,7 @@ $(document).ready(function() {
     formConfigure();
 	});
 	
+  $('#branch').on('select2:select', function (e) { validationForm(); });
 	$('#animalSex').on('select2:select', function (e) { validationForm(); });
 	$('#animalType').keyup(function () { validationForm(); });
 	$('#animalName').keyup(function () { validationForm(); });
@@ -154,7 +156,8 @@ $(document).ready(function() {
 				nama_pemilik: $('#ownerName').val(),
 				alamat_pemilik: $('#ownerAddress').val(),
 				nomor_ponsel_pengirim: $('#ownerTelp').val(),
-        id_cabang: role.toLowerCase() == 'admin' ? $('#branch').val() : 0
+        id_cabang: role.toLowerCase() == 'admin' ? Number($('#branch').val()) : 0,
+        id_member: $('#noRegisTxt').text()
 			};
 
       $.ajax({
@@ -340,6 +343,13 @@ $(document).ready(function() {
 	}
 
 	function validationForm() {
+
+    if (!$('#branch').val() && role.toLowerCase() == 'admin') {
+			$('#branchErr1').text('Cabang Harus di isi!'); isValidBranch = false;
+		} else {
+			$('#branchErr1').text(''); isValidBranch = true;
+    }
+
 		if (!$('#animalType').val()) {
 			$('#animalTypeErr1').text('Jenis hewan harus di isi'); isValidAnimalType = false;
 		} else { 
@@ -384,24 +394,30 @@ $(document).ready(function() {
     
 		$('#beErr').empty(); isBeErr = false;
 
-		if (!isValidAnimalType || !isValidAnimalName || !isValidAnimalSex  || !isValidAnimalAge 
-			|| !isValidOwnerName || !isValidOwnerAddress || !isValidOwnerTelp || isBeErr) {
+		if ((!isValidBranch && role.toLowerCase() == 'admin') || !isValidAnimalType || !isValidAnimalName
+      || !isValidAnimalSex  || !isValidAnimalAge || !isValidOwnerName || !isValidOwnerAddress
+      || !isValidOwnerTelp || isBeErr) {
 			$('#btnSubmitPasien').attr('disabled', true);
 		} else {
 			$('#btnSubmitPasien').attr('disabled', false);
 		}
 	}
-	
-	function refreshForm() {
-		$('#animalType').val(null); isValidAnimalType = true;
-		$('#animalName').val(null); isValidAnimalName = true;
-    $('#animalSex').val(null); isValidAnimalSex = true;
 
-		$('#animalAgeYear').val(null); isValidAnimalAgeYear = true;
-		$('#animalAgeMonth').val(null); isValidAnimalAgeMonth = true;
-		$('#ownerName').val(null); isValidOwnerName = true;
-		$('#ownerAddress').val(null); isValidOwnerAddress = true;
-		$('#ownerTelp').val(null); isValidOwnerTelp = true;
+	function refreshForm() {
+    $('#branch').val(null); $('#branch').trigger('change');
+		$('#animalType').val(null); $('#animalSex').val(null);
+    $('#animalName').val(null); $('#ownerTelp').val(null);
+		$('#ownerName').val(null); $('#ownerAddress').val(null);
+    $('#animalAgeYear').val(null); 
+    $('#animalSexErr1').text(''); isValidAnimalSex = true;
+    $('#branchErr1').text(''); isValidBranch = true;
+    $('#animalAgeMonth').val(null); isValidAnimalAgeMonth = true;
+    $('#animalTypeErr1').text(''); isValidAnimalType = true;
+    $('#animalNameErr1').text('');isValidAnimalName = true;
+    $('#animalAgeErr1').text(''); isValidAnimalAgeYear = true;
+    $('#ownerNameErr1').text('');isValidOwnerName = true;
+    $('#ownerAddressErr1').text('');isValidOwnerAddress = true;
+    $('#ownerTelpErr1').text('');isValidOwnerTelp = true;
     
     $('#beErr').empty(); isBeErr = false;
 
