@@ -57,7 +57,8 @@ const loginApp = new Vue({
             email: getDataLogin.email,
             role: getDataLogin.role,
             token: getDataLogin.token,
-            user_id: getDataLogin.user_id
+            user_id: getDataLogin.user_id,
+            branch_name: getDataLogin.branch_name
           }));
         })
         .catch(err => {

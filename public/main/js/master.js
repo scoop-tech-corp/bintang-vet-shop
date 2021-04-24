@@ -4,6 +4,7 @@ let role = '';
 let email = '';
 let token = '';
 let userId = '';
+let branchName = '';
 
 $(document).ready(function() {
 
@@ -13,15 +14,16 @@ $(document).ready(function() {
   } else {
     getAuthUser = JSON.parse(getAuthUser);
     
-    username = getAuthUser.username;
-    fullname = getAuthUser.fullname;
-    role     = getAuthUser.role.toLowerCase();
-    userId   = getAuthUser.user_id;
-    token    = getAuthUser.token;
-    email    = getAuthUser.email;
+    username   = getAuthUser.username;
+    fullname   = getAuthUser.fullname;
+    role       = getAuthUser.role.toLowerCase();
+    userId     = getAuthUser.user_id;
+    token      = getAuthUser.token;
+    email      = getAuthUser.email;
+    branchName = getAuthUser.branch_name;
 
     $('.username-txt').append(username);
-    $('.nameAndRole-txt').append(fullname + ' - ' + role);
+    $('.nameAndRole-txt').append(fullname + ' - ' + role + ' - ' + branchName);
 
     const getUrl = window.location.pathname;
     if (getUrl.includes('profil')) {
