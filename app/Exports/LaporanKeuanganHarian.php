@@ -2,8 +2,7 @@
 
 namespace App\Exports;
 
-use App\Exports\Cabang;
-use App\Exports\KelompokObat;
+use App\Exports\DataPasien;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
@@ -28,8 +27,7 @@ class LaporanKeuanganHarian implements WithMultipleSheets
         $sheets = [];
 
         $sheets = [
-            new KelompokObat(),
-            new Cabang(),
+            new DataPasien()
         ];
 
         return $sheets;
