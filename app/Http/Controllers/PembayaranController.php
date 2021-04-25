@@ -107,7 +107,7 @@ class PembayaranController extends Controller
             return response()->json([
                 'message' => 'The data was invalid.',
                 'errors' => ['Data Pembayaran Tidak Ditemukan!'],
-            ], 404);
+            ], 422);
         }
 
         $data_check_up_result = CheckUpResult::find($data->check_up_result_id);
@@ -661,6 +661,31 @@ class PembayaranController extends Controller
             ], 403);
         }
 
+        $res_service = "";
+        $res_item = "";
+
+        $services = $request->service_payment;
+        $result_service = json_decode($services, true);
+
+        foreach ($result_service as $dat) {
+            $res_service = $res_service . (string) $dat['detail_service_patient_id'] . ",";
+        }
+
+        $res_service = rtrim($res_service, ", ");
+
+        $myArray_service = explode(',', $res_service);
+
+        $items = $request->item_payment;
+        $result_item = json_decode($items, true);
+
+        foreach ($result_item as $key) {
+            $res_item = $res_item . (string) $key['detail_item_patient_id'] . ",";
+        }
+
+        $res_item = rtrim($res_item, ", ");
+
+        $myArray_item = explode(',', $res_item);
+
         $data_item = DB::table('list_of_payment_items')
             ->join('detail_item_patients', 'list_of_payment_items.detail_item_patient_id', '=', 'detail_item_patients.id')
             ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
@@ -674,9 +699,10 @@ class PembayaranController extends Controller
                 'detail_item_patients.quantity',
                 DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"))
+            ->whereIn('detail_item_patients.id', $myArray_item)
             ->get();
 
-            $data_service = DB::table('list_of_payment_services')
+        $data_service = DB::table('list_of_payment_services')
             ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
             ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
             ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
@@ -686,22 +712,39 @@ class PembayaranController extends Controller
                 'detail_service_patients.quantity',
                 DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"))
+            ->whereIn('detail_service_patients.id', $myArray_service)
             ->get();
 
-            return response()->json([
-              'data_item' => $data_item,
-              'data_service' => $data_service
-          ], 200);
+        $price_overall_service = DB::table('detail_service_patients')
+            ->select(
+                DB::raw("TRIM(SUM(detail_service_patients.price_overall))+0 as price_overall"))
+            ->whereIn('detail_service_patients.id', $myArray_service)
+            ->groupby('detail_service_patients.id')
+            ->first();
+
+
+        $price_overall_item = DB::table('detail_item_patients')
+            ->select(
+                DB::raw("TRIM(SUM(detail_item_patients.price_overall))+0 as price_overall"))
+            ->whereIn('detail_item_patients.id', $myArray_item)
+            ->first();
+
+
+        $price_overall = $price_overall_service->price_overall + $price_overall_item->price_overall;
+
+        $address = DB::table('check_up_results')
+        ->join('registrations','check_up_results.patient_registration_id','registrations.id')
+        ->join('users','registrations.doctor_user_id','users.id')
+        ->join('branches','users.branch_id','branches.id')
+        ->select('branches.branch_code','branches.branch_name','branches.address')
+        ->where('check_up_results.id','=', $request->check_up_result_id)
+        ->get();
+
+        return response()->json([
+            'data_item' => $data_item,
+            'data_service' => $data_service,
+            'price_overall' => $price_overall,
+            'address' => $address
+        ], 200);
     }
-
-    // public function delete(Request $request)
-    // {
-    //     if ($request->user()->role == 'dokter') {
-    //         return response()->json([
-    //             'message' => 'The user role was invalid.',
-    //             'errors' => ['Akses User tidak diizinkan!'],
-    //         ], 403);
-    //     }
-
-    // }
 }
