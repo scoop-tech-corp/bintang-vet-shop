@@ -57,6 +57,7 @@ class CabangController extends Controller
         $validate = Validator::make($request->all(), [
             'KodeCabang' => 'required|string|max:5|unique:branches,branch_code',
             'NamaCabang' => 'required|string|max:20',
+            'Alamat' => 'required|string|min:5',
         ]);
 
         if ($validate->fails()) {
@@ -71,6 +72,7 @@ class CabangController extends Controller
         Branch::create([
             'branch_code' => $request->KodeCabang,
             'branch_name' => $request->NamaCabang,
+            'address' => $request->Alamat,
             'user_id' => $request->user()->id,
         ]);
 
@@ -92,6 +94,7 @@ class CabangController extends Controller
         $validate = Validator::make($request->all(), [
             'KodeCabang' => 'required|string|max:5', //|unique:branches,branch_code
             'NamaCabang' => 'required|string|max:20',
+            'Alamat' => 'required|string|min:5',
         ]);
 
         if ($validate->fails()) {
@@ -114,6 +117,7 @@ class CabangController extends Controller
 
         $branch->branch_code = $request->KodeCabang;
         $branch->branch_name = $request->NamaCabang;
+        $branch->address = $request->Alamat;
         $branch->user_update_id = $request->user()->id;
         $branch->updated_at = \Carbon\Carbon::now();
         $branch->save();

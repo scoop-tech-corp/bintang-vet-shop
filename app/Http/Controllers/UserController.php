@@ -46,7 +46,11 @@ class UserController extends Controller
             //return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
-        $user = User::find($request->user()->id);
+        $user = DB::table('users')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select('users.branch_id', 'branches.branch_name', 'users.username', 'users.fullname', 'users.email', 'users.role', 'users.status', 'users.isDeleted')
+            ->where('users.id', '=', $request->user()->id)
+            ->first();
 
         if ($user->status == 0) {
             return response()->json([
@@ -64,6 +68,7 @@ class UserController extends Controller
             [
                 'user_id' => $request->user()->id,
                 'branch_id' => $user->branch_id,
+                'branch_name' => $user->branch_name,
                 'token' => $token,
                 'username' => $user->username,
                 'fullname' => $user->fullname,
