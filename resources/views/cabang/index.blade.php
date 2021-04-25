@@ -30,6 +30,11 @@
               <span v-if="columnStatus.branch_name == 'asc'" class="fa fa-sort-asc"></span>
               <span v-if="columnStatus.branch_name == 'none'" class="fa fa-sort"></span>
             </th>
+            <th @click="onOrdering('address')">Alamat
+              <span v-if="columnStatus.address == 'desc'" class="fa fa-sort-desc"></span>
+              <span v-if="columnStatus.address == 'asc'" class="fa fa-sort-asc"></span>
+              <span v-if="columnStatus.address == 'none'" class="fa fa-sort"></span>
+            </th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -38,8 +43,9 @@
             <td>@{{ index + 1 }}</td>
             <td>@{{ item.branch_code }}</td>
             <td>@{{ item.branch_name }}</td>
+            <td>@{{ item.address }}</td>
             <td>
-              {{-- <button type="button" class="btn btn-warning" @click="openFormUpdate(item)">Ubah</button> --}}
+              <button type="button" class="btn btn-warning" @click="openFormUpdate(item)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
               <button type="button" class="btn btn-danger" @click="openFormDelete(item)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
             </td>
           </tr>
@@ -62,7 +68,7 @@
             <div class="box-body">
               <div class="form-group">
                 <label for="kodeCabang">Kode Cabang</label>
-                <input type="text" class="form-control" @keyup="kodeCabangKeyup" v-model="kodeCabang" placeholder="Masukan kode cabang">
+                <input type="text" class="form-control" @keyup="kodeCabangKeyup" v-model="kodeCabang" placeholder="Masukan kode cabang" :disabled="stateModal === 'edit'">
                 <div class="validate-error" v-if="kdCabangErr1">Kode Cabang harus di isi</div>
                 <div class="validate-error" v-if="kdCabangErr2">Kode Cabang harus huruf besar dan tidak ada spasi</div>
               </div>
@@ -72,13 +78,18 @@
                 <div class="validate-error" v-if="namaCabangErr">Nama cabang harus di isi</div>
               </div>
               <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" class="form-control" @keyup="alamatCabangKeyup" v-model="alamatCabang" placeholder="Masukan alamat cabang">
+                <div class="validate-error" v-if="alamatErr">Alamat minimal 5 karakter</div>
+              </div>
+              <div class="form-group">
                 <div class="validate-error" v-if="beErr" v-html="msgBeErr"></div>
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" :disabled="validateSimpanCabang" @click="submitCabang">Simpan</button>
+          <button type="button" class="btn btn-primary" :disabled="validateSimpanCabang || !touchedForm" @click="submitCabang">Simpan</button>
         </div>
       </div>
       <!-- /.modal-content -->
