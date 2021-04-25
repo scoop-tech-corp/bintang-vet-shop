@@ -14,13 +14,15 @@ class DataDummySeeder extends Seeder
         DB::table('branches')->insert([
             'branch_code' => 'AS',
             'branch_name' => 'Alam Sutera',
+            'address' => 'Ruko Spectra blok 23c no 19 Alam Sutera',
             'user_id' => '1',
             'created_at' => '2020-12-30',
         ]);
 
         DB::table('branches')->insert([
-            'branch_code' => 'KM',
-            'branch_name' => 'Kembangan',
+            'branch_code' => 'KB',
+            'branch_name' => 'Kebagusan',
+            'address' => 'Jl. Kebagusan Raya no 48 Jaksel',
             'user_id' => '1',
             'created_at' => '2020-12-30',
         ]);
@@ -28,6 +30,7 @@ class DataDummySeeder extends Seeder
         DB::table('branches')->insert([
             'branch_code' => 'TJ',
             'branch_name' => 'Tanjung Duren',
+            'address' => 'Jl. Tanjung Duren Barat 1 no 19c Jakbar',
             'user_id' => '1',
             'created_at' => '2020-12-30',
         ]);
@@ -221,7 +224,7 @@ class DataDummySeeder extends Seeder
 
         DB::table('patients')->insert([
             'branch_id' => 3,
-            'id_member' => 'BVC-P-KM-0001',
+            'id_member' => 'BVC-P-TJ-0001',
             'pet_category' => 'anjing',
             'pet_name' => 'rambo',
             'pet_gender' => 'jantan',
@@ -236,7 +239,7 @@ class DataDummySeeder extends Seeder
 
         DB::table('patients')->insert([
             'branch_id' => 2,
-            'id_member' => 'BVC-P-TJ-0001',
+            'id_member' => 'BVC-P-KM-0001',
             'pet_category' => 'kucing',
             'pet_name' => 'tabi',
             'pet_gender' => 'tidak diketahui',
@@ -1095,7 +1098,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'medicine_group_id'=> '1',
+            'medicine_group_id' => '1',
             'created_at' => '2021-02-26',
         ]);
 
@@ -1106,8 +1109,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'medicine_group_id'=> '1',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '1',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1117,8 +1120,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '0',
             'user_id' => '2',
-            'medicine_group_id'=> '1',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '1',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1128,8 +1131,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '400000',
             'status_paid_off' => '1',
             'user_id' => '1',
-            'medicine_group_id'=> '2',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '2',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1139,8 +1142,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '200000',
             'status_paid_off' => '1',
             'user_id' => '1',
-            'medicine_group_id'=> '2',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '2',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1150,8 +1153,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '200000',
             'status_paid_off' => '0',
             'user_id' => '3',
-            'medicine_group_id'=> '3',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '3',
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_item_patients')->insert([
@@ -1161,8 +1164,8 @@ class DataDummySeeder extends Seeder
             'price_overall' => '200000',
             'status_paid_off' => '0',
             'user_id' => '3',
-            'medicine_group_id'=> '3',
-            'created_at' => '2021-02-26'
+            'medicine_group_id' => '3',
+            'created_at' => '2021-02-26',
         ]);
 
         // // //detail service patient
@@ -1173,7 +1176,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '100000',
             'status_paid_off' => '0',
             'user_id' => '1',
-            'created_at' => '2021-02-26'
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_service_patients')->insert([
@@ -1183,7 +1186,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '100000',
             'status_paid_off' => '0',
             'user_id' => '3',
-            'created_at' => '2021-02-26'
+            'created_at' => '2021-02-26',
         ]);
 
         DB::table('detail_service_patients')->insert([
@@ -1193,7 +1196,7 @@ class DataDummySeeder extends Seeder
             'price_overall' => '100000',
             'status_paid_off' => '0',
             'user_id' => '3',
-            'created_at' => '2021-02-26'
+            'created_at' => '2021-02-26',
         ]);
 
         //medicine group
@@ -1202,42 +1205,42 @@ class DataDummySeeder extends Seeder
             'group_name' => 'anti diare 1',
             'branch_id' => '1',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         DB::table('medicine_groups')->insert([
             'group_name' => 'anti diare 2',
             'branch_id' => '1',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         DB::table('medicine_groups')->insert([
             'group_name' => 'anti diare 1',
             'branch_id' => '2',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         DB::table('medicine_groups')->insert([
             'group_name' => 'anti diare 2',
             'branch_id' => '2',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         DB::table('medicine_groups')->insert([
             'group_name' => 'anti diare 1',
             'branch_id' => '3',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         DB::table('medicine_groups')->insert([
             'group_name' => 'anti diare 2',
             'branch_id' => '3',
             'user_id' => '1',
-            'created_at' => '2021-03-13'
+            'created_at' => '2021-03-13',
         ]);
 
         //price medicine group
@@ -1326,62 +1329,62 @@ class DataDummySeeder extends Seeder
             'check_up_result_id' => '1',
             'description' => 'ini adalah contoh kondisi pasien',
             'user_id' => '1',
-            'created_at' => '2020-12-30'
+            'created_at' => '2020-12-30',
         ]);
 
         DB::table('list_of_payments')->insert([
             'check_up_result_id' => '1',
             'user_id' => '1',
-            'created_at' => '2021-04-04'
+            'created_at' => '2021-04-04',
         ]);
 
         DB::table('list_of_payments')->insert([
-          'check_up_result_id' => '3',
-          'user_id' => '1',
-          'created_at' => '2021-04-11'
-      ]);
+            'check_up_result_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2021-04-11',
+        ]);
 
         DB::table('list_of_payment_items')->insert([
             'check_up_result_id' => '1',
             'detail_item_patient_id' => '1',
             'user_id' => '1',
-            'created_at' => '2020-04-04'
+            'created_at' => '2020-04-04',
         ]);
 
         DB::table('list_of_payment_items')->insert([
             'check_up_result_id' => '1',
             'detail_item_patient_id' => '2',
             'user_id' => '1',
-            'created_at' => '2020-04-04'
+            'created_at' => '2020-04-04',
         ]);
 
         DB::table('list_of_payment_items')->insert([
             'check_up_result_id' => '1',
             'detail_item_patient_id' => '3',
             'user_id' => '1',
-            'created_at' => '2020-04-04'
+            'created_at' => '2020-04-04',
         ]);
 
         DB::table('list_of_payment_items')->insert([
-          'check_up_result_id' => '3',
-          'detail_item_patient_id' => '4',
-          'user_id' => '1',
-          'created_at' => '2020-04-04'
-      ]);
+            'check_up_result_id' => '3',
+            'detail_item_patient_id' => '4',
+            'user_id' => '1',
+            'created_at' => '2020-04-04',
+        ]);
 
         DB::table('list_of_payment_services')->insert([
             'check_up_result_id' => '1',
             'detail_service_patient_id' => '1',
             'user_id' => '1',
-            'created_at' => '2020-04-04'
+            'created_at' => '2020-04-04',
         ]);
 
         DB::table('list_of_payment_services')->insert([
-          'check_up_result_id' => '3',
-          'detail_service_patient_id' => '3',
-          'user_id' => '1',
-          'created_at' => '2020-04-04'
-      ]);
+            'check_up_result_id' => '3',
+            'detail_service_patient_id' => '3',
+            'user_id' => '1',
+            'created_at' => '2020-04-04',
+        ]);
 
         // //history item hovement
         // DB::table('history_item_movements')->insert([
