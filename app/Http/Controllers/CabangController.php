@@ -22,12 +22,13 @@ class CabangController extends Controller
             ->join('users', 'branches.user_id', '=', 'users.id')
             ->select('branches.id', 'branch_code', 'branch_name',
                 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"),'branches.address')
+                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"), 'branches.address')
             ->where('branches.isDeleted', '=', 0);
 
         if ($request->keyword) {
             $branch = $branch->where('branch_code', 'like', '%' . $request->keyword . '%')
                 ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.address', 'like', '%' . $request->keyword . '%')
                 ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
 
