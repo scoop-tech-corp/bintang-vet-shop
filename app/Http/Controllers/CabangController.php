@@ -93,7 +93,7 @@ class CabangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'KodeCabang' => 'required|string|max:5', //|unique:branches,branch_code
+            //'KodeCabang' => 'required|string|max:5', //|unique:branches,branch_code
             'NamaCabang' => 'required|string|max:20',
             'Alamat' => 'required|string|min:5',
         ]);
