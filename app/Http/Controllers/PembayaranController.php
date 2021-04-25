@@ -652,6 +652,48 @@ class PembayaranController extends Controller
         );
     }
 
+    function print(Request $request) {
+
+        if ($request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $data_item = DB::table('list_of_payment_items')
+            ->join('detail_item_patients', 'list_of_payment_items.detail_item_patient_id', '=', 'detail_item_patients.id')
+            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+            ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
+            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+            ->select('list_of_items.item_name',
+                'detail_item_patients.quantity',
+                DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"))
+            ->get();
+
+            $data_service = DB::table('list_of_payment_services')
+            ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
+            ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+            ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
+            ->select('list_of_services.service_name as item_name',
+                'detail_service_patients.quantity',
+                DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"))
+            ->get();
+
+            return response()->json([
+              'data_item' => $data_item,
+              'data_service' => $data_service
+          ], 200);
+    }
+
     // public function delete(Request $request)
     // {
     //     if ($request->user()->role == 'dokter') {
