@@ -116,7 +116,6 @@ class CabangController extends Controller
             ], 404);
         }
 
-        $branch->branch_code = $request->KodeCabang;
         $branch->branch_name = $request->NamaCabang;
         $branch->address = $request->Alamat;
         $branch->user_update_id = $request->user()->id;
