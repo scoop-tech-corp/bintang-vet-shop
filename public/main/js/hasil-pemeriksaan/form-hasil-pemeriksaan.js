@@ -22,6 +22,7 @@ $(document).ready(function() {
   let deletedUpdateListJasa = [];
 
   let getId = null;
+  let getPatienRegistrationId = null;
   let dropzone = null;  
 
   const url = window.location.pathname;
@@ -245,7 +246,7 @@ $(document).ready(function() {
 
     const datas = {
       id: getId,
-      patient_registration_id: lastUrl,
+      patient_registration_id: getPatienRegistrationId,
       anamnesa: $('#anamnesa').val(),
       sign: $('#sign').val(),
       diagnosa: $('#diagnosa').val(),
