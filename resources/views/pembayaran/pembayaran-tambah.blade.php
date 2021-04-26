@@ -171,7 +171,7 @@
             </tr>
           </thead>
           <tbody id="list-tagihan-barang">
-            <tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>
+            <tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>
           </tbody>
         </table>
       </div>
@@ -190,7 +190,10 @@
         - Status Pembayaran tidak dapat diselesaikan, karena terdapat barang atau jasa yang masih belum dibayarkan --}}
     </div>
     <div class="col-md-12 m-t-25px">
-      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right">Simpan & Cetak</button>
+      {{-- <button id="btnPrint" type="button" class="btn btn-info pull-right">
+        <i class="fa fa-print"></i> Cetak
+      </button> --}}
+      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right m-r-10px">Simpan & Cetak</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
   </div>

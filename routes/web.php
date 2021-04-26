@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mike42\Escpos\Printer; 
+use Mike42\Escpos\EscposImage;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,9 +149,69 @@ Route::get('/laporan-keuangan-bulanan/detail/{id}', function () {
 	return view('laporan-keuangan.bulanan.detail-bulanan');
 });
 
-
 Route::get('/profil/{id}', function () {
 	return view('profil.index');
+});
+
+
+Route::post('/print', function(Request $request) {
+  if ($request->ajax()) {
+		try {
+			$ip = '192.168.111.11'; // IP Komputer kita atau printer lain yang masih satu jaringan
+			// $printer = 'EPSON TM-U220 Receipt'; // Nama Printer yang di sharing
+      // $printer = 'POS-58';
+      // $connector = new WindowsPrintConnector("smb://" . $ip . "/" . $printer);
+      $connector = new WindowsPrintConnector('POS-58');
+      $printer = new Printer($connector);
+      // info('check_up_result_id', $request->check_up_result_id);
+      // info('data', $request->data);
+      // Nama 14 karakter, qty 3, Harga 6, total 6
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer -> text('Bintang Vet Clinic' . "\n", Printer::JUSTIFY_CENTER);
+      $printer->setJustification(Printer::JUSTIFY_LEFT);
+      $printer -> text($request->address. "\n");
+      $printer -> text('--------------------------------'. "\n");
+      $printer -> text('Data Pasien'. "\n");
+      $printer -> text('No. Pasien:'. "\n");
+      $printer -> text($request->id_patient. "\n");
+      $printer -> text('Nama Hewan:'. "\n");
+      $printer -> text($request->pet_name. "\n");
+      $printer -> text('Nama Pemilik:'. "\n");
+      $printer -> text($request->owner_name. "\n");
+      $printer -> text('--------------------------------'. "\n");
+      $printer -> text('No. Berobat:'. "\n");
+      $printer -> text($request->registration_number. "\n");
+      $printer -> text('Kasir:'. "\n");
+      $printer -> text($request->cashier_name. "\n");
+      $printer -> text('Tanggal:'. "\n");
+      $printer -> text($request->time. "\n");
+      $printer -> text('--------------------------------'. "\n");
+      $printer -> text('Nama       Qty  Harga    Total'. "\n");
+      $printer -> text('--------------------------------'. "\n");
+      
+      $content = '';
+      $getTable = $request->table;
+      // info('data', $getTable);
+      for($i = 0; $i < count($getTable) ; $i++) {
+        $content .= $getTable[$i]['name']."\n"."            ".$getTable[$i]['qty']."   ".$getTable[$i]['harga']."  ".$getTable[$i]['total']."\n";
+      }
+      $printer -> text($content);
+
+      $printer -> text('--------------------------------'. "\n");
+      $textQty = $request->quantity_total > 1 ? 'items(s)' : 'item';
+      $printer -> text('Total-'.$request->quantity_total.$textQty.'. Rp.'.$request->price_overall.',-'. "\n");
+      $printer -> feed(2);
+      $printer -> cut();
+      $printer -> close();
+      $response = ['success'=> 'true'];
+      // info('masuk SINI');
+		} catch (Exception $e) {
+      info($e);
+      $response = ['success'=>'false'];
+		}
+
+		return response()->json($response);
+	}
 });
 
 Route::get('/unauthorized', function () {
