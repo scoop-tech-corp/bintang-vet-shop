@@ -664,11 +664,15 @@ class PembayaranController extends Controller
         $res_service = "";
         $res_item = "";
 
+        $res_num_service = 0;
+        $res_num_item = 0;
+
         $services = $request->service_payment;
         $result_service = json_decode($services, true);
 
         foreach ($result_service as $dat) {
             $res_service = $res_service . (string) $dat['detail_service_patient_id'] . ",";
+            $res_num_service++;
         }
 
         $res_service = rtrim($res_service, ", ");
@@ -680,7 +684,10 @@ class PembayaranController extends Controller
 
         foreach ($result_item as $key) {
             $res_item = $res_item . (string) $key['detail_item_patient_id'] . ",";
+            $res_num_item++;
         }
+
+        $res_num = $res_num_item + $res_num_service;
 
         $res_item = rtrim($res_item, ", ");
 
@@ -765,6 +772,7 @@ class PembayaranController extends Controller
         return response()->json([
             'data_item' => $data_item,
             'data_service' => $data_service,
+            'quantity_total' => $res_num,
             'price_overall' => $price_overall,
             'address' => $address->address,
             'registration_number' => $data_patient[0]->id_number,
