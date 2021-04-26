@@ -722,29 +722,58 @@ class PembayaranController extends Controller
             ->groupby('detail_service_patients.id')
             ->first();
 
-
         $price_overall_item = DB::table('detail_item_patients')
             ->select(
                 DB::raw("TRIM(SUM(detail_item_patients.price_overall))+0 as price_overall"))
             ->whereIn('detail_item_patients.id', $myArray_item)
             ->first();
 
-
         $price_overall = $price_overall_service->price_overall + $price_overall_item->price_overall;
 
         $address = DB::table('check_up_results')
-        ->join('registrations','check_up_results.patient_registration_id','registrations.id')
-        ->join('users','registrations.doctor_user_id','users.id')
-        ->join('branches','users.branch_id','branches.id')
-        ->select('branches.branch_code','branches.branch_name','branches.address')
-        ->where('check_up_results.id','=', $request->check_up_result_id)
-        ->get();
+            ->join('registrations', 'check_up_results.patient_registration_id', 'registrations.id')
+            ->join('users', 'registrations.doctor_user_id', 'users.id')
+            ->join('branches', 'users.branch_id', 'branches.id')
+            ->select('branches.address')
+            ->where('check_up_results.id', '=', $request->check_up_result_id)
+            ->first();
+
+        $data_patient = DB::table('check_up_results')
+            ->join('registrations', 'check_up_results.patient_registration_id', 'registrations.id')
+            ->join('patients', 'registrations.patient_id', 'patients.id')
+            ->join('users', 'registrations.doctor_user_id', 'users.id')
+            ->join('branches', 'users.branch_id', 'branches.id')
+            ->select('registrations.id_number', 'patients.id_member as id_patient', 'pet_name', 'owner_name')
+            ->where('check_up_results.id', '=', $request->check_up_result_id)
+            ->get();
+
+        $data_cashier = DB::table('users')
+            ->join('list_of_payment_items', 'users.id', 'list_of_payment_items.user_id')
+            ->join('check_up_results', 'list_of_payment_items.check_up_result_id', 'check_up_results.id')
+            ->select('users.fullname as cashier_name', DB::raw("DATE_FORMAT(list_of_payment_items.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
+            ->where('list_of_payment_items.check_up_result_id', '=', $request->check_up_result_id)
+            ->first();
+
+        // $patient_number = DB::table('check_up_results')
+        // ->join('registrations','check_up_results.patient_registration_id','registrations.id')
+        // ->join('users','registrations.doctor_user_id','users.id')
+        // ->join('branches','users.branch_id','branches.id')
+        // ->select('registrations.id_number')
+        // ->where('check_up_results.id','=', $request->check_up_result_id)
+        // ->get();
 
         return response()->json([
             'data_item' => $data_item,
             'data_service' => $data_service,
             'price_overall' => $price_overall,
-            'address' => $address
+            'address' => $address->address,
+            'registration_number' => $data_patient[0]->id_number,
+            'id_patient' => $data_patient[0]->id_patient,
+            'pet_name' => $data_patient[0]->pet_name,
+            'owner_name' => $data_patient[0]->owner_name,
+            'cashier_name' => $data_cashier->cashier_name,
+            'time' => $data_cashier->paid_time,
+            //'' => $patient_number[0]->id_number
         ], 200);
     }
 }
