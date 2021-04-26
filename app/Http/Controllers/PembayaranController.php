@@ -291,7 +291,7 @@ class PembayaranController extends Controller
                 return response()->json([
                     'message' => 'The data was invalid.',
                     'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
-                ], 404);
+                ], 422);
             }
 
         }
@@ -341,7 +341,7 @@ class PembayaranController extends Controller
                     return response()->json([
                         'message' => 'The data was invalid.',
                         'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
-                    ], 404);
+                    ], 422);
                 }
             }
         }
@@ -509,7 +509,7 @@ class PembayaranController extends Controller
                     return response()->json([
                         'message' => 'The data was invalid.',
                         'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
-                    ], 404);
+                    ], 422);
                 }
 
             }
@@ -561,7 +561,7 @@ class PembayaranController extends Controller
                         return response()->json([
                             'message' => 'The data was invalid.',
                             'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
-                        ], 404);
+                        ], 422);
                     }
 
                 }
