@@ -42,10 +42,17 @@
   </div>
 
   @component('gudang.pembagian-harga.modal-harga-barang') @endcomponent
+  @component('gudang.pembagian-harga.upload-harga-barang') @endcomponent
   @component('layout.modal-confirmation') @endcomponent
   @component('layout.message-box') @endcomponent
 @endsection
 @section('script-content')
+  <script src="{{ asset('plugins/jquery.ui.widget.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.iframe-transport.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-ui.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-process.js') }}"></script>
+  <script src="{{ asset('plugins/jquery.fileupload-validate.js') }}"></script>
   <script src="{{ asset('plugins/jquery.mask.js') }}"></script>
   <script src="{{ asset('main/js/gudang/pembagian-harga/harga-barang.js') }}"></script>
 @endsection

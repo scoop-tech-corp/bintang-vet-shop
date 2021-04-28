@@ -30,7 +30,9 @@ $(document).ready(function() {
     $('#selectedKategoriBarang').append(`<option value=''>Pilih Kategori Barang</option>`);
     $('#selectedNamaBarang').append(`<option value=''>Pilih Nama Barang</option>`);
 
-    $('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
+    $('.section-left-box-title').append(`
+      <button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
+      <button class="btn btn-info openFormUpload">Upload Sekaligus</button>`);
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
@@ -79,6 +81,81 @@ $(document).ready(function() {
     refreshForm();
     formConfigure();
   });
+
+  $('.openFormUpload').click(function() {
+		$('#modal-upload-harga-barang .modal-title').text('Upload Harga Barang Sekaligus');
+		$('#modal-upload-harga-barang').modal('show');
+		$('.validate-error').html('');
+	});
+
+  $('.btn-download-template').click(function() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/pembagian-harga-barang/download-template',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+
+	});
+
+  $("#fileupload").fileupload({
+		url: $('.baseUrl').val() + '/api/pembagian-harga-barang/upload',
+		headers : { 'Authorization': `Bearer ${token}` },
+		dropZone: '#dropZone',
+		dataType: 'json',
+		autoUpload: false,
+	}).on('fileuploadadd', function (e, data) {
+		let fileTypeAllowed = /.\.(xlsx|xls)$/i;
+		let fileName = data.originalFiles[0]['name'];
+		let fileSize = data.originalFiles[0]['size'];
+		
+		if (!fileTypeAllowed.test(fileName)) {
+			$('.validate-error').html('File harus berformat .xlsx atau .xls');
+		} else {
+			$('.validate-error').html('');
+			data.submit();
+		}
+	}).on('fileuploaddone', function(e, data) {
+		$('#modal-confirmation').hide();
+
+		$("#msg-box .modal-body").text('Berhasil Upload Barang');
+		$('#msg-box').modal('show');
+		setTimeout(() => {
+			$('#modal-upload-daftar-barang').modal('toggle');
+			loadDaftarBarang();
+		}, 1000);
+	}).on('fileuploadfail', function(e, data) {
+		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
+			: data._response.jqXHR.responseJSON.errors;
+
+		let errText = '';
+		$.each(getResponsError, function(idx, v) {
+			errText += v + ((idx !== getResponsError.length - 1) ? '<br/>' : '');
+		});
+		$('.validate-error').append(errText)
+	}).on('fileuploadprogressall', function(e,data) {
+	});
 
   $('#btnSubmitHargaBarang').click(function() {
     if (modalState == 'add') {
