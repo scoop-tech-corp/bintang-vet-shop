@@ -94,6 +94,9 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('pembagian-harga-barang/kategori-barang', 'HargaBarangController@item_category');
         Route::get('pembagian-harga-barang/nama-barang', 'HargaBarangController@item_name');
 
+        Route::get('pembagian-harga-barang/download-template', 'HargaBarangController@download_template');
+        Route::post('pembagian-harga-barang/upload', 'HargaBarangController@upload_template');
+
         //registrasi pasien
         Route::get('registrasi-pasien', 'RegistrasiController@index');
         Route::post('registrasi-pasien', 'RegistrasiController@create');
