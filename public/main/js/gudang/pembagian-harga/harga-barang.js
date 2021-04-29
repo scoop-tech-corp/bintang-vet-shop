@@ -142,8 +142,8 @@ $(document).ready(function() {
 		$("#msg-box .modal-body").text('Berhasil Upload Barang');
 		$('#msg-box').modal('show');
 		setTimeout(() => {
-			$('#modal-upload-daftar-barang').modal('toggle');
-			loadDaftarBarang();
+			$('#modal-upload-harga-barang').modal('toggle');
+			loadHargaBarang();
 		}, 1000);
 	}).on('fileuploadfail', function(e, data) {
 		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
