@@ -55,6 +55,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/laporan-keuangan/harian/download',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, date: paramUrlSetup.date, branch_id: paramUrlSetup.branchId },
 			xhrFields: { responseType: 'blob' },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data, status, xhr) {

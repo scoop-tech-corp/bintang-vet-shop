@@ -42,6 +42,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/laporan-keuangan/bulanan/download',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, month: paramUrlSetup.month, year: paramUrlSetup.year, branch_id: paramUrlSetup.branchId },
 			xhrFields: { responseType: 'blob' },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data, status, xhr) {
