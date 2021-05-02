@@ -357,26 +357,31 @@ $(document).ready(function() {
 				let listHargaBarang = '';
 				$('#list-harga-barang tr').remove();
 
-				$.each(data, function(idx, v) {
-					listHargaBarang += `<tr>`
-						+ `<td>${++idx}</td>`
-						+ `<td>${v.item_name}</td>`
-            + `<td>${v.category_name}</td>`
-            + `<td>${v.total_item}</td>`
-            + `<td>${v.unit_name}</td>`
-            + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.petshop_fee) == 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-						+ `<td>${v.branch_name}</td>`
-						+ `<td>${v.created_by}</td>`
-						+ `<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() != 'admin') ? `` : `<td>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`)
-						+ `</tr>`;
-				});
+        if(data.length) {
+          $.each(data, function(idx, v) {
+            listHargaBarang += `<tr>`
+              + `<td>${++idx}</td>`
+              + `<td>${v.item_name}</td>`
+              + `<td>${v.category_name}</td>`
+              + `<td>${v.total_item}</td>`
+              + `<td>${v.unit_name}</td>`
+              + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.petshop_fee) == 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>${v.branch_name}</td>`
+              + `<td>${v.created_by}</td>`
+              + `<td>${v.created_at}</td>`
+              + ((role.toLowerCase() != 'admin') ? `` : `<td>
+                  <button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </td>`)
+              + `</tr>`;
+          });
+        } else {
+          listHargaBarang += `<tr class="text-center"><td colspan="13">Tidak ada data.</td></tr>`;
+        }
+
 				$('#list-harga-barang').append(listHargaBarang);
 
 				$('.openFormEdit').click(function() {

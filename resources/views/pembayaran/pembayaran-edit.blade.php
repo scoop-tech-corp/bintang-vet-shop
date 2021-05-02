@@ -176,6 +176,9 @@
         <div id="totalBayarTxt" class="p-left-10px" style="word-break: break-all;"></div>
       </div>
     </div>
+    <div class="col-md-12 m-t-25px">
+      <div id="beErr" class="validate-error"></div>
+    </div>
 
     <div class="col-md-12 m-t-25px">
       <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right">Simpan & Cetak</button>
