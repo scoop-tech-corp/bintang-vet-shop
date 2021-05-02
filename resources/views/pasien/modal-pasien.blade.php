@@ -16,6 +16,12 @@
                 <td id="noRegisTxt" class="detail-value"></td>
               </tr>
             </table>
+            <div class="form-group field-cabang">
+              <label for="branch">Cabang</label>
+              <select id="branch" class="form-control" style="width: 100%">
+              </select>
+              <div id="branchErr1" class="validate-error"></div>
+            </div>
             <div class="form-group">
               <label for="animalType">Jenis Hewan</label>
               <input id="animalType" type="text" class="form-control" placeholder="Masukan Jenis Hewan">

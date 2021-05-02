@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MultipleSheetUploadHargaBarang;
+use App\Imports\MultipleSheetImportHargaBarang;
 use App\Models\PriceItem;
 use DB;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class HargaBarangController extends Controller
@@ -83,6 +86,7 @@ class HargaBarangController extends Controller
 
         $check_list_item = DB::table('price_items')
             ->where('list_of_items_id', '=', $request->ListOfItemsId)
+            ->where('isDeleted', '=', 0)
             ->count();
 
         if ($check_list_item > 0) {
@@ -252,6 +256,69 @@ class HargaBarangController extends Controller
         }
 
         return response()->json($list_of_items, 200);
+    }
+
+    public function download_template(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        return (new MultipleSheetUploadHargaBarang())->download('Template Harga Barang.xlsx');
+    }
+
+    public function upload_template(Request $request)
+    {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx',
+        ]);
+
+        $rows = Excel::toArray(new MultipleSheetImportHargaBarang, $request->file('file'));
+        $result = $rows[0];
+
+        foreach ($result as $key_result) {
+
+            $check_duplicate = DB::table('price_items')
+                ->where('list_of_items_id', '=', $key_result['kode_daftar_barang'])
+                ->where('isDeleted', '=', 0)
+                ->count();
+
+            if ($check_duplicate > 0) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Terdapat Data yang sudah ada!'],
+                ], 422);
+            }
+
+            $count_total = $key_result['harga_modal'] + $key_result['fee_dokter'] + $key_result['fee_petshop'];
+
+            if ($count_total != $key_result['harga_jual']) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Jumlah Harga Modal, Fee Dokter, dan Fee Petshop harus sama dengan Harga Jual!'],
+                ], 422);
+            }
+        }
+
+        $file = $request->file('file');
+
+        Excel::import(new MultipleSheetImportHargaBarang, $file);
+
+        return response()->json([
+            'message' => 'Berhasil mengupload Barang',
+        ], 200);
     }
 
 }

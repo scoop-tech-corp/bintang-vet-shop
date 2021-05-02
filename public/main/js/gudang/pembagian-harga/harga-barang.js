@@ -30,7 +30,9 @@ $(document).ready(function() {
     $('#selectedKategoriBarang').append(`<option value=''>Pilih Kategori Barang</option>`);
     $('#selectedNamaBarang').append(`<option value=''>Pilih Nama Barang</option>`);
 
-    $('.section-left-box-title').append(`<button class="btn btn-info openFormAdd m-r-10px">Tambah</button>`);
+    $('.section-left-box-title').append(`
+      <button class="btn btn-info openFormAdd m-r-10px">Tambah</button>
+      <button class="btn btn-info openFormUpload">Upload Sekaligus</button>`);
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
@@ -79,6 +81,81 @@ $(document).ready(function() {
     refreshForm();
     formConfigure();
   });
+
+  $('.openFormUpload').click(function() {
+		$('#modal-upload-harga-barang .modal-title').text('Upload Harga Barang Sekaligus');
+		$('#modal-upload-harga-barang').modal('show');
+		$('.validate-error').html('');
+	});
+
+  $('.btn-download-template').click(function() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/pembagian-harga-barang/download-template',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+
+	});
+
+  $("#fileupload").fileupload({
+		url: $('.baseUrl').val() + '/api/pembagian-harga-barang/upload',
+		headers : { 'Authorization': `Bearer ${token}` },
+		dropZone: '#dropZone',
+		dataType: 'json',
+		autoUpload: false,
+	}).on('fileuploadadd', function (e, data) {
+		let fileTypeAllowed = /.\.(xlsx|xls)$/i;
+		let fileName = data.originalFiles[0]['name'];
+		let fileSize = data.originalFiles[0]['size'];
+		
+		if (!fileTypeAllowed.test(fileName)) {
+			$('.validate-error').html('File harus berformat .xlsx atau .xls');
+		} else {
+			$('.validate-error').html('');
+			data.submit();
+		}
+	}).on('fileuploaddone', function(e, data) {
+		$('#modal-confirmation').hide();
+
+		$("#msg-box .modal-body").text('Berhasil Upload Barang');
+		$('#msg-box').modal('show');
+		setTimeout(() => {
+			$('#modal-upload-harga-barang').modal('toggle');
+			loadHargaBarang();
+		}, 1000);
+	}).on('fileuploadfail', function(e, data) {
+		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
+			: data._response.jqXHR.responseJSON.errors;
+
+		let errText = '';
+		$.each(getResponsError, function(idx, v) {
+			errText += v + ((idx !== getResponsError.length - 1) ? '<br/>' : '');
+		});
+		$('.validate-error').append(errText)
+	}).on('fileuploadprogressall', function(e,data) {
+	});
 
   $('#btnSubmitHargaBarang').click(function() {
     if (modalState == 'add') {
@@ -280,26 +357,31 @@ $(document).ready(function() {
 				let listHargaBarang = '';
 				$('#list-harga-barang tr').remove();
 
-				$.each(data, function(idx, v) {
-					listHargaBarang += `<tr>`
-						+ `<td>${++idx}</td>`
-						+ `<td>${v.item_name}</td>`
-            + `<td>${v.category_name}</td>`
-            + `<td>${v.total_item}</td>`
-            + `<td>${v.unit_name}</td>`
-            + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-            + `<td>Rp ${typeof(v.petshop_fee) == 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-						+ `<td>${v.branch_name}</td>`
-						+ `<td>${v.created_by}</td>`
-						+ `<td>${v.created_at}</td>`
-						+ ((role.toLowerCase() != 'admin') ? `` : `<td>
-								<button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`)
-						+ `</tr>`;
-				});
+        if(data.length) {
+          $.each(data, function(idx, v) {
+            listHargaBarang += `<tr>`
+              + `<td>${++idx}</td>`
+              + `<td>${v.item_name}</td>`
+              + `<td>${v.category_name}</td>`
+              + `<td>${v.total_item}</td>`
+              + `<td>${v.unit_name}</td>`
+              + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>Rp ${typeof(v.petshop_fee) == 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>${v.branch_name}</td>`
+              + `<td>${v.created_by}</td>`
+              + `<td>${v.created_at}</td>`
+              + ((role.toLowerCase() != 'admin') ? `` : `<td>
+                  <button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </td>`)
+              + `</tr>`;
+          });
+        } else {
+          listHargaBarang += `<tr class="text-center"><td colspan="13">Tidak ada data.</td></tr>`;
+        }
+
 				$('#list-harga-barang').append(listHargaBarang);
 
 				$('.openFormEdit').click(function() {

@@ -7,6 +7,7 @@ $(document).ready(function() {
 			idCabang: null,
 			kodeCabang: '',
 			namaCabang: '',
+      alamatCabang: '',
 			titleModal: '',
 			stateModal: '',
 			msgContent: '',
@@ -14,12 +15,15 @@ $(document).ready(function() {
 			kdCabangErr1: false,
 			kdCabangErr2: false,
 			namaCabangErr: false,
+      alamatErr: false,
 			beErr: false,
+      touchedForm: false,
 			msgBeErr: '',
 			listCabang: [],
 			columnStatus: {
 				branch_code: 'none',
 				branch_name: 'none',
+        address: 'none',
 			},
 			paramUrlSetup: {
 				orderby:'',
@@ -35,7 +39,7 @@ $(document).ready(function() {
 		},
 		computed: {
 			validateSimpanCabang: function() {
-				return this.kdCabangErr1 || this.kdCabangErr2 || this.beErr || this.namaCabangErr || !this.touchedForm;
+				return this.kdCabangErr1 || this.kdCabangErr2 || this.beErr || this.namaCabangErr || this.alamatErr;
 			}
 		},
 		methods: {
@@ -51,8 +55,9 @@ $(document).ready(function() {
 				this.refreshVariable();
 
 				this.idCabang   = item.id;
-				this.kodeCabang = item.BranchCode;
-				this.namaCabang = item.BranchName;
+				this.kodeCabang = item.branch_code;
+				this.namaCabang = item.branch_name;
+        this.alamatCabang = item.address;
 				$('#modal-cabang').modal('show');
 			},
 			openFormDelete: function(item) {
@@ -63,21 +68,29 @@ $(document).ready(function() {
 			},
 			kodeCabangKeyup: function(e) {
 				const regexp = /^[^a-z ]*$/;
-				this.kdCabangErr2 = (!regexp.test(this.kodeCabang)) ? true : false;
+				this.kdCabangErr2 = (!regexp.test(this.kodeCabang) && this.stateModal == 'edit') ? true : false;
 
 				this.validationForm();
 			},
 			namaCabangKeyup: function(e) {
 				this.validationForm();
 			},
+      alamatCabangKeyup: function(e) {
+        this.validationForm();
+      },
 			onOrdering: function(e) {
 
 				this.columnStatus[e] = (this.columnStatus[e] == 'asc') ? 'desc' : 'asc';
 				if (e === 'branch_code') {
 					this.columnStatus['branch_name'] = 'none';
-				} else {
+          this.columnStatus['address'] = 'none';
+				} else if (e === 'branch_name') {
 					this.columnStatus['branch_code'] = 'none';
-				}
+          this.columnStatus['address'] = 'none';
+				} else {
+          this.columnStatus['branch_code'] = 'none';
+          this.columnStatus['branch_name'] = 'none';
+        }
 
 				this.paramUrlSetup.orderby = this.columnStatus[e];
 				this.paramUrlSetup.column = e;
@@ -105,6 +118,7 @@ $(document).ready(function() {
 					const form_data = new FormData();
 					form_data.append('KodeCabang', this.kodeCabang);
 					form_data.append('NamaCabang', this.namaCabang);
+          form_data.append('Alamat', this.alamatCabang);
 
 					this.processSave(form_data);
 				} else {
@@ -114,13 +128,11 @@ $(document).ready(function() {
 				}
 			},
 			submitConfirm: function() {
-				const form_data = new FormData();
-				form_data.append('id', this.idCabang);
 
 				if (this.stateModal === 'edit') {
-					form_data.append('KodeCabang', this.kodeCabang);
-					form_data.append('NamaCabang', this.namaCabang);
-					this.processEdit(form_data);
+					// form_data.append('KodeCabang', this.kodeCabang);
+          const request = {id: this.idCabang, NamaCabang: this.namaCabang, Alamat: this.alamatCabang};
+					this.processEdit(request);
 				} else {
 					this.processDelete({ id: this.idCabang });
 				}
@@ -144,7 +156,7 @@ $(document).ready(function() {
 				})
 			},
 			processEdit: function(form_data) {
-				axios.post('/cabang/update', form_data)
+				axios.put($('.baseUrl').val() + '/api/cabang', form_data, { headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }})
 				.then(resp => {
 					if (resp.status == 200) {
 						$('#modal-confirmation').modal('toggle');
@@ -204,14 +216,16 @@ $(document).ready(function() {
 			},
 			validationForm: function() {
 				this.touchedForm = true;
-				this.kdCabangErr1 = (!this.kodeCabang) ? true : false;
+				this.kdCabangErr1 = (!this.kodeCabang && this.stateModal == 'edit') ? true : false;
 				this.namaCabangErr = (!this.namaCabang) ? true : false;
+        this.alamatErr = (this.alamatCabang.length < 5) ? true : false;
 				this.beErr = false;
 			},
 			refreshVariable: function() {
 				this.kodeCabang = ''; this.namaCabang = '';
 				this.kdCabangErr1 = false; this.kdCabangErr2 = false;
 				this.namaCabangErr = false; this.touchedForm = false;
+        this.alamatCabang = ''; this.alamatErr = false;
 				this.beErr = false;
 			}
 		}

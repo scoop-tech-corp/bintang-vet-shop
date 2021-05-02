@@ -94,6 +94,9 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('pembagian-harga-barang/kategori-barang', 'HargaBarangController@item_category');
         Route::get('pembagian-harga-barang/nama-barang', 'HargaBarangController@item_name');
 
+        Route::get('pembagian-harga-barang/download-template', 'HargaBarangController@download_template');
+        Route::post('pembagian-harga-barang/upload', 'HargaBarangController@upload_template');
+
         //registrasi pasien
         Route::get('registrasi-pasien', 'RegistrasiController@index');
         Route::post('registrasi-pasien', 'RegistrasiController@create');
@@ -122,6 +125,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pembayaran', 'PembayaranController@create');
         Route::put('pembayaran', 'PembayaranController@update');
         Route::get('pembayaran/detail', 'PembayaranController@detail');
+        Route::post('pembayaran/print', 'PembayaranController@print');
 
         //riwayat pasien
         Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
@@ -148,14 +152,21 @@ Route::group(['middleware' => ['api']], function () {
 
         //harian
         Route::get('laporan-keuangan/harian', 'LaporanKeuanganHarianController@index');
+        Route::get('laporan-keuangan/harian/download', 'LaporanKeuanganHarianController@download_excel');
+
         Route::get('laporan-keuangan/detail', 'LaporanKeuanganHarianController@detail');
+
 
         //mingguan
         Route::get('laporan-keuangan/mingguan', 'LaporanKeuanganMingguanController@index');
+        Route::get('laporan-keuangan/mingguan/download', 'LaporanKeuanganMingguanController@download_excel');
+
         Route::get('laporan-keuangan/mingguan/detail', 'LaporanKeuanganMingguanController@detail');
 
         //bulanan
         Route::get('laporan-keuangan/bulanan', 'LaporanKeuanganBulananController@index');
+        Route::get('laporan-keuangan/bulanan/download', 'LaporanKeuanganBulananController@download_excel');
+
         Route::get('laporan-keuangan/bulanan/detail', 'LaporanKeuanganBulananController@detail');
     });
 });

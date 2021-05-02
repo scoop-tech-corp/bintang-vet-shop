@@ -140,7 +140,7 @@
             </tr>
           </thead>
           <tbody id="list-tagihan-jasa">
-            <tr class="text-center"><td colspan="8">Tidak ada data.</td></tr>
+            <tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>
           </tbody>
         </table>
       </div>
@@ -165,7 +165,7 @@
             </tr>
           </thead>
           <tbody id="list-tagihan-barang">
-            <tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>
+            <tr class="text-center"><td colspan="11">Tidak ada data.</td></tr>
           </tbody>
         </table>
       </div>
@@ -175,6 +175,9 @@
         <div style="font-weight: 700">Total tagihan</div>
         <div id="totalBayarTxt" class="p-left-10px" style="word-break: break-all;"></div>
       </div>
+    </div>
+    <div class="col-md-12 m-t-25px">
+      <div id="beErr" class="validate-error"></div>
     </div>
 
     <div class="col-md-12 m-t-25px">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanKeuanganHarian;
 use App\Models\ListofPayments;
 use DB;
 use Illuminate\Http\Request;
@@ -33,7 +34,8 @@ class LaporanKeuanganHarianController extends Controller
             ->join('branches', 'users.branch_id', '=', 'branches.id')
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
-            ->select('list_of_payments.id as list_of_payment_id', 'check_up_results.id as check_up_result_id', 'registrations.id_number as registration_number',
+            ->select('list_of_payments.id as list_of_payment_id', 'check_up_results.id as check_up_result_id',
+                'check_up_results.status_outpatient_inpatient as status_outpatient_inpatient', 'registrations.id_number as registration_number',
                 'patients.id_member as patient_number', 'patients.pet_category', 'patients.pet_name', 'registrations.complaint',
 
                 DB::raw("TRIM(SUM(detail_item_patients.price_overall) + SUM(detail_service_patients.price_overall))+0 as price_overall"),
@@ -42,7 +44,7 @@ class LaporanKeuanganHarianController extends Controller
                 DB::raw("TRIM(SUM(price_items.petshop_fee * detail_item_patients.quantity) + SUM(price_services.petshop_fee * detail_service_patients.quantity))+0 as petshop_fee"),
 
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(list_of_payments.created_at, '%d %b %Y') as created_at"))
-            ->groupBy('list_of_payments.id', 'check_up_results.id', 'registrations.id_number', 'patients.id_member', 'patients.pet_category', 'patients.pet_name',
+            ->groupBy('list_of_payments.id', 'check_up_results.id', 'check_up_results.status_outpatient_inpatient', 'registrations.id_number', 'patients.id_member', 'patients.pet_category', 'patients.pet_name',
                 'registrations.complaint', 'users.fullname', 'list_of_payments.created_at');
 
         if ($request->branch_id && $request->user()->role == 'admin') {
@@ -57,7 +59,7 @@ class LaporanKeuanganHarianController extends Controller
 
             $data = $data->orderBy($request->column, $request->orderby);
         } else {
-            $data = $data->orderBy('list_of_payments.id', 'desc');
+            $data = $data->orderBy('list_of_payments.id', 'asc');
         }
 
         $data = $data->get();
@@ -258,5 +260,17 @@ class LaporanKeuanganHarianController extends Controller
 
         return response()->json($data, 200);
 
+    }
+
+    public function download_excel(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis' && $request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        return (new LaporanKeuanganHarian())->download('Laporan Keuangan Harian.xlsx');
     }
 }

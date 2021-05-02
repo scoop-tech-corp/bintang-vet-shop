@@ -238,8 +238,10 @@ $(document).ready(function() {
 						+ `<td>${v.created_by}</td>`
 						+ `<td>${v.created_at}</td>`
 						+ `<td>
-								<button type="button" class="btn btn-warning openFormEdit" ${v.acceptance_status == 1 || v.acceptance_status == 3 ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" ${v.acceptance_status == 1 || v.acceptance_status == 3 ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-warning openFormEdit" 
+                  ${(v.acceptance_status == 1 || v.acceptance_status == 3) && role.toLowerCase() != 'admin'  ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+								<button type="button" class="btn btn-danger openFormDelete" 
+                  ${(v.acceptance_status == 1 || v.acceptance_status == 3) && role.toLowerCase() != 'admin' ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 							</td>`
 						+ `</tr>`;
 				});
