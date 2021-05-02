@@ -107,26 +107,30 @@ $(document).ready(function() {
 				let listHasilPemeriksaan = '';
 				$('#list-hasil-pemeriksaan tr').remove();
 
-				$.each(data, function(idx, v) {
-					listHasilPemeriksaan += `<tr>`
-						+ `<td>${++idx}</td>`
-						+ `<td>${v.registration_number}</td>`
-						+ `<td>${v.patient_number}</td>`
-            + `<td>${v.pet_category}</td>`
-            + `<td>${v.pet_name}</td>`
-            + `<td>${v.owner_name}</td>`
-						+ `<td>${v.complaint}</td>`
-            + `<td>${generateBedge(v.status_finish)}</td>`
-            + `<td>${(v.status_outpatient_inpatient == 1) ? 'Rawat Inap' : 'Rawat Jalan'}</td>`
-						+ `<td>${v.created_by}</td>`
-						+ `<td>${v.created_at}</td>`
-            + `<td>
-                <button type="button" class="btn btn-info openDetail" ${v.status_finish == 0 ? 'disabled' : ''} value=${v.id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-warning openFormEdit" ${v.status_finish == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-								<button type="button" class="btn btn-danger openFormDelete" ${v.status_finish == 1 ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-							</td>`
-						+ `</tr>`;
-				});
+        if (data.length) {
+          $.each(data, function(idx, v) {
+            listHasilPemeriksaan += `<tr>`
+              + `<td>${++idx}</td>`
+              + `<td>${v.registration_number}</td>`
+              + `<td>${v.patient_number}</td>`
+              + `<td>${v.pet_category}</td>`
+              + `<td>${v.pet_name}</td>`
+              + `<td>${v.owner_name}</td>`
+              + `<td>${v.complaint}</td>`
+              + `<td>${generateBedge(v.status_finish)}</td>`
+              + `<td>${(v.status_outpatient_inpatient == 1) ? 'Rawat Inap' : 'Rawat Jalan'}</td>`
+              + `<td>${v.created_by}</td>`
+              + `<td>${v.created_at}</td>`
+              + `<td>
+                  <button type="button" class="btn btn-info openDetail" ${v.status_finish == 0 && role.toLowerCase() != 'admin' ? 'disabled' : ''} value=${v.id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-warning openFormEdit" ${v.status_finish == 1 && role.toLowerCase() != 'admin' ? 'disabled' : ''} value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-danger openFormDelete" ${v.status_finish == 1 && role.toLowerCase() != 'admin' ? 'disabled' : ''} value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </td>`
+              + `</tr>`;
+          });
+        } else {
+          listHasilPemeriksaan += `<tr class="text-center"><td colspan="12">Tidak ada data.</td></tr>`;
+        }
 				$('#list-hasil-pemeriksaan').append(listHasilPemeriksaan);
 
 				function generateBedge(status) {

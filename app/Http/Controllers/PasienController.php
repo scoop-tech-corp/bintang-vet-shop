@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Patient;
 use DB;
 use Illuminate\Http\Request;
@@ -86,6 +87,25 @@ class PasienController extends Controller
             ->where('id', '=', $request->user()->branch_id)
             ->first();
 
+        $temp_branch = 0;
+
+        if ($request->user()->role == 'admin') {
+
+            $branch = Branch::find($request->id_cabang);
+
+            if (is_null($branch)) {
+
+                return response()->json([
+                    'message' => 'Cabang yang dimasukkan tidak valid!',
+                    'errors' => ['Data tidak ditemukan!'],
+                ], 422);
+            }
+
+            $temp_branch = $request->id_cabang;
+        } else {
+            $temp_branch = $request->user()->branch_id;
+        }
+
         $patient_number = 'BVC-P-' . $getbranchuser->branch_code . '-' . str_pad($lastpatient + 1, 4, 0, STR_PAD_LEFT);
 
         $patient = Patient::create([
@@ -98,7 +118,7 @@ class PasienController extends Controller
             'owner_name' => $request->nama_pemilik,
             'owner_address' => $request->alamat_pemilik,
             'owner_phone_number' => strval($request->nomor_ponsel_pengirim),
-            'branch_id' => $request->user()->branch_id,
+            'branch_id' => $temp_branch,
             'user_id' => $request->user()->id,
         ]);
 
@@ -147,6 +167,41 @@ class PasienController extends Controller
             ], 404);
         }
 
+        $temp_branch = 0;
+        $temp_id_member = "";
+
+        if ($request->user()->role == 'admin') {
+
+            $branch = Branch::find($request->id_cabang);
+
+            if (is_null($branch)) {
+
+                return response()->json([
+                    'message' => 'Cabang yang dimasukkan tidak valid!',
+                    'errors' => ['Data tidak ditemukan!'],
+                ], 422);
+            }
+
+            $lastpatient = DB::table('patients')
+                ->where('branch_id', '=', $request->id_cabang)
+                ->count();
+
+            $getbranchuser = DB::table('branches')
+                ->select('branch_code')
+                ->where('id', '=', $request->id_cabang)
+                ->first();
+
+            $patient_number = 'BVC-P-' . $getbranchuser->branch_code . '-' . str_pad($lastpatient + 1, 4, 0, STR_PAD_LEFT);
+
+            $temp_id_member = $patient_number;
+            $temp_branch = $request->id_cabang;
+
+        } else {
+            $temp_branch = $request->user()->branch_id;
+            $temp_id_member = $request->id_member;
+        }
+
+        $patient->id_member = $temp_id_member;
         $patient->pet_category = $request->kategori_hewan;
         $patient->pet_name = $request->nama_hewan;
         $patient->pet_gender = $request->jenis_kelamin_hewan;
@@ -156,6 +211,7 @@ class PasienController extends Controller
         $patient->owner_address = $request->alamat_pemilik;
         $patient->owner_phone_number = $request->nomor_ponsel_pengirim;
         $patient->user_update_id = $request->user()->id;
+        $patient->branch_id = $temp_branch;
         $patient->updated_at = \Carbon\Carbon::now();
         $patient->save();
 
@@ -220,7 +276,7 @@ class PasienController extends Controller
         if ($request->user()->role == 'dokter') {
             $data = $data
             // ->where('users.branch_id', '=', $request->user()->branch_id)
-            ->where('registrations.doctor_user_id', '=', $request->user()->id);
+                ->where('registrations.doctor_user_id', '=', $request->user()->id);
         }
 
         $data = $data->orderBy('registrations.id', 'desc');

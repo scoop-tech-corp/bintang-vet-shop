@@ -37,6 +37,38 @@ $(document).ready(function() {
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
 
+  $('.btn-download-excel').click(function() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/laporan-keuangan/bulanan/download',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, month: paramUrlSetup.month, year: paramUrlSetup.year, branch_id: paramUrlSetup.branchId },
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+
+	});
+
   $('.onOrdering').click(function() {
 		const column = $(this).attr('data');
 		const orderBy = $(this).attr('orderby');

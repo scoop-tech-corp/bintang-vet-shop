@@ -50,6 +50,38 @@ $(document).ready(function() {
 		loadLaporanKeuanganHarian();
   });
 
+  $('.btn-download-excel').click(function() {
+		$.ajax({
+			url     : $('.baseUrl').val() + '/api/laporan-keuangan/harian/download',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, date: paramUrlSetup.date, branch_id: paramUrlSetup.branchId },
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+
+	});
+
   function onFilterCabang(value) {
     paramUrlSetup.branchId = value;
 		loadLaporanKeuanganHarian();

@@ -16,6 +16,9 @@
 
       </div>
       <div class="section-right-box-title">
+        <button type="button" class="btn btn-success btn-download-excel" title="Download Excel">
+          <i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Download Excel
+        </button>
         <select id="filterCabang" style="width: 100%"></select>
       </div>
     </div>

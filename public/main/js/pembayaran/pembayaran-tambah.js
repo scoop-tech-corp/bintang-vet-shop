@@ -71,13 +71,86 @@ $(document).ready(function() {
     $('#modal-confirmation').modal('show');
   });
 
+  // $('#btnPrint').click(function () {
+  //   const fd = new FormData();
+  //   fd.append('check_up_result_id', 1);
+  //   fd.append('service_payment', JSON.stringify([{detail_service_patient_id: 1}]));
+  //   fd.append('item_payment', JSON.stringify([{detail_item_patient_id:1},{detail_item_patient_id:2},{detail_item_patient_id:3}]));
+  //   $.ajax({
+	// 		url     : $('.baseUrl').val() + '/api/pembayaran/print',
+	// 		headers : { 'Authorization': `Bearer ${token}` },
+	// 		type    : 'POST',
+	// 		data: fd, contentType: false, cache: false,
+  //     processData: false,
+	// 		beforeSend: function() { $('#loading-screen').show(); },
+	// 		success: function(resp) {
+  //       console.log('getDataPrint', resp);
+  //       let table = [];
+  //       let price_overall = resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  //       let address = resp.address;
+  //       let cashier_name = resp.cashier_name;
+  //       let id_patient = resp.id_patient;
+  //       let owner_name = resp.owner_name;
+  //       let pet_name = resp.pet_name;
+  //       let quantity_total = resp.quantity_total;
+  //       let registration_number = resp.registration_number;
+  //       let time = resp.time;
+
+  //       resp.data_service.forEach(ds => {
+  //         table.push({name: ds.item_name, qty: ds.quantity, 
+  //           harga: ds.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
+  //           total: ds.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
+  //       });
+  //       resp.data_item.forEach(di => {
+  //         table.push({name: di.item_name, qty: di.quantity, 
+  //           harga: di.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
+  //           total: di.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
+  //       });        
+
+  //       const datas = {
+  //         _token: $('meta[name="csrf-token"]').attr('content'),
+  //         table, price_overall, address, cashier_name, id_patient,
+  //         owner_name, pet_name, quantity_total, registration_number,
+  //         time
+  //       };
+
+  //       $.ajax({
+  //         url : $('.baseUrl').val() + '/print',
+  //         type: 'POST',
+  //         dataType: 'JSON',
+  //         headers: { 'Authorization': `Bearer ${token}` },
+  //         data: datas,
+  //         beforeSend: function() { $('#loading-screen').show(); },
+  //         success: function(resp) {
+  //           console.log('print berhasil');
+          
+  //         }, complete: function() { $('#loading-screen').hide(); }
+  //         , error: function(err) {
+  //           console.log('print gagal');
+  //           if (err.status == 401) {
+  //             localStorage.removeItem('vet-clinic');
+  //             location.href = $('.baseUrl').val() + '/masuk';
+  //           }
+  //         }
+  //       });
+	// 		}, complete: function() { $('#loading-screen').hide(); },
+	// 		error: function(err) {
+	// 			if (err.status == 401) {
+	// 				localStorage.removeItem('vet-clinic');
+	// 				location.href = $('.baseUrl').val() + '/masuk';
+	// 			}
+	// 		}
+	// 	});
+
+  // });
+
   function processSaved() {
 
     let finalSelectedJasa = []; let finalSelectedBarang = [];
 
     const fd = new FormData();
     fd.append('check_up_result_id', $('#selectedPasien').val());
-    
+    // console.log('checkUpResultId', $('#selectedPasien').val());
     calculationPay.forEach(dt => {
       if (dt.type == 'jasa') {
         finalSelectedJasa.push({ detail_service_patient_id: dt.id});
@@ -85,7 +158,8 @@ $(document).ready(function() {
         finalSelectedBarang.push({ detail_item_patient_id: dt.id});
       }
     });
-
+    // console.log('service_payment', finalSelectedJasa);
+    // console.log('item_payment', finalSelectedBarang);
     fd.append('service_payment', JSON.stringify(finalSelectedJasa));
     fd.append('item_payment', JSON.stringify(finalSelectedBarang));
 
@@ -101,6 +175,8 @@ $(document).ready(function() {
 
         $("#msg-box .modal-body").text('Berhasil Menambah Data');
         $('#msg-box').modal('show');
+
+        processPrint($('#selectedPasien').val(), finalSelectedJasa, finalSelectedBarang);
 
         setTimeout(() => {
           window.location.href = $('.baseUrl').val() + '/pembayaran';
@@ -119,6 +195,78 @@ $(document).ready(function() {
         }
       }
     });
+  }
+
+  function processPrint(check_up_result_id, service_payment, item_payment) {
+    const fd = new FormData();
+    fd.append('check_up_result_id', check_up_result_id);
+    fd.append('service_payment', JSON.stringify(service_payment));
+    fd.append('item_payment', JSON.stringify(item_payment));
+    $.ajax({
+			url     : $('.baseUrl').val() + '/api/pembayaran/print',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'POST',
+			data: fd, contentType: false, cache: false,
+      processData: false,
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(resp) {
+        // console.log('getDataPrint', resp);
+        let table = [];
+        let price_overall = resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        let address = resp.address;
+        let cashier_name = resp.cashier_name;
+        let id_patient = resp.id_patient;
+        let owner_name = resp.owner_name;
+        let pet_name = resp.pet_name;
+        let quantity_total = resp.quantity_total;
+        let registration_number = resp.registration_number;
+        let time = resp.time;
+
+        resp.data_service.forEach(ds => {
+          table.push({name: ds.item_name, qty: ds.quantity, 
+            harga: ds.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
+            total: ds.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
+        });
+        resp.data_item.forEach(di => {
+          table.push({name: di.item_name, qty: di.quantity, 
+            harga: di.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
+            total: di.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
+        });        
+
+        const datas = {
+          _token: $('meta[name="csrf-token"]').attr('content'),
+          table, price_overall, address, cashier_name, id_patient,
+          owner_name, pet_name, quantity_total, registration_number,
+          time
+        };
+
+        $.ajax({
+          url : $('.baseUrl').val() + '/print',
+          type: 'POST',
+          dataType: 'JSON',
+          headers: { 'Authorization': `Bearer ${token}` },
+          data: datas,
+          beforeSend: function() { $('#loading-screen').show(); },
+          success: function(resp) {
+            // console.log('print berhasil');
+          
+          }, complete: function() { $('#loading-screen').hide(); }
+          , error: function(err) {
+            // console.log('print gagal');
+            if (err.status == 401) {
+              localStorage.removeItem('vet-clinic');
+              location.href = $('.baseUrl').val() + '/masuk';
+            }
+          }
+        });
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
   }
 
   function formConfigure() {
@@ -257,7 +405,7 @@ $(document).ready(function() {
           + `</tr>`;
           ++no;
       });
-    } else { rowListTagihanBarang += `<tr class="text-center"><td colspan="9">Tidak ada data.</td></tr>` }
+    } else { rowListTagihanBarang += `<tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>` }
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 

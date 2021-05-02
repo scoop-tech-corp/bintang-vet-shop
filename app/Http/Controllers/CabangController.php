@@ -22,12 +22,13 @@ class CabangController extends Controller
             ->join('users', 'branches.user_id', '=', 'users.id')
             ->select('branches.id', 'branch_code', 'branch_name',
                 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"))
+                DB::raw("DATE_FORMAT(branches.created_at, '%d %b %Y') as created_at"), 'branches.address')
             ->where('branches.isDeleted', '=', 0);
 
         if ($request->keyword) {
             $branch = $branch->where('branch_code', 'like', '%' . $request->keyword . '%')
                 ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.address', 'like', '%' . $request->keyword . '%')
                 ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
         }
 
@@ -57,6 +58,7 @@ class CabangController extends Controller
         $validate = Validator::make($request->all(), [
             'KodeCabang' => 'required|string|max:5|unique:branches,branch_code',
             'NamaCabang' => 'required|string|max:20',
+            'Alamat' => 'required|string|min:5',
         ]);
 
         if ($validate->fails()) {
@@ -71,6 +73,7 @@ class CabangController extends Controller
         Branch::create([
             'branch_code' => $request->KodeCabang,
             'branch_name' => $request->NamaCabang,
+            'address' => $request->Alamat,
             'user_id' => $request->user()->id,
         ]);
 
@@ -90,8 +93,9 @@ class CabangController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'KodeCabang' => 'required|string|max:5', //|unique:branches,branch_code
+            //'KodeCabang' => 'required|string|max:5', //|unique:branches,branch_code
             'NamaCabang' => 'required|string|max:20',
+            'Alamat' => 'required|string|min:5',
         ]);
 
         if ($validate->fails()) {
@@ -112,8 +116,8 @@ class CabangController extends Controller
             ], 404);
         }
 
-        $branch->branch_code = $request->KodeCabang;
         $branch->branch_name = $request->NamaCabang;
+        $branch->address = $request->Alamat;
         $branch->user_update_id = $request->user()->id;
         $branch->updated_at = \Carbon\Carbon::now();
         $branch->save();
