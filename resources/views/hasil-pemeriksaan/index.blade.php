@@ -37,7 +37,9 @@
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody id="list-hasil-pemeriksaan"></tbody>
+        <tbody id="list-hasil-pemeriksaan">
+          <tr class="text-center"><td colspan="12">Tidak ada data.</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
