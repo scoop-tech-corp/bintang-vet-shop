@@ -40,7 +40,8 @@ class User extends Authenticatable implements JWTSubject
         'created_by',
         'update_by',
         'deleted_by',
-        'deleted_at'
+        'deleted_at',
+        'isDeleted'
     ];
 
     /**
