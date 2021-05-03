@@ -274,6 +274,6 @@ class LaporanKeuanganBulananController extends Controller
             ], 403);
         }
 
-        return (new LaporanKeuanganBulanan())->download('Laporan Keuangan Bulanan.xlsx');
+        return (new LaporanKeuanganBulanan($request->orderby, $request->column, $request->month, $request->year, $request->branch_id))->download('Laporan Keuangan Bulanan.xlsx');
     }
 }
