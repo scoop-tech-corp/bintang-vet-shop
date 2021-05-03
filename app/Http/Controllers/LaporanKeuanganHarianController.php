@@ -271,6 +271,6 @@ class LaporanKeuanganHarianController extends Controller
             ], 403);
         }
 
-        return (new LaporanKeuanganHarian())->download('Laporan Keuangan Harian.xlsx');
+        return (new LaporanKeuanganHarian($request->orderby, $request->column, $request->date, $request->branch_id))->download('Laporan Keuangan Harian.xlsx');
     }
 }
