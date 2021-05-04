@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\MultipleSheetUploadDaftarBarang;
 use App\Imports\MultipleSheetImportDaftarBarang;
+use App\Models\HistoryItemMovement;
 use App\Models\ListofItems;
 use DB;
 use Illuminate\Http\Request;
@@ -176,6 +177,7 @@ class DaftarBarangController extends Controller
             $qty_item = $check_stock->total_item - $request->jumlah_barang;
 
             $item_history = HistoryItemMovement::create([
+                'price_item_id' => $request->id,
                 'item_id' => $request->id,
                 'quantity' => $qty_item,
                 'status' => 'tambah',
@@ -186,6 +188,7 @@ class DaftarBarangController extends Controller
             $qty_item = $request->jumlah_barang - $check_stock->total_item;
 
             $item_history = HistoryItemMovement::create([
+                'price_item_id' => $request->id,
                 'item_id' => $request->id,
                 'quantity' => $qty_item,
                 'status' => 'kurang',
