@@ -12,9 +12,17 @@ class LaporanKeuanganHarian implements WithMultipleSheets
 
     protected $sheets;
 
-    public function __construct()
-    {
+    protected $orderby;
+    protected $column;
+    protected $date;
+    protected $branch_id;
 
+    public function __construct($orderby, $column, $date, $branch_id)
+    {
+        $this->orderby = $orderby;
+        $this->column = $column;
+        $this->date = $date;
+        $this->branch_id = $branch_id;
     }
 
     function array(): array
@@ -27,7 +35,7 @@ class LaporanKeuanganHarian implements WithMultipleSheets
         $sheets = [];
 
         $sheets = [
-            new DataPasien()
+            new DataPasien($this->orderby, $this->column, $this->date, $this->branch_id),
         ];
 
         return $sheets;

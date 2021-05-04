@@ -273,6 +273,6 @@ class LaporanKeuanganMingguanController extends Controller
             ], 403);
         }
 
-        return (new LaporanKeuanganMingguan())->download('Laporan Keuangan Mingguan.xlsx');
+        return (new LaporanKeuanganMingguan($request->orderby, $request->column, $request->date_from, $request->date_to, $request->branch_id))->download('Laporan Keuangan Mingguan.xlsx');
     }
 }
