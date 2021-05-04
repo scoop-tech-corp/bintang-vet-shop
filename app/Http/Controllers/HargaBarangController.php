@@ -86,6 +86,7 @@ class HargaBarangController extends Controller
 
         $check_list_item = DB::table('price_items')
             ->where('list_of_items_id', '=', $request->ListOfItemsId)
+            ->where('isDeleted', '=', 0)
             ->count();
 
         if ($check_list_item > 0) {
@@ -289,6 +290,7 @@ class HargaBarangController extends Controller
 
             $check_duplicate = DB::table('price_items')
                 ->where('list_of_items_id', '=', $key_result['kode_daftar_barang'])
+                ->where('isDeleted', '=', 0)
                 ->count();
 
             if ($check_duplicate > 0) {

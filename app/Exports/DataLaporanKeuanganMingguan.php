@@ -9,22 +9,23 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class DataPasien implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
+class DataLaporanKeuanganMingguan implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
     /**
      * @return \Illuminate\Support\Collection
      */
-
     protected $orderby;
     protected $column;
-    protected $date;
+    protected $date_from;
+    protected $date_to;
     protected $branch_id;
 
-    public function __construct($orderby, $column, $date, $branch_id)
+    public function __construct($orderby, $column, $date_from, $date_to, $branch_id)
     {
         $this->orderby = $orderby;
         $this->column = $column;
-        $this->date = $date;
+        $this->date_from = $date_from;
+        $this->date_to = $date_to;
         $this->branch_id = $branch_id;
     }
 
@@ -62,16 +63,9 @@ class DataPasien implements FromCollection, ShouldAutoSize, WithHeadings, WithTi
             $data = $data->where('branches.id', '=', $this->branch_id);
         }
 
-        if ($this->date) {
-            $data = $data->where('list_of_payments.created_at', '=', $this->date);
+        if ($this->date_from && $this->date_to) {
+            $data = $data->whereBetween('list_of_payments.created_at', [$this->date_from, $this->date_to]);
         }
-
-        // if ($this->orderby) {
-
-        //     $data = $data->orderBy($this->column, $this->orderby);
-        // } else {
-        //     $data = $data->orderBy('list_of_payments.id', 'asc');
-        // }
 
         $data2 = DB::table('list_of_payments')
             ->join('check_up_results', 'list_of_payments.check_up_result_id', '=', 'check_up_results.id')
@@ -102,9 +96,10 @@ class DataPasien implements FromCollection, ShouldAutoSize, WithHeadings, WithTi
             $data2 = $data2->where('branches.id', '=', $this->branch_id);
         }
 
-        if ($this->date) {
-            $data2 = $data2->where('list_of_payments.created_at', '=', $this->date);
+        if ($this->date_from && $this->date_to) {
+            $data2 = $data2->whereBetween('list_of_payments.created_at', [$this->date_from, $this->date_to]);
         }
+
         $data2 = $data2->groupBy('list_of_payments.id', 'check_up_results.id', 'registrations.id_number', 'patients.id_member', 'patients.pet_category', 'patients.pet_name',
             'registrations.complaint', 'users.fullname', 'list_of_payments.created_at', 'check_up_results.status_outpatient_inpatient')
             ->union($data)
@@ -123,7 +118,7 @@ class DataPasien implements FromCollection, ShouldAutoSize, WithHeadings, WithTi
 
     public function title(): string
     {
-        return 'Laporan Keuangan Harian';
+        return 'Laporan Keuangan Mingguan';
     }
 
     public function map($list_of_payments): array

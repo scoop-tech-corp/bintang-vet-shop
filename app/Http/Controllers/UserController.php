@@ -48,16 +48,16 @@ class UserController extends Controller
 
         $user = DB::table('users')
             ->join('branches', 'users.branch_id', '=', 'branches.id')
-            ->select('users.branch_id', 'branches.branch_name', 'users.username', 'users.fullname', 'users.email', 'users.role', 'users.status', 'users.isDeleted')
+            ->select('users.branch_id', 'branches.branch_name', 'users.username', 'users.image_profile', 'users.fullname', 'users.email', 'users.role', 'users.status', 'users.isDeleted')
             ->where('users.id', '=', $request->user()->id)
-            ->first();
+            ->get();
 
-        if ($user->status == 0) {
+        if ($user[0]->status == 0) {
             return response()->json([
                 'message' => 'Akun yang anda gunakan tidak aktif!',
                 'errors' => ['Akses tidak diijinkan!'],
             ], 403);
-        } elseif ($user->isDeleted == 1) {
+        } elseif ($user[0]->isDeleted == 1) {
             return response()->json([
                 'message' => 'Akun yang anda gunakan sudah dihapus!',
                 'errors' => ['Akses tidak diijinkan!'],
@@ -67,13 +67,14 @@ class UserController extends Controller
         return response()->json(
             [
                 'user_id' => $request->user()->id,
-                'branch_id' => $user->branch_id,
-                'branch_name' => $user->branch_name,
+                'branch_id' => $user[0]->branch_id,
+                'branch_name' => $user[0]->branch_name,
                 'token' => $token,
-                'username' => $user->username,
-                'fullname' => $user->fullname,
-                'email' => $user->email,
-                'role' => $user->role,
+                'username' => $user[0]->username,
+                'fullname' => $user[0]->fullname,
+                'email' => $user[0]->email,
+                'image_profile' => $user[0]->image_profile,
+                'role' => $user[0]->role,
             ]
         );
     }
