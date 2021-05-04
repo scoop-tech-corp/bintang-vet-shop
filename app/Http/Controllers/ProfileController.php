@@ -15,7 +15,6 @@ class ProfileController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'user_id' => 'required',
                 'file' => 'required|mimes:png,jpg|max:2048',
             ]);
 
@@ -25,15 +24,24 @@ class ProfileController extends Controller
 
         if ($files = $request->file('file')) {
 
-            //store file into document folder
-            $file = $request->file->store('public/documents');
+            $fileName = $request->file->getClientOriginalName();
 
-            //store your file into database
+            $path = $request->file('file')->move(public_path("/documents"), $fileName);
+            $photoURL = url('/' . $fileName);
+
+            //return "public/documents/" . $fileName;
+
+            //return response()->json(['url' => $photoURL], 200);
+
+            //store file into document folder
+            $file = "public/documents/" . $fileName;
+
+            // //store your file into database
             // $document = new User();
             // $document->image_profile = $file;
             // $document->id = $request->user_id;
             // $document->save();
-            $user = User::find($request->user_id);
+            $user = User::find($request->user()->id);
 
             if (is_null($user)) {
                 return response()->json([
@@ -46,19 +54,20 @@ class ProfileController extends Controller
             $user->updated_at = \Carbon\Carbon::now();
             $user->save();
 
+            // return response()->json([
+            //     "success" => true,
+            //     "message" => "File successfully uploaded",
+            //     "file" => $file,
+            // ]);
             return response()->json([
-                "success" => true,
-                "message" => "File successfully uploaded",
-                "file" => $file,
-            ]);
+                'message' => 'Berhasil menambah Foto',
+            ], 200);
         }
     }
 
     public function update_data_user(Request $request)
     {
         if ($request->user()->id) {
-
-          info($request);
 
             $validator = Validator::make($request->all(), [
                 'username' => 'required|string|min:3|max:20',
