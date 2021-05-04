@@ -119,7 +119,7 @@ class ProfileController extends Controller
                 ->select('users.username', 'users.birth_place', 'users.birthdate', 'users.email',
                     'users.phone_number', 'users.address', 'users.image_profile')
                 ->where('users.id', '=', $request->user()->id)
-                ->get();
+                ->first();
 
             return response()->json($user, 200);
 
