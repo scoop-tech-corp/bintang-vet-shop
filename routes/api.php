@@ -38,6 +38,10 @@ Route::group(['middleware' => ['api']], function () {
 
         Route::get('user/dokter', 'UserController@doctor');
 
+        Route::post('user/upload-image', 'ProfileController@upload_photo_profile');
+        Route::get('user/profile', 'ProfileController@get_data_user');
+        Route::put('user/profile', 'ProfileController@update_data_user');
+
         //pasien
         Route::get('pasien', 'PasienController@index');
         Route::post('pasien', 'PasienController@create');
