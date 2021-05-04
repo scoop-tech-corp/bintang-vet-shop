@@ -56,6 +56,7 @@ const loginApp = new Vue({
             username: getDataLogin.username,
             email: getDataLogin.email,
             role: getDataLogin.role,
+            image_profile: getDataLogin.image_profile,
             token: getDataLogin.token,
             user_id: getDataLogin.user_id,
             branch_name: getDataLogin.branch_name

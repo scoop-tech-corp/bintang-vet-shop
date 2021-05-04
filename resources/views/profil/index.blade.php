@@ -6,7 +6,7 @@
     <!-- Profile Image -->
     <div class="box box-info">
       <div class="box-body box-profile">
-        <img class="profile-user-img img-responsive img-circle" alt="User profile picture">
+        <img class="profile-user-img img-responsive img-circle">
         <h3 class="profile-username text-center">-</h3>
         <p class="profile-role text-muted text-center">-</p>
         <div class="text-center">
@@ -22,10 +22,12 @@
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" placeholder="username">
+          <div id="usernameErr1" class="validate-error"></div>
         </div>
         <div class="form-group">
           <label for="tempatLahir">Tempat Lahir</label>
-          <input type="text" class="form-control" id="password" placeholder="tempat lahir">
+          <input type="text" class="form-control" id="tempatLahir" placeholder="tempat lahir">
+          <div id="tempatLahirErr1" class="validate-error"></div>
         </div>
         <div class="form-group">
           <label for="tanggalLahir">Tanggal Lahir</label>
@@ -35,22 +37,29 @@
             </div>
             <input type="text" class="form-control" id="tanggalLahir" placeholder="yyyy-mm-dd" autocomplete="off">
           </div>
+          <div id="tanggalLahirErr1" class="validate-error"></div>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
           <input type="text" class="form-control" id="email" placeholder="contoh: budi@gmail.com">
+          <div id="emailErr1" class="validate-error"></div>
         </div>
         <div class="form-group">
           <label for="nomor ponsel">Nomor Ponsel</label>
           <input type="number" class="form-control" id="nomorponsel" placeholder="nomor ponsel">
+          <div id="noponselErr1" class="validate-error"></div>
         </div>
         <div class="form-group">
           <label for="alamat">Alamat</label>
           <textarea class="form-control" rows="3" cols="3" id="alamat" placeholder="alamat"></textarea>
+          <div id="alamatErr1" class="validate-error"></div>
+        </div>
+        <div class="form-group">
+          <div id="beErr" class="validate-error"></div>
         </div>
       </div>
       <div class="box-footer">
-        <button class="btn btn-info">Update</button>
+        <button class="btn btn-info" id="btnSubmitProfil">Simpan</button>
       </div>
     </div>
   </div>
@@ -66,14 +75,14 @@
 			</div>
 			<div class="modal-body">
         <div class="temp-img-upload-section">
-          <img class="profile-user-img img-responsive img-circle" alt="User profile picture">
+          <img class="profile-user-img img-responsive img-circle">
         </div>
         <div class="input-file-section">
           <input type="file" id="inputfileimg">
         </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="btnSubmitPendaftaranPasien">Simpan</button>
+				<button type="button" class="btn btn-primary" id="btnSubmitUploadImage">Simpan</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -81,7 +90,7 @@
 	<!-- /.modal-dialog -->
 </div>
 
-
+@component('layout.message-box') @endcomponent
 
 @endsection
 

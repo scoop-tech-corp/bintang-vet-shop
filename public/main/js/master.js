@@ -1,6 +1,7 @@
 let username = '';
 let fullname = '';
 let role = '';
+let imageProfile = '';
 let email = '';
 let token = '';
 let userId = '';
@@ -14,16 +15,20 @@ $(document).ready(function() {
   } else {
     getAuthUser = JSON.parse(getAuthUser);
     
-    username   = getAuthUser.username;
-    fullname   = getAuthUser.fullname;
-    role       = getAuthUser.role.toLowerCase();
-    userId     = getAuthUser.user_id;
-    token      = getAuthUser.token;
-    email      = getAuthUser.email;
-    branchName = getAuthUser.branch_name;
+    username     = getAuthUser.username;
+    fullname     = getAuthUser.fullname;
+    role         = getAuthUser.role.toLowerCase();
+    imageProfile = getAuthUser.image_profile;
+    userId       = getAuthUser.user_id;
+    token        = getAuthUser.token;
+    email        = getAuthUser.email;
+    branchName   = getAuthUser.branch_name;
 
     $('.username-txt').append(username);
     $('.nameAndRole-txt').append(fullname + ' - ' + role + ' - ' + branchName);
+
+    const setUrlImage = `${$('.baseUrl').val()}${imageProfile ? imageProfile : '/assets/image/avatar-default.svg'}`;
+    $('.image-header').attr("src", setUrlImage);
 
     const getUrl = window.location.pathname;
     if (getUrl.includes('profil')) {
