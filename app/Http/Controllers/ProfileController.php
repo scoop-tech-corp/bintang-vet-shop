@@ -34,7 +34,7 @@ class ProfileController extends Controller
             //return response()->json(['url' => $photoURL], 200);
 
             //store file into document folder
-            $file = "public/documents/" . $fileName;
+            $file = "/documents/" . $fileName;
 
             // //store your file into database
             // $document = new User();
