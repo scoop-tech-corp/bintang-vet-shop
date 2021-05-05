@@ -1,0 +1,11 @@
+.input-file-section {
+  margin-top: 15px;
+}
+.temp-img-upload-section .profile-user-img, .box-profile .profile-user-img{
+  height: 140px;
+}
+
+.input-file-section #inputfileimg {
+  margin: 0 auto;
+  width: 200px;
+}
