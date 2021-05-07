@@ -6,7 +6,7 @@ use App\Models\CheckUpResult;
 use App\Models\DetailItemPatient;
 use App\Models\DetailServicePatient;
 use App\Models\HistoryItemMovement;
-use App\Models\images_check_up_result;
+use App\Models\ImagesCheckUpResults;
 use App\Models\InPatient;
 use App\Models\ListofItems;
 use App\Models\ListofServices;
@@ -32,7 +32,7 @@ class HasilPemeriksaanController extends Controller
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('check_up_results.id', 'registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category', 'patients.pet_name',
-                'patients.owner_name','registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
+                'patients.owner_name', 'registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"));
 
         if ($request->user()->role == 'dokter') {
@@ -544,6 +544,13 @@ class HasilPemeriksaanController extends Controller
             ->get();
 
         $data['inpatient'] = $inpatient;
+
+        $image = DB::table('images_check_up_results')
+        ->select('images_check_up_results.image')
+        ->where('check_up_result_id','=',$data->id)
+        ->get();
+
+        $data['images'] = $image;
 
         return response()->json($data, 200);
     }
@@ -1552,33 +1559,40 @@ class HasilPemeriksaanController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
+            'check_up_result_id' => 'required',
+            'filenames' => 'required',
+            'filenames.*' => 'mimes:jpg,png',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'message' => $validator->messages()->first(),
-            ], 200);
-            //return sendCustomResponse($validator->messages()->first(), 'error', 500);
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
-        if ($file = $request->file('file')) {
-            $path = $file->store('public/files');
-            $name = $file->getClientOriginalName();
+        if ($request->hasfile('filenames')) {
+            $files[] = $request->file('filenames');
+            foreach ($files as $file) {
 
-            //store your file into directory and db
-            $save = new images_check_up_result();
-            $save->name = $file;
-            $save->store_path = $path;
-            $save->save();
+                foreach ($file as $fil) {
 
-            return response()->json([
-                "success" => true,
-                "message" => "File successfully uploaded",
-                "file" => $file,
-            ]);
+                    $name = $fil->getClientOriginalName();
 
+                    $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                    $fileName = "/image_check_up_result/" . $name;
+
+                    $file = new ImagesCheckUpResults();
+                    $file->image = $fileName;
+                    $file->check_up_result_id = $request->check_up_result_id;
+                    $file->user_id = $request->user()->id;
+                    $file->save();
+                }
+
+            }
         }
 
+        return response()->json([
+            'message' => 'Berhasil',
+        ], 200);
     }
 
     public function payment(Request $request)
