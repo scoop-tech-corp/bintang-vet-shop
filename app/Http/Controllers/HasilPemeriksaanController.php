@@ -1574,7 +1574,7 @@ class HasilPemeriksaanController extends Controller
 
                 foreach ($file as $fil) {
 
-                    $name = $fil->getClientOriginalName();
+                    $name = $fil->hashName();
 
                     $fil->move(public_path() . '/image_check_up_result/', $name);
 
