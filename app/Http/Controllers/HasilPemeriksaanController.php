@@ -13,6 +13,7 @@ use App\Models\ListofServices;
 use App\Models\Registration;
 use App\Models\TempCountItem;
 use DB;
+use File;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -546,9 +547,9 @@ class HasilPemeriksaanController extends Controller
         $data['inpatient'] = $inpatient;
 
         $image = DB::table('images_check_up_results')
-        ->select('images_check_up_results.image')
-        ->where('check_up_result_id','=',$data->id)
-        ->get();
+            ->select('images_check_up_results.image')
+            ->where('check_up_result_id', '=', $data->id)
+            ->get();
 
         $data['images'] = $image;
 
@@ -1561,11 +1562,16 @@ class HasilPemeriksaanController extends Controller
         $validator = Validator::make($request->all(), [
             'check_up_result_id' => 'required',
             'filenames' => 'required',
-            'filenames.*' => 'mimes:jpg,png',
+            'filenames.*' => 'required|mimes:jpg,png|max:2048',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
         }
 
         if ($request->hasfile('filenames')) {
@@ -1593,6 +1599,90 @@ class HasilPemeriksaanController extends Controller
         return response()->json([
             'message' => 'Berhasil',
         ], 200);
+    }
+
+    public function update_upload_images(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+
+        }
+
+        $validator = Validator::make($request->all(), [
+            'check_up_result_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
+        }
+
+        $find_image = DB::table('images_check_up_results')
+            ->select('images_check_up_results.image')
+            ->where('check_up_result_id', '=', $request->check_up_result_id)
+            ->get();
+
+        foreach ($find_image as $res) {
+
+            if (file_exists(public_path() . $res->image)) {
+
+                File::delete(public_path() . $res->image);
+            }
+        }
+
+        if ($find_image) {
+            $delete = DB::table('images_check_up_results')
+                ->where('check_up_result_id', $request->check_up_result_id)->delete();
+        }
+
+        if ($request->hasfile('filenames')) {
+
+            $validator2 = Validator::make($request->all(), [
+                'filenames' => 'required',
+                'filenames.*' => 'required|mimes:jpg,png|max:2048',
+            ]);
+
+            if ($validator2->fails()) {
+                $errors2 = $validator2->errors()->all();
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $errors2,
+                ], 422);
+            }
+
+            $files[] = $request->file('filenames');
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $name = $fil->hashName();
+
+                    $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                    $fileName = "/image_check_up_result/" . $name;
+
+                    $file = new ImagesCheckUpResults();
+                    $file->image = $fileName;
+                    $file->check_up_result_id = $request->check_up_result_id;
+                    $file->user_id = $request->user()->id;
+                    $file->save();
+                }
+
+            }
+        }
+
+        return response()->json([
+            'message' => 'Berhasil update',
+        ], 200);
+
     }
 
     public function payment(Request $request)

@@ -121,6 +121,8 @@ Route::group(['middleware' => ['api']], function () {
 
         Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
 
+        Route::post('hasil-pemeriksaan/update-upload-gambar', 'HasilPemeriksaanController@update_upload_images');
+
         Route::get('hasil-pemeriksaan/pembayaran', 'HasilPemeriksaanController@payment');
 
         //pembayaran    DropDownPatient
