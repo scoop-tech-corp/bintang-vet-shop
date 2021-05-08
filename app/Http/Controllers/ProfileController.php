@@ -24,7 +24,7 @@ class ProfileController extends Controller
 
         if ($files = $request->file('file')) {
 
-            $fileName = $request->file->getClientOriginalName();
+            $fileName = $request->file->hashName();
 
             $path = $request->file('file')->move(public_path("/documents"), $fileName);
             $photoURL = url('/' . $fileName);
