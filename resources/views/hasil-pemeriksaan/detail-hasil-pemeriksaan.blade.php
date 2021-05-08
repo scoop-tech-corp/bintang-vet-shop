@@ -15,6 +15,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#general" data-toggle="tab">Utama</a></li>
         <li><a href="#kelompok_obat" data-toggle="tab">Obat</a></li>
+        <li><a href="#foto_pemeriksaan" data-toggle="tab">Foto Pemeriksaan</a></li>
       </ul>
 
       <div id="tab-content" class="tab-content">
@@ -84,11 +85,6 @@
                 <div id="diagnosaDetailTxt" class="p-left-10px value-detail-div"></div>
               </div>
             </div>
-  
-            {{-- <div class="col-md-12 m-b-10px">
-              <label for="foto">Foto Kondisi Pasien</label>
-              <div class="dropzone" id="fotoKondisiPasien"></div>
-            </div> --}}
 
             <div class="col-md-12 m-b-10px">
               <div class="label-detail-div m-b-10px">Jasa</div>
@@ -157,6 +153,22 @@
             </div>
           </div>
         </div>
+
+        <div class="tab-pane fade" id="foto_pemeriksaan">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="section-foto-kondisi-pasien">
+                {{-- <a href="http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png" class="img-style">
+                  <img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
+                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
+                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
+                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
+                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a> --}}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -164,9 +176,12 @@
 @endsection
 
 @section('script-content')
+  <!-- Magnific Popup core JS file -->
+  <script src="{{ asset('plugins/magnific-popup/jquery.magnific-popup.js') }}"></script>
   <script src="{{ asset('main/js/hasil-pemeriksaan/detail-hasil-pemeriksaan.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/hasil-pemeriksaan.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('plugins/magnific-popup/magnific-popup.css') }}">
 @endsection
 @section('vue-content')@endsection

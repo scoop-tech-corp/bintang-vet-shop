@@ -134,25 +134,28 @@ $(document).ready(function() {
 			success: function(data) {
 				let listPenerimaanPasien = '';
 				$('#list-penerimaan-pasien tr').remove();
-
-				$.each(data, function(idx, v) {
-					listPenerimaanPasien += `<tr>`
-						+ `<td>${++idx}</td>`
-						+ `<td>${v.id_number}</td>`
-            + `<td>${v.id_number_patient}</td>`
-            + `<td>${v.pet_category}</td>`
-            + `<td>${v.pet_name}</td>`
-            + `<td>${v.complaint}</td>`
-            + `<td>${v.registrant}</td>`
-						+ `<td>${v.created_by}</td>`
-						+ `<td>${v.created_at}</td>`
-						+ `<td>
-								<button type="button" class="btn btn-info openDetail" value=${v.id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-success openTerima" value=${v.id} title="Diterima"><i class="fa fa-check" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-danger openTolak" value=${v.id} title="Ditolak"><i class="fa fa-close" aria-hidden="true"></i></button>
-							</td>`
-						+ `</tr>`;
-				});
+        if (data.length) {
+          $.each(data, function(idx, v) {
+            listPenerimaanPasien += `<tr>`
+              + `<td>${++idx}</td>`
+              + `<td>${v.id_number}</td>`
+              + `<td>${v.id_number_patient}</td>`
+              + `<td>${v.pet_category}</td>`
+              + `<td>${v.pet_name}</td>`
+              + `<td>${v.complaint}</td>`
+              + `<td>${v.registrant}</td>`
+              + `<td>${v.created_by}</td>`
+              + `<td>${v.created_at}</td>`
+              + `<td>
+                  <button type="button" class="btn btn-info openDetail" value=${v.id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-success openTerima" value=${v.id} title="Diterima"><i class="fa fa-check" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-danger openTolak" value=${v.id} title="Ditolak"><i class="fa fa-close" aria-hidden="true"></i></button>
+                </td>`
+              + `</tr>`;
+          });
+        } else {
+          listPenerimaanPasien = '<tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>';
+        }
 				$('#list-penerimaan-pasien').append(listPenerimaanPasien);
 
 				$('.openDetail').click(function() {

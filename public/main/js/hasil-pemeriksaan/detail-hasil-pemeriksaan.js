@@ -10,6 +10,7 @@ $(document).ready(function() {
 
     refreshText();
     loadDetailHasilPemeriksaan(lastUrl);
+    $('#section-foto-kondisi-pasien').magnificPopup({delegate: 'a', type:'image'});
 	}
 
   $('.btn-back-to-list .text').click(function() {
@@ -37,7 +38,7 @@ $(document).ready(function() {
         $('#statusPemeriksaanDetailTxt').text(getData.status_finish ? 'Selesai' : 'Belum');
         $('#anamnesaDetailTxt').text(getData.anamnesa); $('#diagnosaDetailTxt').text(getData.diagnosa);
         $('#signDetailTxt').text(getData.sign);
-  
+
         let rowListJasa = ''; let no1 = 1;
         $('#detail-list-jasa tr').remove();
         if (getData.services.length) {
@@ -77,6 +78,17 @@ $(document).ready(function() {
         }
 
         drawListKelompokObatDetail(getData.item);
+
+        let rowFotoKondPasien = '';
+        $('#section-foto-kondisi-pasien .img-style').remove();
+        if (getData.images.length) {
+          getData.images.forEach(img => {
+            rowFotoKondPasien += `<a href="${$('.baseUrl').val()+img.image}"><div class="img-style"><img src=${$('.baseUrl').val()+img.image}></div></a>`;
+          });
+        } else {
+          rowFotoKondPasien = 'Tidak ada foto.';
+        }
+        $('#section-foto-kondisi-pasien').append(rowFotoKondPasien);
   
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
@@ -89,10 +101,11 @@ $(document).ready(function() {
   }
 
   function drawListKelompokObatDetail(listItem) {
+    let rowKelompokObat = ''; let no = 1;
+    $('#locateDrawKelompokBarang .target').remove();
+
     if (listItem.length) {
 
-      let rowKelompokObat = ''; let no = 1;
-      $('#locateDrawKelompokBarang .target').remove();
       listItem.forEach((li, idx) => {
         let rowSelectedListBarang = appendListSelectBarang(li.list_of_medicine);
 
@@ -125,7 +138,7 @@ $(document).ready(function() {
       $('#locateDrawKelompokBarang').append(rowKelompokObat);
 
     } else {
-      $('#locateDrawKelompokBarang').append('Tidak ada kelompok obat.');
+      $('#locateDrawKelompokBarang').append(`<div class="target">Tidak ada kelompok obat.</div>`);
     }
   }
 
