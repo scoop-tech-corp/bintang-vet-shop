@@ -547,7 +547,7 @@ class HasilPemeriksaanController extends Controller
         $data['inpatient'] = $inpatient;
 
         $image = DB::table('images_check_up_results')
-            ->select('images_check_up_results.image')
+            ->select('images_check_up_results.id as image_id', 'images_check_up_results.image')
             ->where('check_up_result_id', '=', $data->id)
             ->get();
 
