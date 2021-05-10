@@ -1624,22 +1624,27 @@ class HasilPemeriksaanController extends Controller
             ], 422);
         }
 
-        $find_image = DB::table('images_check_up_results')
-            ->select('images_check_up_results.image')
-            ->where('check_up_result_id', '=', $request->check_up_result_id)
-            ->get();
+        $image = $request->images;
+        $result_image = json_decode($image, true);
 
-        foreach ($find_image as $res) {
+        foreach ($result_image as $img) {
 
-            if (file_exists(public_path() . $res->image)) {
+            $find_image = DB::table('images_check_up_results')
+                ->select('images_check_up_results.image')
+                ->where('id', '=', $img['image'])
+                ->where('check_up_result_id', '=', $request->check_up_result_id)
+                ->first();
 
-                File::delete(public_path() . $res->image);
+            if ($find_image) {
+
+                if (file_exists(public_path() . $find_image->image)) {
+
+                    File::delete(public_path() . $find_image->image);
+
+                    $delete = DB::table('images_check_up_results')
+                        ->where('id', $img['image'])->delete();
+                }
             }
-        }
-
-        if ($find_image) {
-            $delete = DB::table('images_check_up_results')
-                ->where('check_up_result_id', $request->check_up_result_id)->delete();
         }
 
         if ($request->hasfile('filenames')) {
