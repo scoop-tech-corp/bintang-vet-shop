@@ -155,35 +155,35 @@
                   <div class="box-image-upload" id="box-1">
                     <a class="img-preview-1"><img class="img-preview-1"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-1">+</span> 
-                    <input type="file" class="input-file" id="upload-image-1" accept="image/jpeg, image/png">
+                    <input type="file" class="input-file" id="upload-image-1" accept=".png, .jpg, .jpeg">
                     <div class="btn-icon btn-trash-upload-image" noUploadImage='1'><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                   </div>
   
                   <div class="box-image-upload" id="box-2">
                     <a class="img-preview-2"><img class="img-preview-2"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-2">+</span> 
-                    <input type="file" class="input-file" id="upload-image-2" accept="image/jpeg, image/png">
+                    <input type="file" class="input-file" id="upload-image-2" accept=".png, .jpg, .jpeg">
                     <div class="btn-icon btn-trash-upload-image" noUploadImage="2"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                   </div>
   
                   <div class="box-image-upload" id="box-3">
                     <a class="img-preview-3"><img class="img-preview-3"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-3">+</span> 
-                    <input type="file" class="input-file" id="upload-image-3" accept="image/jpeg, image/png">
+                    <input type="file" class="input-file" id="upload-image-3" accept=".png, .jpg, .jpeg">
                     <div class="btn-icon btn-trash-upload-image" noUploadImage="3"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                   </div>
   
                   <div class="box-image-upload" id="box-4">
                     <a class="img-preview-4"><img class="img-preview-4"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-4">+</span> 
-                    <input type="file" class="input-file" id="upload-image-4" accept="image/jpeg, image/png">
+                    <input type="file" class="input-file" id="upload-image-4" accept=".png, .jpg, .jpeg">
                     <div class="btn-icon btn-trash-upload-image" noUploadImage="4"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                   </div>
   
                   <div class="box-image-upload" id="box-5">
                     <a class="img-preview-5"><img class="img-preview-5"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-5">+</span> 
-                    <input type="file" class="input-file" id="upload-image-5" accept="image/jpeg, image/png">
+                    <input type="file" class="input-file" id="upload-image-5" accept=".png, .jpg, .jpeg">
                     <div class="btn-icon btn-trash-upload-image" noUploadImage="5"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                   </div>
                 </div>
