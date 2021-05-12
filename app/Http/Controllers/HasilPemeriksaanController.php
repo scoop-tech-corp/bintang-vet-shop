@@ -1559,11 +1559,15 @@ class HasilPemeriksaanController extends Controller
 
         }
 
+        $message_image = [
+            'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
+        ];
+
         $validator = Validator::make($request->all(), [
             'check_up_result_id' => 'required',
             'filenames' => 'required',
-            'filenames.*' => 'required|mimes:jpg,png|max:2048',
-        ]);
+            'filenames.*' => 'required|mimes:jpg,png,jpeg|max:5000',
+        ], $message_image);
 
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -1653,10 +1657,14 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->hasfile('filenames')) {
 
+            $message_image = [
+                'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
+            ];
+
             $validator2 = Validator::make($request->all(), [
                 'filenames' => 'required',
-                'filenames.*' => 'required|mimes:jpg,png|max:2048',
-            ]);
+                'filenames.*' => 'required|mimes:jpg,png,jpeg|max:5000',
+            ],$message_image);
 
             if ($validator2->fails()) {
                 $errors2 = $validator2->errors()->all();
