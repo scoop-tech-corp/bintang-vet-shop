@@ -184,6 +184,18 @@ $(document).ready(function() {
     fd.append('service', JSON.stringify(finalSelectedJasa));
     fd.append('item', JSON.stringify(finalSelectedBarang));
 
+    let tempFile = [];
+    for(let i = 1 ; i <= 5 ; i++) {
+      const getFile = $(`#upload-image-${i}`)[0].files[0];
+      if(getFile) { tempFile.push(getFile); }
+    }
+
+    if(tempFile.length) {
+      tempFile.forEach(file => { fd.append('filenames[]', file); });
+    } else {
+      tempFile.append('filenames[]', []);
+    }
+
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
       type: 'POST',
@@ -193,52 +205,11 @@ $(document).ready(function() {
       processData: false,
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(resp) {
-        console.log('resp hasil pemeriksaan', resp);
-        // dropzone.processQueue();
-
-        let tempFile = [];
-        const fdUpload = new FormData();
-        fdUpload.append('check_up_result_id', resp.id);
-
-        for(let i = 1 ; i <= 5 ; i++) {
-          const getFile = $(`#upload-image-${i}`)[0].files[0];
-          if(getFile) {
-            fdUpload.append('filenames[]', getFile);
-            tempFile.push(getFile);
-          }
-        }
-
-        if (tempFile.length) {
-          $.ajax({
-            url : $('.baseUrl').val() + '/api/hasil-pemeriksaan/upload-gambar',
-            type: 'POST',
-            dataType: 'JSON',
-            headers: { 'Authorization': `Bearer ${token}` },
-            data: fdUpload, contentType: false, cache: false,
-            processData: false,
-            beforeSend: function() { $('#loading-screen').show(); },
-            success: function(resp) {
-              $("#msg-box .modal-body").text(`Berhasil Menambah Data`);
-              $('#msg-box').modal('show');
-              setTimeout(() => {
-                window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
-              }, 1000);
-            }, complete: function() { $('#loading-screen').hide(); }
-            , error: function(err) {
-              if (err.status === 422) {
-                let errText = ''; $('#beErr').empty(); $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
-                $.each(err.responseJSON.errors, function(idx, v) {
-                  errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
-                });
-                $('#beErr').append(errText); isBeErr = true;
-              } else if (err.status == 401) {
-                localStorage.removeItem('vet-clinic');
-                location.href = $('.baseUrl').val() + '/masuk';
-              }
-            }
-          });
-        }
-
+        $("#msg-box .modal-body").text(`Berhasil Menambah Data`);
+        $('#msg-box').modal('show');
+        setTimeout(() => {
+          window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
+        }, 1000);
       }, complete: function() { $('#loading-screen').hide(); }
       , error: function(err) {
         if (err.status === 422) {
@@ -318,7 +289,6 @@ $(document).ready(function() {
       data: datas,
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(data) {
-        // dropzone.processQueue();
 
         let tempFile = [];
         const fdUpload = new FormData();
@@ -330,7 +300,6 @@ $(document).ready(function() {
             tempFile.push(getFile);
           }
         }
-        // console.log('tempFile', tempFile.filter(x => x));
 
         if (tempFile.length) {
           tempFile.forEach((tf) => { fdUpload.append('filenames[]', tf); });
