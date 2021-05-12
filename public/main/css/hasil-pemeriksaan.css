@@ -28,9 +28,16 @@ input::-webkit-file-upload-button {
 #section-upload-image {
   display: flex;
   justify-content: center;
+  position: relative;
 
   border: 1px solid #3c8dbc;
   padding: 70px 0px;
+}
+
+.notes-upload-image {
+  position: absolute;
+  top: 15px;
+  left: 25px;
 }
 
 #section-upload-image .box-image-upload {
@@ -118,6 +125,9 @@ input::-webkit-file-upload-button {
   #section-upload-image {
     display: block;
     padding: 25px;
+  }
+  .notes-upload-image {
+    position: unset;
   }
 
   #section-upload-image .box-image-upload {

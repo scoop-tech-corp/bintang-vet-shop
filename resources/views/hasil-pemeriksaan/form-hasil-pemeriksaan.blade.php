@@ -151,6 +151,7 @@
               <div class="col-md-12 m-b-10px">
                 <label>Foto Kondisi Pasien</label>
                 <div id="section-upload-image">
+                  <div class="notes-upload-image">Format gambar .jpg .jpeg .png dan ukuran maksimal 5mb<br>Pilih foto dengan cara pilih satu per satu</div>
                   <div class="box-image-upload" id="box-1">
                     <a class="img-preview-1"><img class="img-preview-1"></a>
                     <span class="icon-plus-upload" id="icon-plus-upload-1">+</span> 
