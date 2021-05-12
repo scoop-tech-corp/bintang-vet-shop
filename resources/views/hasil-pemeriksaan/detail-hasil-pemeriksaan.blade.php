@@ -15,7 +15,6 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#general" data-toggle="tab">Utama</a></li>
         <li><a href="#kelompok_obat" data-toggle="tab">Obat</a></li>
-        <li><a href="#foto_pemeriksaan" data-toggle="tab">Foto Pemeriksaan</a></li>
       </ul>
 
       <div id="tab-content" class="tab-content">
@@ -142,6 +141,11 @@
               </div>
             </div>
 
+            <div class="col-md-12">
+              <div class="label-detail-div m-b-10px">Foto Kondisi Pasien</div>
+              <div id="section-foto-kondisi-pasien"></div>
+            </div>
+
           </div>
         </div>
         <div class="tab-pane fade" id="kelompok_obat">
@@ -149,21 +153,6 @@
             <div class="col-md-12 m-b-10px" id="locateDrawKelompokBarang">
               <div class="target">
                 Tidak ada kelompok obat.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-pane fade" id="foto_pemeriksaan">
-          <div class="row">
-            <div class="col-md-12">
-              <div id="section-foto-kondisi-pasien">
-                {{-- <a href="http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png" class="img-style">
-                  <img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
-                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
-                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
-                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a>
-                <a class="img-style"><img src='http://127.0.0.1:8000/image_check_up_result/7pGGoJgjSLQluYLupSWSmqGGhI6EAYFJI6VqbtDp.png'></a> --}}
               </div>
             </div>
           </div>

@@ -20,10 +20,17 @@
   margin-top: 25px;
 }
 
+input::-webkit-file-upload-button {
+  cursor: pointer;
+  width: 100%;
+}
 
 #section-upload-image {
   display: flex;
   justify-content: center;
+
+  border: 1px solid #3c8dbc;
+  padding: 70px 0px;
 }
 
 #section-upload-image .box-image-upload {
@@ -73,6 +80,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border: 1px solid #3c8dbc;
+  padding: 70px 0px;
 }
 
 #section-foto-kondisi-pasien .img-style {
@@ -82,18 +92,42 @@
   float: left;
 }
 #section-foto-kondisi-pasien .img-style img {
-  width: 170px; height: 170px;
+  width: 150px; height: 150px;
 }
 
 @media (max-width: 768px) {
   .section-add-kelompok-obat {
     margin-bottom: 20px;
   }
+
+  #section-foto-kondisi-pasien {
+    display: block;
+    padding: 25px
+  }
+
   #section-foto-kondisi-pasien .img-style {
     width: 100%;
+    float: none;
+    margin: 10px 0px;
   }
   #section-foto-kondisi-pasien .img-style img {
-    height: 250px;
+    width: 100%;
+    height: 230px;
+  }
+
+  #section-upload-image {
+    display: block;
+    padding: 25px;
+  }
+
+  #section-upload-image .box-image-upload {
+    margin: 10px 0px;
+    width: 100%;
+    height: 230px;
+  }
+
+  .img-preview-1, .img-preview-2, .img-preview-3, .img-preview-4, .img-preview-5 {
+    width: 100%; height: 100%;
   }
 }
 
