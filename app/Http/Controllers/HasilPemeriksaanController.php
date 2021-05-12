@@ -330,17 +330,69 @@ class HasilPemeriksaanController extends Controller
 
                 $count_item = $list_of_items->total_item - $find_stock['quantity'];
 
+                $detail_item = DB::table('temp_count_items')
+                    ->where('user_id', $request->user()->id)->delete();
+                //return $count_item;
                 if ($count_item < 0) {
-
-                    $detail_item = DB::table('temp_count_items')
-                        ->where('user_id', $request->user()->id)->delete();
 
                     return response()->json([
                         'message' => 'The given data was invalid.',
                         'errors' => ['Jumlah stok ' . $list_of_items->item_name . ' kurang atau habis!'],
                     ], 422);
                 }
+
             }
+        }
+
+        //validasi tambah tambah gambar
+        $validator_image = Validator::make($request->all(), [
+            'filenames' => 'required',
+            'filenames.*' => 'required|mimes:jpg,png,jpeg',
+        ]);
+
+        if ($validator_image->fails()) {
+            $errors_image = $validator_image->errors()->all();
+
+            return response()->json([
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors_image,
+            ], 422);
+        }
+
+        if ($request->hasfile('filenames')) {
+
+            $data_item = [];
+
+            $files[] = $request->file('filenames');
+
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $file_size = $fil->getSize();
+
+                    $file_size = $file_size / 1024;
+
+                    $oldname = $fil->getClientOriginalName();
+
+                    if ($file_size >= 5000) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap upload gambar dengan ukuran lebih kecil!');
+                    }
+
+                }
+
+            }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            }
+
         }
 
         //insert data
@@ -436,10 +488,30 @@ class HasilPemeriksaanController extends Controller
         $detail_item = DB::table('temp_count_items')
             ->where('user_id', $request->user()->id)->delete();
 
+        if ($request->hasfile('filenames')) {
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $name = $fil->hashName();
+
+                    $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                    $fileName = "/image_check_up_result/" . $name;
+
+                    $file = new ImagesCheckUpResults();
+                    $file->image = $fileName;
+                    $file->check_up_result_id = $item->id;
+                    $file->user_id = $request->user()->id;
+                    $file->save();
+                }
+            }
+        }
+
         return response()->json(
             [
                 'message' => 'Tambah Data Berhasil!',
-                'id' => $item->id,
+                //'id' => $item->id,
             ], 200
         );
     }
@@ -1540,6 +1612,26 @@ class HasilPemeriksaanController extends Controller
         $delete_inpatient = DB::table('in_patients')
             ->where('check_up_result_id', $request->id)->delete();
 
+        $find_images = DB::table('images_check_up_results')
+            ->select('images_check_up_results.id', 'images_check_up_results.image')
+            ->where('check_up_result_id', '=', $request->id)
+            ->get();
+
+        if ($find_images) {
+
+            foreach ($find_images as $image) {
+
+                if (file_exists(public_path() . $image->image)) {
+
+                    File::delete(public_path() . $image->image);
+
+                    $delete = DB::table('images_check_up_results')
+                        ->where('id', $image->id)->delete();
+                }
+            }
+
+        }
+
         $check_up_result = CheckUpResult::find($request->id);
         $check_up_result->delete();
 
@@ -1559,15 +1651,15 @@ class HasilPemeriksaanController extends Controller
 
         }
 
-        $message_image = [
-            'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
-        ];
+        // $message_image = [
+        //     'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
+        // ];
 
         $validator = Validator::make($request->all(), [
             'check_up_result_id' => 'required',
             'filenames' => 'required',
-            'filenames.*' => 'required|mimes:jpg,png,jpeg|max:5000',
-        ], $message_image);
+            'filenames.*' => 'required|mimes:jpg,png,jpeg',
+        ]);
 
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -1579,25 +1671,58 @@ class HasilPemeriksaanController extends Controller
         }
 
         if ($request->hasfile('filenames')) {
+
+            $data_item = [];
+
             $files[] = $request->file('filenames');
+
             foreach ($files as $file) {
 
                 foreach ($file as $fil) {
 
-                    $name = $fil->hashName();
+                    $file_size = $fil->getSize();
 
-                    $fil->move(public_path() . '/image_check_up_result/', $name);
+                    $file_size = $file_size / 1024;
 
-                    $fileName = "/image_check_up_result/" . $name;
+                    $oldname = $fil->getClientOriginalName();
 
-                    $file = new ImagesCheckUpResults();
-                    $file->image = $fileName;
-                    $file->check_up_result_id = $request->check_up_result_id;
-                    $file->user_id = $request->user()->id;
-                    $file->save();
+                    if ($file_size >= 5) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap cek ulang!');
+                    }
+
                 }
 
             }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            } else {
+
+                foreach ($files as $file) {
+
+                    foreach ($file as $fil) {
+
+                        $name = $fil->hashName();
+
+                        $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                        $fileName = "/image_check_up_result/" . $name;
+
+                        $file = new ImagesCheckUpResults();
+                        $file->image = $fileName;
+                        $file->check_up_result_id = $request->check_up_result_id;
+                        $file->user_id = $request->user()->id;
+                        $file->save();
+                    }
+                }
+            }
+
         }
 
         return response()->json([
@@ -1657,43 +1782,57 @@ class HasilPemeriksaanController extends Controller
 
         if ($request->hasfile('filenames')) {
 
-            $message_image = [
-                'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
-            ];
-
-            $validator2 = Validator::make($request->all(), [
-                'filenames' => 'required',
-                'filenames.*' => 'required|mimes:jpg,png,jpeg|max:5000',
-            ],$message_image);
-
-            if ($validator2->fails()) {
-                $errors2 = $validator2->errors()->all();
-
-                return response()->json([
-                    'message' => 'Foto yang dimasukkan tidak valid!',
-                    'errors' => $errors2,
-                ], 422);
-            }
+            $data_item = [];
 
             $files[] = $request->file('filenames');
+
             foreach ($files as $file) {
 
                 foreach ($file as $fil) {
 
-                    $name = $fil->hashName();
+                    $file_size = $fil->getSize();
 
-                    $fil->move(public_path() . '/image_check_up_result/', $name);
+                    $file_size = $file_size / 1024;
 
-                    $fileName = "/image_check_up_result/" . $name;
+                    $oldname = $fil->getClientOriginalName();
 
-                    $file = new ImagesCheckUpResults();
-                    $file->image = $fileName;
-                    $file->check_up_result_id = $request->check_up_result_id;
-                    $file->user_id = $request->user()->id;
-                    $file->save();
+                    if ($file_size >= 5) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap cek ulang!');
+                    }
+
                 }
 
             }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            } else {
+
+                foreach ($files as $file) {
+
+                    foreach ($file as $fil) {
+
+                        $name = $fil->hashName();
+
+                        $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                        $fileName = "/image_check_up_result/" . $name;
+
+                        $file = new ImagesCheckUpResults();
+                        $file->image = $fileName;
+                        $file->check_up_result_id = $request->check_up_result_id;
+                        $file->user_id = $request->user()->id;
+                        $file->save();
+                    }
+                }
+            }
+
         }
 
         return response()->json([
