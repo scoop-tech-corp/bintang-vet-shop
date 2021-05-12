@@ -90,10 +90,6 @@
                 <textarea id="diagnosa" class="form-control" placeholder="Masukan Diagnosa"></textarea>
                 <div id="diagnosaErr1" class="validate-error"></div>
               </div>
-              {{-- <div class="col-md-12 m-b-10px">
-                <label for="foto">Foto Kondisi Pasien</label>
-                <div class="dropzone" id="fotoKondisiPasien"></div>
-              </div> --}}
               <div class="col-md-12 m-b-10px">
                 <div class="label-detail-div m-b-10px">Jasa</div>
                 <select id="selectedJasa" class="form-control" style="width: 100%; margin-bottom: 10px" multiple="multiple"></select>
@@ -151,6 +147,47 @@
                 <span><input type="radio" name="radioStatusPemeriksa" value=0 /> Belum</span>
                 <div id="statusPemeriksaErr1" class="validate-error"></div>
               </div>
+
+              <div class="col-md-12 m-b-10px">
+                <label>Foto Kondisi Pasien</label>
+                <div id="section-upload-image">
+                  <div class="box-image-upload" id="box-1">
+                    <a class="img-preview-1"><img class="img-preview-1"></a>
+                    <span class="icon-plus-upload" id="icon-plus-upload-1">+</span> 
+                    <input type="file" class="input-file" id="upload-image-1" accept="image/jpeg, image/png">
+                    <div class="btn-icon btn-trash-upload-image" noUploadImage='1'><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  </div>
+  
+                  <div class="box-image-upload" id="box-2">
+                    <a class="img-preview-2"><img class="img-preview-2"></a>
+                    <span class="icon-plus-upload" id="icon-plus-upload-2">+</span> 
+                    <input type="file" class="input-file" id="upload-image-2" accept="image/jpeg, image/png">
+                    <div class="btn-icon btn-trash-upload-image" noUploadImage="2"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  </div>
+  
+                  <div class="box-image-upload" id="box-3">
+                    <a class="img-preview-3"><img class="img-preview-3"></a>
+                    <span class="icon-plus-upload" id="icon-plus-upload-3">+</span> 
+                    <input type="file" class="input-file" id="upload-image-3" accept="image/jpeg, image/png">
+                    <div class="btn-icon btn-trash-upload-image" noUploadImage="3"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  </div>
+  
+                  <div class="box-image-upload" id="box-4">
+                    <a class="img-preview-4"><img class="img-preview-4"></a>
+                    <span class="icon-plus-upload" id="icon-plus-upload-4">+</span> 
+                    <input type="file" class="input-file" id="upload-image-4" accept="image/jpeg, image/png">
+                    <div class="btn-icon btn-trash-upload-image" noUploadImage="4"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  </div>
+  
+                  <div class="box-image-upload" id="box-5">
+                    <a class="img-preview-5"><img class="img-preview-5"></a>
+                    <span class="icon-plus-upload" id="icon-plus-upload-5">+</span> 
+                    <input type="file" class="input-file" id="upload-image-5" accept="image/jpeg, image/png">
+                    <div class="btn-icon btn-trash-upload-image" noUploadImage="5"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  </div>
+                </div>
+                <div id="fotoKondErr1" class="validate-error"></div>
+              </div>
             </form>
           </div>
         </div>
@@ -172,6 +209,7 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
+      <button id="testUpload" type="button" class="btn btn-primary pull-right">Upload</button>
       <button id="btnSubmitHasilPemeriksaan" type="button" class="btn btn-primary pull-right">Simpan</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
@@ -184,12 +222,15 @@
 
 @endsection
 @section('script-content')
-  <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script>
+  {{-- <script src="{{ asset('plugins/dropzone/dropzone.js') }}"></script> --}}
+  <script src="{{ asset('plugins/magnific-popup/jquery.magnific-popup.js') }}"></script>
   <script src="{{ asset('main/js/hasil-pemeriksaan/form-hasil-pemeriksaan.js') }}"></script>
   <script src="{{ asset('main/js/hasil-pemeriksaan/kelompok-obat.js') }}"></script>
+  <script src="{{ asset('main/js/hasil-pemeriksaan/upload-images.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('plugins/dropzone/dropzone.css') }}">
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/hasil-pemeriksaan.css') }}">
+  <link rel="stylesheet" type='text/css' href="{{ asset('plugins/magnific-popup/magnific-popup.css') }}">
 @endsection
 @section('vue-content')@endsection
