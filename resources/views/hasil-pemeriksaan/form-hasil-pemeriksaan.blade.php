@@ -209,7 +209,7 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
-      <button id="testUpload" type="button" class="btn btn-primary pull-right">Upload</button>
+      {{-- <button id="testUpload" type="button" class="btn btn-primary pull-right">Upload</button> --}}
       <button id="btnSubmitHasilPemeriksaan" type="button" class="btn btn-primary pull-right">Simpan</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
