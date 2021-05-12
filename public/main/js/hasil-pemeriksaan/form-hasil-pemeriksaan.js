@@ -349,9 +349,9 @@ $(document).ready(function() {
           success: function(resp) {
             $("#msg-box .modal-body").text(`Berhasil Menambah Data`);
             $('#msg-box').modal('show');
-            // setTimeout(() => {
-            //   window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
-            // }, 1000);
+            setTimeout(() => {
+              window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
+            }, 1000);
           }, complete: function() { $('#loading-screen').hide(); }
           , error: function(err) {
             if (err.status === 422) {
