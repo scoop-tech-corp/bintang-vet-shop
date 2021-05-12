@@ -202,10 +202,12 @@ $(document).ready(function() {
 
         for(let i = 1 ; i <= 5 ; i++) {
           const getFile = $(`#upload-image-${i}`)[0].files[0];
-          fdUpload.append('filenames[]', getFile);
-          tempFile.push(getFile);
+          if(getFile) {
+            fdUpload.append('filenames[]', getFile);
+            tempFile.push(getFile);
+          }
         }
-        console.log('tempFile', tempFile.filter(x => x));
+
         if (tempFile.length) {
           $.ajax({
             url : $('.baseUrl').val() + '/api/hasil-pemeriksaan/upload-gambar',
