@@ -1796,7 +1796,7 @@ class HasilPemeriksaanController extends Controller
 
                     $oldname = $fil->getClientOriginalName();
 
-                    if ($file_size >= 5) {
+                    if ($file_size >= 5000) {
 
                         array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap cek ulang!');
                     }
