@@ -163,7 +163,7 @@ $(document).ready(function() {
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
 					const getObj = data.find(x => x.id == getId);
-					if (getObj.status_finish != 1) {
+					if (getObj.status_finish != 1 || role.toLowerCase() == 'admin') {
 						modalState = 'delete';
 
 						$('#modal-confirmation .modal-title').text('Peringatan');
