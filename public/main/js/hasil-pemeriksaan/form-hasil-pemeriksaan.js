@@ -318,7 +318,7 @@ $(document).ready(function() {
           processData: false,
           beforeSend: function() { $('#loading-screen').show(); },
           success: function(resp) {
-            $("#msg-box .modal-body").text(`Berhasil Menambah Data`);
+            $("#msg-box .modal-body").text(`Berhasil Mengubah Data`);
             $('#msg-box').modal('show');
             setTimeout(() => {
               window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
