@@ -1,25 +1,27 @@
 $(document).ready(function() {
 
-  let paramUrlSetup = {
-    orderby:'', column: '', keyword: ''
-  };
-
-  $.ajax({
-    url     : $('.baseUrl').val() + '/api/cabang',
-    headers : { 'Authorization': `Bearer ${token}` },
-    type    : 'GET',
-    data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword },
-    beforeSend: function() { $('#loading-screen').show(); },
-    success: function(data) {
-      
-    }, complete: function() { $('#loading-screen').hide(); },
-    error: function(err) {
-      if (err.status == 401) {
-        localStorage.removeItem('vet-clinic');
-        location.href = $('.baseUrl').val() + '/masuk';
-      }
-    }
-  });
-
+  function loadWidget1() {
+    Highcharts.chart('container', {
+      chart: {
+        type: 'column'
+      },
+      title: { text: '' },
+      xAxis: { 
+        categories: ['Apples', 'Bananas', 'Oranges'] 
+      },
+      yAxis: {
+        title: { 
+          text: '' 
+        }
+      },
+      series: [{
+        name: 'Jane',
+        data: [1, 2, 4]
+      }, {
+        name: 'John',
+        data: [5, 7, 3]
+      }],
+    }); 
+  }
 
 });

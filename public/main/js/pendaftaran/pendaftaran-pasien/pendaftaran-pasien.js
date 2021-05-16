@@ -268,7 +268,7 @@ $(document).ready(function() {
 
 				$('.openFormEdit').click(function() {
 					const getObj = data.find(x => x.id == $(this).val());
-					if (getObj.acceptance_status != 1 && getObj.acceptance_status != 3) {
+					if ((getObj.acceptance_status != 1 && getObj.acceptance_status != 3) || role.toLowerCase() == 'admin') {
 						modalState = 'edit';
 
 						$('.modal-title').text('Edit Pendaftaran Pasien');
@@ -290,7 +290,7 @@ $(document).ready(function() {
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
 					const getObj = data.find(x => x.id == getId);
-					if (getObj.acceptance_status != 1 && getObj.acceptance_status != 3) {
+					if ((getObj.acceptance_status != 1 && getObj.acceptance_status != 3) || role.toLowerCase() == 'admin') {
 						modalState = 'delete';
 
 						$('#modal-confirmation .modal-title').text('Peringatan');
