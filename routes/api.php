@@ -38,6 +38,10 @@ Route::group(['middleware' => ['api']], function () {
 
         Route::get('user/dokter', 'UserController@doctor');
 
+        Route::post('user/upload-image', 'ProfileController@upload_photo_profile');
+        Route::get('user/profile', 'ProfileController@get_data_user');
+        Route::put('user/profile', 'ProfileController@update_data_user');
+
         //pasien
         Route::get('pasien', 'PasienController@index');
         Route::post('pasien', 'PasienController@create');
@@ -115,7 +119,9 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('hasil-pemeriksaan', 'HasilPemeriksaanController@update');
         Route::delete('hasil-pemeriksaan', 'HasilPemeriksaanController@delete');
 
-        Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+        //Route::post('hasil-pemeriksaan/upload-gambar', 'HasilPemeriksaanController@upload_images');
+
+        Route::post('hasil-pemeriksaan/update-upload-gambar', 'HasilPemeriksaanController@update_upload_images');
 
         Route::get('hasil-pemeriksaan/pembayaran', 'HasilPemeriksaanController@payment');
 

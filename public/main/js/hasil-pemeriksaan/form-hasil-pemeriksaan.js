@@ -1,4 +1,4 @@
-Dropzone.autoDiscover = false;
+// Dropzone.autoDiscover = false;
 let arrayKelompokObat = [];
 let arrayKelompokObatDelete = [];
 let formState = '';
@@ -8,8 +8,10 @@ let isValidSign = false;
 let isValidDiagnosa = false;
 let isValidRadioRawatInap = false;
 let isValidRadioStatusPemeriksa = false;
+let isValidFotoKondisiPasien = true;
 let customErr1 = false;
 let isBeErr = false;
+let getFileImagesExisting = [];
 
 $(document).ready(function() {
   
@@ -43,6 +45,7 @@ $(document).ready(function() {
       loadFormAdd();
     } else {
       formState = 'edit';
+      $('.box-image-upload').magnificPopup({delegate: 'a', type:'image'});
       loadFormEdit();
     }
   }
@@ -105,27 +108,16 @@ $(document).ready(function() {
 
   $('input:radio[name="radioStatusPemeriksa"]').change(function (e) { validationForm(); });
 
-  // function loadDropzone() {
-  //   dropzone = new Dropzone('#fotoKondisiPasien', {
-  //     url: 'somethingUrl',
-  //     uploadMultiple: true,
-  //     addRemoveLinks: true,
-  //     acceptedFiles: '.png',
-  //     autoProcessQueue: false,
-  //     maxFiles: 5,
-  //     maxFilesize: 0.1, // MB
-  //     init: function() {
-  //       this.on('error', function(file, response) {
-  //           // do stuff here.
-  //           console.log('eror upload meessage', response, file);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // $('#testUpload').click(function() {
-  //   dropzone.processQueue();
-  // });
+  $('#testUpload').click(function() {
+    // dropzone.processQueue();
+    let tempFile = [];
+    for(let i = 1 ; i <= 5 ; i++) {
+      const getFile = $(`#upload-image-${i}`)[0].files[0];
+      tempFile.push(getFile);
+    }
+    console.log('tempFile', tempFile.filter(x => x));
+    console.log('getFileImagesExisting', getFileImagesExisting);
+  });
 
   $('#submitConfirm').click(function() {
     if (formState === 'add') {
@@ -139,6 +131,28 @@ $(document).ready(function() {
       $('#modal-confirmation').modal('toggle');
     }
   });
+
+  function validationPhoto() {
+    const getLengthPhoto = tempFile.length;
+    let isError = false;
+
+    if (getLengthPhoto > 5) {
+      detectValidPhoto(false); isError = true;
+    }
+
+    if (!isError) { detectValidPhoto(true); }
+    validationForm();
+  }
+
+  function detectValidPhoto(isValid) {
+    if(!isValid) {
+      $('#fotoKondErr1').text('Foto tidak boleh lebih dari 5'); 
+      isValidFotoKondisiPasien = false;
+    } else {
+      $('#fotoKondErr1').text(''); 
+      isValidFotoKondisiPasien = true;
+    }
+  }
 
   function processSaved() {
     const fd = new FormData();
@@ -170,6 +184,18 @@ $(document).ready(function() {
     fd.append('service', JSON.stringify(finalSelectedJasa));
     fd.append('item', JSON.stringify(finalSelectedBarang));
 
+    let tempFile = [];
+    for(let i = 1 ; i <= 5 ; i++) {
+      const getFile = $(`#upload-image-${i}`)[0].files[0];
+      if(getFile) { tempFile.push(getFile); }
+    }
+
+    if(tempFile.length) {
+      tempFile.forEach(file => { fd.append('filenames[]', file); });
+    } else {
+      tempFile.append('filenames[]', []);
+    }
+
     $.ajax({
       url : $('.baseUrl').val() + '/api/hasil-pemeriksaan',
       type: 'POST',
@@ -179,10 +205,8 @@ $(document).ready(function() {
       processData: false,
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(resp) {
-
-        $("#msg-box .modal-body").text('Berhasil Menambah Data');
+        $("#msg-box .modal-body").text(`Berhasil Menambah Data`);
         $('#msg-box').modal('show');
-
         setTimeout(() => {
           window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
         }, 1000);
@@ -266,12 +290,53 @@ $(document).ready(function() {
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(data) {
 
-        $("#msg-box .modal-body").text('Berhasil Mengubah Data');
-        $('#msg-box').modal('show');
+        let tempFile = [];
+        const fdUpload = new FormData();
 
-        setTimeout(() => {
-          window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
-        }, 1000);
+        fdUpload.append('check_up_result_id', getId);
+        for(let i = 1 ; i <= 5 ; i++) {
+          const getFile = $(`#upload-image-${i}`)[0].files[0];
+          if (getFile) {
+            tempFile.push(getFile);
+          }
+        }
+
+        if (tempFile.length) {
+          tempFile.forEach((tf) => { fdUpload.append('filenames[]', tf); });
+        } else {
+          fdUpload.append('filenames[]', []);
+        }
+
+        fdUpload.append('images', JSON.stringify(getFileImagesExisting));
+
+        $.ajax({
+          url : $('.baseUrl').val() + '/api/hasil-pemeriksaan/update-upload-gambar',
+          type: 'POST',
+          dataType: 'JSON',
+          headers: { 'Authorization': `Bearer ${token}` },
+          data: fdUpload, contentType: false, cache: false,
+          processData: false,
+          beforeSend: function() { $('#loading-screen').show(); },
+          success: function(resp) {
+            $("#msg-box .modal-body").text(`Berhasil Mengubah Data`);
+            $('#msg-box').modal('show');
+            setTimeout(() => {
+              window.location.href = $('.baseUrl').val() + '/hasil-pemeriksaan';
+            }, 1000);
+          }, complete: function() { $('#loading-screen').hide(); }
+          , error: function(err) {
+            if (err.status === 422) {
+              let errText = ''; $('#beErr').empty(); $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
+              $.each(err.responseJSON.errors, function(idx, v) {
+                errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
+              });
+              $('#beErr').append(errText); isBeErr = true;
+            } else if (err.status == 401) {
+              localStorage.removeItem('vet-clinic');
+              location.href = $('.baseUrl').val() + '/masuk';
+            }
+          }
+        });
 
       }, complete: function() { $('#loading-screen').hide(); }
       , error: function(err) {
@@ -470,6 +535,27 @@ $(document).ready(function() {
 
         $(`input[name=radioStatusPemeriksa][value=${getData.status_finish}]`).prop('checked', true);
 
+        let rowFotoKondPasien = '';
+        $('#section-foto-kondisi-pasien .img-style').remove();
+        if (getData.images.length) {
+
+          getData.images.forEach((img, i) => {
+            getFileImagesExisting.push({image_id: img.image_id, status: ''});
+            $(`.box-image-upload img.img-preview-${i+1}`).attr('src', $('.baseUrl').val()+img.image);
+            $(`.box-image-upload a.img-preview-${i+1}`).attr('href', $('.baseUrl').val()+img.image);
+            $(`.box-image-upload a.img-preview-${i+1}`).attr('image_id', img.image_id);
+
+            $(`.box-image-upload img.img-preview-${i+1}, .box-image-upload a.img-preview-${i+1}`).show();
+
+            $(`[noUploadImage="${i+1}"]`).show();
+            $(`#icon-plus-upload-${i+1}`).hide(); 
+            $(`#upload-image-${i+1}`).hide();
+          });
+        } else {
+          rowFotoKondPasien = 'Tidak ada foto.';
+        }
+        $('#section-foto-kondisi-pasien').append(rowFotoKondPasien);
+
         formConfigure();
       }, complete: function() { $('#loading-screen').hide(); },
       error: function(err) {
@@ -639,7 +725,8 @@ function validationForm() {
   $('#beErr').empty(); isBeErr = false;
 
   if (!isValidSelectedPasien || !isValidAnamnesa || !isValidSign || !isValidDiagnosa 
-    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa || isBeErr || customErr1) {
+    || !isValidRadioRawatInap || !isValidRadioStatusPemeriksa
+    || !isValidFotoKondisiPasien || isBeErr || customErr1) {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', true);
   } else {
     $('#btnSubmitHasilPemeriksaan').attr('disabled', false);
