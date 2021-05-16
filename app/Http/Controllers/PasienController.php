@@ -279,6 +279,22 @@ class PasienController extends Controller
                 ->where('registrations.doctor_user_id', '=', $request->user()->id);
         }
 
+        $data_check = DB::table('check_up_results')
+            ->select('check_up_results.patient_registration_id')
+            ->get();
+
+        $res = "";
+
+        foreach ($data_check as $dat) {
+            $res = $res . (string) $dat->patient_registration_id . ",";
+        }
+
+        $res = rtrim($res, ", ");
+
+        $myArray = explode(',', $res);
+
+        $data = $data->whereNotIn('registrations.id', $myArray);
+
         $data = $data->orderBy('registrations.id', 'desc');
 
         $data = $data->get();

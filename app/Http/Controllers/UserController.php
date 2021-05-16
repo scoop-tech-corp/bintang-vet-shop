@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $user = DB::table('users')
             ->join('branches', 'users.branch_id', '=', 'branches.id')
-            ->select('users.branch_id', 'branches.branch_name', 'users.username', 'users.fullname', 'users.email', 'users.role', 'users.status', 'users.isDeleted')
+            ->select('users.branch_id', 'branches.branch_name', 'users.username', 'users.image_profile', 'users.fullname', 'users.email', 'users.role', 'users.status', 'users.isDeleted')
             ->where('users.id', '=', $request->user()->id)
             ->get();
 
@@ -73,6 +73,7 @@ class UserController extends Controller
                 'username' => $user[0]->username,
                 'fullname' => $user[0]->fullname,
                 'email' => $user[0]->email,
+                'image_profile' => $user[0]->image_profile,
                 'role' => $user[0]->role,
             ]
         );

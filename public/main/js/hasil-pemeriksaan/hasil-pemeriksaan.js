@@ -148,14 +148,14 @@ $(document).ready(function() {
         
         $('.openDetail').click(function() {
           const getObj = data.find(x => x.id == $(this).val());
-					if (getObj.status_finish != 0) {
+					if (getObj.status_finish != 0 || role.toLowerCase() == 'admin') {
             window.location.href = $('.baseUrl').val() + `/hasil-pemeriksaan/detail/${$(this).val()}`;
           }
         });
 
 				$('.openFormEdit').click(function() {
           const getObj = data.find(x => x.id == $(this).val());
-					if (getObj.status_finish != 1) {
+					if (getObj.status_finish != 1 || role.toLowerCase() == 'admin') {
             window.location.href = $('.baseUrl').val() + `/hasil-pemeriksaan/edit/${$(this).val()}`;
           }
 				});
@@ -163,7 +163,7 @@ $(document).ready(function() {
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
 					const getObj = data.find(x => x.id == getId);
-					if (getObj.status_finish != 1) {
+					if (getObj.status_finish != 1 || role.toLowerCase() == 'admin') {
 						modalState = 'delete';
 
 						$('#modal-confirmation .modal-title').text('Peringatan');

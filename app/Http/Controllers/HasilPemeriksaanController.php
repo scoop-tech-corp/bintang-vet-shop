@@ -6,13 +6,14 @@ use App\Models\CheckUpResult;
 use App\Models\DetailItemPatient;
 use App\Models\DetailServicePatient;
 use App\Models\HistoryItemMovement;
-use App\Models\images_check_up_result;
+use App\Models\ImagesCheckUpResults;
 use App\Models\InPatient;
 use App\Models\ListofItems;
 use App\Models\ListofServices;
 use App\Models\Registration;
 use App\Models\TempCountItem;
 use DB;
+use File;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -32,7 +33,7 @@ class HasilPemeriksaanController extends Controller
             ->join('registrations', 'check_up_results.patient_registration_id', '=', 'registrations.id')
             ->join('patients', 'registrations.patient_id', '=', 'patients.id')
             ->select('check_up_results.id', 'registrations.id_number as registration_number', 'patients.id as patient_id', 'patients.id_member as patient_number', 'patients.pet_category', 'patients.pet_name',
-                'patients.owner_name','registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
+                'patients.owner_name', 'registrations.complaint', 'check_up_results.status_finish', 'check_up_results.status_outpatient_inpatient', 'users.fullname as created_by',
                 DB::raw("DATE_FORMAT(check_up_results.created_at, '%d %b %Y') as created_at"));
 
         if ($request->user()->role == 'dokter') {
@@ -329,17 +330,69 @@ class HasilPemeriksaanController extends Controller
 
                 $count_item = $list_of_items->total_item - $find_stock['quantity'];
 
+                $detail_item = DB::table('temp_count_items')
+                    ->where('user_id', $request->user()->id)->delete();
+                //return $count_item;
                 if ($count_item < 0) {
-
-                    $detail_item = DB::table('temp_count_items')
-                        ->where('user_id', $request->user()->id)->delete();
 
                     return response()->json([
                         'message' => 'The given data was invalid.',
                         'errors' => ['Jumlah stok ' . $list_of_items->item_name . ' kurang atau habis!'],
                     ], 422);
                 }
+
             }
+        }
+
+        //validasi tambah tambah gambar
+        $validator_image = Validator::make($request->all(), [
+            'filenames' => 'required',
+            'filenames.*' => 'required|mimes:jpg,png,jpeg',
+        ]);
+
+        if ($validator_image->fails()) {
+            $errors_image = $validator_image->errors()->all();
+
+            return response()->json([
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors_image,
+            ], 422);
+        }
+
+        if ($request->hasfile('filenames')) {
+
+            $data_item = [];
+
+            $files[] = $request->file('filenames');
+
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $file_size = $fil->getSize();
+
+                    $file_size = $file_size / 1024;
+
+                    $oldname = $fil->getClientOriginalName();
+
+                    if ($file_size >= 5000) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap upload gambar dengan ukuran lebih kecil!');
+                    }
+
+                }
+
+            }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            }
+
         }
 
         //insert data
@@ -435,10 +488,30 @@ class HasilPemeriksaanController extends Controller
         $detail_item = DB::table('temp_count_items')
             ->where('user_id', $request->user()->id)->delete();
 
+        if ($request->hasfile('filenames')) {
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $name = $fil->hashName();
+
+                    $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                    $fileName = "/image_check_up_result/" . $name;
+
+                    $file = new ImagesCheckUpResults();
+                    $file->image = $fileName;
+                    $file->check_up_result_id = $item->id;
+                    $file->user_id = $request->user()->id;
+                    $file->save();
+                }
+            }
+        }
+
         return response()->json(
             [
                 'message' => 'Tambah Data Berhasil!',
-                'id' => $item->id,
+                //'id' => $item->id,
             ], 200
         );
     }
@@ -545,13 +618,20 @@ class HasilPemeriksaanController extends Controller
 
         $data['inpatient'] = $inpatient;
 
+        $image = DB::table('images_check_up_results')
+            ->select('images_check_up_results.id as image_id', 'images_check_up_results.image')
+            ->where('check_up_result_id', '=', $data->id)
+            ->get();
+
+        $data['images'] = $image;
+
         return response()->json($data, 200);
     }
 
     public function update(Request $request)
     {
 
-        //info($request);
+        info($request);
 
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
@@ -737,177 +817,39 @@ class HasilPemeriksaanController extends Controller
 
             foreach ($result_item as $res_group) {
 
-                $check_medicine_group = DB::table('medicine_groups')
-                    ->select('id')
-                    ->where('id', '=', $res_group['medicine_group_id'])
-                    ->first();
+                if ($res_group['medicine_group_id']) {
 
-                if (is_null($check_medicine_group)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data Kelompok Obat tidak ditemukan!'],
-                    ], 404);
-                }
+                    $check_medicine_group = DB::table('medicine_groups')
+                        ->select('id')
+                        ->where('id', '=', $res_group['medicine_group_id'])
+                        ->first();
 
-                //return $res_group;
+                    if (is_null($check_medicine_group)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data Kelompok Obat tidak ditemukan!'],
+                        ], 404);
+                    }
 
-                //info(is_object($res_group['list_of_medicine']));
+                    //return $res_group;
 
-                // if (!is_object($res_group['list_of_medicine'])) {
+                    //info(is_object($res_group['list_of_medicine']));
 
-                //     return response()->json([
-                //         'message' => 'The data was invalid.',
-                //         'errors' => ['Isi Kelompok Obat Harus diisi!'],
-                //     ], 422);
-                // }
+                    // if (!is_object($res_group['list_of_medicine'])) {
 
-                foreach ($res_group['list_of_medicine'] as $value_item) {
+                    //     return response()->json([
+                    //         'message' => 'The data was invalid.',
+                    //         'errors' => ['Isi Kelompok Obat Harus diisi!'],
+                    //     ], 422);
+                    // }
 
-                    //cek untuk melakukan update atau create
+                    foreach ($res_group['list_of_medicine'] as $value_item) {
 
-                    if (is_null($value_item['id'])) {
-                        //$detail_item
-                        //kalau data baru
+                        //cek untuk melakukan update atau create
 
-                        $check_price_item = DB::table('price_items')
-                            ->select('list_of_items_id')
-                            ->where('id', '=', $value_item['price_item_id'])
-                            ->first();
-
-                        if (is_null($check_price_item)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Harga Barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
-
-                        if (is_null($list_of_items)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Daftar Barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        $check_storage = DB::table('list_of_items')
-                            ->select('total_item')
-                            ->where('id', '=', $check_price_item->list_of_items_id)
-                            ->first();
-
-                        if (is_null($check_storage)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data jumlah barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        $check_storage_name = DB::table('list_of_items')
-                            ->select('item_name')
-                            ->where('id', '=', $check_price_item->list_of_items_id)
-                            ->first();
-
-                        if (is_null($check_storage_name)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data jumlah barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        if ($value_item['quantity'] > $check_storage->total_item) {
-                            return response()->json([
-                                'message' => 'The given data was invalid.',
-                                'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
-                            ], 422);
-                        }
-
-                        if ($value_item['quantity'] <= 0) {
-                            return response()->json([
-                                'message' => 'The given data was invalid.',
-                                'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
-                            ], 422);
-                        }
-
-                    } else {
-
-                        $detail_item = DetailItemPatient::find($value_item['id']);
-                        //kalau data yang sudah pernah ada
-                        if (is_null($detail_item)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Daftar Barang Pasien tidak ditemukan!'],
-                            ], 404);
-                        }
-                        //untuk mendapatkan data stok terupdate
-                        $check_price_item = DB::table('price_items')
-                            ->select('list_of_items_id')
-                            ->where('id', '=', $value_item['price_item_id'])
-                            ->first();
-
-                        if (is_null($check_price_item)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Price Item not found!'],
-                            ], 404);
-                        }
-
-                        $check_stock = DB::table('list_of_items')
-                            ->select('total_item')
-                            ->where('id', '=', $check_price_item->list_of_items_id)
-                            ->first();
-
-                        if (is_null($check_stock)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Daftar Barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        $check_storage_name = DB::table('list_of_items')
-                            ->select('item_name')
-                            ->where('id', '=', $check_price_item->list_of_items_id)
-                            ->first();
-
-                        if (is_null($check_storage_name)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data jumlah barang tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
-                        // $check_item_result = DB::table('detail_item_out_patients')
-                        //     ->select('quantity')
-                        //     ->where('check_up_result_id', '=', $request->id)
-                        //     ->where('item_id', '=', $value_item['item_id'])
-                        //     ->first();
-
-                        $check_item_result = DB::table('detail_item_patients')
-                            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-                            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-                            ->select('detail_item_patients.quantity as quantity')
-                            ->where('list_of_items.id', '=', $check_price_item->list_of_items_id)
-                            ->where('price_items.id', '=', $value_item['price_item_id'])
-                            ->first();
-
-                        if (is_null($check_item_result)) {
-                            return response()->json([
-                                'message' => 'The data was invalid.',
-                                'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
-                            ], 404);
-                        }
-
-                        //validasi kalau data input lebih dari data awal
-                        if ($value_item['quantity'] > $check_item_result->quantity) {
-
-                            $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
-
-                            if ($res_value_item > $check_stock->total_item) {
-                                return response()->json([
-                                    'message' => 'The given data was invalid.',
-                                    'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
-                                ], 422);
-                            }
+                        if (is_null($value_item['id'])) {
+                            //$detail_item
+                            //kalau data baru
 
                             $check_price_item = DB::table('price_items')
                                 ->select('list_of_items_id')
@@ -930,52 +872,55 @@ class HasilPemeriksaanController extends Controller
                                 ], 404);
                             }
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
-
-                            if (is_null($detail_item_patient)) {
-
-                                return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data tidak ditemukan!'],
-                                ], 404);
-                            }
-
-                        } elseif ($value_item['quantity'] < $check_item_result->quantity) {
-
-                            $res_value_item = $check_item_result->quantity - $value_item['quantity'];
-
-                            $check_price_item = DB::table('price_items')
-                                ->select('list_of_items_id')
-                                ->where('id', '=', $value_item['price_item_id'])
+                            $check_storage = DB::table('list_of_items')
+                                ->select('total_item')
+                                ->where('id', '=', $check_price_item->list_of_items_id)
                                 ->first();
 
-                            if (is_null($check_price_item)) {
+                            if (is_null($check_storage)) {
                                 return response()->json([
                                     'message' => 'The data was invalid.',
-                                    'errors' => ['Data Harga Barang tidak ditemukan!'],
+                                    'errors' => ['Data jumlah barang tidak ditemukan!'],
                                 ], 404);
                             }
 
-                            $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+                            $check_storage_name = DB::table('list_of_items')
+                                ->select('item_name')
+                                ->where('id', '=', $check_price_item->list_of_items_id)
+                                ->first();
 
-                            if (is_null($list_of_items)) {
+                            if (is_null($check_storage_name)) {
                                 return response()->json([
                                     'message' => 'The data was invalid.',
-                                    'errors' => ['Data tidak ditemukan!'],
+                                    'errors' => ['Data jumlah barang tidak ditemukan!'],
                                 ], 404);
                             }
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
-
-                            if (is_null($detail_item_patient)) {
-
+                            if ($value_item['quantity'] > $check_storage->total_item) {
                                 return response()->json([
-                                    'message' => 'The data was invalid.',
-                                    'errors' => ['Data tidak ditemukan!'],
-                                ], 404);
+                                    'message' => 'The given data was invalid.',
+                                    'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
+                                ], 422);
                             }
+
+                            if ($value_item['quantity'] <= 0) {
+                                return response()->json([
+                                    'message' => 'The given data was invalid.',
+                                    'errors' => ['Jumlah barang ' . $check_storage_name->item_name . ' belum diisi!'],
+                                ], 422);
+                            }
+
                         } else {
 
+                            $detail_item = DetailItemPatient::find($value_item['id']);
+                            //kalau data yang sudah pernah ada
+                            if (is_null($detail_item)) {
+                                return response()->json([
+                                    'message' => 'The data was invalid.',
+                                    'errors' => ['Data Daftar Barang Pasien tidak ditemukan!'],
+                                ], 404);
+                            }
+                            //untuk mendapatkan data stok terupdate
                             $check_price_item = DB::table('price_items')
                                 ->select('list_of_items_id')
                                 ->where('id', '=', $value_item['price_item_id'])
@@ -984,30 +929,168 @@ class HasilPemeriksaanController extends Controller
                             if (is_null($check_price_item)) {
                                 return response()->json([
                                     'message' => 'The data was invalid.',
-                                    'errors' => ['Data Harga Barang tidak ditemukan!'],
+                                    'errors' => ['Data Price Item not found!'],
                                 ], 404);
                             }
 
-                            $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+                            $check_stock = DB::table('list_of_items')
+                                ->select('total_item')
+                                ->where('id', '=', $check_price_item->list_of_items_id)
+                                ->first();
 
-                            if (is_null($list_of_items)) {
+                            if (is_null($check_stock)) {
                                 return response()->json([
                                     'message' => 'The data was invalid.',
-                                    'errors' => ['Data tidak ditemukan!'],
+                                    'errors' => ['Data Daftar Barang tidak ditemukan!'],
                                 ], 404);
                             }
 
-                            $detail_item_patient = DetailItemPatient::find($value_item['id']);
+                            $check_storage_name = DB::table('list_of_items')
+                                ->select('item_name')
+                                ->where('id', '=', $check_price_item->list_of_items_id)
+                                ->first();
 
-                            if (is_null($detail_item_patient)) {
-
+                            if (is_null($check_storage_name)) {
                                 return response()->json([
                                     'message' => 'The data was invalid.',
-                                    'errors' => ['Data tidak ditemukan!'],
+                                    'errors' => ['Data jumlah barang tidak ditemukan!'],
                                 ], 404);
                             }
+
+                            //untuk cek quantity yang sudah ada untuk mencari selisih penambahan
+                            // $check_item_result = DB::table('detail_item_out_patients')
+                            //     ->select('quantity')
+                            //     ->where('check_up_result_id', '=', $request->id)
+                            //     ->where('item_id', '=', $value_item['item_id'])
+                            //     ->first();
+
+                            $check_item_result = DB::table('detail_item_patients')
+                                ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+                                ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+                                ->select('detail_item_patients.quantity as quantity')
+                                ->where('list_of_items.id', '=', $check_price_item->list_of_items_id)
+                                ->where('price_items.id', '=', $value_item['price_item_id'])
+                                ->first();
+
+                            if (is_null($check_item_result)) {
+                                return response()->json([
+                                    'message' => 'The data was invalid.',
+                                    'errors' => ['Data Hasil Pemeriksaan tidak ditemukan!'],
+                                ], 404);
+                            }
+
+                            //validasi kalau data input lebih dari data awal
+                            if ($value_item['quantity'] > $check_item_result->quantity) {
+
+                                $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
+
+                                if ($res_value_item > $check_stock->total_item) {
+                                    return response()->json([
+                                        'message' => 'The given data was invalid.',
+                                        'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
+                                    ], 422);
+                                }
+
+                                $check_price_item = DB::table('price_items')
+                                    ->select('list_of_items_id')
+                                    ->where('id', '=', $value_item['price_item_id'])
+                                    ->first();
+
+                                if (is_null($check_price_item)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data Harga Barang tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                                if (is_null($list_of_items)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data Daftar Barang tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                if (is_null($detail_item_patient)) {
+
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                            } elseif ($value_item['quantity'] < $check_item_result->quantity) {
+
+                                $res_value_item = $check_item_result->quantity - $value_item['quantity'];
+
+                                $check_price_item = DB::table('price_items')
+                                    ->select('list_of_items_id')
+                                    ->where('id', '=', $value_item['price_item_id'])
+                                    ->first();
+
+                                if (is_null($check_price_item)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data Harga Barang tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                                if (is_null($list_of_items)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                if (is_null($detail_item_patient)) {
+
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data tidak ditemukan!'],
+                                    ], 404);
+                                }
+                            } else {
+
+                                $check_price_item = DB::table('price_items')
+                                    ->select('list_of_items_id')
+                                    ->where('id', '=', $value_item['price_item_id'])
+                                    ->first();
+
+                                if (is_null($check_price_item)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data Harga Barang tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $list_of_items = ListofItems::find($check_price_item->list_of_items_id);
+
+                                if (is_null($list_of_items)) {
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data tidak ditemukan!'],
+                                    ], 404);
+                                }
+
+                                $detail_item_patient = DetailItemPatient::find($value_item['id']);
+
+                                if (is_null($detail_item_patient)) {
+
+                                    return response()->json([
+                                        'message' => 'The data was invalid.',
+                                        'errors' => ['Data tidak ditemukan!'],
+                                    ], 404);
+                                }
+                            }
+
                         }
-
                     }
                 }
 
@@ -1016,47 +1099,50 @@ class HasilPemeriksaanController extends Controller
             //disini
             foreach ($result_item as $value_data) {
 
-                foreach ($value_data['list_of_medicine'] as $value_item) {
+                if ($value_data['medicine_group_id']) {
 
-                    if (is_null($value_item['status'])) {
+                    foreach ($value_data['list_of_medicine'] as $value_item) {
 
-                        $check_temp_count_items = DB::table('temp_count_items')
-                            ->where('price_item_id', '=', $value_item['price_item_id'])
-                            ->where('user_id', '=', $request->user()->id)
-                            ->sum('temp_count_items.quantity');
+                        if (is_null($value_item['status'])) {
 
-                        $check_temp_item = DB::table('temp_count_items')
-                            ->where('price_item_id', '=', $value_item['price_item_id'])
-                            ->where('user_id', '=', $request->user()->id)
-                            ->first();
+                            $check_temp_count_items = DB::table('temp_count_items')
+                                ->where('price_item_id', '=', $value_item['price_item_id'])
+                                ->where('user_id', '=', $request->user()->id)
+                                ->sum('temp_count_items.quantity');
 
-                        if (is_null($check_temp_item)) {
-
-                            $service_list = TempCountItem::create([
-                                'price_item_id' => $value_item['price_item_id'],
-                                'quantity' => $value_item['quantity'],
-                                'user_id' => $request->user()->id,
-                            ]);
-
-                        } else {
-
-                            $adding_value = $check_temp_count_items;
-
-                            $find_id = DB::table('temp_count_items')
-                                ->select('id', 'quantity')
+                            $check_temp_item = DB::table('temp_count_items')
                                 ->where('price_item_id', '=', $value_item['price_item_id'])
                                 ->where('user_id', '=', $request->user()->id)
                                 ->first();
 
-                            $res_adding = $adding_value + $value_item['quantity'];
+                            if (is_null($check_temp_item)) {
 
-                            $find_price_item = TempCountItem::find($find_id->id);
-                            $find_price_item->quantity = $res_adding;
-                            $find_price_item->save();
+                                $service_list = TempCountItem::create([
+                                    'price_item_id' => $value_item['price_item_id'],
+                                    'quantity' => $value_item['quantity'],
+                                    'user_id' => $request->user()->id,
+                                ]);
+
+                            } else {
+
+                                $adding_value = $check_temp_count_items;
+
+                                $find_id = DB::table('temp_count_items')
+                                    ->select('id', 'quantity')
+                                    ->where('price_item_id', '=', $value_item['price_item_id'])
+                                    ->where('user_id', '=', $request->user()->id)
+                                    ->first();
+
+                                $res_adding = $adding_value + $value_item['quantity'];
+
+                                $find_price_item = TempCountItem::find($find_id->id);
+                                $find_price_item->quantity = $res_adding;
+                                $find_price_item->save();
+                            }
+
                         }
 
                     }
-
                 }
             }
 
@@ -1532,6 +1618,26 @@ class HasilPemeriksaanController extends Controller
         $delete_inpatient = DB::table('in_patients')
             ->where('check_up_result_id', $request->id)->delete();
 
+        $find_images = DB::table('images_check_up_results')
+            ->select('images_check_up_results.id', 'images_check_up_results.image')
+            ->where('check_up_result_id', '=', $request->id)
+            ->get();
+
+        if ($find_images) {
+
+            foreach ($find_images as $image) {
+
+                if (file_exists(public_path() . $image->image)) {
+
+                    File::delete(public_path() . $image->image);
+
+                    $delete = DB::table('images_check_up_results')
+                        ->where('id', $image->id)->delete();
+                }
+            }
+
+        }
+
         $check_up_result = CheckUpResult::find($request->id);
         $check_up_result->delete();
 
@@ -1551,33 +1657,193 @@ class HasilPemeriksaanController extends Controller
 
         }
 
+        // $message_image = [
+        //     'filenames.*.max' => 'Terdapat foto yang lebih dari 5mb harap cek ulang!',
+        // ];
+
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
+            'check_up_result_id' => 'required',
+            'filenames' => 'required',
+            'filenames.*' => 'required|mimes:jpg,png,jpeg',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'message' => $validator->messages()->first(),
-            ], 200);
-            //return sendCustomResponse($validator->messages()->first(), 'error', 500);
-        }
-
-        if ($file = $request->file('file')) {
-            $path = $file->store('public/files');
-            $name = $file->getClientOriginalName();
-
-            //store your file into directory and db
-            $save = new images_check_up_result();
-            $save->name = $file;
-            $save->store_path = $path;
-            $save->save();
+            $errors = $validator->errors()->all();
 
             return response()->json([
-                "success" => true,
-                "message" => "File successfully uploaded",
-                "file" => $file,
-            ]);
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
+        }
+
+        if ($request->hasfile('filenames')) {
+
+            $data_item = [];
+
+            $files[] = $request->file('filenames');
+
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $file_size = $fil->getSize();
+
+                    $file_size = $file_size / 1024;
+
+                    $oldname = $fil->getClientOriginalName();
+
+                    if ($file_size >= 5) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap cek ulang!');
+                    }
+
+                }
+
+            }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            } else {
+
+                foreach ($files as $file) {
+
+                    foreach ($file as $fil) {
+
+                        $name = $fil->hashName();
+
+                        $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                        $fileName = "/image_check_up_result/" . $name;
+
+                        $file = new ImagesCheckUpResults();
+                        $file->image = $fileName;
+                        $file->check_up_result_id = $request->check_up_result_id;
+                        $file->user_id = $request->user()->id;
+                        $file->save();
+                    }
+                }
+            }
 
         }
+
+        return response()->json([
+            'message' => 'Berhasil',
+        ], 200);
+    }
+
+    public function update_upload_images(Request $request)
+    {
+        if ($request->user()->role == 'resepsionis') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+
+        }
+
+        $validator = Validator::make($request->all(), [
+            'check_up_result_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            return response()->json([
+                'message' => 'Foto yang dimasukkan tidak valid!',
+                'errors' => $errors,
+            ], 422);
+        }
+
+        $image = $request->images;
+        $result_image = json_decode($image, true);
+
+        foreach ($result_image as $img) {
+
+            if ($img['status'] == 'del') {
+
+                $find_image = DB::table('images_check_up_results')
+                    ->select('images_check_up_results.image')
+                    ->where('id', '=', $img['image_id'])
+                    ->where('check_up_result_id', '=', $request->check_up_result_id)
+                    ->first();
+
+                if ($find_image) {
+
+                    if (file_exists(public_path() . $find_image->image)) {
+
+                        File::delete(public_path() . $find_image->image);
+
+                        $delete = DB::table('images_check_up_results')
+                            ->where('id', $img['image_id'])->delete();
+                    }
+                }
+            }
+
+        }
+
+        if ($request->hasfile('filenames')) {
+
+            $data_item = [];
+
+            $files[] = $request->file('filenames');
+
+            foreach ($files as $file) {
+
+                foreach ($file as $fil) {
+
+                    $file_size = $fil->getSize();
+
+                    $file_size = $file_size / 1024;
+
+                    $oldname = $fil->getClientOriginalName();
+
+                    if ($file_size >= 5000) {
+
+                        array_push($data_item, 'Foto ' . $oldname . ' lebih dari 5mb! Harap cek ulang!');
+                    }
+
+                }
+
+            }
+
+            if ($data_item) {
+
+                return response()->json([
+                    'message' => 'Foto yang dimasukkan tidak valid!',
+                    'errors' => $data_item,
+                ], 422);
+
+            } else {
+
+                foreach ($files as $file) {
+
+                    foreach ($file as $fil) {
+
+                        $name = $fil->hashName();
+
+                        $fil->move(public_path() . '/image_check_up_result/', $name);
+
+                        $fileName = "/image_check_up_result/" . $name;
+
+                        $file = new ImagesCheckUpResults();
+                        $file->image = $fileName;
+                        $file->check_up_result_id = $request->check_up_result_id;
+                        $file->user_id = $request->user()->id;
+                        $file->save();
+                    }
+                }
+            }
+
+        }
+
+        return response()->json([
+            'message' => 'Berhasil update',
+        ], 200);
 
     }
 

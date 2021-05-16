@@ -20,9 +20,124 @@
   margin-top: 25px;
 }
 
+input::-webkit-file-upload-button {
+  cursor: pointer;
+  width: 100%;
+}
+
+#section-upload-image {
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  border: 1px solid #3c8dbc;
+  padding: 70px 0px;
+}
+
+.notes-upload-image {
+  position: absolute;
+  top: 15px;
+  left: 25px;
+}
+
+#section-upload-image .box-image-upload {
+  width: 150px; height: 150px;
+  font-size: 50px;
+  border: 1px solid #00c0ef;
+  border-style: dashed;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+#section-upload-image .box-image-upload .btn-icon {
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+  cursor: pointer;
+  display: none;
+}
+
+#section-upload-image .box-image-upload .btn-icon i {
+  font-size: 25px;
+  color: #dd4b39;
+}
+
+.img-preview-1, .img-preview-2, .img-preview-3, .img-preview-4, .img-preview-5 {
+  display: none;
+  width: 150px; height: 150px;
+}
+
+#section-upload-image .box-image-upload .input-file{
+  opacity: 0.0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+#section-foto-kondisi-pasien {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #3c8dbc;
+  padding: 70px 0px;
+}
+
+#section-foto-kondisi-pasien .img-style {
+  border:#00c0ef;
+  border-style: double;
+  margin: 5px 5px;
+  float: left;
+}
+#section-foto-kondisi-pasien .img-style img {
+  width: 150px; height: 150px;
+}
+
 @media (max-width: 768px) {
   .section-add-kelompok-obat {
     margin-bottom: 20px;
+  }
+
+  #section-foto-kondisi-pasien {
+    display: block;
+    padding: 25px
+  }
+
+  #section-foto-kondisi-pasien .img-style {
+    width: 100%;
+    float: none;
+    margin: 10px 0px;
+  }
+  #section-foto-kondisi-pasien .img-style img {
+    width: 100%;
+    height: 230px;
+  }
+
+  #section-upload-image {
+    display: block;
+    padding: 25px;
+  }
+  .notes-upload-image {
+    position: unset;
+  }
+
+  #section-upload-image .box-image-upload {
+    margin: 10px 0px;
+    width: 100%;
+    height: 230px;
+  }
+
+  .img-preview-1, .img-preview-2, .img-preview-3, .img-preview-4, .img-preview-5 {
+    width: 100%; height: 100%;
   }
 }
 
