@@ -174,6 +174,13 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('laporan-keuangan/bulanan/download', 'LaporanKeuanganBulananController@download_excel');
 
         Route::get('laporan-keuangan/bulanan/detail', 'LaporanKeuanganBulananController@detail');
+
+        //dashboard
+        Route::get('dashboard/barchart', 'DashboardController@BarChartPatient');
+
+        Route::get('dashboard/piechart', 'DashboardController@PieChartGender');
+
+        Route::get('dashboard/graphchart', 'DashboardController@GraphChartAge');
     });
 });
 
