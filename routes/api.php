@@ -135,7 +135,7 @@ Route::group(['middleware' => ['api']], function () {
 
         Route::delete('pembayaran', 'PembayaranController@delete');
 
-        Route::delete('pembayaran/all', 'PembayaranController@delete_all');
+        //Route::delete('pembayaran/all', 'PembayaranController@delete_all');
 
         //riwayat pasien
         Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
