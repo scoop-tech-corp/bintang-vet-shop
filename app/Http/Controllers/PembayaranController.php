@@ -142,7 +142,7 @@ class PembayaranController extends Controller
                 'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'detail_service_patients.status_paid_off', 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_service_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->orderBy('detail_service_patients.id', 'desc')
             ->get();
 
@@ -160,7 +160,7 @@ class PembayaranController extends Controller
                 DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
                 'medicine_groups.group_name', 'detail_item_patients.status_paid_off', 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
-            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->orderBy('detail_item_patients.id', 'desc')
             ->get();
 
@@ -179,7 +179,7 @@ class PembayaranController extends Controller
                 'users.fullname as created_by', 'list_of_services.service_name',
                 'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"))
-            ->where('detail_service_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_service_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->where('detail_service_patients.status_paid_off', '=', 1)
             ->orderBy('list_of_payment_services.id', 'desc')
             ->get();
@@ -201,7 +201,7 @@ class PembayaranController extends Controller
                 'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"), 'detail_item_patients.medicine_group_id as medicine_group_id',
                 'medicine_groups.group_name', 'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"),
                 DB::raw("DATE_FORMAT(list_of_payment_items.created_at, '%d %b %Y') as paid_date"))
-            ->where('detail_item_patients.check_up_result_id', '=', $data->id)
+            ->where('detail_item_patients.check_up_result_id', '=', $data->check_up_result_id)
             ->where('detail_item_patients.status_paid_off', '=', 1)
             ->orderBy('list_of_payment_items.id', 'desc')
             ->get();
@@ -249,51 +249,47 @@ class PembayaranController extends Controller
         $services = $request->service_payment;
         $result_services = json_decode($services, true);
 
-        if (count($result_services) == 0) {
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Jasa Harus dipilih minimal 1!'],
-            ], 422);
-        }
+        if (count($result_services) != 0) {
 
-        foreach ($result_services as $key_service) {
+            foreach ($result_services as $key_service) {
 
-            $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
+                $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
 
-            if (is_null($check_service)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data Hasil Pemeriksaan Layanan Pasien tidak ditemukan!'],
-                ], 404);
+                if (is_null($check_service)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data Hasil Pemeriksaan Layanan Pasien tidak ditemukan!'],
+                    ], 404);
+                }
+
+                $check_service_name = DB::table('detail_service_patients')
+                    ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+                    ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+                    ->select('list_of_services.service_name as service_name')
+                    ->where('detail_service_patients.id', '=', $key_service['detail_service_patient_id'])
+                    ->first();
+
+                if (is_null($check_service_name)) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Data List of Services not found!'],
+                    ], 404);
+                }
+
+                $check_detail_service = DB::table('detail_service_patients')
+                    ->select('id')
+                    ->where('status_paid_off', '=', 1)
+                    ->where('id', '=', $key_service['detail_service_patient_id'])
+                    ->first();
+
+                if ($check_detail_service) {
+                    return response()->json([
+                        'message' => 'The data was invalid.',
+                        'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
+                    ], 422);
+                }
+
             }
-
-            $check_service_name = DB::table('detail_service_patients')
-                ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
-                ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
-                ->select('list_of_services.service_name as service_name')
-                ->where('detail_service_patients.id', '=', $key_service['detail_service_patient_id'])
-                ->first();
-
-            if (is_null($check_service_name)) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Data List of Services not found!'],
-                ], 404);
-            }
-
-            $check_detail_service = DB::table('detail_service_patients')
-                ->select('id')
-                ->where('status_paid_off', '=', 1)
-                ->where('id', '=', $key_service['detail_service_patient_id'])
-                ->first();
-
-            if ($check_detail_service) {
-                return response()->json([
-                    'message' => 'The data was invalid.',
-                    'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
-                ], 422);
-            }
-
         }
 
         $items = $request->item_payment;
@@ -342,20 +338,22 @@ class PembayaranController extends Controller
         }
 
         //simpan data jasa
-        foreach ($result_services as $key_service) {
+        if (count($result_services) != 0) {
+            foreach ($result_services as $key_service) {
 
-            $item = ListofPaymentService::create([
-                'detail_service_patient_id' => $key_service['detail_service_patient_id'],
-                'check_up_result_id' => $request->check_up_result_id,
-                'user_id' => $request->user()->id,
-            ]);
+                $item = ListofPaymentService::create([
+                    'detail_service_patient_id' => $key_service['detail_service_patient_id'],
+                    'check_up_result_id' => $request->check_up_result_id,
+                    'user_id' => $request->user()->id,
+                ]);
 
-            $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
+                $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
 
-            $check_service->status_paid_off = 1;
-            $check_service->user_update_id = $request->user()->id;
-            $check_service->updated_at = \Carbon\Carbon::now();
-            $check_service->save();
+                $check_service->status_paid_off = 1;
+                $check_service->user_update_id = $request->user()->id;
+                $check_service->updated_at = \Carbon\Carbon::now();
+                $check_service->save();
+            }
         }
 
         if (count($result_item) != 0) {
@@ -647,137 +645,137 @@ class PembayaranController extends Controller
         );
     }
 
+    // public function delete(Request $request)
+    // {
+    //     if ($request->user()->role == 'dokter' || $request->user()->role == 'dokter') {
+    //         return response()->json([
+    //             'message' => 'The user role was invalid.',
+    //             'errors' => ['Akses User tidak diizinkan!'],
+    //         ], 403);
+    //     }
+
+    //     //validasi
+    //     $check_list_of_payment = DB::table('list_of_payments')
+    //         ->where('check_up_result_id', '=', $request->check_up_result_id)
+    //         ->count();
+
+    //     if ($check_list_of_payment == 0) {
+
+    //         return response()->json([
+    //             'message' => 'The given data was invalid.',
+    //             'errors' => ['Data Pembayaran ini tidak ada!'],
+    //         ], 422);
+    //     }
+
+    //     $services = $request->service_payment;
+    //     $result_services = json_decode(json_encode($services), true);
+
+    //     if (count($result_services) != 0) {
+
+    //         foreach ($result_services as $key_service) {
+
+    //             if ($key_service['list_of_payment_service_id']) {
+
+    //                 $check_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
+
+    //                 if (is_null($check_service)) {
+    //                     return response()->json([
+    //                         'message' => 'The data was invalid.',
+    //                         'errors' => ['Data tidak ditemukan!'],
+    //                     ], 404);
+    //                 }
+
+    //             }
+    //         }
+    //     }
+
+    //     $items = $request->item_payment;
+    //     $result_item = json_decode(json_encode($items), true);
+
+    //     if (count($result_item) != 0) {
+
+    //         foreach ($result_item as $value_item) {
+
+    //             if ($value_item['list_of_payment_item_id']) {
+
+    //                 $check_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
+
+    //                 if (is_null($check_item)) {
+    //                     return response()->json([
+    //                         'message' => 'The data was invalid.',
+    //                         'errors' => ['Data tidak ditemukan!'],
+    //                     ], 404);
+    //                 }
+
+    //             }
+    //         }
+    //     }
+
+    //     //hapus data jasa
+    //     if (count($result_services) != 0) {
+    //         foreach ($result_services as $key_service) {
+
+    //             if ($key_service['list_of_payment_service_id']) {
+
+    //                 $check_payment_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
+
+    //                 $check_service = DetailServicePatient::find($check_payment_service->detail_service_patient_id);
+
+    //                 $check_service->status_paid_off = 0;
+    //                 $check_service->user_update_id = $request->user()->id;
+    //                 $check_service->updated_at = \Carbon\Carbon::now();
+    //                 $check_service->save();
+
+    //                 $delete_payment_service = DB::table('list_of_payment_services')
+    //                     ->where('id', $key_service['list_of_payment_service_id'])->delete();
+    //             }
+    //         }
+    //     }
+
+    //     // //hapus data barang
+    //     if (count($result_item) != 0) {
+    //         foreach ($result_item as $value_item) {
+
+    //             if ($value_item['list_of_payment_item_id']) {
+
+    //                 $check_payment_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
+
+    //                 $check_item = DetailItemPatient::find($check_payment_item->detail_item_patient_id);
+
+    //                 $check_item->status_paid_off = 0;
+    //                 $check_item->user_update_id = $request->user()->id;
+    //                 $check_item->updated_at = \Carbon\Carbon::now();
+    //                 $check_item->save();
+
+    //                 $delete_payment_item = DB::table('list_of_payment_items')
+    //                     ->where('id', $value_item['list_of_payment_item_id'])->delete();
+
+    //             }
+    //         }
+    //     }
+
+    //     $check_paid_off = DB::table('check_up_results')
+    //         ->where('id', '=', $request->check_up_result_id)
+    //         ->get();
+
+    //     if ($check_paid_off[0]->status_paid_off == 1) {
+
+    //         $update_paid_off = CheckUpResult::find($request->check_up_result_id);
+
+    //         $update_paid_off->status_paid_off = 0;
+    //         $update_paid_off->user_update_id = $request->user()->id;
+    //         $update_paid_off->updated_at = \Carbon\Carbon::now();
+    //         $update_paid_off->save();
+    //     }
+
+    //     return response()->json(
+    //         [
+    //             'message' => 'Hapus Data Berhasil!',
+    //         ], 200
+    //     );
+    // }
+
     public function delete(Request $request)
-    {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
-
-        //validasi
-        $check_list_of_payment = DB::table('list_of_payments')
-            ->where('check_up_result_id', '=', $request->check_up_result_id)
-            ->count();
-
-        if ($check_list_of_payment == 0) {
-
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Pembayaran ini tidak ada!'],
-            ], 422);
-        }
-
-        $services = $request->service_payment;
-        $result_services = json_decode(json_encode($services), true);
-
-        if (count($result_services) != 0) {
-
-            foreach ($result_services as $key_service) {
-
-                if ($key_service['list_of_payment_service_id']) {
-
-                    $check_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
-
-                    if (is_null($check_service)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data tidak ditemukan!'],
-                        ], 404);
-                    }
-
-                }
-            }
-        }
-
-        $items = $request->item_payment;
-        $result_item = json_decode(json_encode($items), true);
-
-        if (count($result_item) != 0) {
-
-            foreach ($result_item as $value_item) {
-
-                if ($value_item['list_of_payment_item_id']) {
-
-                    $check_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
-
-                    if (is_null($check_item)) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data tidak ditemukan!'],
-                        ], 404);
-                    }
-
-                }
-            }
-        }
-
-        //hapus data jasa
-        if (count($result_services) != 0) {
-            foreach ($result_services as $key_service) {
-
-                if ($key_service['list_of_payment_service_id']) {
-
-                    $check_payment_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
-
-                    $check_service = DetailServicePatient::find($check_payment_service->detail_service_patient_id);
-
-                    $check_service->status_paid_off = 0;
-                    $check_service->user_update_id = $request->user()->id;
-                    $check_service->updated_at = \Carbon\Carbon::now();
-                    $check_service->save();
-
-                    $delete_payment_service = DB::table('list_of_payment_services')
-                        ->where('id', $key_service['list_of_payment_service_id'])->delete();
-                }
-            }
-        }
-
-        // //hapus data barang
-        if (count($result_item) != 0) {
-            foreach ($result_item as $value_item) {
-
-                if ($value_item['list_of_payment_item_id']) {
-
-                    $check_payment_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
-
-                    $check_item = DetailItemPatient::find($check_payment_item->detail_item_patient_id);
-
-                    $check_item->status_paid_off = 0;
-                    $check_item->user_update_id = $request->user()->id;
-                    $check_item->updated_at = \Carbon\Carbon::now();
-                    $check_item->save();
-
-                    $delete_payment_item = DB::table('list_of_payment_items')
-                        ->where('id', $value_item['list_of_payment_item_id'])->delete();
-
-                }
-            }
-        }
-
-        $check_paid_off = DB::table('check_up_results')
-            ->where('id', '=', $request->check_up_result_id)
-            ->get();
-
-        if ($check_paid_off[0]->status_paid_off == 1) {
-
-            $update_paid_off = CheckUpResult::find($request->check_up_result_id);
-
-            $update_paid_off->status_paid_off = 0;
-            $update_paid_off->user_update_id = $request->user()->id;
-            $update_paid_off->updated_at = \Carbon\Carbon::now();
-            $update_paid_off->save();
-        }
-
-        return response()->json(
-            [
-                'message' => 'Hapus Data Berhasil!',
-            ], 200
-        );
-    }
-
-    public function delete_all(Request $request)
     {
         if ($request->user()->role == 'dokter' || $request->user()->role == 'dokter') {
             return response()->json([
@@ -795,26 +793,54 @@ class PembayaranController extends Controller
             ], 404);
         }
 
-        $check_payment_service = DB::table('list_of_payment_services')
-            ->where('check_up_result_id', $check_payment->check_up_result_id)
+        $check_payment_service = ListofPaymentService::where('check_up_result_id', '=', $check_payment->check_up_result_id)
             ->get();
 
         if ($check_payment_service) {
 
+            $data_service = [];
+
+            $data_service = $check_payment_service;
+
+            foreach ($data_service as $service) {
+
+                $check_service = DetailServicePatient::find($service['detail_service_patient_id']);
+
+                $check_service->status_paid_off = 0;
+                $check_service->user_update_id = $request->user()->id;
+                $check_service->updated_at = \Carbon\Carbon::now();
+                $check_service->save();
+
+            }
+
             $check_payment_service = DB::table('list_of_payment_services')
                 ->where('check_up_result_id', $check_payment->check_up_result_id)
                 ->delete();
+
         }
 
-        $check_payment_item = DB::table('list_of_payment_items')
-            ->where('check_up_result_id', $check_payment->check_up_result_id)
+        $check_payment_item = ListofPaymentItem::where('check_up_result_id', '=', $check_payment->check_up_result_id)
             ->get();
 
         if ($check_payment_item) {
 
+            $data_item = [];
+
+            $data_item = $check_payment_item;
+
+            foreach ($data_item as $item) {
+                $check_item = DetailItemPatient::find($item['detail_item_patient_id']);
+
+                $check_item->status_paid_off = 0;
+                $check_item->user_update_id = $request->user()->id;
+                $check_item->updated_at = \Carbon\Carbon::now();
+                $check_item->save();
+            }
+
             $check_payment_item = DB::table('list_of_payment_items')
                 ->where('check_up_result_id', $check_payment->check_up_result_id)
                 ->delete();
+
         }
 
         $check_paid_off = DB::table('check_up_results')
