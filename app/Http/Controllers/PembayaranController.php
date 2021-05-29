@@ -173,7 +173,7 @@ class PembayaranController extends Controller
             ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
             ->join('check_up_results', 'list_of_payment_services.check_up_result_id', '=', 'check_up_results.id')
             ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
-            ->select('list_of_payment_services.id as list_of_payment_service_id',
+            ->select('list_of_payment_services.id as list_of_payment_service_id', 'list_of_services.id as detail_service_patient_id',
                 DB::raw("DATE_FORMAT(list_of_payment_services.created_at, '%d %b %Y') as paid_date"),
                 DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"),
                 'users.fullname as created_by', 'list_of_services.service_name',
@@ -458,64 +458,60 @@ class PembayaranController extends Controller
         $services = $request->service_payment;
         $result_services = json_decode(json_encode($services), true);
 
-        if (count($result_services) == 0) {
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Jasa Harus dipilih minimal 1!'],
-            ], 422);
-        }
+        if (count($result_services) != 0) {
 
-        foreach ($result_services as $key_service) {
+            foreach ($result_services as $key_service) {
 
-            if ($key_service['detail_service_patient_id']) {
+                if ($key_service['detail_service_patient_id']) {
 
-                $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
+                    $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
 
-                if (is_null($check_service)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data tidak ditemukan!'],
-                    ], 404);
+                    if (is_null($check_service)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data tidak ditemukan!'],
+                        ], 404);
+                    }
+
+                    $check_service_name = DB::table('detail_service_patients')
+                        ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+                        ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+                        ->select('list_of_services.service_name as service_name')
+                        ->where('detail_service_patients.id', '=', $key_service['detail_service_patient_id'])
+                        ->first();
+
+                    if (is_null($check_service_name)) {
+                        return response()->json([
+                            'message' => 'The data was invalid.',
+                            'errors' => ['Data List of Services not found!'],
+                        ], 404);
+                    }
+
+                    if (is_null($key_service['status'])) {
+
+                        $check_detail_service = DB::table('detail_service_patients')
+                            ->select('id')
+                            ->where('status_paid_off', '=', 1)
+                            ->where('id', '=', $key_service['detail_service_patient_id'])
+                            ->first();
+
+                        if ($check_detail_service) {
+                            return response()->json([
+                                'message' => 'The data was invalid.',
+                                'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
+                            ], 422);
+                        }
+                    }
+
                 }
-
-                $check_service_name = DB::table('detail_service_patients')
-                    ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
-                    ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
-                    ->select('list_of_services.service_name as service_name')
-                    ->where('detail_service_patients.id', '=', $key_service['detail_service_patient_id'])
-                    ->first();
-
-                if (is_null($check_service_name)) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Data List of Services not found!'],
-                    ], 404);
-                }
-
-                $check_detail_service = DB::table('detail_service_patients')
-                    ->select('id')
-                    ->where('status_paid_off', '=', 1)
-                    ->where('id', '=', $key_service['detail_service_patient_id'])
-                    ->first();
-
-                if ($check_detail_service) {
-                    return response()->json([
-                        'message' => 'The data was invalid.',
-                        'errors' => ['Jasa ' . $check_service_name->service_name . ' sudah pernah dibayar sebelumnya!'],
-                    ], 422);
-                }
-
             }
+
         }
 
         $items = $request->item_payment;
         $result_item = json_decode(json_encode($items), true);
 
         if (count($result_item) != 0) {
-            // return response()->json([
-            //     'message' => 'The given data was invalid.',
-            //     'errors' => ['Data Barang Harus dipilih minimal 1!'],
-            // ], 422);
 
             foreach ($result_item as $value_item) {
 
@@ -544,17 +540,21 @@ class PembayaranController extends Controller
                         ], 404);
                     }
 
-                    $check_detail_item = DB::table('detail_item_patients')
-                        ->select('id')
-                        ->where('status_paid_off', '=', 1)
-                        ->where('id', '=', $value_item['detail_item_patient_id'])
-                        ->first();
+                    if (is_null($value_item['status'])) {
 
-                    if ($check_detail_item) {
-                        return response()->json([
-                            'message' => 'The data was invalid.',
-                            'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
-                        ], 422);
+                        $check_detail_item = DB::table('detail_item_patients')
+                            ->select('id')
+                            ->where('status_paid_off', '=', 1)
+                            ->where('id', '=', $value_item['detail_item_patient_id'])
+                            ->first();
+
+                        if ($check_detail_item) {
+                            return response()->json([
+                                'message' => 'The data was invalid.',
+                                'errors' => ['Data Barang ' . $check_item_name->item_name . ' sudah pernah dibayar sebelumnya!'],
+                            ], 422);
+                        }
+
                     }
 
                 }
@@ -564,7 +564,7 @@ class PembayaranController extends Controller
         //simpan data jasa
         foreach ($result_services as $key_service) {
 
-            if ($key_service['detail_service_patient_id']) {
+            if ($key_service['detail_service_patient_id'] && is_null($key_service['status'])) {
 
                 $item = ListofPaymentService::create([
                     'detail_service_patient_id' => $key_service['detail_service_patient_id'],
@@ -578,6 +578,18 @@ class PembayaranController extends Controller
                 $check_service->user_update_id = $request->user()->id;
                 $check_service->updated_at = \Carbon\Carbon::now();
                 $check_service->save();
+
+            } elseif ($key_service['status'] == "del") {
+
+                $check_service = DetailServicePatient::find($key_service['detail_service_patient_id']);
+
+                $check_service->status_paid_off = 0;
+                $check_service->user_update_id = $request->user()->id;
+                $check_service->updated_at = \Carbon\Carbon::now();
+                $check_service->save();
+
+                $delete_payment_service = DB::table('list_of_payment_services')
+                    ->where('detail_service_patient_id', $key_service['detail_service_patient_id'])->delete();
             }
         }
 
@@ -585,7 +597,7 @@ class PembayaranController extends Controller
         if (count($result_item) != 0) {
             foreach ($result_item as $value_item) {
 
-                if ($value_item['detail_item_patient_id']) {
+                if ($value_item['detail_item_patient_id'] && is_null($value_item['status'])) {
 
                     $item = ListofPaymentItem::create([
                         'detail_item_patient_id' => $value_item['detail_item_patient_id'],
@@ -600,6 +612,17 @@ class PembayaranController extends Controller
                     $check_item->updated_at = \Carbon\Carbon::now();
                     $check_item->save();
 
+                } elseif ($value_item['status'] == "del") {
+
+                    $check_item = DetailItemPatient::find($value_item['detail_item_patient_id']);
+
+                    $check_item->status_paid_off = 0;
+                    $check_item->user_update_id = $request->user()->id;
+                    $check_item->updated_at = \Carbon\Carbon::now();
+                    $check_item->save();
+
+                    $delete_payment_item = DB::table('list_of_payment_items')
+                        ->where('detail_item_patient_id', $value_item['detail_item_patient_id'])->delete();
                 }
             }
         }
