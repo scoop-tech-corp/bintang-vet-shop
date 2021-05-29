@@ -817,6 +817,20 @@ class PembayaranController extends Controller
                 ->delete();
         }
 
+        $check_paid_off = DB::table('check_up_results')
+            ->where('id', '=', $check_payment->check_up_result_id)
+            ->get();
+
+        if ($check_paid_off[0]->status_paid_off == 1) {
+
+            $update_paid_off = CheckUpResult::find($request->check_up_result_id);
+
+            $update_paid_off->status_paid_off = 0;
+            $update_paid_off->user_update_id = $request->user()->id;
+            $update_paid_off->updated_at = \Carbon\Carbon::now();
+            $update_paid_off->save();
+        }
+
         $check_payment->delete();
 
         return response()->json(
