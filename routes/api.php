@@ -133,6 +133,10 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('pembayaran/detail', 'PembayaranController@detail');
         Route::post('pembayaran/print', 'PembayaranController@print');
 
+        Route::delete('pembayaran', 'PembayaranController@delete');
+
+        Route::delete('pembayaran/all', 'PembayaranController@delete_all');
+
         //riwayat pasien
         Route::get('pasien/riwayat', 'PasienController@HistoryPatient');
         Route::get('pasien/detail-riwayat', 'PasienController@DetailHistoryPatient');
