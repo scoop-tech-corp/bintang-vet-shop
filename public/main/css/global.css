@@ -28,6 +28,17 @@ body {
 	opacity: 0.2;
 }
 
+.header-time-container {
+  display: inherit;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.header-time-container > #time-text {
+  color: #ffffff;
+}
+
 .icon-password {
   cursor: pointer;
   position: absolute;
@@ -141,6 +152,14 @@ body {
 
 .d-flex {
   display: flex;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
 }
 
 .p-relative {

@@ -121,53 +121,46 @@ $(document).ready(function() {
       }
     });
   });
+
+  function showTime() {
+    let months  = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    let myDays  = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+    let date    = new Date();
+    let day     = date.getDate();
+    let month   = date.getMonth();
+    let thisDay = date.getDay();
+    let nowDay   = myDays[thisDay];
+    let yy      = date.getYear();
+    let year    = (yy < 1000) ? yy + 1900 : yy;
+
+    let today       = new Date();
+    let curr_hour   = today.getHours();
+    let curr_minute = today.getMinutes();
+    let curr_second = today.getSeconds();
+    let a_p  = (curr_hour < 12) ? "AM" : "PM";
+
+    if (curr_hour == 0) { curr_hour = 12; }
+    if (curr_hour > 12) { curr_hour = curr_hour - 12; }
+    
+    curr_hour = checkTime(curr_hour);
+    curr_minute = checkTime(curr_minute);
+    curr_second = checkTime(curr_second);
+
+    let newTime = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+    let newDay = nowDay + ', ' + day + ' ' + months[month] + ' ' + year;
+
+    // document.getElementById('time').innerHTML= ;
+    
+    $('#time-text').text(newDay + ' ' + newTime);
+  }
+        
+  function checkTime(i) {
+    if (i < 10) { i = "0" + i; }
+    return i;
+  }
+  setInterval(showTime, 500); 
 });
 
-// const masterApp = new Vue({
-// 	el: '#master-app',
-// 	data: {
-//     fullname: '',
-//     username: '',
-//     role: '',
-//     token: '',
-//     email: '',
-//     userId: null,
-//     baseUrl: ''
-//   },
-//   mounted() {
-//     let getAuthUser = localStorage.getItem('vet-clinic');
-//     if (!getAuthUser) {
-//       alert('You Must Login First!');
-//       location.href = this.$refs.baseUrl.value + '/login';
-//     } else {
-//       getAuthUser = JSON.parse(getAuthUser);
-//       this.fullname = getAuthUser.fullname;
-//       this.username = getAuthUser.username;
-//       this.userId = getAuthUser.user_id;
-//       this.token = getAuthUser.token;
-//       this.email = getAuthUser.email;
-//       this.role = getAuthUser.role.toLowerCase();
-//     }
-//   },
-//   methods: {
-//     onLogOut: function() {
-//       const formData = { 'username': this.username };
-//       axios.post(this.$refs.baseUrl.value + '/api/keluar', formData, { 
-//         headers: { 
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${this.token}`
-//        },
-//       })
-//       .then(resp => {
-//         localStorage.removeItem('vet-clinic');
-//         location.href = this.$refs.baseUrl.value + '/login';
-//       })
-//       .catch(err => {
-//         if (err.response.status === 401) {
-//           localStorage.removeItem('vet-clinic');
-//           location.href = this.$refs.baseUrl.value + '/login';
-//         }
-//       });
-//     }
-//   }
-// });
+// <script type='text/javascript'>
+                       
+// 		</script>

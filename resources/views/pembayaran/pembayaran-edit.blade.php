@@ -77,6 +77,7 @@
                 <th>Harga Satuan</th>
                 <th>Harga Keseluruhan</th>
                 <th>Pembayaran</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody id="list-selected-jasa"></tbody>
@@ -100,6 +101,7 @@
                 <th>Harga Satuan</th>
                 <th>Harga Keseluruhan</th>
                 <th>Pembayaran</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody id="list-selected-barang"></tbody>
