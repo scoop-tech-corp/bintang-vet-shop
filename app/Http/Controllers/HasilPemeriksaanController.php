@@ -631,8 +631,6 @@ class HasilPemeriksaanController extends Controller
     public function update(Request $request)
     {
 
-        info($request);
-
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
                 'message' => 'The user role was invalid.',
@@ -897,6 +895,7 @@ class HasilPemeriksaanController extends Controller
                             }
 
                             if ($value_item['quantity'] > $check_storage->total_item) {
+
                                 return response()->json([
                                     'message' => 'The given data was invalid.',
                                     'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
@@ -985,6 +984,7 @@ class HasilPemeriksaanController extends Controller
                                 $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
 
                                 if ($res_value_item > $check_stock->total_item) {
+
                                     return response()->json([
                                         'message' => 'The given data was invalid.',
                                         'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
@@ -1217,6 +1217,7 @@ class HasilPemeriksaanController extends Controller
                     'price_service_id' => $key_service['price_service_id'],
                     'quantity' => $key_service['quantity'],
                     'price_overall' => $key_service['price_overall'],
+                    'status_paid_off' => 0,
                     'user_id' => $request->user()->id,
                 ]);
 
@@ -1249,8 +1250,6 @@ class HasilPemeriksaanController extends Controller
             $temp_item = $request->item;
 
             $result_item = json_decode(json_encode($temp_item), true);
-
-            // info($result_item);
 
             foreach ($result_item as $res_group) {
 
