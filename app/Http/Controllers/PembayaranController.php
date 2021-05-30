@@ -442,18 +442,18 @@ class PembayaranController extends Controller
             ], 422);
         }
 
-        $check_up_result = DB::table('check_up_results')
-            ->select('status_paid_off')
-            ->where('id', '=', $request->check_up_result_id)
-            ->first();
+        // $check_up_result = DB::table('check_up_results')
+        //     ->select('status_paid_off')
+        //     ->where('id', '=', $request->check_up_result_id)
+        //     ->first();
 
-        if ($check_up_result->status_paid_off == 1) {
+        // if ($check_up_result->status_paid_off == 1) {
 
-            return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => ['Data Pemeriksaan ini sudah pernah dilunaskan!'],
-            ], 422);
-        }
+        //     return response()->json([
+        //         'message' => 'The given data was invalid.',
+        //         'errors' => ['Data Pemeriksaan ini sudah pernah dilunaskan!'],
+        //     ], 422);
+        // }
 
         $services = $request->service_payment;
         $result_services = json_decode(json_encode($services), true);
