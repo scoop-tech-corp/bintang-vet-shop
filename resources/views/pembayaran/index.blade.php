@@ -31,13 +31,16 @@
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody id="list-pembayaran"></tbody>
+        <tbody id="list-pembayaran">
+          <tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
 </div>
 
 @component('layout.modal-confirmation') @endcomponent
+@component('layout.message-box') @endcomponent
 
 @endsection
 @section('script-content')
