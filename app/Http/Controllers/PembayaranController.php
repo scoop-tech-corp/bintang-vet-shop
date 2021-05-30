@@ -872,7 +872,7 @@ class PembayaranController extends Controller
 
         if ($check_paid_off[0]->status_paid_off == 1) {
 
-            $update_paid_off = CheckUpResult::find($request->check_up_result_id);
+            $update_paid_off = CheckUpResult::find($check_payment->check_up_result_id);
 
             $update_paid_off->status_paid_off = 0;
             $update_paid_off->user_update_id = $request->user()->id;
@@ -981,7 +981,18 @@ class PembayaranController extends Controller
             ->whereIn('detail_item_patients.id', $myArray_item)
             ->first();
 
-        $price_overall = $price_overall_service->price_overall + $price_overall_item->price_overall;
+        $price_service = 0;
+        $price_item = 0;
+
+        if ($price_overall_service->price_overall) {
+            $price_service = $price_overall_service->price_overall;
+        }
+
+        if ($price_overall_item->price_overall) {
+            $price_item = $price_overall_item->price_overall;
+        }
+
+        $price_overall = $price_service + $price_item;
 
         $address = DB::table('check_up_results')
             ->join('registrations', 'check_up_results.patient_registration_id', 'registrations.id')
