@@ -1012,10 +1012,10 @@ class PembayaranController extends Controller
             ->get();
 
         $data_cashier = DB::table('users')
-            ->join('list_of_payment_items', 'users.id', 'list_of_payment_items.user_id')
-            ->join('check_up_results', 'list_of_payment_items.check_up_result_id', 'check_up_results.id')
-            ->select('users.fullname as cashier_name', DB::raw("DATE_FORMAT(list_of_payment_items.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
-            ->where('list_of_payment_items.check_up_result_id', '=', $request->check_up_result_id)
+            ->join('list_of_payments', 'users.id', 'list_of_payments.user_id')
+            ->join('check_up_results', 'list_of_payments.check_up_result_id', 'check_up_results.id')
+            ->select('users.fullname as cashier_name', DB::raw("DATE_FORMAT(list_of_payments.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
+            ->where('list_of_payments.check_up_result_id', '=', $request->check_up_result_id)
             ->first();
 
         return response()->json([
