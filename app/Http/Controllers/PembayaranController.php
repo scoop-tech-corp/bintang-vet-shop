@@ -984,11 +984,11 @@ class PembayaranController extends Controller
         $price_service = 0;
         $price_item = 0;
 
-        if ($price_overall_service->price_overall) {
+        if ($price_overall_service) {
             $price_service = $price_overall_service->price_overall;
         }
 
-        if ($price_overall_item->price_overall) {
+        if ($price_overall_item) {
             $price_item = $price_overall_item->price_overall;
         }
 
