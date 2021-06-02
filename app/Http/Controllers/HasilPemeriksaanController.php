@@ -556,7 +556,7 @@ class HasilPemeriksaanController extends Controller
                 'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
                 'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"), 'detail_service_patients.status_paid_off')
             ->where('detail_service_patients.check_up_result_id', '=', $data->id)
             ->orderBy('detail_service_patients.id', 'desc')
             ->get();
@@ -598,7 +598,7 @@ class HasilPemeriksaanController extends Controller
                 ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
                     DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
                     'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"), 'detail_item_patients.status_paid_off')
                 ->where('detail_item_patients.check_up_result_id', '=', $data->id)
                 ->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
                 ->orderBy('detail_item_patients.id', 'desc')
