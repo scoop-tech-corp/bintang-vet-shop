@@ -134,13 +134,13 @@ function appendDropdownKelompokObat() {
   });
 }
 
-function appendDropdownSelectBarang() {
+function appendDropdownSelectBarang() {;
   $('.selectedBarang').each(function(index, obj) {
     let getValue = arrayKelompokObat[index].selectDropdownBarang;
     optBarang = '';
     if (listBarang.length) {
       for (let i = 0 ; i < listBarang.length ; i++) {
-        optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name}</option>`;
+        optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name} - ${listBarang[i].branch_name}</option>`;
       }
     }
 
@@ -160,11 +160,13 @@ function appendListSelectBarang(arrSelectedListBarang, idxKelompokObat) {
       + `<td>${lb.item_name}</td>`
       + `<td>${lb.category_name}</td>`
       + `<td>${lb.unit_name}</td>`
-      + `<td><input type="number" min="0" class="qty-input-barang" idxKelompokObat=${idxKelompokObat} index=${idx} value=${lb.quantity}></td>`
+      + `<td><input type="number" min="0" class="qty-input-barang" idxKelompokObat=${idxKelompokObat} index=${idx} 
+          value=${lb.quantity} ${lb.status_paid_off ? 'disabled': ''}></td>`
       + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
       + `<td><span id="totalBarang-${idxKelompokObat}-${idx}">${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
       + `<td>
-          <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" idxKelompokObat=${idxKelompokObat} index=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-danger btnRemoveSelectedListBarang" 
+            ${lb.status_paid_off ? 'disabled': ''} idxKelompokObat=${idxKelompokObat} index=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         </td>`
       + `</tr>`;
       ++no;

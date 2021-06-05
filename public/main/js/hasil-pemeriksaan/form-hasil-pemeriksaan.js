@@ -394,11 +394,12 @@ $(document).ready(function() {
         + `${(formState) == 'edit' ? '<td>'+(lj.created_by ? lj.created_by : '-')+'</td>' : '' }`
         + `<td>${lj.category_name}</td>`
         + `<td>${lj.service_name}</td>`
-        + `<td><input type="number" min="0" class="qty-input-jasa" index=${idx} value=${lj.quantity}></td>`
+        + `<td><input type="number" min="0" class="qty-input-jasa" index=${idx} value=${lj.quantity} ${lj.status_paid_off ? 'disabled': ''}></td>`
         + `<td>${typeof(lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
         + `<td><span id="totalBarang-jasa-${idx}">${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</span></td>`
         + `<td>
-            <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-danger btnRemoveSelectedListJasa" value=${idx} 
+              ${lj.status_paid_off ? 'disabled': ''}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </td>`
         + `</tr>`;
         ++no;
@@ -474,7 +475,7 @@ $(document).ready(function() {
               id: item.detail_service_patient_id,
               price_service_id: item.price_service_id, 
               category_name: item.category_name, service_name: item.service_name,
-              selling_price: item.selling_price,
+              selling_price: item.selling_price, status_paid_off: item.status_paid_off,
               quantity: item.quantity, price_overall: item.price_overall,
               created_at: item.created_at, created_by: item.created_by
             });
@@ -500,6 +501,7 @@ $(document).ready(function() {
                 category_name: lom.category_name,
                 item_name: lom.item_name, unit_name: lom.unit_name,
                 selling_price: lom.selling_price,
+                status_paid_off: lom.status_paid_off,
                 quantity: lom.quantity, price_overall: lom.price_overall,
                 created_at: lom.created_at, created_by: lom.created_by
               });
@@ -602,7 +604,7 @@ $(document).ready(function() {
         listJasa = data;
 				if (listJasa.length) {
 					for (let i = 0 ; i < listJasa.length ; i++) {
-						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name}</option>`;
+						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name} - ${listJasa[i].branch_name}</option>`;
 					}
         }
 				$('#selectedJasa').append(optJasa);
