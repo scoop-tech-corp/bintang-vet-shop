@@ -146,6 +146,13 @@ body {
   background: #222d32 !important ;
 }
 
+
+input:disabled {
+  cursor: not-allowed !important;
+  background: #eee;
+  opacity: 1;
+}
+
 .width-350px {
   width: 350px;
 }
