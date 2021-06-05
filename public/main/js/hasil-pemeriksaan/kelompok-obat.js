@@ -134,13 +134,13 @@ function appendDropdownKelompokObat() {
   });
 }
 
-function appendDropdownSelectBarang() {
+function appendDropdownSelectBarang() {;
   $('.selectedBarang').each(function(index, obj) {
     let getValue = arrayKelompokObat[index].selectDropdownBarang;
     optBarang = '';
     if (listBarang.length) {
       for (let i = 0 ; i < listBarang.length ; i++) {
-        optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name}</option>`;
+        optBarang += `<option value=${listBarang[i].id}>${listBarang[i].item_name} - ${listBarang[i].category_name} - ${listBarang[i].branch_name}</option>`;
       }
     }
 

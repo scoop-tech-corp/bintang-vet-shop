@@ -454,7 +454,6 @@ $(document).ready(function() {
       data	  : { id: lastUrl },
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(data) {
-        console.log('get Edit data', data);
         const getData = data;
 
         getId = getData.id; getPatienRegistrationId = getData.patient_registration_id;
@@ -605,7 +604,7 @@ $(document).ready(function() {
         listJasa = data;
 				if (listJasa.length) {
 					for (let i = 0 ; i < listJasa.length ; i++) {
-						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name}</option>`;
+						optJasa += `<option value=${listJasa[i].id}>${listJasa[i].category_name} - ${listJasa[i].service_name} - ${listJasa[i].branch_name}</option>`;
 					}
         }
 				$('#selectedJasa').append(optJasa);
