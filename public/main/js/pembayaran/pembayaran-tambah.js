@@ -100,7 +100,7 @@ $(document).ready(function () {
         $("#msg-box .modal-body").text('Berhasil Menambah Data');
         $('#msg-box').modal('show');
 
-        processPrint($('#selectedPasien').val(), finalSelectedJasa, finalSelectedBarang);
+        processPrint($('#selectedPasien').val(), JSON.stringify(finalSelectedJasa), JSON.stringify(finalSelectedBarang));
 
         setTimeout(() => {
           window.location.href = $('.baseUrl').val() + '/pembayaran';
@@ -261,40 +261,47 @@ $(document).ready(function () {
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 
+  // function downloadFile(response) {
+  //   var blob = new Blob([response], {type: 'application/pdf'})
+  //   var url = URL.createObjectURL(blob);
+  //   location.assign(url);
+  // } 
+
   function processPrint(check_up_result_id, service_payment, item_payment) {
-    const fd = new FormData();
-    fd.append('check_up_result_id', check_up_result_id);
-    fd.append('service_payment', JSON.stringify(service_payment));
-    fd.append('item_payment', JSON.stringify(item_payment));
-    $.ajax({
-      url: $('.baseUrl').val() + '/api/pembayaran/print',
-      headers: { 'Authorization': `Bearer ${token}` },
-      type: 'POST',
-      data: fd, contentType: false, cache: false,
-      processData: false,
-      beforeSend: function () { $('#loading-screen').show(); },
-      success: function (resp, xhr) {
-
-        let disposition = xhr.getResponseHeader('content-disposition');
-        let matches = /"([^"]*)"/.exec(disposition);
-        let filename = (matches != null && matches[1] ? matches[1] : 'file.pdf');
-        let blob = new Blob([data], { type: 'application/pdf' });
-        let downloadUrl = URL.createObjectURL(blob);
-        let a = document.createElement("a");
-
-        a.href = downloadUrl;
-        a.download = filename
-        document.body.appendChild(a);
-        a.click();
-      },
-      complete: function () { $('#loading-screen').hide(); },
-      error: function (err) {
-        if (err.status == 401) {
-          localStorage.removeItem('vet-clinic');
-          location.href = $('.baseUrl').val() + '/masuk';
-        }
-      }
-    });
+    let url = '/pembayaran/print/' + check_up_result_id + '/' + service_payment + '/' + item_payment;
+    window.open($('.baseUrl').val() + url, '_blank');
+    // const fd = new FormData();
+    // fd.append('check_up_result_id', check_up_result_id);
+    // fd.append('service_payment', JSON.stringify(service_payment));
+    // fd.append('item_payment', JSON.stringify(item_payment));
+    // $.ajax({
+    //   url: $('.baseUrl').val() + '/pembayaran/print',
+    //   headers: { 'Authorization': `Bearer ${token}` },
+    //   type: 'GET',
+    //   data : { check_up_result_id, service_payment, item_payment },
+    //   // data: fd, 
+    //   // contentType: false, cache: false,
+    //   // processData: false,
+    //   beforeSend: function () { $('#loading-screen').show(); },
+    //   success: function (resp, xhr) {
+    //     console.log('resp', resp); console.log('xhr', xhr);
+    //     // let disposition = xhr.getResponseHeader('content-disposition');
+    //     // let matches = /"([^"]*)"/.exec(disposition);
+    //     // var blob=new Blob([resp], {type: 'application/pdf'});
+    //     // var link=document.createElement('a');
+    //     // link.href=window.URL.createObjectURL(blob);
+    //     // link.download="ADI.pdf";
+    //     // link.click();
+    //   },
+    //   complete: function () { $('#loading-screen').hide(); },
+    //   error: function (err) {
+    //     if (err.status == 401) {
+    //       localStorage.removeItem('vet-clinic');
+    //       location.href = $('.baseUrl').val() + '/masuk';
+    //     }
+    //   }
+    // });
+    // .done(downloadFile);
   }
 
   function processCalculationTagihan() {
