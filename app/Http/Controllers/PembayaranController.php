@@ -906,12 +906,12 @@ class PembayaranController extends Controller
 
     public function print_pdf(Request $request)
     {
-        if ($request->user()->role == 'dokter') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'dokter') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $res_service = "";
         $res_item = "";
@@ -920,7 +920,7 @@ class PembayaranController extends Controller
         $res_num_item = 0;
 
         $services = $request->service_payment;
-        $result_service = json_decode($services, true);
+        $result_service = json_decode(json_encode($services), true);
 
         if ($result_service) {
 
@@ -939,7 +939,7 @@ class PembayaranController extends Controller
         $myArray_service = explode(',', $res_service);
 
         $items = $request->item_payment;
-        $result_item = json_decode($items, true);
+        $result_item = json_decode(json_encode($items), true);
 
         if ($result_item) {
 
@@ -1050,8 +1050,9 @@ class PembayaranController extends Controller
             'cashier_name' => $data_cashier->cashier_name,
             'time' => $data_cashier->paid_time];
 
-        $pdf = PDF::loadView('pdf', $data);
+        $pdf = PDF::loadview('pdf', $data);
+        //return $pdf->download('laporan-pegawai.pdf');
 
-        return $pdf->download($data_patient[0]->id_number . ' - ' . $data_patient[0]->pet_name . '.pdf');
+         return $pdf->download($data_patient[0]->id_number . ' - ' . $data_patient[0]->pet_name . '.pdf');
     }
 }
