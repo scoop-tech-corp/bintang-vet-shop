@@ -131,7 +131,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('pembayaran', 'PembayaranController@create');
         Route::put('pembayaran', 'PembayaranController@update');
         Route::get('pembayaran/detail', 'PembayaranController@detail');
-        Route::post('pembayaran/print', 'PembayaranController@print');
+        Route::post('pembayaran/print', 'PembayaranController@print_pdf');
+        //Route::post('pembayaran/printpdf', 'PembayaranController@print_pdf');
 
         Route::delete('pembayaran', 'PembayaranController@delete');
 
@@ -175,7 +176,7 @@ Route::group(['middleware' => ['api']], function () {
 
         //bulanan
         Route::get('laporan-keuangan/bulanan', 'LaporanKeuanganBulananController@index');
-        Route::get('laporan-keuangan/bulanan/download', 'LaporanKeuanganBulananController@download_excel');
+        Route::get('laporan-keuangan/bulanan/download', 'PembayaranController@print_pdf');
 
         Route::get('laporan-keuangan/bulanan/detail', 'LaporanKeuanganBulananController@detail');
 
