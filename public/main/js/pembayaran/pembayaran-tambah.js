@@ -261,47 +261,9 @@ $(document).ready(function () {
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 
-  // function downloadFile(response) {
-  //   var blob = new Blob([response], {type: 'application/pdf'})
-  //   var url = URL.createObjectURL(blob);
-  //   location.assign(url);
-  // } 
-
   function processPrint(check_up_result_id, service_payment, item_payment) {
     let url = '/pembayaran/print/' + check_up_result_id + '/' + service_payment + '/' + item_payment;
     window.open($('.baseUrl').val() + url, '_blank');
-    // const fd = new FormData();
-    // fd.append('check_up_result_id', check_up_result_id);
-    // fd.append('service_payment', JSON.stringify(service_payment));
-    // fd.append('item_payment', JSON.stringify(item_payment));
-    // $.ajax({
-    //   url: $('.baseUrl').val() + '/pembayaran/print',
-    //   headers: { 'Authorization': `Bearer ${token}` },
-    //   type: 'GET',
-    //   data : { check_up_result_id, service_payment, item_payment },
-    //   // data: fd, 
-    //   // contentType: false, cache: false,
-    //   // processData: false,
-    //   beforeSend: function () { $('#loading-screen').show(); },
-    //   success: function (resp, xhr) {
-    //     console.log('resp', resp); console.log('xhr', xhr);
-    //     // let disposition = xhr.getResponseHeader('content-disposition');
-    //     // let matches = /"([^"]*)"/.exec(disposition);
-    //     // var blob=new Blob([resp], {type: 'application/pdf'});
-    //     // var link=document.createElement('a');
-    //     // link.href=window.URL.createObjectURL(blob);
-    //     // link.download="ADI.pdf";
-    //     // link.click();
-    //   },
-    //   complete: function () { $('#loading-screen').hide(); },
-    //   error: function (err) {
-    //     if (err.status == 401) {
-    //       localStorage.removeItem('vet-clinic');
-    //       location.href = $('.baseUrl').val() + '/masuk';
-    //     }
-    //   }
-    // });
-    // .done(downloadFile);
   }
 
   function processCalculationTagihan() {
