@@ -333,18 +333,6 @@ $(document).ready(function() {
       beforeSend: function() { $('#loading-screen').show(); },
       success: function(resp) {
 
-        let disposition = xhr.getResponseHeader('content-disposition');
-				let matches = /"([^"]*)"/.exec(disposition);
-				let filename = (matches != null && matches[1] ? matches[1] : 'file.pdf');
-				let blob = new Blob([data],{type:'application/pdf'});
-				let downloadUrl = URL.createObjectURL(blob);
-				let a = document.createElement("a");
-
-				a.href = downloadUrl;
-				a.download = filename
-				document.body.appendChild(a);
-				a.click();
-
         $("#msg-box .modal-body").text('Berhasil Merubah Data');
         $('#msg-box').modal('show');
 
