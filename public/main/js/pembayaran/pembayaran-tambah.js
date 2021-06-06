@@ -100,6 +100,8 @@ $(document).ready(function() {
         $("#msg-box .modal-body").text('Berhasil Menambah Data');
         $('#msg-box').modal('show');
 
+        processPrint($('#selectedPasien').val(), finalSelectedJasa, finalSelectedBarang);
+
         setTimeout(() => {
           window.location.href = $('.baseUrl').val() + '/pembayaran';
         }, 1000);
@@ -257,6 +259,29 @@ $(document).ready(function() {
       });
     } else { rowListTagihanBarang += `<tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>` }
     $('#list-tagihan-barang').append(rowListTagihanBarang);
+  }
+
+  function processPrint(check_up_result_id, service_payment, item_payment) {
+    const fd = new FormData();
+    fd.append('check_up_result_id', check_up_result_id);
+    fd.append('service_payment', JSON.stringify(service_payment));
+    fd.append('item_payment', JSON.stringify(item_payment));
+    $.ajax({
+			url     : $('.baseUrl').val() + '/api/pembayaran/print',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'POST',
+			data: fd, contentType: false, cache: false,
+      processData: false,
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(resp) {},
+      complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-clinic');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
   }
 
   function processCalculationTagihan() {
