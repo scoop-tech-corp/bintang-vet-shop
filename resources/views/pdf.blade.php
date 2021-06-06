@@ -51,7 +51,6 @@
 
 
 <body>
-
     <table>
         <tr>
             <td class="center-content">
