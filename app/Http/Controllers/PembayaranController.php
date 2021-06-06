@@ -10,6 +10,7 @@ use App\Models\ListofPayments;
 use App\Models\ListofPaymentService;
 use DB;
 use Illuminate\Http\Request;
+use PDF;
 
 class PembayaranController extends Controller
 {
@@ -668,136 +669,6 @@ class PembayaranController extends Controller
         );
     }
 
-    // public function delete(Request $request)
-    // {
-    //     if ($request->user()->role == 'dokter' || $request->user()->role == 'dokter') {
-    //         return response()->json([
-    //             'message' => 'The user role was invalid.',
-    //             'errors' => ['Akses User tidak diizinkan!'],
-    //         ], 403);
-    //     }
-
-    //     //validasi
-    //     $check_list_of_payment = DB::table('list_of_payments')
-    //         ->where('check_up_result_id', '=', $request->check_up_result_id)
-    //         ->count();
-
-    //     if ($check_list_of_payment == 0) {
-
-    //         return response()->json([
-    //             'message' => 'The given data was invalid.',
-    //             'errors' => ['Data Pembayaran ini tidak ada!'],
-    //         ], 422);
-    //     }
-
-    //     $services = $request->service_payment;
-    //     $result_services = json_decode(json_encode($services), true);
-
-    //     if (count($result_services) != 0) {
-
-    //         foreach ($result_services as $key_service) {
-
-    //             if ($key_service['list_of_payment_service_id']) {
-
-    //                 $check_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
-
-    //                 if (is_null($check_service)) {
-    //                     return response()->json([
-    //                         'message' => 'The data was invalid.',
-    //                         'errors' => ['Data tidak ditemukan!'],
-    //                     ], 404);
-    //                 }
-
-    //             }
-    //         }
-    //     }
-
-    //     $items = $request->item_payment;
-    //     $result_item = json_decode(json_encode($items), true);
-
-    //     if (count($result_item) != 0) {
-
-    //         foreach ($result_item as $value_item) {
-
-    //             if ($value_item['list_of_payment_item_id']) {
-
-    //                 $check_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
-
-    //                 if (is_null($check_item)) {
-    //                     return response()->json([
-    //                         'message' => 'The data was invalid.',
-    //                         'errors' => ['Data tidak ditemukan!'],
-    //                     ], 404);
-    //                 }
-
-    //             }
-    //         }
-    //     }
-
-    //     //hapus data jasa
-    //     if (count($result_services) != 0) {
-    //         foreach ($result_services as $key_service) {
-
-    //             if ($key_service['list_of_payment_service_id']) {
-
-    //                 $check_payment_service = ListofPaymentService::find($key_service['list_of_payment_service_id']);
-
-    //                 $check_service = DetailServicePatient::find($check_payment_service->detail_service_patient_id);
-
-    //                 $check_service->status_paid_off = 0;
-    //                 $check_service->user_update_id = $request->user()->id;
-    //                 $check_service->updated_at = \Carbon\Carbon::now();
-    //                 $check_service->save();
-
-    //                 $delete_payment_service = DB::table('list_of_payment_services')
-    //                     ->where('id', $key_service['list_of_payment_service_id'])->delete();
-    //             }
-    //         }
-    //     }
-
-    //     // //hapus data barang
-    //     if (count($result_item) != 0) {
-    //         foreach ($result_item as $value_item) {
-
-    //             if ($value_item['list_of_payment_item_id']) {
-
-    //                 $check_payment_item = ListofPaymentItem::find($value_item['list_of_payment_item_id']);
-
-    //                 $check_item = DetailItemPatient::find($check_payment_item->detail_item_patient_id);
-
-    //                 $check_item->status_paid_off = 0;
-    //                 $check_item->user_update_id = $request->user()->id;
-    //                 $check_item->updated_at = \Carbon\Carbon::now();
-    //                 $check_item->save();
-
-    //                 $delete_payment_item = DB::table('list_of_payment_items')
-    //                     ->where('id', $value_item['list_of_payment_item_id'])->delete();
-
-    //             }
-    //         }
-    //     }
-
-    //     $check_paid_off = DB::table('check_up_results')
-    //         ->where('id', '=', $request->check_up_result_id)
-    //         ->get();
-
-    //     if ($check_paid_off[0]->status_paid_off == 1) {
-
-    //         $update_paid_off = CheckUpResult::find($request->check_up_result_id);
-
-    //         $update_paid_off->status_paid_off = 0;
-    //         $update_paid_off->user_update_id = $request->user()->id;
-    //         $update_paid_off->updated_at = \Carbon\Carbon::now();
-    //         $update_paid_off->save();
-    //     }
-
-    //     return response()->json(
-    //         [
-    //             'message' => 'Hapus Data Berhasil!',
-    //         ], 200
-    //     );
-    // }
-
     public function delete(Request $request)
     {
         if ($request->user()->role == 'dokter' || $request->user()->role == 'dokter') {
@@ -1030,7 +901,157 @@ class PembayaranController extends Controller
             'owner_name' => $data_patient[0]->owner_name,
             'cashier_name' => $data_cashier->cashier_name,
             'time' => $data_cashier->paid_time,
-            //'' => $patient_number[0]->id_number
         ], 200);
+    }
+
+    public function print_pdf(Request $request)
+    {
+        if ($request->user()->role == 'dokter') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        $res_service = "";
+        $res_item = "";
+
+        $res_num_service = 0;
+        $res_num_item = 0;
+
+        $services = $request->service_payment;
+        $result_service = json_decode($services, true);
+
+        if ($result_service) {
+
+            foreach ($result_service as $dat) {
+                $res_service = $res_service . (string) $dat['detail_service_patient_id'] . ",";
+
+                if ($dat['detail_service_patient_id']) {
+                    $res_num_service++;
+                }
+
+            }
+        }
+
+        $res_service = rtrim($res_service, ", ");
+
+        $myArray_service = explode(',', $res_service);
+
+        $items = $request->item_payment;
+        $result_item = json_decode($items, true);
+
+        if ($result_item) {
+
+            foreach ($result_item as $key) {
+                $res_item = $res_item . (string) $key['detail_item_patient_id'] . ",";
+
+                if ($key['detail_item_patient_id']) {
+                    $res_num_item++;
+                }
+
+            }
+        }
+
+        $res_num = $res_num_item + $res_num_service;
+
+        $res_item = rtrim($res_item, ", ");
+
+        $myArray_item = explode(',', $res_item);
+
+        $data_item = DB::table('list_of_payment_items')
+            ->join('detail_item_patients', 'list_of_payment_items.detail_item_patient_id', '=', 'detail_item_patients.id')
+            ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
+            ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
+            ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
+            ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
+            ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
+            ->join('medicine_groups', 'price_medicine_groups.medicine_group_id', '=', 'medicine_groups.id')
+            ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
+            ->select('list_of_items.item_name',
+                'detail_item_patients.quantity',
+                DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"))
+            ->whereIn('detail_item_patients.id', $myArray_item)
+            ->get();
+
+        $data_service = DB::table('list_of_payment_services')
+            ->join('detail_service_patients', 'list_of_payment_services.detail_service_patient_id', '=', 'detail_service_patients.id')
+            ->join('price_services', 'detail_service_patients.price_service_id', '=', 'price_services.id')
+            ->join('list_of_services', 'price_services.list_of_services_id', '=', 'list_of_services.id')
+            ->join('service_categories', 'list_of_services.service_category_id', '=', 'service_categories.id')
+            ->join('users', 'detail_service_patients.user_id', '=', 'users.id')
+            ->select('list_of_services.service_name as item_name',
+                'detail_service_patients.quantity',
+                DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"))
+            ->whereIn('detail_service_patients.id', $myArray_service)
+            ->get();
+
+        $price_overall_service = DB::table('detail_service_patients')
+            ->select(
+                DB::raw("TRIM(SUM(detail_service_patients.price_overall))+0 as price_overall"))
+            ->whereIn('detail_service_patients.id', $myArray_service)
+            ->groupby('detail_service_patients.id')
+            ->first();
+
+        $price_overall_item = DB::table('detail_item_patients')
+            ->select(
+                DB::raw("TRIM(SUM(detail_item_patients.price_overall))+0 as price_overall"))
+            ->whereIn('detail_item_patients.id', $myArray_item)
+            ->first();
+
+        $price_service = 0;
+        $price_item = 0;
+
+        if ($price_overall_service) {
+            $price_service = $price_overall_service->price_overall;
+        }
+
+        if ($price_overall_item) {
+            $price_item = $price_overall_item->price_overall;
+        }
+
+        $price_overall = $price_service + $price_item;
+
+        $address = DB::table('check_up_results')
+            ->join('registrations', 'check_up_results.patient_registration_id', 'registrations.id')
+            ->join('users', 'registrations.doctor_user_id', 'users.id')
+            ->join('branches', 'users.branch_id', 'branches.id')
+            ->select('branches.address')
+            ->where('check_up_results.id', '=', $request->check_up_result_id)
+            ->first();
+
+        $data_patient = DB::table('check_up_results')
+            ->join('registrations', 'check_up_results.patient_registration_id', 'registrations.id')
+            ->join('patients', 'registrations.patient_id', 'patients.id')
+            ->join('users', 'registrations.doctor_user_id', 'users.id')
+            ->join('branches', 'users.branch_id', 'branches.id')
+            ->select('registrations.id_number', 'patients.id_member as id_patient', 'pet_name', 'owner_name')
+            ->where('check_up_results.id', '=', $request->check_up_result_id)
+            ->get();
+
+        $data_cashier = DB::table('users')
+            ->join('list_of_payments', 'users.id', 'list_of_payments.user_id')
+            ->join('check_up_results', 'list_of_payments.check_up_result_id', 'check_up_results.id')
+            ->select('users.fullname as cashier_name', DB::raw("DATE_FORMAT(list_of_payments.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
+            ->where('list_of_payments.check_up_result_id', '=', $request->check_up_result_id)
+            ->first();
+
+        $data = ['data_item' => $data_item,
+            'data_service' => $data_service,
+            'quantity_total' => $res_num,
+            'price_overall' => $price_overall,
+            'address' => $address->address,
+            'registration_number' => $data_patient[0]->id_number,
+            'id_patient' => $data_patient[0]->id_patient,
+            'pet_name' => $data_patient[0]->pet_name,
+            'owner_name' => $data_patient[0]->owner_name,
+            'cashier_name' => $data_cashier->cashier_name,
+            'time' => $data_cashier->paid_time];
+
+        $pdf = PDF::loadView('pdf', $data);
+
+        return $pdf->download($data_patient[0]->id_number . ' - ' . $data_patient[0]->pet_name . '.pdf');
     }
 }
