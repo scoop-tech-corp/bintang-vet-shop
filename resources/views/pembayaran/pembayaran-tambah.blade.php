@@ -190,10 +190,7 @@
         - Status Pembayaran tidak dapat diselesaikan, karena terdapat barang atau jasa yang masih belum dibayarkan --}}
     </div>
     <div class="col-md-12 m-t-25px">
-      {{-- <button id="btnPrint" type="button" class="btn btn-info pull-right">
-        <i class="fa fa-print"></i> Cetak
-      </button> --}}
-      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right m-r-10px">Simpan & Cetak</button>
+      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right m-r-10px" title="Simpan dan Unduh PDF">Simpan & Unduh</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
   </div>
