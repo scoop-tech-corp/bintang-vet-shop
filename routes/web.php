@@ -206,7 +206,6 @@ Route::post('/print', function(Request $request) {
       $printer -> cut();
       $printer -> close();
       $response = ['success'=> 'true'];
-      // info('masuk SINI');
 		} catch (Exception $e) {
       info($e);
       $response = ['success'=>'false'];
