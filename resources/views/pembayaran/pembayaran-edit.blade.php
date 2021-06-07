@@ -183,7 +183,7 @@
     </div>
 
     <div class="col-md-12 m-t-25px">
-      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right">Simpan & Cetak</button>
+      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right" title="Simpan dan Unduh PDF">Simpan & Unduh</button>
       <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
   </div>
