@@ -63,13 +63,6 @@ class RegistrasiController extends Controller
 
     public function create(Request $request)
     {
-        // if ($request->user()->role == 'dokter') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|numeric',
             'doctor_user_id' => 'required|numeric',
@@ -118,12 +111,6 @@ class RegistrasiController extends Controller
 
     public function update(Request $request)
     {
-        // if ($request->user()->role == 'dokter') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
 
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|numeric',
@@ -171,13 +158,6 @@ class RegistrasiController extends Controller
 
     public function delete(Request $request)
     {
-        // if ($request->user()->role == 'dokter') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
         $registration = Registration::find($request->id);
 
         if (is_null($registration)) {
@@ -196,8 +176,6 @@ class RegistrasiController extends Controller
         $registration->deleted_by = $request->user()->fullname;
         $registration->deleted_at = \Carbon\Carbon::now();
         $registration->save();
-
-        //$registration->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Data',

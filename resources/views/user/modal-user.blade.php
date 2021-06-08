@@ -67,7 +67,7 @@
               <div class="form-group">
                 <label for="role">Role</label>
                 <select id="selectRole" class="form-control" style="width: 100%">
-                  <option selected="selected" value="">Select Role</option>
+                  <option selected="selected" value="">Pilih Role</option>
                   <option value="admin">Admin</option>
                   <option value="resepsionis">Resepsionis</option>
                   <option value="dokter">Dokter</option>
@@ -82,7 +82,7 @@
               <div class="form-group">
                 <label for="status">Status</label>
                 <select id="selectStatus" class="form-control" style="width: 100%">
-                  <option selected="selected" value="">Select Status</option>
+                  <option selected="selected" value="">Pilih Status</option>
                   <option value=1>Aktif</option>
                   <option value=0>Non Aktif</option>
                 </select>
