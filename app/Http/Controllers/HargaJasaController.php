@@ -11,12 +11,6 @@ class HargaJasaController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->role == 'resepsionis') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
 
         $price_services = DB::table('price_services')
             ->join('users', 'price_services.user_id', '=', 'users.id')
@@ -29,13 +23,13 @@ class HargaJasaController extends Controller
                 DB::raw("TRIM(price_services.capital_price)+0 as capital_price"), DB::raw("TRIM(price_services.doctor_fee)+0 as doctor_fee"),
                 DB::raw("TRIM(price_services.petshop_fee)+0 as petshop_fee"),
                 'users.fullname as created_by', DB::raw("DATE_FORMAT(price_services.created_at, '%d %b %Y') as created_at"))
-                ->where('price_services.isDeleted', '=', 0);
+            ->where('price_services.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $price_services = $price_services->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $price_services = $price_services->where('branches.id', '=', $request->user()->branch_id);
         }
 

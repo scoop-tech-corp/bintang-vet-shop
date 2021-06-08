@@ -24,7 +24,7 @@ class DaftarJasaController extends Controller
             $list_of_services = $list_of_services->where('list_of_services.branch_id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $list_of_services = $list_of_services->where('list_of_services.branch_id', '=', $request->user()->branch_id);
         }
 
@@ -182,8 +182,6 @@ class DaftarJasaController extends Controller
         $list_of_services->deleted_by = $request->user()->fullname;
         $list_of_services->deleted_at = \Carbon\Carbon::now();
         $list_of_services->save();
-
-        //$list_of_services->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Barang',

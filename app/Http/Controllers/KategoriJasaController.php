@@ -144,8 +144,6 @@ class KategoriJasaController extends Controller
         $service_categories->deleted_at = \Carbon\Carbon::now();
         $service_categories->save();
 
-        //$service_categories->delete();
-
         return response()->json([
             'message' => 'Berhasil menghapus Kategori Jasa',
         ], 200);

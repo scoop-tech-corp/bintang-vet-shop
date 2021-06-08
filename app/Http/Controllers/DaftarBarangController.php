@@ -31,7 +31,7 @@ class DaftarBarangController extends Controller
             $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
         }
 
@@ -289,22 +289,8 @@ class DaftarBarangController extends Controller
             }
         }
 
-        //return $res_rows[1];
-        // return $request->file('file')->store('import');
-
-        // // menangkap file excel
         $file = $request->file('file');
 
-        // $import = new MultipleSheetImportDaftarBarang;
-        // $import->import($file);
-
-        // membuat nama file unik
-        //$nama_file = rand().$file->getClientOriginalName();
-
-        // upload ke folder file_siswa di dalam folder public
-        //$file->move('file_siswa',$nama_file);
-
-        // import data
         Excel::import(new MultipleSheetImportDaftarBarang, $file);
 
         return response()->json([
