@@ -1,6 +1,7 @@
 $(document).ready(function () {
   let optPasien = '';
   let isValidSelectedPasien = false;
+  let isValidCalculationPay = false;
   let listPasien = [];
   let selectedListJasa = [];
   let selectedListBarang = [];
@@ -308,10 +309,11 @@ $(document).ready(function () {
       $('#pasienErr1').text(''); isValidSelectedPasien = true;
     }
 
+    isValidCalculationPay = (!calculationPay.length) ? false : true;
+
     $('#beErr').empty(); isBeErr = false;
 
-    $('#btnSubmitPembayaran').attr('disabled',
-      (!isValidSelectedPasien || isBeErr) ? true : false);
+    $('#btnSubmitPembayaran').attr('disabled', (!isValidSelectedPasien || !isValidCalculationPay || isBeErr) ? true : false);
   }
 
   function refreshText() {

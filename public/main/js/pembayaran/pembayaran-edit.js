@@ -4,6 +4,7 @@ $(document).ready(function() {
   const stuff = url.split('/');
   const id = stuff[stuff.length-1];
   let getCheckUpResultId = null;
+  let isValidCalculationPay = false;
 
   let selectedListJasa = [];
   let selectedListBarang = [];
@@ -63,6 +64,7 @@ $(document).ready(function() {
       listTagihanBarang = data.paid_item;
 
       processAppendListTagihanJasa(); processAppendListTagihanBarang();
+      validationForm();
 
     }, complete: function() { $('#loading-screen').hide(); },
     error: function(err) {
@@ -122,6 +124,7 @@ $(document).ready(function() {
 
       processAppendListTagihanJasa();
       processCalculationTagihan();
+      validationForm();
     });
 
     $('.cancelPembayaranJasa').click(function() {
@@ -136,6 +139,7 @@ $(document).ready(function() {
       calculationPay.push({ id: getDetailJasa.detail_service_patient_id, type: 'jasa', price: getDetailJasa.price_overall, isRevert: true });
 
       processAppendListTagihanJasa();
+      validationForm();
     });
 
     $('.revertPembayaranJasa').click(function() {
@@ -151,6 +155,7 @@ $(document).ready(function() {
       calculationPay[getIdxCalculation].isRevert = null;
 
       processAppendListTagihanJasa();
+      validationForm();
     });
   }
 
@@ -231,6 +236,7 @@ $(document).ready(function() {
 
       processAppendListTagihanBarang();
       processCalculationTagihan();
+      validationForm();
     });
 
     $('.cancelPembayaranBarang').click(function() {
@@ -245,6 +251,7 @@ $(document).ready(function() {
       calculationPay.push({ id: getDetailBarang.detail_item_patients_id, type: 'barang', price: getDetailBarang.price_overall, isRevert: true });
 
       processAppendListTagihanBarang();
+      validationForm();
     });
 
     $('.revertPembayaranBarang').click(function() {
@@ -260,6 +267,7 @@ $(document).ready(function() {
       calculationPay[getIdxCalculation].isRevert = null;
 
       processAppendListTagihanBarang();
+      validationForm();
     });
   }
 
@@ -355,6 +363,15 @@ $(document).ready(function() {
         }
       }
     });
+  }
+
+  function validationForm() {
+
+    isValidCalculationPay = (!calculationPay.length) ? false : true;
+
+    $('#beErr').empty(); isBeErr = false;
+
+    $('#btnSubmitPembayaran').attr('disabled', (!isValidCalculationPay || isBeErr) ? true : false);
   }
 
   function processPrint(check_up_result_id, service_payment, item_payment) {
