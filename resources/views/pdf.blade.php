@@ -125,7 +125,7 @@
         </tr>
         <tr>
             <td>
-                <label class="boldtext">Kasir:</label>
+                <label class="boldtext">Dicetak oleh:</label>
             </td>
         </tr>
         <tr>
