@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Mike42\Escpos\Printer; 
+use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Illuminate\Http\Request;
@@ -153,6 +153,8 @@ Route::get('/profil/{id}', function () {
 	return view('profil.index');
 });
 
+Route::get('pembayaran/print/{check_up_result_id}/{service_payment}/{item_payment}', 'PembayaranController@print_pdf');
+
 
 Route::post('/print', function(Request $request) {
   if ($request->ajax()) {
@@ -188,7 +190,7 @@ Route::post('/print', function(Request $request) {
       $printer -> text('--------------------------------'. "\n");
       $printer -> text('Nama       Qty  Harga    Total'. "\n");
       $printer -> text('--------------------------------'. "\n");
-      
+
       $content = '';
       $getTable = $request->table;
       // info('data', $getTable);
@@ -204,7 +206,6 @@ Route::post('/print', function(Request $request) {
       $printer -> cut();
       $printer -> close();
       $response = ['success'=> 'true'];
-      // info('masuk SINI');
 		} catch (Exception $e) {
       info($e);
       $response = ['success'=>'false'];

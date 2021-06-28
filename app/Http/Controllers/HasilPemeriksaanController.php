@@ -556,26 +556,12 @@ class HasilPemeriksaanController extends Controller
                 'list_of_services.id as list_of_service_id', 'list_of_services.service_name',
                 'detail_service_patients.quantity', DB::raw("TRIM(detail_service_patients.price_overall)+0 as price_overall"),
                 'service_categories.category_name', DB::raw("TRIM(price_services.selling_price)+0 as selling_price"),
-                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"))
+                'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_service_patients.created_at, '%d %b %Y') as created_at"), 'detail_service_patients.status_paid_off')
             ->where('detail_service_patients.check_up_result_id', '=', $data->id)
             ->orderBy('detail_service_patients.id', 'desc')
             ->get();
 
         $data['services'] = $services;
-
-        // $item = DB::table('detail_item_patients')
-        //     ->join('price_items', 'detail_item_patients.price_item_id', '=', 'price_items.id')
-        //     ->join('list_of_items', 'price_items.list_of_items_id', '=', 'list_of_items.id')
-        //     ->join('category_item', 'list_of_items.category_item_id', '=', 'category_item.id')
-        //     ->join('unit_item', 'list_of_items.unit_item_id', '=', 'unit_item.id')
-        //     ->join('users', 'detail_item_patients.user_id', '=', 'users.id')
-        //     ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
-        //         DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
-        //         'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-        //         'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
-        //     ->where('detail_item_patients.check_up_result_id', '=', $data->id)
-        //     ->orderBy('detail_item_patients.id', 'desc')
-        //     ->get();
 
         $item = DB::table('detail_item_patients')
             ->join('price_medicine_groups', 'detail_item_patients.medicine_group_id', '=', 'price_medicine_groups.id')
@@ -598,7 +584,7 @@ class HasilPemeriksaanController extends Controller
                 ->select('detail_item_patients.id as detail_item_patients_id', 'list_of_items.id as list_of_item_id', 'price_items.id as price_item_id', 'list_of_items.item_name', 'detail_item_patients.quantity',
                     DB::raw("TRIM(detail_item_patients.price_overall)+0 as price_overall"), 'unit_item.unit_name',
                     'category_item.category_name', DB::raw("TRIM(price_items.selling_price)+0 as selling_price"),
-                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"))
+                    'users.fullname as created_by', DB::raw("DATE_FORMAT(detail_item_patients.created_at, '%d %b %Y') as created_at"), 'detail_item_patients.status_paid_off')
                 ->where('detail_item_patients.check_up_result_id', '=', $data->id)
                 ->where('detail_item_patients.medicine_group_id', '=', $value->medicine_group_id)
                 ->orderBy('detail_item_patients.id', 'desc')
@@ -630,8 +616,6 @@ class HasilPemeriksaanController extends Controller
 
     public function update(Request $request)
     {
-
-        info($request);
 
         if ($request->user()->role == 'resepsionis') {
             return response()->json([
@@ -897,6 +881,7 @@ class HasilPemeriksaanController extends Controller
                             }
 
                             if ($value_item['quantity'] > $check_storage->total_item) {
+
                                 return response()->json([
                                     'message' => 'The given data was invalid.',
                                     'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
@@ -985,6 +970,7 @@ class HasilPemeriksaanController extends Controller
                                 $res_value_item = $value_item['quantity'] - $check_item_result->quantity;
 
                                 if ($res_value_item > $check_stock->total_item) {
+
                                     return response()->json([
                                         'message' => 'The given data was invalid.',
                                         'errors' => ['Jumlah stok ' . $check_storage_name->item_name . ' kurang atau habis!'],
@@ -1217,6 +1203,7 @@ class HasilPemeriksaanController extends Controller
                     'price_service_id' => $key_service['price_service_id'],
                     'quantity' => $key_service['quantity'],
                     'price_overall' => $key_service['price_overall'],
+                    'status_paid_off' => 0,
                     'user_id' => $request->user()->id,
                 ]);
 
@@ -1249,8 +1236,6 @@ class HasilPemeriksaanController extends Controller
             $temp_item = $request->item;
 
             $result_item = json_decode(json_encode($temp_item), true);
-
-            // info($result_item);
 
             foreach ($result_item as $res_group) {
 
