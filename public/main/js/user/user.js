@@ -3,7 +3,7 @@ $(document).ready(function() {
 	let getId = null
 	let optCabang1 = '';
 	let optCabang2 = '';
-	let showPassword1 = false; 
+	let showPassword1 = false;
 	let showPassword2 = false;
 	let getUser = [];
 	let listCabang = [];
@@ -29,7 +29,7 @@ $(document).ready(function() {
 	$('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
 
 	if (role.toLowerCase() !== 'admin') {
-		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
+		window.location.href = $('.baseUrl').val() + `/unauthorized`;
 	} else {
 		loadUser(); loadCabang();
 	}
@@ -41,7 +41,7 @@ $(document).ready(function() {
 	$('.input-search-section input').keypress(function(e) {
 		if (e.which == 13) { onSearch($(this).val()); }
   });
-  
+
   $('.onOrdering').click(function() {
 		const column = $(this).attr('data');
 		const orderBy = $(this).attr('orderby');
@@ -101,7 +101,7 @@ $(document).ready(function() {
 
 	$('#selectRole').on('select2:select', function (e) { validationForm(); });
 	$('#selectCabang').on('select2:select', function (e) { validationForm(); });
-	$('#selectStatus').on('select2:select', function (e) { validationForm(); });	
+	$('#selectStatus').on('select2:select', function (e) { validationForm(); });
 
 	$('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
 	$('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
@@ -165,7 +165,7 @@ $(document).ready(function() {
 			// process edit
 			const objCabang = listCabang.find(x => x.id == $('#selectCabang').val());
 			const objUser = getUser.find(x => x.id == getId);
-			
+
       const datas = {
         id: getId,
 				nomor_kepegawaian: objUser.staffing_number,
@@ -242,7 +242,7 @@ $(document).ready(function() {
     paramUrlSetup.branchId = value;
 		loadUser();
 	}
-	
+
 	function onSearch(keyword) {
 		paramUrlSetup.keyword = keyword;
 		loadUser();
@@ -328,7 +328,7 @@ $(document).ready(function() {
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				optCabang1 += `<option value=''>Cabang</option>`;
-				optCabang2 += `<option value=''>Select Cabang</option>`;
+				optCabang2 += `<option value=''>Pilih Cabang</option>`;
 				if (data.length) {
 					for (let i = 0 ; i < data.length ; i++) {
 						listCabang.push(data[i]);
@@ -351,7 +351,7 @@ $(document).ready(function() {
 		if (modalState == 'edit') {
 			if (!$('#namaLengkap').val()) {
 				$('#namaLengkapErr1').text('Nama Lengkap harus di isi'); isValidNamaLengkap = false;
-			} else { 
+			} else {
 				$('#namaLengkapErr1').text(''); isValidNamaLengkap = true;
 			}
 
@@ -360,20 +360,20 @@ $(document).ready(function() {
 			} else {
 				$('#roleErr1').text(''); isValidSelectRole = true;
 			}
-	
+
 			if ($('#selectCabang').val() == '') {
 				$('#cabangErr1').text('Cabang harus di isi'); isValidSelectCabang = false;
 			} else {
 				$('#cabangErr1').text(''); isValidSelectCabang = true;
 			}
-	
+
 			if ($('#selectStatus').val() == '') {
 				$('#statusErr1').text('Status harus di isi'); isValidSelectStatus = false;
 			} else {
 				$('#statusErr1').text(''); isValidSelectStatus = true;
 			}
 
-			if (!isValidNamaLengkap || !isValidSelectRole || !isValidSelectCabang 
+			if (!isValidNamaLengkap || !isValidSelectRole || !isValidSelectCabang
 				|| !isValidSelectStatus || isBeErr) {
 				$('#btnSubmitUser').attr('disabled', true);
 			} else {
@@ -384,22 +384,22 @@ $(document).ready(function() {
 
 			if (!$('#username').val()) {
 				$('#usernameErr1').text('Username harus di isi'); isValidUsername = false;
-			} else { 
+			} else {
 				$('#usernameErr1').text(''); isValidUsername = true;
 			}
-	
+
 			if (!$('#namaLengkap').val()) {
 				$('#namaLengkapErr1').text('Nama Lengkap harus di isi'); isValidNamaLengkap = false;
-			} else { 
+			} else {
 				$('#namaLengkapErr1').text(''); isValidNamaLengkap = true;
 			}
-	
+
 			if (!$('#email').val()) {
 				$('#emailErr1').text('Email harus di isi'); isValidEmail = false;
-			} else { 
+			} else {
 				$('#emailErr1').text(''); isValidEmail = true;
 			}
-	
+
 			if (!$('#password').val()) {
 				$('#passwordErr1').text('Password harus di isi'); isValidPassword = false;
 			} else if ($('#password').val() != $('#confPassword').val()) {
@@ -407,39 +407,39 @@ $(document).ready(function() {
 			} else {
 				$('#passwordErr1').text(''); isValidPassword = true;
 			}
-	
+
 			if (!$('#confPassword').val()) {
 				$('#confPasswordErr1').text('Konfirmasi Password harus di isi'); isValidConfPassword = false;
-			} else { 
+			} else {
 				$('#confPasswordErr1').text(''); isValidConfPassword = true;
 			}
-	
+
 			if (!$('#nomPonsel').val()) {
 				$('#nomPonselErr1').text('Nomor Ponsel harus di isi'); isValidNomPonsel = false;
 			} else {
 				$('#nomPonselErr1').text(''); isValidNomPonsel = true;
 			}
-	
+
 			if ($('#selectRole').val() == '') {
 				$('#roleErr1').text('Role harus di isi'); isValidSelectRole = false;
 			} else {
 				$('#roleErr1').text(''); isValidSelectRole = true;
 			}
-	
+
 			if ($('#selectCabang').val() == '') {
 				$('#cabangErr1').text('Cabang harus di isi'); isValidSelectCabang = false;
 			} else {
 				$('#cabangErr1').text(''); isValidSelectCabang = true;
 			}
-	
+
 			if ($('#selectStatus').val() == '') {
 				$('#statusErr1').text('Status harus di isi'); isValidSelectStatus = false;
 			} else {
 				$('#statusErr1').text(''); isValidSelectStatus = true;
 			}
 
-			if (!isValidUsername || !isValidNamaLengkap || !isValidEmail  || !isValidPassword 
-				|| !isValidConfPassword || !isValidNomPonsel || !isValidSelectRole || !isValidSelectCabang 
+			if (!isValidUsername || !isValidNamaLengkap || !isValidEmail  || !isValidPassword
+				|| !isValidConfPassword || !isValidNomPonsel || !isValidSelectRole || !isValidSelectCabang
 				|| !isValidSelectStatus || isBeErr) {
 				$('#btnSubmitUser').attr('disabled', true);
 			} else {
@@ -451,7 +451,7 @@ $(document).ready(function() {
 
 	}
 
-	function refreshForm() { 
+	function refreshForm() {
 		$('#username').val(null); isValidUsername = true;
 		$('#namaLengkap').val(null); isValidNamaLengkap = true;
 		$('#email').val(null); isValidEmail = true;
@@ -472,7 +472,7 @@ $(document).ready(function() {
 		$('#selectRole').select2();
 		$('#selectStatus').select2();
 		$('#selectCabang').select2();
-		
+
 		$('#modal-user').modal('show');
 		$('#btnSubmitUser').attr('disabled', true);
 	}

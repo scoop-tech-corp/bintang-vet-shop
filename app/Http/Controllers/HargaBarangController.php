@@ -33,7 +33,7 @@ class HargaBarangController extends Controller
             $price_items = $price_items->where('branches.id', '=', $request->branch_id);
         }
 
-        if ($request->user()->role == 'dokter') {
+        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
             $price_items = $price_items->where('branches.id', '=', $request->user()->branch_id);
         }
 

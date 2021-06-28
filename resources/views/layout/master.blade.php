@@ -65,6 +65,9 @@
 				</a>
 				<!-- Navbar Right Menu -->
 				<div class="navbar-custom-menu">
+          <div class="header-time-container">
+            <span id="time-text"></span>
+          </div>
 					<ul class="nav navbar-nav">
 						<!-- User Account: style can be found in dropdown.less -->
 						<li class="dropdown user user-menu">

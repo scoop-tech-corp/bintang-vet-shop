@@ -1,6 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
   let optPasien = '';
   let isValidSelectedPasien = false;
+  let isValidCalculationPay = false;
   let listPasien = [];
   let selectedListJasa = [];
   let selectedListBarang = [];
@@ -11,29 +12,29 @@ $(document).ready(function() {
   let isBeErr = false;
 
   if (role.toLowerCase() == 'dokter') {
-		window.location.href = $('.baseUrl').val() + `/unauthorized`;	
-	}
+    window.location.href = $('.baseUrl').val() + `/unauthorized`;
+  }
 
   loadPasien();
-  refreshText(); 
+  refreshText();
   refreshForm();
   formConfigure();
 
-  $('.btn-back-to-list .text, #btnKembali').click(function() {
+  $('.btn-back-to-list .text, #btnKembali').click(function () {
     window.location.href = $('.baseUrl').val() + '/pembayaran';
   });
 
   $('#selectedPasien').on('select2:select', function (e) {
     refreshVariableTambahPembayaran();
 
-    if ( $(this).val()) {
+    if ($(this).val()) {
       $.ajax({
-        url     : $('.baseUrl').val() + '/api/hasil-pemeriksaan/pembayaran',
-        headers : { 'Authorization': `Bearer ${token}` },
-        type    : 'GET',
-        data	  : { id: $(this).val() },
-        beforeSend: function() { $('#loading-screen').show(); },
-        success: function(data) {
+        url: $('.baseUrl').val() + '/api/hasil-pemeriksaan/pembayaran',
+        headers: { 'Authorization': `Bearer ${token}` },
+        type: 'GET',
+        data: { id: $(this).val() },
+        beforeSend: function () { $('#loading-screen').show(); },
+        success: function (data) {
 
           $('#nomorPasienTxt').text(data.registration.patient_number); $('#jenisHewanTxt').text(data.registration.pet_category);
           $('#namaHewanTxt').text(data.registration.pet_name); $('#jenisKelaminTxt').text(data.registration.pet_gender);
@@ -46,8 +47,8 @@ $(document).ready(function() {
           selectedListJasa = data.services; selectedListBarang = data.item;
           processAppendListSelectedJasa(); processAppendListSelectedBarang();
 
-        }, complete: function() { $('#loading-screen').hide(); },
-        error: function(err) {
+        }, complete: function () { $('#loading-screen').hide(); },
+        error: function (err) {
           if (err.status == 401) {
             localStorage.removeItem('vet-clinic');
             location.href = $('.baseUrl').val() + '/masuk';
@@ -58,91 +59,18 @@ $(document).ready(function() {
     validationForm();
   });
 
-  $('#submitConfirm').click(function() {
+  $('#submitConfirm').click(function () {
     processSaved();
     $('#modal-confirmation .modal-title').text('Peringatan');
     $('#modal-confirmation').modal('toggle');
   });
 
-  $('#btnSubmitPembayaran').click(function() {
+  $('#btnSubmitPembayaran').click(function () {
 
     $('#modal-confirmation .modal-title').text('Peringatan');
     $('#modal-confirmation .box-body').text('Anda yakin ingin menyimpan Pembayaran ini? Data yang akan anda tambahkan tidak dapat diubah kembali.');
     $('#modal-confirmation').modal('show');
   });
-
-  // $('#btnPrint').click(function () {
-  //   const fd = new FormData();
-  //   fd.append('check_up_result_id', 1);
-  //   fd.append('service_payment', JSON.stringify([{detail_service_patient_id: 1}]));
-  //   fd.append('item_payment', JSON.stringify([{detail_item_patient_id:1},{detail_item_patient_id:2},{detail_item_patient_id:3}]));
-  //   $.ajax({
-	// 		url     : $('.baseUrl').val() + '/api/pembayaran/print',
-	// 		headers : { 'Authorization': `Bearer ${token}` },
-	// 		type    : 'POST',
-	// 		data: fd, contentType: false, cache: false,
-  //     processData: false,
-	// 		beforeSend: function() { $('#loading-screen').show(); },
-	// 		success: function(resp) {
-  //       console.log('getDataPrint', resp);
-  //       let table = [];
-  //       let price_overall = resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  //       let address = resp.address;
-  //       let cashier_name = resp.cashier_name;
-  //       let id_patient = resp.id_patient;
-  //       let owner_name = resp.owner_name;
-  //       let pet_name = resp.pet_name;
-  //       let quantity_total = resp.quantity_total;
-  //       let registration_number = resp.registration_number;
-  //       let time = resp.time;
-
-  //       resp.data_service.forEach(ds => {
-  //         table.push({name: ds.item_name, qty: ds.quantity, 
-  //           harga: ds.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
-  //           total: ds.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
-  //       });
-  //       resp.data_item.forEach(di => {
-  //         table.push({name: di.item_name, qty: di.quantity, 
-  //           harga: di.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
-  //           total: di.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
-  //       });        
-
-  //       const datas = {
-  //         _token: $('meta[name="csrf-token"]').attr('content'),
-  //         table, price_overall, address, cashier_name, id_patient,
-  //         owner_name, pet_name, quantity_total, registration_number,
-  //         time
-  //       };
-
-  //       $.ajax({
-  //         url : $('.baseUrl').val() + '/print',
-  //         type: 'POST',
-  //         dataType: 'JSON',
-  //         headers: { 'Authorization': `Bearer ${token}` },
-  //         data: datas,
-  //         beforeSend: function() { $('#loading-screen').show(); },
-  //         success: function(resp) {
-  //           console.log('print berhasil');
-          
-  //         }, complete: function() { $('#loading-screen').hide(); }
-  //         , error: function(err) {
-  //           console.log('print gagal');
-  //           if (err.status == 401) {
-  //             localStorage.removeItem('vet-clinic');
-  //             location.href = $('.baseUrl').val() + '/masuk';
-  //           }
-  //         }
-  //       });
-	// 		}, complete: function() { $('#loading-screen').hide(); },
-	// 		error: function(err) {
-	// 			if (err.status == 401) {
-	// 				localStorage.removeItem('vet-clinic');
-	// 				location.href = $('.baseUrl').val() + '/masuk';
-	// 			}
-	// 		}
-	// 	});
-
-  // });
 
   function processSaved() {
 
@@ -150,42 +78,39 @@ $(document).ready(function() {
 
     const fd = new FormData();
     fd.append('check_up_result_id', $('#selectedPasien').val());
-    // console.log('checkUpResultId', $('#selectedPasien').val());
     calculationPay.forEach(dt => {
       if (dt.type == 'jasa') {
-        finalSelectedJasa.push({ detail_service_patient_id: dt.id});
+        finalSelectedJasa.push({ detail_service_patient_id: dt.id });
       } else {
-        finalSelectedBarang.push({ detail_item_patient_id: dt.id});
+        finalSelectedBarang.push({ detail_item_patient_id: dt.id });
       }
     });
-    // console.log('service_payment', finalSelectedJasa);
-    // console.log('item_payment', finalSelectedBarang);
     fd.append('service_payment', JSON.stringify(finalSelectedJasa));
     fd.append('item_payment', JSON.stringify(finalSelectedBarang));
 
     $.ajax({
-      url : $('.baseUrl').val() + '/api/pembayaran',
+      url: $('.baseUrl').val() + '/api/pembayaran',
       type: 'POST',
       dataType: 'JSON',
       headers: { 'Authorization': `Bearer ${token}` },
       data: fd, contentType: false, cache: false,
       processData: false,
-      beforeSend: function() { $('#loading-screen').show(); },
-      success: function(resp) {
+      beforeSend: function () { $('#loading-screen').show(); },
+      success: function (resp) {
 
         $("#msg-box .modal-body").text('Berhasil Menambah Data');
         $('#msg-box').modal('show');
 
-        processPrint($('#selectedPasien').val(), finalSelectedJasa, finalSelectedBarang);
+        processPrint($('#selectedPasien').val(), JSON.stringify(finalSelectedJasa), JSON.stringify(finalSelectedBarang));
 
         setTimeout(() => {
           window.location.href = $('.baseUrl').val() + '/pembayaran';
         }, 1000);
-      }, complete: function() { $('#loading-screen').hide(); }
-      , error: function(err) {
+      }, complete: function () { $('#loading-screen').hide(); }
+      , error: function (err) {
         if (err.status === 422) {
           let errText = ''; $('#beErr').empty(); $('#btnSubmitPembayaran').attr('disabled', true);
-          $.each(err.responseJSON.errors, function(idx, v) {
+          $.each(err.responseJSON.errors, function (idx, v) {
             errText += v + ((idx !== err.responseJSON.errors.length - 1) ? '<br/>' : '');
           });
           $('#beErr').append(errText); isBeErr = true;
@@ -197,81 +122,9 @@ $(document).ready(function() {
     });
   }
 
-  function processPrint(check_up_result_id, service_payment, item_payment) {
-    const fd = new FormData();
-    fd.append('check_up_result_id', check_up_result_id);
-    fd.append('service_payment', JSON.stringify(service_payment));
-    fd.append('item_payment', JSON.stringify(item_payment));
-    $.ajax({
-			url     : $('.baseUrl').val() + '/api/pembayaran/print',
-			headers : { 'Authorization': `Bearer ${token}` },
-			type    : 'POST',
-			data: fd, contentType: false, cache: false,
-      processData: false,
-			beforeSend: function() { $('#loading-screen').show(); },
-			success: function(resp) {
-        // console.log('getDataPrint', resp);
-        let table = [];
-        let price_overall = resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        let address = resp.address;
-        let cashier_name = resp.cashier_name;
-        let id_patient = resp.id_patient;
-        let owner_name = resp.owner_name;
-        let pet_name = resp.pet_name;
-        let quantity_total = resp.quantity_total;
-        let registration_number = resp.registration_number;
-        let time = resp.time;
-
-        resp.data_service.forEach(ds => {
-          table.push({name: ds.item_name, qty: ds.quantity, 
-            harga: ds.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
-            total: ds.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
-        });
-        resp.data_item.forEach(di => {
-          table.push({name: di.item_name, qty: di.quantity, 
-            harga: di.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), 
-            total: di.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')});
-        });        
-
-        const datas = {
-          _token: $('meta[name="csrf-token"]').attr('content'),
-          table, price_overall, address, cashier_name, id_patient,
-          owner_name, pet_name, quantity_total, registration_number,
-          time
-        };
-
-        $.ajax({
-          url : $('.baseUrl').val() + '/print',
-          type: 'POST',
-          dataType: 'JSON',
-          headers: { 'Authorization': `Bearer ${token}` },
-          data: datas,
-          beforeSend: function() { $('#loading-screen').show(); },
-          success: function(resp) {
-            // console.log('print berhasil');
-          
-          }, complete: function() { $('#loading-screen').hide(); }
-          , error: function(err) {
-            // console.log('print gagal');
-            if (err.status == 401) {
-              localStorage.removeItem('vet-clinic');
-              location.href = $('.baseUrl').val() + '/masuk';
-            }
-          }
-        });
-			}, complete: function() { $('#loading-screen').hide(); },
-			error: function(err) {
-				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
-					location.href = $('.baseUrl').val() + '/masuk';
-				}
-			}
-		});
-  }
-
   function formConfigure() {
     $('#selectedPasien').select2();
-		$('#btnSubmitPembayaran').attr('disabled', true);
+    $('#btnSubmitPembayaran').attr('disabled', true);
   }
 
   function processAppendListSelectedJasa() {
@@ -287,15 +140,15 @@ $(document).ready(function() {
         + `<td>${lj.category_name}</td>`
         + `<td>${lj.service_name}</td>`
         + `<td>${lj.quantity}</td>`
-        + `<td>${typeof(lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-        + `<td>${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+        + `<td>${typeof (lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+        + `<td>${typeof (lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
         + `<td><input type="checkbox" index=${idx} class="isBayarJasa"/></td>`
         + `</tr>`;
-        ++no;
+      ++no;
     });
     $('#list-selected-jasa').append(rowSelectedListJasa);
 
-    $('.isBayarJasa').click(function() {
+    $('.isBayarJasa').click(function () {
       const idx = $(this).attr('index');
       const getDetailJasa = selectedListJasa[idx];
 
@@ -307,7 +160,7 @@ $(document).ready(function() {
         const getIdxCalculation = calculationPay.findIndex(i => (i.type == 'jasa' && i.id == getDetailJasa.detail_service_patient_id));
 
         listTagihanJasa.splice(getIdxTagihanJasa, 1);
-        calculationPay.splice(getIdxCalculation, 1);        
+        calculationPay.splice(getIdxCalculation, 1);
       }
 
       processAppendListTagihanJasa();
@@ -330,10 +183,10 @@ $(document).ready(function() {
           + `<td>${lj.category_name}</td>`
           + `<td>${lj.service_name}</td>`
           + `<td>${lj.quantity}</td>`
-          + `<td>${typeof(lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-          + `<td>${typeof(lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof (lj.selling_price) == 'number' ? lj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof (lj.price_overall) == 'number' ? lj.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
           + `</tr>`;
-          ++no;
+        ++no;
       });
     } else { rowListTagihanJasa += `<tr class="text-center"><td colspan="8">Tidak ada data.</td></tr>` }
     $('#list-tagihan-jasa').append(rowListTagihanJasa);
@@ -354,15 +207,15 @@ $(document).ready(function() {
         + `<td>${lb.category_name}</td>`
         + `<td>${lb.unit_name}</td>`
         + `<td>${lb.quantity}</td>`
-        + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-        + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+        + `<td>${typeof (lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+        + `<td>${typeof (lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
         + `<td><input type="checkbox" index=${idx} class="isBayarBarang"/></td>`
         + `</tr>`;
-        ++no;
+      ++no;
     });
     $('#list-selected-barang').append(rowSelectedListBarang);
-    
-    $('.isBayarBarang').click(function() {
+
+    $('.isBayarBarang').click(function () {
       const idx = $(this).attr('index');
       const getDetailBarang = selectedListBarang[idx];
 
@@ -389,7 +242,7 @@ $(document).ready(function() {
     let no = 1;
     $('#list-tagihan-barang tr').remove();
 
-    if (listTagihanBarang.length) { 
+    if (listTagihanBarang.length) {
       listTagihanBarang.forEach((lb) => {
         rowListTagihanBarang += `<tr>`
           + `<td>${no}</td>`
@@ -400,19 +253,24 @@ $(document).ready(function() {
           + `<td>${lb.category_name}</td>`
           + `<td>${lb.unit_name}</td>`
           + `<td>${lb.quantity}</td>`
-          + `<td>${typeof(lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-          + `<td>${typeof(lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof (lb.selling_price) == 'number' ? lb.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+          + `<td>${typeof (lb.price_overall) == 'number' ? lb.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
           + `</tr>`;
-          ++no;
+        ++no;
       });
     } else { rowListTagihanBarang += `<tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>` }
     $('#list-tagihan-barang').append(rowListTagihanBarang);
   }
 
+  function processPrint(check_up_result_id, service_payment, item_payment) {
+    let url = '/pembayaran/print/' + check_up_result_id + '/' + service_payment + '/' + item_payment;
+    window.open($('.baseUrl').val() + url, '_blank');
+  }
+
   function processCalculationTagihan() {
     let total = 0;
 
-    calculationPay.forEach(calc => total += calc.price );
+    calculationPay.forEach(calc => total += calc.price);
 
     let totalText = `Rp. ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')},00`;
     $('#totalBayarTxt').text(totalText);
@@ -420,22 +278,22 @@ $(document).ready(function() {
 
   function loadPasien() {
     $.ajax({
-      url     : $('.baseUrl').val() + '/api/pembayaran/pasien',
-      headers : { 'Authorization': `Bearer ${token}` },
-      type    : 'GET',
-      beforeSend: function() { $('#loading-screen').show(); },
-      success: function(data) {
+      url: $('.baseUrl').val() + '/api/pembayaran/pasien',
+      headers: { 'Authorization': `Bearer ${token}` },
+      type: 'GET',
+      beforeSend: function () { $('#loading-screen').show(); },
+      success: function (data) {
         optPasien += `<option value=''>Pilih Pasien</option>`
         listPasien = data;
 
         if (listPasien.length) {
-          for (let i = 0 ; i < listPasien.length ; i++) {
+          for (let i = 0; i < listPasien.length; i++) {
             optPasien += `<option value=${listPasien[i].check_up_result_id}>${listPasien[i].pet_name} - ${listPasien[i].registration_number}</option>`;
           }
         }
         $('#selectedPasien').append(optPasien);
-      }, complete: function() { $('#loading-screen').hide(); },
-      error: function(err) {
+      }, complete: function () { $('#loading-screen').hide(); },
+      error: function (err) {
         if (err.status == 401) {
           localStorage.removeItem('vet-clinic');
           location.href = $('.baseUrl').val() + '/masuk';
@@ -451,10 +309,11 @@ $(document).ready(function() {
       $('#pasienErr1').text(''); isValidSelectedPasien = true;
     }
 
+    isValidCalculationPay = (!calculationPay.length) ? false : true;
+
     $('#beErr').empty(); isBeErr = false;
 
-    $('#btnSubmitPembayaran').attr('disabled', 
-      (!isValidSelectedPasien || isBeErr) ? true : false);
+    $('#btnSubmitPembayaran').attr('disabled', (!isValidSelectedPasien || !isValidCalculationPay || isBeErr) ? true : false);
   }
 
   function refreshText() {
@@ -463,7 +322,7 @@ $(document).ready(function() {
     $('#usiaHewanTahunTxt').text('- Tahun'); $('#usiaHewanBulanTxt').text('- Bulan');
     $('#namaPemilikTxt').text('-'); $('#alamatPemilikTxt').text('-');
     $('#nomorHpPemilikTxt').text('-'); $('#nomorRegistrasiTxt').text('-');
-    $('#keluhanTxt').text('-'); $('#namaPendaftarTxt').text('-'); 
+    $('#keluhanTxt').text('-'); $('#namaPendaftarTxt').text('-');
     $('#totalBayarTxt').text('-'); $('#rawatInapTxt').text('-');
     $('#statusPemeriksaanTxt').text('-');
   }
@@ -478,8 +337,8 @@ $(document).ready(function() {
     selectedListJasa = []; selectedListBarang = [];
     listTagihanJasa = []; listTagihanBarang = [];
     calculationPay = [];
-    processAppendListSelectedJasa(); 
-    processAppendListSelectedBarang(); 
+    processAppendListSelectedJasa();
+    processAppendListSelectedBarang();
     processAppendListTagihanJasa();
     processAppendListTagihanBarang();
     refreshText();

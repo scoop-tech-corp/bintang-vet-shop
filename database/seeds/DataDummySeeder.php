@@ -223,6 +223,36 @@ class DataDummySeeder extends Seeder
         ]);
 
         DB::table('patients')->insert([
+            'branch_id' => 1,
+            'id_member' => 'BVC-P-AS-0002',
+            'pet_category' => 'monyet',
+            'pet_name' => 'kimbo',
+            'pet_gender' => 'jantan',
+            'pet_year_age' => 5,
+            'pet_month_age' => 10,
+            'owner_name' => 'yudi',
+            'owner_address' => 'duri',
+            'owner_phone_number' => '0812345609009',
+            'user_id' => '1',
+            'created_at' => '2021-03-20',
+        ]);
+
+        DB::table('patients')->insert([
+            'branch_id' => 1,
+            'id_member' => 'BVC-P-AS-0003',
+            'pet_category' => 'anjing',
+            'pet_name' => 'sisi',
+            'pet_gender' => 'betina',
+            'pet_year_age' => 6,
+            'pet_month_age' => 8,
+            'owner_name' => 'cindy',
+            'owner_address' => 'alam sutera',
+            'owner_phone_number' => '081234560987',
+            'user_id' => '1',
+            'created_at' => '2020-12-30',
+        ]);
+
+        DB::table('patients')->insert([
             'branch_id' => 3,
             'id_member' => 'BVC-P-TJ-0001',
             'pet_category' => 'anjing',
@@ -238,6 +268,36 @@ class DataDummySeeder extends Seeder
         ]);
 
         DB::table('patients')->insert([
+            'branch_id' => 3,
+            'id_member' => 'BVC-P-TJ-0002',
+            'pet_category' => 'kucing',
+            'pet_name' => 'butet',
+            'pet_gender' => 'jantan',
+            'pet_year_age' => 10,
+            'pet_month_age' => 10,
+            'owner_name' => 'raka',
+            'owner_address' => 'kemanggisan',
+            'owner_phone_number' => '081234560988',
+            'user_id' => '1',
+            'created_at' => '2021-01-12',
+        ]);
+
+        DB::table('patients')->insert([
+            'branch_id' => 3,
+            'id_member' => 'BVC-P-TJ-0003',
+            'pet_category' => 'anjing',
+            'pet_name' => 'godart',
+            'pet_gender' => 'jantan',
+            'pet_year_age' => 8,
+            'pet_month_age' => 10,
+            'owner_name' => 'ricky',
+            'owner_address' => 'ilir',
+            'owner_phone_number' => '081234560928',
+            'user_id' => '1',
+            'created_at' => '2021-02-18',
+        ]);
+
+        DB::table('patients')->insert([
             'branch_id' => 2,
             'id_member' => 'BVC-P-KB-0001',
             'pet_category' => 'kucing',
@@ -250,6 +310,36 @@ class DataDummySeeder extends Seeder
             'owner_phone_number' => '081234560989',
             'user_id' => '1',
             'created_at' => '2020-12-30',
+        ]);
+
+        DB::table('patients')->insert([
+            'branch_id' => 2,
+            'id_member' => 'BVC-P-KB-0002',
+            'pet_category' => 'kucing',
+            'pet_name' => 'mpus',
+            'pet_gender' => 'betina',
+            'pet_year_age' => 11,
+            'pet_month_age' => 10,
+            'owner_name' => 'lisa',
+            'owner_address' => 'pondok indah',
+            'owner_phone_number' => '081234560989',
+            'user_id' => '1',
+            'created_at' => '2020-12-30',
+        ]);
+
+        DB::table('patients')->insert([
+            'branch_id' => 2,
+            'id_member' => 'BVC-P-KB-0003',
+            'pet_category' => 'ikan',
+            'pet_name' => 'woofy',
+            'pet_gender' => 'tidak diketahui',
+            'pet_year_age' => 6,
+            'pet_month_age' => 10,
+            'owner_name' => 'tono',
+            'owner_address' => 'pondok indah',
+            'owner_phone_number' => '081234560989',
+            'user_id' => '1',
+            'created_at' => '2021-04-22',
         ]);
 
         //category_item
@@ -1011,7 +1101,7 @@ class DataDummySeeder extends Seeder
         //registrations
         DB::table('registrations')->insert([
             'id_number' => 'BVC-RP-TJ-0001',
-            'patient_id' => '2',
+            'patient_id' => '4',
             'complaint' => 'pilek',
             'registrant' => 'agus',
             'user_id' => '1',
@@ -1022,7 +1112,7 @@ class DataDummySeeder extends Seeder
 
         DB::table('registrations')->insert([
             'id_number' => 'BVC-RP-KB-0001',
-            'patient_id' => '3',
+            'patient_id' => '7',
             'complaint' => 'gatal-gatal',
             'registrant' => 'kuncoro',
             'user_id' => '1',
@@ -1332,59 +1422,59 @@ class DataDummySeeder extends Seeder
             'created_at' => '2020-12-30',
         ]);
 
-        DB::table('list_of_payments')->insert([
-            'check_up_result_id' => '1',
-            'user_id' => '1',
-            'created_at' => '2021-04-04',
-        ]);
+        // DB::table('list_of_payments')->insert([
+        //     'check_up_result_id' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2021-04-04',
+        // ]);
 
-        DB::table('list_of_payments')->insert([
-            'check_up_result_id' => '3',
-            'user_id' => '1',
-            'created_at' => '2021-04-11',
-        ]);
+        // DB::table('list_of_payments')->insert([
+        //     'check_up_result_id' => '3',
+        //     'user_id' => '1',
+        //     'created_at' => '2021-04-11',
+        // ]);
 
-        DB::table('list_of_payment_items')->insert([
-            'check_up_result_id' => '1',
-            'detail_item_patient_id' => '1',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_items')->insert([
+        //     'check_up_result_id' => '1',
+        //     'detail_item_patient_id' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
-        DB::table('list_of_payment_items')->insert([
-            'check_up_result_id' => '1',
-            'detail_item_patient_id' => '2',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_items')->insert([
+        //     'check_up_result_id' => '1',
+        //     'detail_item_patient_id' => '2',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
-        DB::table('list_of_payment_items')->insert([
-            'check_up_result_id' => '1',
-            'detail_item_patient_id' => '3',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_items')->insert([
+        //     'check_up_result_id' => '1',
+        //     'detail_item_patient_id' => '3',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
-        DB::table('list_of_payment_items')->insert([
-            'check_up_result_id' => '3',
-            'detail_item_patient_id' => '4',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_items')->insert([
+        //     'check_up_result_id' => '3',
+        //     'detail_item_patient_id' => '4',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
-        DB::table('list_of_payment_services')->insert([
-            'check_up_result_id' => '1',
-            'detail_service_patient_id' => '1',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_services')->insert([
+        //     'check_up_result_id' => '1',
+        //     'detail_service_patient_id' => '1',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
-        DB::table('list_of_payment_services')->insert([
-            'check_up_result_id' => '3',
-            'detail_service_patient_id' => '3',
-            'user_id' => '1',
-            'created_at' => '2020-04-04',
-        ]);
+        // DB::table('list_of_payment_services')->insert([
+        //     'check_up_result_id' => '3',
+        //     'detail_service_patient_id' => '3',
+        //     'user_id' => '1',
+        //     'created_at' => '2020-04-04',
+        // ]);
 
         // //history item hovement
         // DB::table('history_item_movements')->insert([
