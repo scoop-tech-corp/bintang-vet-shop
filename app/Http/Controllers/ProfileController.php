@@ -29,18 +29,8 @@ class ProfileController extends Controller
             $path = $request->file('file')->move(public_path("/documents"), $fileName);
             $photoURL = url('/' . $fileName);
 
-            //return "public/documents/" . $fileName;
-
-            //return response()->json(['url' => $photoURL], 200);
-
-            //store file into document folder
             $file = "/documents/" . $fileName;
 
-            // //store your file into database
-            // $document = new User();
-            // $document->image_profile = $file;
-            // $document->id = $request->user_id;
-            // $document->save();
             $user = User::find($request->user()->id);
 
             if (is_null($user)) {
@@ -54,11 +44,6 @@ class ProfileController extends Controller
             $user->updated_at = \Carbon\Carbon::now();
             $user->save();
 
-            // return response()->json([
-            //     "success" => true,
-            //     "message" => "File successfully uploaded",
-            //     "file" => $file,
-            // ]);
             return response()->json([
                 'message' => 'Berhasil menambah Foto',
             ], 200);
