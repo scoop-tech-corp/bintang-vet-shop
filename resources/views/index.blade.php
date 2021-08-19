@@ -32,7 +32,7 @@
                 <div class="input-group-addon">
                   <i class="fa fa-calendar"></i>
                 </div>
-                <input type="text" class="form-control" id="datepicker-jumlah-pasien" placeholder="mm-yyyy" autocomplete="off">
+                {{-- <input type="text" class="form-control" id="datepicker-jumlah" placeholder="mm-yyyy" autocomplete="off"> --}}
               </div>
             </div>
           </div>

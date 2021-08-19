@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
   widgetTotalPasien({month: null, year: null});
-  widgetJenisKelamin();
-  widgetUmur();
+  // widgetJenisKelamin();
+  // widgetUmur();
 
   $('#datepicker-jumlah-pasien').datepicker({
     autoclose: true, clearBtn: true,
@@ -62,86 +62,86 @@ $(document).ready(function() {
     });
   }
 
-  function widgetJenisKelamin() {
-    Highcharts.chart('jenisKelaminWidget', {
-      chart: { type: 'pie' },
-      title: { text: '' },
-      plotOptions: {
-        pie: { cursor: 'pointer', 
-        dataLabels: { 
-          enabled: true,
-          format: '<b>{point.name}</b>: {point.y}'
-        } }
-      },
-      credits: { enabled: false },
-      series: [{
-          name: 'Brands',
-          colorByPoint: true,
-          data: [{
-              name: 'Chrome',
-              y: 61.41,
-          }, {
-              name: 'Internet Explorer',
-              y: 11.84
-          }, {
-              name: 'Firefox',
-              y: 10.85
-          }, {
-              name: 'Edge',
-              y: 4.67
-          }, {
-              name: 'Safari',
-              y: 4.18
-          }, {
-              name: 'Sogou Explorer',
-              y: 1.64
-          }, {
-              name: 'Opera',
-              y: 1.6
-          }, {
-              name: 'QQ',
-              y: 1.2
-          }, {
-              name: 'Other',
-              y: 2.61
-          }]
-      }]
-    });
-  }
+  // function widgetJenisKelamin() {
+  //   Highcharts.chart('jenisKelaminWidget', {
+  //     chart: { type: 'pie' },
+  //     title: { text: '' },
+  //     plotOptions: {
+  //       pie: { cursor: 'pointer', 
+  //       dataLabels: { 
+  //         enabled: true,
+  //         format: '<b>{point.name}</b>: {point.y}'
+  //       } }
+  //     },
+  //     credits: { enabled: false },
+  //     series: [{
+  //         name: 'Brands',
+  //         colorByPoint: true,
+  //         data: [{
+  //             name: 'Chrome',
+  //             y: 61.41,
+  //         }, {
+  //             name: 'Internet Explorer',
+  //             y: 11.84
+  //         }, {
+  //             name: 'Firefox',
+  //             y: 10.85
+  //         }, {
+  //             name: 'Edge',
+  //             y: 4.67
+  //         }, {
+  //             name: 'Safari',
+  //             y: 4.18
+  //         }, {
+  //             name: 'Sogou Explorer',
+  //             y: 1.64
+  //         }, {
+  //             name: 'Opera',
+  //             y: 1.6
+  //         }, {
+  //             name: 'QQ',
+  //             y: 1.2
+  //         }, {
+  //             name: 'Other',
+  //             y: 2.61
+  //         }]
+  //     }]
+  //   });
+  // }
 
-  function widgetUmur() {
-    Highcharts.chart('umurWidget', {
-      chart: {
-          type: 'area'
-      },
-      title: { text: '' },
-      subtitle: { text: ''},
-      xAxis: { categories: ['Internet Explorer', 'Firefox', 'Edge', 'Safari']},
-      yAxis: { title: { text: '' } },
-      credits: { enabled: false },
-      plotOptions: {
-        area: {
-          dataLabels:{ enabled: true },
-          marker: { enabled: true, symbol: 'circle' }
-        }
-      },
-      series: [{
-          name: 'Total Pasien Widget',
-          data: [{
-              name: 'Internet Explorer',
-              y: 11.84
-          }, {
-              name: 'Firefox',
-              y: 10.85
-          }, {
-              name: 'Edge',
-              y: 4.67
-          }, {
-              name: 'Safari',
-              y: 4.18
-          }]
-        }]
-    });
-  }
+  // function widgetUmur() {
+  //   Highcharts.chart('umurWidget', {
+  //     chart: {
+  //         type: 'area'
+  //     },
+  //     title: { text: '' },
+  //     subtitle: { text: ''},
+  //     xAxis: { categories: ['Internet Explorer', 'Firefox', 'Edge', 'Safari']},
+  //     yAxis: { title: { text: '' } },
+  //     credits: { enabled: false },
+  //     plotOptions: {
+  //       area: {
+  //         dataLabels:{ enabled: true },
+  //         marker: { enabled: true, symbol: 'circle' }
+  //       }
+  //     },
+  //     series: [{
+  //         name: 'Total Pasien Widget',
+  //         data: [{
+  //             name: 'Internet Explorer',
+  //             y: 11.84
+  //         }, {
+  //             name: 'Firefox',
+  //             y: 10.85
+  //         }, {
+  //             name: 'Edge',
+  //             y: 4.67
+  //         }, {
+  //             name: 'Safari',
+  //             y: 4.18
+  //         }]
+  //       }]
+  //   });
+  // }
 
 });

@@ -1,7 +1,7 @@
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<div class="section-logo-vet-clinic">
-			<img src="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
+			<img src="{{ asset('assets/image/logo-vet-clinic.png') }}">
 		</div>
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">MENU UTAMA</li>
@@ -16,14 +16,14 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="{{ url('/kategori-barang') }}"><i class="fa fa-circle-o"></i> Cat Food</a></li>
-					<li><a href="{{ url('/satuan-barang') }}"><i class="fa fa-circle-o"></i> Dog Food</a></li>
-					<li><a href="{{ url('/daftar-barang') }}"><i class="fa fa-circle-o"></i> Animal Food</a></li>
-					<li><a href="{{ url('/pembagian-harga-barang') }}"><i class="fa fa-circle-o"></i> Vitamin</a></li>
-					<li><a href="{{ url('/kelompok-obat') }}"><i class="fa fa-circle-o"></i> Pet Care</a></li>
-					<li><a href="{{ url('/pembagian-harga-kelompok-obat') }}"><i class="fa fa-circle-o"></i> Kandang</a></li>
-          <li><a href="{{ url('/pembagian-harga-kelompok-obat') }}"><i class="fa fa-circle-o"></i> Aksesoris</a></li>
-          <li><a href="{{ url('/pembagian-harga-kelompok-obat') }}"><i class="fa fa-circle-o"></i> Lain-lain</a></li>
+					<li><a href="{{ url('/gudang/cat-food') }}"><i class="fa fa-circle-o"></i> Cat Food</a></li>
+					<li><a href="{{ url('/gudang/dog-food') }}"><i class="fa fa-circle-o"></i> Dog Food</a></li>
+					<li><a href="{{ url('/gudang/animal-food') }}"><i class="fa fa-circle-o"></i> Animal Food</a></li>
+					<li><a href="{{ url('/gudang/vitamin') }}"><i class="fa fa-circle-o"></i> Vitamin</a></li>
+					<li><a href="{{ url('/gudang/pet-care') }}"><i class="fa fa-circle-o"></i> Pet Care</a></li>
+					<li><a href="{{ url('/gudang/kandang') }}"><i class="fa fa-circle-o"></i> Kandang</a></li>
+          <li><a href="{{ url('/gudang/aksesoris') }}"><i class="fa fa-circle-o"></i> Aksesoris</a></li>
+          <li><a href="{{ url('/gudang/lain-lain') }}"><i class="fa fa-circle-o"></i> Lain-lain</a></li>
 				</ul>
 			</li>
 			<li class="menuPembayaran"><a href="{{ url('/pembayaran') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Pembayaran</span></a></li>
@@ -36,9 +36,9 @@
 					</span>
 				</a>
 				<ul class="treeview-menu">
-					<li><a href="{{ url('/laporan-keuangan-harian') }}"><i class="fa fa-circle-o"></i> Harian</a></li>
-					<li><a href="{{ url('/laporan-keuangan-mingguan') }}"><i class="fa fa-circle-o"></i> Mingguan</a></li>
-					<li><a href="{{ url('/laporan-keuangan-bulanan') }}"><i class="fa fa-circle-o"></i> Bulanan</a></li>
+					<li><a href="{{ url('/laporan-keuangan/harian') }}"><i class="fa fa-circle-o"></i> Harian</a></li>
+					<li><a href="{{ url('/laporan-keuangan/mingguan') }}"><i class="fa fa-circle-o"></i> Mingguan</a></li>
+					<li><a href="{{ url('/laporan-keuangan/bulanan') }}"><i class="fa fa-circle-o"></i> Bulanan</a></li>
 				</ul>
 			</li>
 		</ul>
