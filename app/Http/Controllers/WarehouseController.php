@@ -2,13 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RecapWarehouse;
 use App\Exports\TemplateUploadGudang;
+use App\Imports\UploadItem;
 use App\Models\ListofItems;
+use DB;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class WarehouseController extends Controller
 {
+    public function index(Request $request)
+    {
+        $item = DB::table('list_of_items')
+            ->join('users', 'list_of_items.user_id', '=', 'users.id')
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
+            ->select(
+                'list_of_items.id',
+                'list_of_items.item_name',
+                'list_of_items.total_item',
+                DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                DB::raw("TRIM(list_of_items.profit)+0 as profit"),
+                'list_of_items.image',
+                'branches.id as branch_id',
+                'branches.branch_name',
+                'users.id as user_id',
+                'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+            ->where('list_of_items.isDeleted', '=', 0)
+            ->where('list_of_items.category', '=', $request->category);
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+        }
+
+        if ($request->user()->role == 'kasir') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+        }
+
+        if ($request->keyword) {
+
+            $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
+                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->orderby) {
+            $item = $item->orderBy($request->column, $request->orderby);
+        }
+
+        $item = $item->orderBy('list_of_items.id', 'desc');
+
+        $item = $item->get();
+
+        return response()->json($item, 200);
+    }
+
     public function create(Request $request)
     {
         if ($request->user()->role == 'kasir') {
@@ -38,7 +89,7 @@ class WarehouseController extends Controller
             ], 422);
         }
 
-        $check_list_item = ListofItems::where('item_name', 'like', '%' . $request->item_name . '%')
+        $check_list_item = ListofItems::where('item_name', '=', $request->item_name)
             ->where('branch_id', '=', $request->branch_id)
             ->where('category', '=', $request->category)
             ->count();
@@ -184,6 +235,8 @@ class WarehouseController extends Controller
             ], 422);
         }
 
+        $item = ListofItems::find($request->id);
+
         $item->user_update_id = $request->user()->id;
         $item->isDeleted = 1;
         $item->deleted_by = $request->user()->id;
@@ -214,6 +267,19 @@ class WarehouseController extends Controller
 
         return (new TemplateUploadGudang())->download($request->filename);
     }
+
+    public function download_report_excel(Request $request)
+    {
+        if ($request->user()->role == 'kasir') {
+            return response()->json([
+                'message' => 'The user role was invalid.',
+                'errors' => ['Akses User tidak diizinkan!'],
+            ], 403);
+        }
+
+        return (new RecapWarehouse($request->orderby, $request->column, $request->date, $branch, $request->category))->download('Laporan Keuangan Harian.xlsx');
+    }
+
     public function upload_excel(Request $request)
     {
         if ($request->user()->role == 'kasir') {
@@ -223,15 +289,45 @@ class WarehouseController extends Controller
             ], 403);
         }
 
-    }
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx',
+            'category' => 'required|string',
+        ]);
 
-    public function download_result_excel(Request $request)
-    {
-        if ($request->user()->role == 'kasir') {
+        $rows = Excel::toArray(new UploadItem, $request->file('file'));
+        $result = $rows[0];
+
+        foreach ($result as $key_result) {
+
+            $check_duplicate = DB::table('list_of_items')
+                ->where('item_name', 'like', '%' . $key_result['nama_barang'] . '%')
+                ->where('category', '=', $request->category)
+                ->where('branch_id', '=', $key_result['kode_cabang'])
+                ->count();
+
+            if ($check_duplicate > 0) {
+
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Terdapat Data yang sudah ada!'],
+                ], 422);
+            }
+
+            if ($key_result['harga_modal'] < $key_result['harga_jual']) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Harga Modal harus lebih kecil dengan Harga Jual!'],
+                ], 422);
+            }
+
+            $file = $request->file('file');
+
+            Excel::import(new UploadItem, $file);
+
             return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
+                'message' => 'Berhasil mengupload Barang',
+            ], 200);
         }
+
     }
 }

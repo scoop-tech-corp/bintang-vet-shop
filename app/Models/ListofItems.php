@@ -13,5 +13,5 @@ class ListofItems extends Model
   protected $guarded = ['id'];
 
   protected $fillable = ['item_name',
-      'total_item','selling_price','capital_price','profit','image','category','branch_id','user_id'];
+      'total_item','selling_price','capital_price','profit','image','category','branch_id','user_id','user_update_id'];
 }
