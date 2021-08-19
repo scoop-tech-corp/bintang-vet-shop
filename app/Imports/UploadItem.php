@@ -8,13 +8,16 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class UploadItem implements WithMultipleSheets
 {
-    /**
-     * @param Collection $collection
-     */
+  protected $category;
+
+  public function __construct($category)
+  {
+      $this->category = $category;
+  }
     public function sheets(): array
     {
         return [
-            0 => new UploadDataItem(),
+            0 => new UploadDataItem($this->category),
         ];
     }
 }

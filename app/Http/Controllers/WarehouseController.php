@@ -298,7 +298,7 @@ class WarehouseController extends Controller
             'category' => 'required|string',
         ]);
 
-        $rows = Excel::toArray(new UploadItem, $request->file('file'));
+        $rows = Excel::toArray(new UploadItem($request->category), $request->file('file'));
         $result = $rows[0];
 
         foreach ($result as $key_result) {
@@ -317,7 +317,7 @@ class WarehouseController extends Controller
                 ], 422);
             }
 
-            if ($key_result['harga_modal'] < $key_result['harga_jual']) {
+            if ($key_result['harga_modal'] > $key_result['harga_jual']) {
                 return response()->json([
                     'message' => 'The data was invalid.',
                     'errors' => ['Harga Modal harus lebih kecil dengan Harga Jual!'],
@@ -326,7 +326,7 @@ class WarehouseController extends Controller
 
             $file = $request->file('file');
 
-            Excel::import(new UploadItem, $file);
+            Excel::import(new UploadItem($request->category), $file);
 
             return response()->json([
                 'message' => 'Berhasil mengupload Barang',

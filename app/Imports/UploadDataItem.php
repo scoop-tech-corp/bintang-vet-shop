@@ -3,7 +3,6 @@
 namespace App\Imports;
 
 use App\Models\ListofItems;
-
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -12,6 +11,13 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 {
     use Importable;
+
+    protected $category;
+
+    public function __construct($category)
+    {
+        $this->category = $category;
+    }
 
     public function model(array $row)
     {
@@ -22,6 +28,8 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             'selling_price' => $row['harga_jual'],
             'capital_price' => $row['harga_modal'],
             'profit' => $row['keuntungan'],
+            'image' => "",
+            'category' => $this->category,
             'branch_id' => $row['kode_cabang'],
             'user_id' => 1,
         ]);
