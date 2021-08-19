@@ -43,23 +43,14 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('user/profile', 'ProfileController@update_data_user');
 
         //Warehouse
+        Route::get('gudang','WarehouseController@index');
         Route::post('gudang','WarehouseController@create');
         Route::put('gudang','WarehouseController@update');
         Route::delete('gudang','WarehouseController@delete');
 
         Route::get('gudang/template','WarehouseController@download_template_excel');
-
-        //cat food
-        Route::get('gudang/cat-food','CatFoodController@index');
-        Route::post('gudang/cat-food/upload','CatFoodController@upload');
-
-        //dog food
-        Route::get('gudang/dog-food','DogFoodController@index');
-        Route::post('gudang/dog-food/upload','DogFoodController@upload');
-
-        //animal food
-        Route::get('gudang/animal-food','AnimalFoodController@index');
-        Route::post('gudang/animal-food/upload','AnimalFoodController@upload');
+        Route::get('gudang/generate','WarehouseController@download_report_excel');
+        Route::post('gudang/upload','WarehouseController@upload_excel');
 
     });
 });
