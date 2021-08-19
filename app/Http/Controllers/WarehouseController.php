@@ -149,7 +149,7 @@ class WarehouseController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'id' => 'required|numeric|min:1|max:1',
+            'id' => 'required|numeric',
             'item_name' => 'required|string|min:3|max:50',
             'total_item' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric',
