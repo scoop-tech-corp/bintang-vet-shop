@@ -190,6 +190,12 @@ class WarehouseController extends Controller
             $file = "/documents/" . $fileName;
         }
 
+        $update_item = ListofItems::find($request->id);
+
+        if ($file == "") {
+          $file = $update_item->image;
+        }
+
         $insert_item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
@@ -201,8 +207,6 @@ class WarehouseController extends Controller
             'branch_id' => $request->branch_id,
             'user_id' => $request->user()->id,
         ]);
-
-        $update_item = ListofItems::find($request->id);
 
         $update_item->user_update_id = $request->user()->id;
         $update_item->isDeleted = 1;
