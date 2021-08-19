@@ -120,6 +120,7 @@ $(document).ready(function() {
 		headers : { 'Authorization': `Bearer ${token}` },
 		dropZone: '#dropZone',
 		dataType: 'json',
+    formData: { category: 'cat_food' },
 		autoUpload: false,
 	}).on('fileuploadadd', function (e, data) {
 		let fileTypeAllowed = /.\.(xlsx|xls)$/i;
