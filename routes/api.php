@@ -45,7 +45,7 @@ Route::group(['middleware' => ['api']], function () {
         //Warehouse
         Route::get('gudang','WarehouseController@index');
         Route::post('gudang','WarehouseController@create');
-        Route::put('gudang','WarehouseController@update');
+        Route::post('gudang/update','WarehouseController@update');
         Route::delete('gudang','WarehouseController@delete');
 
         Route::get('gudang/template','WarehouseController@download_template_excel');

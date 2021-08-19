@@ -6,7 +6,7 @@
     <h3 class="box-title">User Management</h3>
     <div class="inner-box-title">
       <div class="section-left-box-title">
-        <button class="btn btn-info openFormAdd">Tambah</button>
+        <button class="btn btn-primary openFormAdd">Tambah</button>
       </div>
       <div class="section-right-box-title">
         <div class="input-search-section m-r-10px">

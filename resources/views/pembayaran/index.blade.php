@@ -6,7 +6,7 @@
     <h3 class="box-title">Pembayaran</h3>
     <div class="inner-box-title">
       <div class="section-left-box-title">
-        <button class="btn btn-info openFormAdd">Tambah Pembayaran</button>
+        <button class="btn btn-primary openFormAdd">Tambah Pembayaran</button>
       </div>
       <div class="section-right-box-title" style="width: 150px;">
         <select id="filterCabang" style="width: 100%"></select>
