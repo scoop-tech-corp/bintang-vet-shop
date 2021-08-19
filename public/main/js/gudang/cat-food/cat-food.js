@@ -139,7 +139,7 @@ $(document).ready(function() {
 		$("#msg-box .modal-body").text('Berhasil Upload Cat Food');
 		$('#msg-box').modal('show');
 		setTimeout(() => {
-			$('#modal-barang-cat-food').modal('toggle');
+			$('#modal-upload-harga-barang').modal('toggle');
 			loadCatFood();
 		}, 1000);
 	}).on('fileuploadfail', function(e, data) {
@@ -212,21 +212,6 @@ $(document).ready(function() {
   $('#submitConfirm').click(function() {
     if (modalState == 'edit') {
       // process edit
-
-      // let datas = {
-      //   id: getId,
-      //   branch_id: $('#selectedCabang').val(), 
-      //   item_name: $('#namaBarang').val(),
-      //   total_item: $('#jumlahBarang').val(),
-      //   selling_price: $('#hargaJual').val().replaceAll('.', ''),
-      //   capital_price: $('#hargaModal').val().replaceAll('.', ''),
-      //   profit: $('#label-keuntungan').text().replaceAll('.', ''),
-      //   category: 'cat_food'
-      // };
-
-      // if ($(`#upload-image-1`)[0].files[0]) {
-      //   datas = Object.assign(datas, {image: $(`#upload-image-1`)[0].files[0]})
-      // }
 
       const fd = new FormData();
       fd.append('id', getId);
