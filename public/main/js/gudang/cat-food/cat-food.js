@@ -29,7 +29,7 @@ $(document).ready(function() {
     $('.section-left-box-title').append(`
       <button class="btn btn-primary openFormAdd m-r-10px">Tambah</button>
       <button class="btn btn-primary openFormUpload m-r-10px">Upload Sekaligus</button>
-      <button class="btn btn-primary openUploadSekaligus">Download Excel</button>
+      <button class="btn btn-primary downloadExcel">Download Excel</button>
       `);
 		$('.section-right-box-title').append(`<select id="filterCabang" style="width: 50%"></select>`);
 
@@ -39,7 +39,6 @@ $(document).ready(function() {
   }
 
   loadCatFood();
-  // $('.box-image-upload').magnificPopup({delegate: 'a', type:'image'});
 
   $('.input-search-section .fa').click(function() {
 		onSearch($('.input-search-section input').val());
@@ -78,10 +77,41 @@ $(document).ready(function() {
   });
 
   $('.openFormUpload').click(function() {
-		$('#modal-upload-harga-barang .modal-title').text('Upload Barang Cat Food Sekaligus');
-		$('#modal-upload-harga-barang').modal('show');
+		$('#modal-upload-cat-food .modal-title').text('Upload Barang Cat Food Sekaligus');
+		$('#modal-upload-cat-food').modal('show');
 		$('.validate-error').html('');
 	});
+
+  $('.downloadExcel').click(function() {
+    $.ajax({
+			url     : $('.baseUrl').val() + '/api/gudang/generate',
+			headers : { 'Authorization': `Bearer ${token}` },
+			type    : 'GET',
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId, category: 'cat_food' },
+			xhrFields: { responseType: 'blob' },
+			beforeSend: function() { $('#loading-screen').show(); },
+			success: function(data, status, xhr) {
+				let disposition = xhr.getResponseHeader('content-disposition');
+				let matches = /"([^"]*)"/.exec(disposition);
+				let filename = (matches != null && matches[1] ? matches[1] : 'file.xlsx');
+				let blob = new Blob([data],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+				let downloadUrl = URL.createObjectURL(blob);
+				let a = document.createElement("a");
+
+				a.href = downloadUrl;
+				a.download = filename
+				document.body.appendChild(a);
+				a.click();
+
+			}, complete: function() { $('#loading-screen').hide(); },
+			error: function(err) {
+				if (err.status == 401) {
+					localStorage.removeItem('vet-shop');
+					location.href = $('.baseUrl').val() + '/masuk';
+				}
+			}
+		});
+  });
 
   $('.btn-download-template').click(function() {
 		$.ajax({
@@ -107,7 +137,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -139,7 +169,7 @@ $(document).ready(function() {
 		$("#msg-box .modal-body").text('Berhasil Upload Cat Food');
 		$('#msg-box').modal('show');
 		setTimeout(() => {
-			$('#modal-upload-harga-barang').modal('toggle');
+			$('#modal-upload-cat-food').modal('toggle');
 			loadCatFood();
 		}, 1000);
 	}).on('fileuploadfail', function(e, data) {
@@ -196,7 +226,7 @@ $(document).ready(function() {
 						});
 						$('#beErr').append(errText); isBeErr = true;
 					} else if (err.status == 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 						location.href = $('.baseUrl').val() + '/masuk';
 					}
 				}
@@ -250,7 +280,7 @@ $(document).ready(function() {
         }, complete: function() { $('#loading-screen').hide(); }
         , error: function(err) {
           if (err.status == 401) {
-            localStorage.removeItem('vet-clinic');
+            localStorage.removeItem('vet-shop');
             location.href = $('.baseUrl').val() + '/masuk';
           }
         }
@@ -275,7 +305,7 @@ $(document).ready(function() {
         }, complete: function() { $('#loading-screen').hide(); }
         , error: function(err) {
           if (err.status == 401) {
-            localStorage.removeItem('vet-clinic');
+            localStorage.removeItem('vet-shop');
             location.href = $('.baseUrl').val() + '/masuk';
           }
         }
@@ -422,7 +452,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -445,7 +475,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
