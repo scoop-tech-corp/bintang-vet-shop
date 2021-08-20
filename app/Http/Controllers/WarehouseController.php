@@ -193,7 +193,7 @@ class WarehouseController extends Controller
         $update_item = ListofItems::find($request->id);
 
         if ($file == "") {
-          $file = $update_item->image;
+            $file = $update_item->image;
         }
 
         $insert_item = ListofItems::create([
@@ -281,7 +281,35 @@ class WarehouseController extends Controller
             ], 403);
         }
 
-        return (new RecapWarehouse($request->orderby, $request->column, $request->date, $branch, $request->category))->download('Laporan Keuangan Harian.xlsx');
+        $date = "";
+        $date = \Carbon\Carbon::now()->format('d-m-y');
+
+        $category = $this->category_name($request);
+        $filename = 'Rekap Barang ' . $category . ' ' . $date . '.xlsx';
+        //
+        return (new RecapWarehouse($request->orderby, $request->column, $request->keyword, $request->category, $request->branch_id))
+        ->download($filename);
+    }
+
+    private function category_name($request)
+    {
+        if ($request->category == "cat_food") {
+            return "Cat Food";
+        } elseif ($request->category == "dog_food") {
+            return "Dog Food";
+        } elseif ($request->category == "animal_food") {
+            return "Animal Food";
+        } elseif ($request->category == "vitamin") {
+            return "Vitamin";
+        } elseif ($request->category == "pet_care") {
+            return "Pet Care";
+        } elseif ($request->category == "cage") {
+            return "Kandang";
+        } elseif ($request->category == "accessories") {
+            return "Aksesoris";
+        } elseif ($request->category == "others") {
+            return "Lain-lain";
+        }
     }
 
     public function upload_excel(Request $request)
@@ -307,6 +335,7 @@ class WarehouseController extends Controller
                 ->where('item_name', 'like', '%' . $key_result['nama_barang'] . '%')
                 ->where('category', '=', $request->category)
                 ->where('branch_id', '=', $key_result['kode_cabang'])
+                ->where('isDeleted', '=', 0)
                 ->count();
 
             if ($check_duplicate > 0) {
