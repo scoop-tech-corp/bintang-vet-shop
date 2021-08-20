@@ -116,7 +116,7 @@ $(document).ready(function() {
 					})
 					.catch(err => {
 						if (err.response.status === 401) {
-							localStorage.removeItem('vet-clinic');
+							localStorage.removeItem('vet-shop');
 							location.href = $('.baseUrl').val() + '/masuk';
 						}
 					})
@@ -148,7 +148,7 @@ $(document).ready(function() {
 						this.beErr = true;
 
 					} else if (err.response.status === 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 	          location.href = $('.baseUrl').val() + '/masuk';
 					}
 				})
@@ -183,7 +183,7 @@ $(document).ready(function() {
 						$('#modal-confirmation').modal('toggle');
 
 					} else if (err.response.status === 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 	          location.href = $('.baseUrl').val() + '/masuk';
 					}
 				})
@@ -204,7 +204,7 @@ $(document).ready(function() {
 				})
 				.catch(err => {
 					if (err.response.status === 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 	          location.href = $('.baseUrl').val() + '/masuk';
 					}
 				})

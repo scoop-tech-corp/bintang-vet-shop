@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-upload-cat-food">
+<div class="modal fade" id="modal-upload-animal-food">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">

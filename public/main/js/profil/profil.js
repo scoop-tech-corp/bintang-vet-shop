@@ -71,7 +71,7 @@ $(document).ready(function() {
           });
           $('#beErr').append(errText); isBeErr = true;
         } else if (err.status == 401) {
-          localStorage.removeItem('vet-clinic');
+          localStorage.removeItem('vet-shop');
           location.href = $('.baseUrl').val() + '/masuk';
         }
       }
@@ -111,7 +111,7 @@ $(document).ready(function() {
         //   $('#beErr').append(errText); isBeErr = true;
         // } else 
         if (err.status == 401) {
-          localStorage.removeItem('vet-clinic');
+          localStorage.removeItem('vet-shop');
           location.href = $('.baseUrl').val() + '/masuk';
         }
       }
@@ -153,7 +153,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -161,7 +161,7 @@ $(document).ready(function() {
   }
 
   function replaceDataLocalUser(data) {
-    let getExistingLocalData = localStorage.getItem('vet-clinic');
+    let getExistingLocalData = localStorage.getItem('vet-shop');
     getExistingLocalData = JSON.parse(getExistingLocalData);
 
     getFotoProfile = data.image_profile;
@@ -171,7 +171,7 @@ $(document).ready(function() {
     $('.box-profile img').attr("src", setUrlImage);
     $('.image-header').attr("src", setUrlImage);
 
-    localStorage.setItem('vet-clinic', JSON.stringify({
+    localStorage.setItem('vet-shop', JSON.stringify({
       fullname: getExistingLocalData.fullname,
       username: data.username,
       email: getExistingLocalData.email,
