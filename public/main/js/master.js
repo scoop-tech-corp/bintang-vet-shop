@@ -9,7 +9,7 @@ let branchName = '';
 
 $(document).ready(function() {
 
-  let getAuthUser = localStorage.getItem('vet-clinic');
+  let getAuthUser = localStorage.getItem('vet-shop');
   if (!getAuthUser) {
     location.href = $('.baseUrl').val() + '/masuk';
   } else {
@@ -95,12 +95,12 @@ $(document).ready(function() {
       data: fd, contentType: false, cache: false,
       processData: false,
       success:function(resp) {
-        localStorage.removeItem('vet-clinic');
+        localStorage.removeItem('vet-shop');
         location.href = $('.baseUrl').val() + '/masuk';
       },
       error: function(err) {
         if (err.status == 401) {
-          localStorage.removeItem('vet-clinic');
+          localStorage.removeItem('vet-shop');
           location.href = $('.baseUrl').val() + '/masuk';
         }
       }

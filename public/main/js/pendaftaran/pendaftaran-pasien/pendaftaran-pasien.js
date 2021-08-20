@@ -103,7 +103,7 @@ $(document).ready(function() {
 						});
 						$('#beErr').append(errText); isBeErr = true;
 					} else if (err.status == 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 						location.href = $('.baseUrl').val() + '/masuk';
 					}
 				}
@@ -150,7 +150,7 @@ $(document).ready(function() {
 				}, complete: function() { $('#loading-screen').hide(); }
 				, error: function(err) {
 					if (err.status == 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 						location.href = $('.baseUrl').val() + '/masuk';
 					}
 				}
@@ -175,7 +175,7 @@ $(document).ready(function() {
 				}, complete: function() { $('#loading-screen').hide(); }
 				, error: function(err) {
 					if (err.status == 401) {
-						localStorage.removeItem('vet-clinic');
+						localStorage.removeItem('vet-shop');
 						location.href = $('.baseUrl').val() + '/masuk';
 					}
 				}
@@ -302,7 +302,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -327,7 +327,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -352,7 +352,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -377,7 +377,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}

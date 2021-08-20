@@ -51,7 +51,7 @@ const loginApp = new Vue({
           this.form.username = ''; this.form.password = '';
           const getDataLogin = resp.data;
 
-          localStorage.setItem('vet-clinic', JSON.stringify({
+          localStorage.setItem('vet-shop', JSON.stringify({
             fullname: getDataLogin.fullname,
             username: getDataLogin.username,
             email: getDataLogin.email,
