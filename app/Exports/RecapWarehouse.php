@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Exports\DataRecapWarehouse;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class RecapWarehouse implements FromCollection
+class RecapWarehouse implements WithMultipleSheets
 {
     use Exportable;
 
@@ -16,13 +17,13 @@ class RecapWarehouse implements FromCollection
     protected $branch_id;
     protected $category;
 
-    public function __construct($orderby, $column, $date, $branch_id, $category)
+    public function __construct($orderby, $column, $keyword, $category, $branch_id)
     {
         $this->orderby = $orderby;
         $this->column = $column;
-        $this->date = $date;
-        $this->branch_id = $branch_id;
+        $this->keyword = $keyword;
         $this->category = $category;
+        $this->branch_id = $branch_id;
     }
 
     function array(): array
@@ -35,7 +36,7 @@ class RecapWarehouse implements FromCollection
         $sheets = [];
 
         $sheets = [
-            new DataRecapWarehouse($this->orderby, $this->column, $this->date, $this->branch_id, $this->category),
+            new DataRecapWarehouse($this->orderby, $this->column, $this->keyword, $this->category, $this->branch_id),
         ];
 
         return $sheets;
