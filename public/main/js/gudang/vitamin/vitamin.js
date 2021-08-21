@@ -20,7 +20,7 @@ $(document).ready(function() {
 
   if (role.toLowerCase() != 'admin') {
     $('.columnAction').hide(); $('#filterCabang').hide();
-    $('[data="capital_price"]').hide(); $('[data="profit"]').hide(); 
+    $('[data="capital_price"]').hide(); $('[data="profit"]').hide();
   } else {
     $('#selectedCabang').append(`<option value=''>Pilih Cabang</option>`);
     $('#selectedKategoriBarang').append(`<option value=''>Pilih Kategori Barang</option>`);
@@ -47,7 +47,7 @@ $(document).ready(function() {
 	$('.input-search-section input').keypress(function(e) {
 		if (e.which == 13) { onSearch($(this).val()); }
   });
-  
+
   $('.onOrdering').click(function() {
 		const column = $(this).attr('data');
 		const orderBy = $(this).attr('orderby');
@@ -87,7 +87,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/gudang/generate',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId, category: 'vitamin' },
+      data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId, category: 'Vitamin' },
 			xhrFields: { responseType: 'blob' },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data, status, xhr) {
@@ -150,13 +150,13 @@ $(document).ready(function() {
 		headers : { 'Authorization': `Bearer ${token}` },
 		dropZone: '#dropZone',
 		dataType: 'json',
-    formData: { category: 'vitamin' },
+    formData: { category: 'Vitamin' },
 		autoUpload: false,
 	}).on('fileuploadadd', function (e, data) {
 		let fileTypeAllowed = /.\.(xlsx|xls)$/i;
 		let fileName = data.originalFiles[0]['name'];
 		let fileSize = data.originalFiles[0]['size'];
-		
+
 		if (!fileTypeAllowed.test(fileName)) {
 			$('.validate-error').html('File harus berformat .xlsx atau .xls');
 		} else {
@@ -173,7 +173,7 @@ $(document).ready(function() {
 			loadVitamin();
 		}, 1000);
 	}).on('fileuploadfail', function(e, data) {
-		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file 
+		const getResponsError = data._response.jqXHR.responseJSON.errors.hasOwnProperty('file') ? data._response.jqXHR.responseJSON.errors.file
 			: data._response.jqXHR.responseJSON.errors;
 
 		let errText = '';
@@ -194,7 +194,7 @@ $(document).ready(function() {
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
-      fd.append('category', 'vitamin');
+      fd.append('category', 'Vitamin');
 
       if ($(`#upload-image-1`)[0].files[0]) {
         fd.append('image', $(`#upload-image-1`)[0].files[0]);
@@ -251,7 +251,7 @@ $(document).ready(function() {
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
-      fd.append('category', 'vitamin');
+      fd.append('category', 'Vitamin');
 
       if ($(`#upload-image-1`)[0].files[0]) {
         fd.append('image', $(`#upload-image-1`)[0].files[0]);
@@ -353,7 +353,7 @@ $(document).ready(function() {
     resetImageUpload();
   });
 
-  function resetImageUpload() { 
+  function resetImageUpload() {
     $(`#upload-image-1`).val('');
     $(`#upload-image-1`).show();
     $(`#icon-plus-upload-1`).show();
@@ -381,7 +381,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/gudang',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId, category: 'vitamin' },
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId, category: 'Vitamin' },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				let listVitamin = '';
@@ -398,23 +398,23 @@ $(document).ready(function() {
                 ${
                   (role.toLowerCase() == 'admin') ?
                     `Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}`
-                  : `${(v.image) 
-                      ? `<a class="image-list-vitamin" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>` 
+                  : `${(v.image)
+                      ? `<a class="image-list-vitamin" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>`
                       : `<div style="padding-left: 15px">-</div>`}`
                 }
               </td>`
             + `<td>
                 ${
-                  (role.toLowerCase() == 'admin') ? 
-                    `Rp ${(typeof(v.profit) == 'number') ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}` 
+                  (role.toLowerCase() == 'admin') ?
+                    `Rp ${(typeof(v.profit) == 'number') ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}`
                   : `${v.branch_name}`
                 }
               </td>`
             + `<td>
                 ${
-                  (role.toLowerCase() == 'admin') ? 
-                    (v.image) 
-                      ? `<a class="image-list-vitamin" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>` 
+                  (role.toLowerCase() == 'admin') ?
+                    (v.image)
+                      ? `<a class="image-list-vitamin" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>`
                       : `<div style="padding-left: 15px">-</div>`
                   : `${v.created_by}`
                 }
@@ -456,7 +456,7 @@ $(document).ready(function() {
             $(`[noUploadImage="1"]`).show(); $(`#icon-plus-upload-1`).hide();  $(`#upload-image-1`).hide();
           }
 				});
-			
+
 				$('.openFormDelete').click(function() {
 					getId = $(this).val();
 					modalState = 'delete';
@@ -484,7 +484,7 @@ $(document).ready(function() {
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			beforeSend: function() { $('#loading-screen').show(); },
-			success: function(data) {	
+			success: function(data) {
 				if (data.length) {
 					for (let i = 0 ; i < data.length ; i++) {
 						optCabang += `<option value=${data[i].id}>${data[i].branch_name}</option>`;
@@ -504,7 +504,7 @@ $(document).ready(function() {
   function validationForm() {
     if (!$('#selectedCabang').val()) {
 			$('#cabangErr1').text('Cabang barang harus di isi'); isValidSelectedCabang = false;
-		} else { 
+		} else {
 			$('#cabangErr1').text(''); isValidSelectedCabang = true;
 		}
 
@@ -536,12 +536,12 @@ $(document).ready(function() {
     let hargaModal = $('#hargaModal').val().replaceAll('.', '');
 
     if (parseInt(hargaJual) <= parseInt(hargaModal)) {
-      $('#customErr1').text('Nominal Harga Jual harus lebih besar dari harga modal'); 
+      $('#customErr1').text('Nominal Harga Jual harus lebih besar dari harga modal');
       customErr1 = false;
-		} else { 
+		} else {
 			$('#customErr1').text(''); customErr1 = true;
 		}
-    
+
     $('#beErr').empty(); isBeErr = false;
     validationBtnSubmitBarangVitamin();
   }
@@ -550,7 +550,7 @@ $(document).ready(function() {
 		$('#selectedCabang').val(null);
     $('#namaBarang').val(null);
     $('#jumlahBarang').val(null);
-    $('#hargaJual').val(null); 
+    $('#hargaJual').val(null);
     $('#hargaModal').val(null);
     resetImageUpload();
 
@@ -563,7 +563,7 @@ $(document).ready(function() {
 
     $('#hargaJualErr1').text(''); isValidHargaJual = true;
     $('#hargaModalErr1').text(''); isValidHargaModal = true;
-    
+
     $('#label-keuntungan').text('-');
   }
 
@@ -585,7 +585,7 @@ $(document).ready(function() {
 
     $('#label-keuntungan').text(totalKeuntungan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
   }
-  
+
   function validationBtnSubmitBarangVitamin() {
     if (!isValidSelectedCabang || !isValidNamaBarang || !isValidJumlahBarang
       || !isValidHargaJual || !isValidHargaModal || !customErr1 || isBeErr) {
