@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('content')
-  <div class="row">
+  {{-- <div class="row">
     <div class="col-md-6">
       <div class="box box-info">
         <div class="box-header with-border">
@@ -32,7 +32,6 @@
                 <div class="input-group-addon">
                   <i class="fa fa-calendar"></i>
                 </div>
-                {{-- <input type="text" class="form-control" id="datepicker-jumlah" placeholder="mm-yyyy" autocomplete="off"> --}}
               </div>
             </div>
           </div>
@@ -42,7 +41,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 @endsection
 
 @section('script-content')

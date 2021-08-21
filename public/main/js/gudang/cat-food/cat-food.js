@@ -394,19 +394,38 @@ $(document).ready(function() {
               + `<td>${v.item_name}</td>`
               + `<td>${v.total_item}</td>`
               + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-              + `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-              + `<td>Rp ${typeof(v.profit) == 'number' ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
               + `<td>
-                  ${(v.image) ? `<a class="image-list-cat-food" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>` 
-                  : `<div style="padding-left: 15px">-</div>`}
+                  ${
+                    (role.toLowerCase() == 'admin') ?
+                      `Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}`
+                    : `${(v.image) 
+                        ? `<a class="image-list-cat-food" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>` 
+                        : `<div style="padding-left: 15px">-</div>`}`
+                  }
                 </td>`
-              + ((role.toLowerCase() != 'admin') ? `` : `<td>${v.branch_name}</td>`)
-              + ((role.toLowerCase() != 'admin') ? `` : `<td>${v.created_by}</td>`)
+              + `<td>
+                  ${
+                    (role.toLowerCase() == 'admin') ? 
+                      `Rp ${(typeof(v.profit) == 'number') ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}` 
+                    : `${v.branch_name}`
+                  }
+                </td>`
+              + `<td>
+                  ${
+                    (role.toLowerCase() == 'admin') ? 
+                      (v.image) 
+                        ? `<a class="image-list-cat-food" href="${v.image}"><img src="${v.image}" width="50" height="50"></a>` 
+                        : `<div style="padding-left: 15px">-</div>`
+                    : `${v.created_by}`
+                  }
+                </td>`
+              + ((role.toLowerCase() == 'admin') ? `<td>${v.branch_name}</td>` : ``)
+              + ((role.toLowerCase() == 'admin') ? `<td>${v.created_by}</td>` : ``)
               + `<td>${v.created_at}</td>`
-              + ((role.toLowerCase() != 'admin') ? `` : `<td>
-                  <button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                  <button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                </td>`)
+              + ((role.toLowerCase() == 'admin') ? `<td>
+                    <button type="button" class="btn btn-warning openFormEdit" value=${v.id}><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-danger openFormDelete" value=${v.id}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                  </td>` : ``)
               + `</tr>`;
           });
         } else {
