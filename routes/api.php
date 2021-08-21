@@ -43,14 +43,22 @@ Route::group(['middleware' => ['api']], function () {
         Route::put('user/profile', 'ProfileController@update_data_user');
 
         //Warehouse
-        Route::get('gudang','WarehouseController@index');
-        Route::post('gudang','WarehouseController@create');
-        Route::post('gudang/update','WarehouseController@update');
-        Route::delete('gudang','WarehouseController@delete');
+        Route::get('gudang', 'WarehouseController@index');
+        Route::post('gudang', 'WarehouseController@create');
+        Route::post('gudang/update', 'WarehouseController@update');
+        Route::delete('gudang', 'WarehouseController@delete');
 
-        Route::get('gudang/template','WarehouseController@download_template_excel');
-        Route::get('gudang/generate','WarehouseController@download_report_excel');
-        Route::post('gudang/upload','WarehouseController@upload_excel');
+        Route::get('gudang/template', 'WarehouseController@download_template_excel');
+        Route::get('gudang/generate', 'WarehouseController@download_report_excel');
+        Route::post('gudang/upload', 'WarehouseController@upload_excel');
 
+        //Payment
+        Route::get('payment', 'PaymentController@index');
+        Route::post('payment', 'PaymentController@create');
+        Route::delete('payment', 'PaymentController@delete');
+
+        Route::get('payment/filteritem', 'PaymentController@filter_item');
+        Route::get('payment/generate', 'PaymentController@download_report_excel');
+        Route::get('payment/printreceipt', 'PaymentController@print_receipt');
     });
 });

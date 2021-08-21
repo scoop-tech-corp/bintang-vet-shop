@@ -17,8 +17,23 @@ class WarehouseController extends Controller
     {
         $item = DB::table('list_of_items')
             ->join('users', 'list_of_items.user_id', '=', 'users.id')
-            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
-            ->select(
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+
+        if ($request->user()->role == 'kasir') {
+            $item = $item->select(
+                'list_of_items.id',
+                'list_of_items.item_name',
+                'list_of_items.total_item',
+                DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                'list_of_items.image',
+                'branches.id as branch_id',
+                'branches.branch_name',
+                'users.id as user_id',
+                'users.fullname as created_by',
+                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
+        } else {
+            $item = $item->select(
                 'list_of_items.id',
                 'list_of_items.item_name',
                 'list_of_items.total_item',
@@ -30,8 +45,10 @@ class WarehouseController extends Controller
                 'branches.branch_name',
                 'users.id as user_id',
                 'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-            ->where('list_of_items.isDeleted', '=', 0)
+                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
+        }
+
+        $item = $item->where('list_of_items.isDeleted', '=', 0)
             ->where('list_of_items.category', '=', $request->category);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
@@ -76,7 +93,7 @@ class WarehouseController extends Controller
             'capital_price' => 'required|numeric',
             'profit' => 'required|numeric',
             'image' => 'mimes:png,jpg|max:2048',
-            'branch_id' => 'required|string',
+            'branch_id' => 'required|numeric',
             'category' => 'required|string',
         ]);
 
@@ -284,32 +301,11 @@ class WarehouseController extends Controller
         $date = "";
         $date = \Carbon\Carbon::now()->format('d-m-y');
 
-        $category = $this->category_name($request);
+        $category = $request->category;
         $filename = 'Rekap Barang ' . $category . ' ' . $date . '.xlsx';
-        //
-        return (new RecapWarehouse($request->orderby, $request->column, $request->keyword, $request->category, $request->branch_id))
-        ->download($filename);
-    }
 
-    private function category_name($request)
-    {
-        if ($request->category == "cat_food") {
-            return "Cat Food";
-        } elseif ($request->category == "dog_food") {
-            return "Dog Food";
-        } elseif ($request->category == "animal_food") {
-            return "Animal Food";
-        } elseif ($request->category == "vitamin") {
-            return "Vitamin";
-        } elseif ($request->category == "pet_care") {
-            return "Pet Care";
-        } elseif ($request->category == "cage") {
-            return "Kandang";
-        } elseif ($request->category == "accessories") {
-            return "Aksesoris";
-        } elseif ($request->category == "others") {
-            return "Lain-lain";
-        }
+        return (new RecapWarehouse($request->orderby, $request->column, $request->keyword, $request->category, $request->branch_id))
+            ->download($filename);
     }
 
     public function upload_excel(Request $request)
