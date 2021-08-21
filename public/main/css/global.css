@@ -245,4 +245,17 @@ input:disabled {
     margin-right: 0px;
   }
 
+  .main-footer {
+    font-size: 13px;
+  }
+
+  /* to Set all gudang feature */
+  .openFormAdd, .openFormUpload {
+    margin-bottom: 10px;
+  }
+
+  #section-upload-image .box-image-upload {
+    height: calc(100% - 35px) !important;
+  }
+
 }
