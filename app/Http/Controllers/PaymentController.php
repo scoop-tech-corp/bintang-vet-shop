@@ -189,7 +189,7 @@ class PaymentController extends Controller
         }
 
         $item = DB::table('list_of_items')
-            ->select('id', 'item_name', 'category', DB::raw("TRIM(loi.selling_price)+0 as selling_price"))
+            ->select('id', 'item_name', 'category', DB::raw("TRIM(selling_price)+0 as selling_price"))
             ->where('isDeleted', '=', 0)
             ->where('branch_id', '=', $request->branch_id)
             ->get();
