@@ -93,6 +93,7 @@ class PaymentController extends Controller
         $master_payment = Master_Payments::create([
             'payment_number' => $payment_number,
             'user_id' => $request->user()->id,
+            'branch_id' => $request->branch_id,
         ]);
 
         foreach ($result_items as $value) {
@@ -123,7 +124,7 @@ class PaymentController extends Controller
             $payment = Payment::create([
                 'list_of_item_id' => $value['list_of_item_id'],
                 'total_item' => $value['total_item'],
-                'master_payment' => $master_payment,
+                'master_payment_id' => $master_payment->id,
                 'user_id' => $request->user()->id,
             ]);
 
@@ -213,7 +214,9 @@ class PaymentController extends Controller
         $res_list_of_payments = rtrim($res_list_of_payments, ", ");
         $myArray_list_of_payments = explode(',', $res_list_of_payments);
 
-        $find_master_payment;
+        $find_payment = Payments::whereIn('id',$myArray_list_of_payments);
+
+        return $find_payment;
 
         $data_header = DB::table('master_payments as mp')
             ->join('payments as py', 'mp.id', '=', 'py.master_payment_id')
@@ -229,7 +232,7 @@ class PaymentController extends Controller
         // where('')
             ->get();
 
-        return $data_header;
+        // return $data_header;
 
         // $data_detail = DB::table()
         $pdf = PDF::loadview('pdf', $data);
