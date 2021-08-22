@@ -181,12 +181,12 @@ class PaymentController extends Controller
 
     public function filter_item(Request $request)
     {
-        if ($request->user()->role == 'kasir') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
-        }
+        // if ($request->user()->role == 'kasir') {
+        //     return response()->json([
+        //         'message' => 'The user role was invalid.',
+        //         'errors' => ['Akses User tidak diizinkan!'],
+        //     ], 403);
+        // }
 
         $item = DB::table('list_of_items')
             ->select('id', 'item_name', 'category', DB::raw("TRIM(selling_price)+0 as selling_price"))
