@@ -15,66 +15,214 @@ class WarehouseController extends Controller
 {
     public function index(Request $request)
     {
+
+        if ($request->keyword) {
+
+            $res = $this->Search($request);
+
+            $item = DB::table('list_of_items')
+                ->join('users', 'list_of_items.user_id', '=', 'users.id')
+                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.category', '=', $request->category);
+            } else {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    DB::raw("TRIM(list_of_items.profit)+0 as profit"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.category', '=', $request->category);
+            }
+
+            if ($res) {
+                $item = $item->where($res, 'like', '%' . $request->keyword . '%');
+            } else {
+                $data = [];
+                return response()->json($data, 200);
+            }
+
+            if ($request->branch_id && $request->user()->role == 'admin') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+            }
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+            }
+
+            if ($request->orderby) {
+
+                $item = $item->orderBy($request->column, $request->orderby);
+            }
+
+            $item = $item->orderBy('list_of_items.id', 'desc');
+
+            $item = $item->get();
+
+            return response()->json($item, 200);
+        } else {
+
+            $item = DB::table('list_of_items')
+                ->join('users', 'list_of_items.user_id', '=', 'users.id')
+                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.category', '=', $request->category);
+            } else {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    DB::raw("TRIM(list_of_items.profit)+0 as profit"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.category', '=', $request->category);
+            }
+
+            if ($request->branch_id && $request->user()->role == 'admin') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+            }
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+            }
+
+            if ($request->orderby) {
+
+                $item = $item->orderBy($request->column, $request->orderby);
+            }
+
+            $item = $item->orderBy('list_of_items.id', 'desc');
+
+            $item = $item->get();
+
+            return response()->json($item, 200);
+        }
+    }
+
+    private function Search($request)
+    {
+        $temp_column = '';
+
         $item = DB::table('list_of_items')
             ->join('users', 'list_of_items.user_id', '=', 'users.id')
-            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
-
-        if ($request->user()->role == 'kasir') {
-            $item = $item->select(
-                'list_of_items.id',
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
+            ->select(
                 'list_of_items.item_name',
-                'list_of_items.total_item',
-                DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
-                DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
-                'list_of_items.image',
-                'branches.id as branch_id',
                 'branches.branch_name',
                 'users.id as user_id',
-                'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
-        } else {
-            $item = $item->select(
-                'list_of_items.id',
-                'list_of_items.item_name',
-                'list_of_items.total_item',
-                DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
-                DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
-                DB::raw("TRIM(list_of_items.profit)+0 as profit"),
-                'list_of_items.image',
-                'branches.id as branch_id',
-                'branches.branch_name',
-                'users.id as user_id',
-                'users.fullname as created_by',
-                DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
-        }
+                'users.fullname as created_by')
+            ->where('list_of_items.isDeleted', '=', 0);
 
-        $item = $item->where('list_of_items.isDeleted', '=', 0)
-            ->where('list_of_items.category', '=', $request->category);
-
-        if ($request->branch_id && $request->user()->role == 'admin') {
-            $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+        if ($request->keyword) {
+            $item = $item->where('list_of_items.item_name', 'like', $request->keyword);
         }
 
         if ($request->user()->role == 'kasir') {
             $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
         }
 
+        $item = $item->get();
+
+        if (count($item)) {
+            $temp_column = 'list_of_items.item_name';
+            return $temp_column;
+        }
+        //=======================================
+
+        $item = DB::table('list_of_items')
+            ->join('users', 'list_of_items.user_id', '=', 'users.id')
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
+            ->select(
+                'list_of_items.item_name',
+                'branches.branch_name',
+                'users.id as user_id',
+                'users.fullname as created_by')
+            ->where('list_of_items.isDeleted', '=', 0);
+
         if ($request->keyword) {
-
-            $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
+            $item = $item->where('branches.branch_name', 'like', $request->keyword);
         }
 
-        if ($request->orderby) {
-            $item = $item->orderBy($request->column, $request->orderby);
+        if ($request->user()->role == 'kasir') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
         }
-
-        $item = $item->orderBy('list_of_items.id', 'desc');
 
         $item = $item->get();
 
-        return response()->json($item, 200);
+        if (count($item)) {
+            $temp_column = 'branches.branch_name';
+            return $temp_column;
+        }
+
+        //===============================
+        $item = DB::table('list_of_items')
+            ->join('users', 'list_of_items.user_id', '=', 'users.id')
+            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id')
+            ->select(
+                'list_of_items.item_name',
+                'branches.branch_name',
+                'users.id as user_id',
+                'users.fullname as created_by')
+            ->where('list_of_items.isDeleted', '=', 0);
+
+        if ($request->keyword) {
+            $item = $item->where('users.fullname', 'like', $request->keyword);
+        }
+
+        if ($request->user()->role == 'kasir') {
+            $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+        }
+
+        $item = $item->get();
+
+        if (count($item)) {
+            $temp_column = 'users.fullname';
+            return $temp_column;
+        }
+
     }
 
     public function create(Request $request)
@@ -109,6 +257,7 @@ class WarehouseController extends Controller
         $check_list_item = ListofItems::where('item_name', '=', $request->item_name)
             ->where('branch_id', '=', $request->branch_id)
             ->where('category', '=', $request->category)
+            ->where('list_of_items.isDeleted', '=', 0)
             ->count();
 
         if ($check_list_item > 0) {
@@ -196,6 +345,20 @@ class WarehouseController extends Controller
             ], 422);
         }
 
+        $check_list_item = ListofItems::where('item_name', '=', $request->item_name)
+            ->where('branch_id', '=', $request->branch_id)
+            ->where('category', '=', $request->category)
+            ->where('isDeleted', '=', 0)
+            ->where('id', '!=', $request->id)
+            ->count();
+
+        if ($check_list_item > 0) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['Data yang dimasukkan sudah ada!'],
+            ], 422);
+        }
+
         $file = "";
 
         if ($files = $request->file('image')) {
@@ -213,6 +376,22 @@ class WarehouseController extends Controller
             $file = $update_item->image;
         }
 
+        if ($request->selling_price != $update_item->selling_price
+            || $request->capital_price != $update_item->capital_price
+            || $request->profit != $update_item->profit) {
+
+            $this->update_and_delete($request, $update_item, $file);
+        } else {
+            $this->update_data($request, $update_item, $file);
+        }
+
+        return response()->json([
+            'message' => 'Berhasil mengubah Barang',
+        ], 200);
+    }
+
+    private function update_and_delete($request, $update_item, $file)
+    {
         $insert_item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
@@ -231,10 +410,22 @@ class WarehouseController extends Controller
         $update_item->updated_at = \Carbon\Carbon::now();
         $update_item->deleted_at = \Carbon\Carbon::now();
         $update_item->save();
+    }
 
-        return response()->json([
-            'message' => 'Berhasil mengubah Barang',
-        ], 200);
+    private function update_data($request, $update_item, $file)
+    {
+        $update_item->item_name = $request->item_name;
+        $update_item->total_item = $request->total_item;
+        $update_item->selling_price = $request->selling_price;
+        $update_item->capital_price = $request->capital_price;
+        $update_item->profit = $request->profit;
+        $update_item->image = $file;
+        $update_item->category = $request->category;
+        $update_item->branch_id = $request->branch_id;
+
+        $update_item->user_update_id = $request->user()->id;
+        $update_item->updated_at = \Carbon\Carbon::now();
+        $update_item->save();
     }
 
     public function delete(Request $request)

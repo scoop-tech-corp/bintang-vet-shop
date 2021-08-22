@@ -60,5 +60,14 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('payment/filteritem', 'PaymentController@filter_item');
         Route::get('payment/generate', 'PaymentController@download_report_excel');
         Route::get('payment/printreceipt', 'PaymentController@print_receipt');
+
+        Route::get('daily-finance-report', 'DailyFinancialReportController@index');
+        Route::get('daily-finance-report/generate', 'DailyFinancialReportController@download_report');
+
+        Route::get('weekly-finance-report', 'WeeklyFinancialReportController@index');
+        Route::get('weekly-finance-report/generate', 'WeeklyFinancialReportController@download_report');
+
+        Route::get('monthly-finance-report', 'MonthlyFinancialReportController@index');
+        Route::get('monthly-finance-report/generate', 'MonthlyFinancialReportController@download_report');
     });
 });

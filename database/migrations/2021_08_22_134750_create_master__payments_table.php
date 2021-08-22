@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreateMasterPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('master_payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('list_of_item_id');
-            $table->integer('master_payment_id');
-            $table->integer('total_item');
+            $table->string('payment_number');
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
+            $table->integer('branch_id');
             $table->integer('user_update_id')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamp('deleted_at',0)->nullable();
@@ -34,6 +33,6 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('master_payments');
     }
 }

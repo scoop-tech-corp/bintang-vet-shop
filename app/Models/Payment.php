@@ -12,6 +12,6 @@ class Payment extends Model
 
     protected $guarded = ['id'];
 
-    protected $fillable = ['list_of_item_id',
+    protected $fillable = ['list_of_item_id', 'master_payment_id',
         'total_item', 'user_id', 'user_update_id'];
 }

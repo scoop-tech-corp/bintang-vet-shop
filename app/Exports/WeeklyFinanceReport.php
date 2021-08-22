@@ -2,25 +2,27 @@
 
 namespace App\Exports;
 
-use App\Exports\DataRecapPayment;
+use App\Exports\DataWeeklyFinanceReport;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class RecapPayment implements WithMultipleSheets
+class WeeklyFinanceReport implements WithMultipleSheets
 {
     use Exportable;
 
     protected $sheets;
     protected $orderby;
     protected $column;
-    protected $keyword;
+    protected $date_from;
+    protected $date_to;
     protected $branch_id;
 
-    public function __construct($orderby, $column, $keyword, $branch_id)
+    public function __construct($orderby, $column, $date_from, $date_to, $branch_id)
     {
         $this->orderby = $orderby;
         $this->column = $column;
-        $this->keyword = $keyword;
+        $this->date_from = $date_from;
+        $this->date_to = $date_to;
         $this->branch_id = $branch_id;
     }
 
@@ -34,7 +36,7 @@ class RecapPayment implements WithMultipleSheets
         $sheets = [];
 
         $sheets = [
-            new DataRecapPayment($this->orderby, $this->column, $this->keyword, $this->branch_id),
+            new DataWeeklyFinanceReport($this->orderby, $this->column, $this->date_from, $this->date_to, $this->branch_id),
         ];
 
         return $sheets;
