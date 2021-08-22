@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RecapPayment;
+use App\Models\Branch;
 use App\Models\ListofItems;
+use App\Models\Master_Payments;
 use App\Models\Payment;
 use DB;
 use Illuminate\Http\Request;
+use PDF;
 use Validator;
 
 class PaymentController extends Controller
@@ -29,9 +32,8 @@ class PaymentController extends Controller
             'branches.branch_name',
             'users.id as user_id',
             'users.fullname as created_by',
-            DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"));
-
-        $payment = $payment->where('py.isDeleted', '=', 0);
+            DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"))
+            ->where('py.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
             $payment = $payment->where('loi.branch_id', '=', $request->branch_id);
@@ -77,6 +79,21 @@ class PaymentController extends Controller
 
         $items = $request->list_of_items;
         $result_items = json_decode(json_encode($items), true);
+        //$items;
+        //json_decode($items, true);
+
+        $lastnumber = DB::table('master_payments')
+            ->where('branch_id', '=', $request->branch_id)
+            ->count();
+
+        $branch = Branch::find($request->branch_id);
+
+        $payment_number = 'EVS-P-' . $branch->branch_code . '-' . str_pad($lastnumber + 1, 4, 0, STR_PAD_LEFT);
+
+        $master_payment = Master_Payments::create([
+            'payment_number' => $payment_number,
+            'user_id' => $request->user()->id,
+        ]);
 
         foreach ($result_items as $value) {
 
@@ -89,9 +106,24 @@ class PaymentController extends Controller
                 ], 422);
             }
 
+            $res_value = $find_item->total_item - $value['total_item'];
+
+            if ($res_value < 0) {
+                return response()->json([
+                    'message' => 'The data was invalid.',
+                    'errors' => ['Stok Barang ' . $find_item->item_name . ' kurang atau habis!'],
+                ], 422);
+            }
+
+            $find_item->total_item = $res_value;
+            $find_item->user_update_id = $request->user()->id;
+            $find_item->updated_at = \Carbon\Carbon::now();
+            $find_item->save();
+
             $payment = Payment::create([
                 'list_of_item_id' => $value['list_of_item_id'],
                 'total_item' => $value['total_item'],
+                'master_payment' => $master_payment,
                 'user_id' => $request->user()->id,
             ]);
 
@@ -125,6 +157,15 @@ class PaymentController extends Controller
 
         $payment = Payment::find($request->id);
 
+        $find_item = ListofItems::find($payment->list_of_item_id);
+
+        $res_value = $find_item->total_item + $payment->total_item;
+
+        $find_item->total_item = $res_value;
+        $find_item->user_update_id = $request->user()->id;
+        $find_item->updated_at = \Carbon\Carbon::now();
+        $find_item->save();
+
         $payment->user_update_id = $request->user()->id;
         $payment->isDeleted = 1;
         $payment->deleted_by = $request->user()->id;
@@ -147,7 +188,7 @@ class PaymentController extends Controller
         }
 
         $item = DB::table('list_of_items')
-            ->select('item_name', 'category')
+            ->select('id', 'item_name', 'category')
             ->where('isDeleted', '=', 0)
             ->where('branch_id', '=', $request->branch_id)
             ->get();
@@ -156,12 +197,44 @@ class PaymentController extends Controller
     }
     public function print_receipt(Request $request)
     {
-      $payments = $request->list_of_payments;
-      $result_payments = json_decode($payments, true);
-      //$payments;
+        $res_list_of_payments = "";
+        $payments = $request->list_of_payments;
+        $result_payments = $payments;
+        //$payments;
         //json_decode($payments, true);
 
+        if ($result_payments) {
 
+            foreach ($result_payments as $key) {
+                $res_list_of_payments = $res_list_of_payments . (string) $key['id'] . ",";
+            }
+        }
+
+        $res_list_of_payments = rtrim($res_list_of_payments, ", ");
+        $myArray_list_of_payments = explode(',', $res_list_of_payments);
+
+        $find_master_payment;
+
+        $data_header = DB::table('master_payments as mp')
+            ->join('payments as py', 'mp.id', '=', 'py.master_payment_id')
+            ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
+            ->join('users', 'mp.user_id', '=', 'users.id')
+            ->join('branches', 'mp.branch_id', '=', 'branches.id')
+            ->select(
+                'branches.branch_name',
+                'branches.address',
+                'mp.payment_number',
+                'users.fullname as cashier_name',
+                DB::raw("DATE_FORMAT(mp.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
+        // where('')
+            ->get();
+
+        return $data_header;
+
+        // $data_detail = DB::table()
+        $pdf = PDF::loadview('pdf', $data);
+
+        // return $pdf->download($data_patient[0]->id_number . ' - ' . $data_patient[0]->pet_name . '.pdf');
     }
     public function download_report_excel(Request $request)
     {

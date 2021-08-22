@@ -249,5 +249,54 @@ class DataDummySeeder extends Seeder
             'updated_at' => '2021-08-18 08:44:55',
         ]);
 
+        DB::table('payments')->insert([
+            'list_of_item_id' => 1,
+            'master_payment_id' => 1,
+            'total_item' => 1,
+            'isDeleted' => 0,
+            'user_id' => 1,
+            'user_update_id' => null,
+            'deleted_by' => null,
+            'deleted_at' => null,
+            'created_at' => '2021-08-22 08:44:55',
+            'updated_at' => '2021-08-22 08:44:55',
+        ]);
+        DB::table('payments')->insert([
+            'list_of_item_id' => 2,
+            'master_payment_id' => 1,
+            'total_item' => 1,
+            'isDeleted' => 0,
+            'user_id' => 1,
+            'user_update_id' => null,
+            'deleted_by' => null,
+            'deleted_at' => null,
+            'created_at' => '2021-08-22 08:44:55',
+            'updated_at' => '2021-08-22 08:44:55',
+        ]);
+        DB::table('payments')->insert([
+            'list_of_item_id' => 3,
+            'master_payment_id' => 1,
+            'total_item' => 1,
+            'isDeleted' => 0,
+            'user_id' => 1,
+            'user_update_id' => null,
+            'deleted_by' => null,
+            'deleted_at' => null,
+            'created_at' => '2021-08-22 08:44:55',
+            'updated_at' => '2021-08-22 08:44:55',
+        ]);
+
+        DB::table('master_payments')->insert([
+            'payment_number' => 'EVS-P-AS-001',
+            'isDeleted' => 0,
+            'user_id' => 1,
+            'branch_id' => 1,
+            'user_update_id' => null,
+            'deleted_by' => null,
+            'deleted_at' => null,
+            'created_at' => '2021-08-22 08:44:55',
+            'updated_at' => '2021-08-22 08:44:55',
+        ]);
+
     }
 }
