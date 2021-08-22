@@ -445,8 +445,8 @@ $(document).ready(function() {
           $('#selectedCabang').val(getObj.branch_id); $('#selectedCabang').trigger('change');
           $('#namaBarang').val(getObj.item_name);
           $('#jumlahBarang').val(getObj.total_item);
-          $('#hargaJual').val(getObj.selling_price);
-          $('#hargaModal').val(getObj.capital_price);
+          $('#hargaJual').val(getObj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+          $('#hargaModal').val(getObj.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 
           validationHargaJual();
           if (getObj.image) {

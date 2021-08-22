@@ -109,7 +109,7 @@ Route::get('/profil/{id}', function () {
 	return view('profil.index');
 });
 
-Route::get('pembayaran/print/{check_up_result_id}/{service_payment}/{item_payment}', 'PembayaranController@print_pdf');
+Route::get('payment/printreceipt/{list_of_payments}', 'PaymentController@print_receipt');
 
 Route::get('/unauthorized', function () {
 	return view('errors.unauthorized');
