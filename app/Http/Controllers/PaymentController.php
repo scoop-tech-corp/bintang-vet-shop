@@ -78,7 +78,7 @@ class PaymentController extends Controller
         }
 
         $items = $request->list_of_items;
-        $result_items = json_decode(json_encode($items), true);
+        $result_items = json_decode($items, true);
         //$items;
         //json_decode($items, true);
 
@@ -200,7 +200,7 @@ class PaymentController extends Controller
     {
         $res_list_of_payments = "";
         $payments = $request->list_of_payments;
-        $result_payments = $payments;
+        $result_payments = json_decode($payments, true);
         //$payments;
         //json_decode($payments, true);
 
@@ -214,13 +214,12 @@ class PaymentController extends Controller
         $res_list_of_payments = rtrim($res_list_of_payments, ", ");
         $myArray_list_of_payments = explode(',', $res_list_of_payments);
 
-        $find_payment = Payments::whereIn('id',$myArray_list_of_payments);
-
-        return $find_payment;
+        $find_payment = DB::table('payments')
+            ->select('master_payment_id')
+            ->whereIn('id', $myArray_list_of_payments)
+            ->first();
 
         $data_header = DB::table('master_payments as mp')
-            ->join('payments as py', 'mp.id', '=', 'py.master_payment_id')
-            ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
             ->join('users', 'mp.user_id', '=', 'users.id')
             ->join('branches', 'mp.branch_id', '=', 'branches.id')
             ->select(
@@ -229,15 +228,42 @@ class PaymentController extends Controller
                 'mp.payment_number',
                 'users.fullname as cashier_name',
                 DB::raw("DATE_FORMAT(mp.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
-        // where('')
+            ->where('mp.id', '=', $find_payment->master_payment_id)
             ->get();
 
-        // return $data_header;
+        $data_detail = DB::table('payments as py')
+            ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
+            ->select(
+                'loi.item_name',
+                'py.total_item',
+                DB::raw("TRIM(loi.selling_price)+0 as each_price"),
+                DB::raw("TRIM(py.total_item * loi.selling_price)+0 as total_price")
+            )
+            ->whereIn('py.id', $myArray_list_of_payments)
+            ->get();
 
-        // $data_detail = DB::table()
+        $price_overall = DB::table('payments as py')
+            ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
+            ->select(
+                DB::raw("TRIM(SUM(py.total_item * loi.selling_price))+0 as price_overall")
+            )
+            ->whereIn('py.id', $myArray_list_of_payments)
+            ->first();
+
+        $data = [
+            'data_header' => $data_header,
+            'data_detail' => $data_detail,
+            'price_overall' => $price_overall,
+        ];
+
+        $find_payment_number = DB::table('master_payments')
+        ->select('payment_number')
+        ->where('id','=',$find_payment->master_payment_id)
+        ->first();
+
         $pdf = PDF::loadview('pdf', $data);
 
-        // return $pdf->download($data_patient[0]->id_number . ' - ' . $data_patient[0]->pet_name . '.pdf');
+        return $pdf->download($find_payment_number->payment_number . '.pdf');
     }
     public function download_report_excel(Request $request)
     {
