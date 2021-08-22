@@ -46,7 +46,7 @@
         }
 
     </style>
-    <title>{{ $registration_number }}</title>
+    <title>{{ $data_header[0]->payment_number }}</title>
 </head>
 
 
@@ -54,18 +54,25 @@
     <table>
         <tr>
             <td class="center-content">
-                <img src="{{ public_path('assets/image/logo-vet-clinic.png') }}" width="100" height="100"
+                <img src="{{ public_path('assets/image/logo-estell-shop.jpg') }}" width="100" height="100"
                     class="img-style">
             </td>
         </tr>
+
+        <tr>
+          <td class="center-content">
+            <br>
+          </td>
+      </tr>
+
         <tr>
             <td class="center-content">
-                <label class="boldtext">Estell Vet Clinic</label>
+                <label class="boldtext">Estell Vet Shop</label>
             </td>
         </tr>
         <tr>
             <td class="center-content">
-                <label class="boldtext">{{ $address }}</label>
+                <label class="boldtext">{{ $data_header[0]->address }}</label>
             </td>
         </tr>
         <tr>
@@ -75,52 +82,12 @@
         </tr>
         <tr>
             <td>
-                <label class="boldtext">Data Pasien</label>
+                <label class="boldtext">No. Transaksi:</label>
             </td>
         </tr>
         <tr>
             <td>
-                <label class="boldtext">No. Pasien:</label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ $id_patient }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="boldtext">Nama Hewan:</label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ $pet_name }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="boldtext">Nama Pemilik:</label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ $owner_name }}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="boldtext">------------------------------</label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="boldtext">No. Berobat:</label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ $registration_number }}
+                {{ $data_header[0]->payment_number }}
             </td>
         </tr>
         <tr>
@@ -130,7 +97,7 @@
         </tr>
         <tr>
             <td>
-                {{ $cashier_name }}
+                {{ $data_header[0]->cashier_name }}
             </td>
         </tr>
         <tr>
@@ -140,7 +107,7 @@
         </tr>
         <tr>
             <td>
-                {{ $time }}
+                {{ $data_header[0]->paid_time }}
             </td>
         </tr>
         <tr>
@@ -165,24 +132,13 @@
             </tr>
         </thead>
         <tbody>
-            @if ($data_item)
-                @foreach ($data_item as $item)
+            @if ($data_detail)
+                @foreach ($data_detail as $item)
                     <tr>
                         <td>{{ $item->item_name }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ number_format($item->selling_price) }}</td>
-                        <td>{{ number_format($item->price_overall) }}</td>
-                    </tr>
-                @endforeach
-            @endif
-
-            @if ($data_service)
-                @foreach ($data_service as $service)
-                    <tr>
-                        <td>{{ $service->item_name }}</td>
-                        <td>{{ $service->quantity }}</td>
-                        <td>{{ number_format($service->selling_price) }}</td>
-                        <td>{{ number_format($service->price_overall) }}</td>
+                        <td>{{ $item->total_item }}</td>
+                        <td>{{ number_format($item->each_price) }}</td>
+                        <td>{{ number_format($item->total_price) }}</td>
                     </tr>
                 @endforeach
             @endif
@@ -197,7 +153,7 @@
         </tr>
         <tr>
             <td>
-                <label class="boldtext">Total-item: Rp. {{ number_format($price_overall, 2) }},-</label>
+                <label class="boldtext">Total-item: Rp. {{ number_format($price_overall->price_overall, 2) }},-</label>
             </td>
         </tr>
     </table>
