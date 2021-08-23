@@ -49,9 +49,9 @@ $(document).ready(function() {
     loadLaporanKeuanganMingguan();
   });
 
-  $('.btn-download-excel').click(function() {
+  $('.btn-download-laporan').click(function() {
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/laporan-keuangan/mingguan/download',
+			url     : $('.baseUrl').val() + '/api/weekly-finance-report/generate',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
       data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, date_from: paramUrlSetup.date_from, date_to: paramUrlSetup.date_to, branch_id: paramUrlSetup.branchId },
@@ -108,7 +108,7 @@ $(document).ready(function() {
 
   function loadLaporanKeuanganMingguan() {
     $.ajax({
-			url     : $('.baseUrl').val() + '/api/laporan-keuangan/mingguan',
+			url     : $('.baseUrl').val() + '/api/weekly-finance-report',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, date_from: paramUrlSetup.date_from, date_to: paramUrlSetup.date_to, branch_id: paramUrlSetup.branchId },
@@ -124,40 +124,29 @@ $(document).ready(function() {
 					$.each(getData, function(idx, v) {
 						listLaporanKeuanganMingguan += `<tr>`
 							+ `<td>${++idx}</td>`
-							+ `<td>${v.registration_number}</td>`
-							+ `<td>${v.patient_number}</td>`
-							+ `<td>${v.pet_category}</td>`
-							+ `<td>${v.pet_name}</td>`
-							+ `<td>${v.complaint}</td>`
-							+ `<td>${(v.status_outpatient_inpatient == 1) ? 'Rawat Inap' : 'Rawat Jalan'}</td>`
-							+ `<td>${typeof(v.price_overall) == 'number' ? v.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.petshop_fee)== 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>${v.created_at}</td>`
+              + `<td>${v.branch_name}</td>`
+              + `<td>${v.payment_number}</td>`
+							+ `<td>${v.item_name}</td>`
+							+ `<td>${v.category}</td>`
+							+ `<td>${v.total_item}</td>`
+							+ `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.profit) == 'number' ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.overall_price)== 'number' ? v.overall_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
 							+ `<td>${v.created_by}</td>`
-							+ `<td>${v.created_at}</td>`
-							+ `<td>
-									<button type="button" class="btn btn-info openDetail" value=${v.list_of_payment_id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
-								</td>`
 							+ `</tr>`;
 					});
 				} else { listLaporanKeuanganMingguan += `<tr class="text-center"><td colspan="14">Tidak ada data.</td></tr>`; }
 				$('#list-laporan-keuangan-mingguan').append(listLaporanKeuanganMingguan);
 
-				const priceOverall = resp.price_overall ? resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
 				const capitalPrice = resp.capital_price ? resp.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
-				const docterFee    = resp.doctor_fee ? resp.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
-				const petshopFee   = resp.petshop_fee ? resp.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+				const sellingPrice = resp.selling_price ? resp.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
+				const profit       = resp.profit ? resp.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
 
-        $('#total-keseluruhan-txt').text(`Rp. ${priceOverall}`);
         $('#harga-modal-txt').text(`Rp. ${capitalPrice}`);
-        $('#fee-dokter-txt').text(`Rp. ${docterFee}`);
-        $('#fee-petshop-txt').text(`Rp. ${petshopFee}`);
-        
-        $('.openDetail').click(function() {
-          // const getObj = data.find(x => x.id == $(this).val());
-					window.location.href = $('.baseUrl').val() + `/laporan-keuangan-mingguan/detail/${$(this).val()}`;
-        });
+        $('#harga-jual-txt').text(`Rp. ${sellingPrice}`);
+        $('#keuntungan-txt').text(`Rp. ${profit}`);
 
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
