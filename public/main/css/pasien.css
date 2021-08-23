@@ -1,7 +1,0 @@
-.section-age-animal {
-    display: flex;
-}
-
-.section-age-animal > input:nth-of-type(odd) {
-    margin-right: 30px
-}
