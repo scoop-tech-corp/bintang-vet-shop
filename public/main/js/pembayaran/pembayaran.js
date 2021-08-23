@@ -331,6 +331,8 @@ $(document).ready(function() {
             listPembayaran += `<tr>`
               + `<td>${++idx}</td>`
               + `<td>${v.created_at}</td>`
+              + `<td>${v.branch_name}</td>`
+              + `<td>${v.payment_number}</td>`
               + `<td>${v.item_name}</td>`
               + `<td>${v.category}</td>`
               + `<td>${v.total_item}</td>`

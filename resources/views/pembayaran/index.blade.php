@@ -26,6 +26,8 @@
           <tr>
             <th>No</th>
             <th class="onOrdering" data='created_at' orderby="none">Tanggal Dibuat <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Nama Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='payment_number' orderby="none">No. Transaksi <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='category' orderby="none">Kategori Barang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='total_item' orderby="none">Jumlah <span class="fa fa-sort"></span></th>
