@@ -222,7 +222,6 @@ $(document).ready(function() {
 
   $('#btnSubmitPembayaran').click(function() {
     let finalSelectedBarang = [];
-    let selectedBarangForPrint = [];
     const fd = new FormData();
     const getBranchId = (role.toLowerCase() == 'admin') ? $('#selectedCabang').val() : branchId;
 
@@ -231,7 +230,6 @@ $(document).ready(function() {
         list_of_item_id: barang.id,
         total_item: barang.total_item
       })
-      selectedBarangForPrint.push({id: barang.id});
     });
 
     fd.append('branch_id', getBranchId); // for kasir id cabang from login data
@@ -250,7 +248,9 @@ $(document).ready(function() {
         $("#msg-box .modal-body").text('Berhasil Menambah Data');
         $('#msg-box').modal('show');
 
-        processPrint(JSON.stringify(selectedBarangForPrint));
+        const getMasterPaymentId = resp.master_payment_id;
+
+        processPrint(getMasterPaymentId);
 
         setTimeout(() => {
           $('#modal-tambah-pembayaran').modal('toggle');
@@ -273,8 +273,8 @@ $(document).ready(function() {
 
   });
 
-  function processPrint(list_of_payments) {
-    let url = '/payment/printreceipt/' + list_of_payments;
+  function processPrint(master_payment_id) {
+    let url = '/payment/printreceipt/' + master_payment_id;
     window.open($('.baseUrl').val() + url, '_blank');
   }
 

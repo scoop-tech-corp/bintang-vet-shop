@@ -139,13 +139,39 @@ body {
 }
 
 .datepicker table tr td.today {
-  background: #3c8dbc !important;
+  background: #903030 !important;
 }
 
 .datepicker table tr td.active.active {
-  background: #222d32 !important ;
+  background: #2b1d1d !important ;
 }
 
+.daterangepicker td.active, .daterangepicker td.active:hover { 
+  background-color: #2b1d1d !important;
+}
+
+.daterangepicker .input-mini.active {
+  border: 1px solid #903030 !important;
+}
+
+.range_inputs .applyBtn {
+  background-color: #903030;
+  border-color: #903030;
+}
+.range_inputs .applyBtn:focus {
+  outline: none;
+  background-color: #903030;
+  border-color: #903030;
+}
+
+.datepicker table tr td span.active, .datepicker table tr td span.active.disabled,
+.datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active:hover {
+  background-image: linear-gradient(to bottom,#903030,#2b1d1d) !important;
+}
+
+/* .daterangepicker td.in-range { 
+  background-color: #903030 !important;
+} */
 
 input:disabled {
   cursor: not-allowed !important;
