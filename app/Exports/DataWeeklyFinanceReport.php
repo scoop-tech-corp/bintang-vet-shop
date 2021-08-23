@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use DB;
 
 class DataWeeklyFinanceReport implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
