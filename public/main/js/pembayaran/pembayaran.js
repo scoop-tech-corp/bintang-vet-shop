@@ -31,6 +31,14 @@ $(document).ready(function() {
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
 
+  $('.input-search-section .fa').click(function() {
+		onSearch($('.input-search-section input').val());
+	});
+
+	$('.input-search-section input').keypress(function(e) {
+		if (e.which == 13) { onSearch($(this).val()); }
+  });
+
   $('.onOrdering').click(function() {
 		const column = $(this).attr('data');
 		const orderBy = $(this).attr('orderby');
@@ -275,6 +283,11 @@ $(document).ready(function() {
 		loadPembayaran();
   }
 
+  function onSearch(keyword) {
+		paramUrlSetup.keyword = keyword;
+		loadPembayaran();
+	}
+
   function refreshForm() {
 		$('#selectedCabang').val(null);
     $('#selectedBarang').val(null);
@@ -307,7 +320,7 @@ $(document).ready(function() {
 			url     : $('.baseUrl').val() + '/api/payment',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
-			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, branch_id: paramUrlSetup.branchId },
+			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, keyword: paramUrlSetup.keyword, branch_id: paramUrlSetup.branchId },
 			beforeSend: function() { $('#loading-screen').show(); },
 			success: function(data) {
 				let listPembayaran = '';
