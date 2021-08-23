@@ -195,12 +195,6 @@ class PaymentController extends Controller
     }
     public function print_receipt(Request $request)
     {
-        $res_list_of_payments = "";
-        $payments = $request->list_of_payments;
-        $result_payments = json_decode($payments, true);
-        //$payments;
-        //json_decode($payments, true);
-
         $data_header = DB::table('master_payments as mp')
             ->join('users', 'mp.user_id', '=', 'users.id')
             ->join('branches', 'mp.branch_id', '=', 'branches.id')
