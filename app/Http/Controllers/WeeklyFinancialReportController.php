@@ -10,51 +10,86 @@ class WeeklyFinancialReportController extends Controller
 {
     public function index(Request $request)
     {
-        $item = DB::table('list_of_items')
-            ->join('users', 'list_of_items.user_id', '=', 'users.id')
-            ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+        $item = DB::table('payments as py')
+            ->join('master_payments as mp', 'py.master_payment_id', '=', 'mp.id')
+            ->join('list_of_items as lop', 'py.list_of_item_id', '=', 'lop.id')
+            ->join('users', 'py.user_id', '=', 'users.id')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select(
+                'py.id',
+                'mp.payment_number',
+                DB::raw("DATE_FORMAT(py.created_at, '%d/%m/%Y') as created_at"),
+                'lop.item_name',
+                'lop.category',
+                'py.total_item',
+                DB::raw("TRIM(lop.capital_price)+0 as capital_price"),
+                DB::raw("TRIM(lop.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(lop.profit)+0 as profit"),
+                DB::raw("TRIM(lop.selling_price * py.total_item)+0 as overall_price"),
+                'branches.id as branch_id',
+                'branches.branch_name',
+                'users.id as user_id',
+                'users.fullname as created_by',
+            );
 
-        $item = $item->select(
-            'list_of_items.id',
-            'list_of_items.item_name',
-            'list_of_items.total_item',
-            DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
-            DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
-            DB::raw("TRIM(list_of_items.profit)+0 as profit"),
-            'list_of_items.image',
-            'branches.id as branch_id',
-            'branches.branch_name',
-            'users.id as user_id',
-            'users.fullname as created_by',
-            DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"));
-
-        $item = $item->where('list_of_items.isDeleted', '=', 0)
-            ->where('list_of_items.category', '=', $request->category);
+        $item = $item->where('py.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
-            $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+            $item = $item->where('lop.branch_id', '=', $request->branch_id);
         }
 
         if ($request->user()->role == 'kasir') {
-            $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+            $item = $item->whereBetween('mp.branch_id', '=', $request->user()->branch_id);
         }
 
-        if ($request->keyword) {
+        if ($request->date_from && $request->date_to) {
 
-            $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('branches.branch_name', 'like', '%' . $request->keyword . '%')
-                ->orwhere('users.fullname', 'like', '%' . $request->keyword . '%');
+            $item = $item->whereBetween(DB::raw('DATE(py.created_at)'), [$request->date_from, $request->date_to]);
         }
 
         if ($request->orderby) {
             $item = $item->orderBy($request->column, $request->orderby);
         }
 
-        $item = $item->orderBy('list_of_items.id', 'desc');
+        $item = $item->orderBy('py.id', 'desc');
 
         $item = $item->get();
 
-        return response()->json($item, 200);
+        //=======================================================
+        $avg = DB::table('payments as py')
+            ->join('master_payments as mp', 'py.master_payment_id', '=', 'mp.id')
+            ->join('list_of_items as lop', 'py.list_of_item_id', '=', 'lop.id')
+            ->join('users', 'py.user_id', '=', 'users.id')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select(
+                DB::raw("TRIM(SUM(lop.capital_price))+0 as capital_price"),
+                DB::raw("TRIM(SUM(lop.selling_price))+0 as selling_price"),
+                DB::raw("TRIM(SUM(lop.profit))+0 as profit")
+            );
+
+        $avg = $avg->where('py.isDeleted', '=', 0);
+
+        if ($request->branch_id && $request->user()->role == 'admin') {
+            $avg = $avg->where('lop.branch_id', '=', $request->branch_id);
+        }
+
+        if ($request->user()->role == 'kasir') {
+            $avg = $avg->where('mp.branch_id', '=', $request->user()->branch_id);
+        }
+
+        if ($request->date_from && $request->date_to) {
+
+            $avg = $avg->whereBetween(DB::raw('DATE(py.created_at)'), [$request->date_from, $request->date_to]);
+        }
+
+        $avg = $avg->first();
+
+        return response()->json([
+            'data' => $item,
+            'capital_price' => $avg->capital_price,
+            'selling_price' => $avg->selling_price,
+            'profit' => $avg->profit,
+        ], 200);
     }
 
     public function download_report(Request $request)

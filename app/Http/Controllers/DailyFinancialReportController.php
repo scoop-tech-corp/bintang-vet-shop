@@ -18,14 +18,14 @@ class DailyFinancialReportController extends Controller
             ->select(
                 'py.id',
                 'mp.payment_number',
-                DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"),
+                DB::raw("DATE_FORMAT(py.created_at, '%d/%m/%Y') as created_at"),
                 'lop.item_name',
                 'lop.category',
                 'py.total_item',
                 DB::raw("TRIM(lop.capital_price)+0 as capital_price"),
                 DB::raw("TRIM(lop.selling_price)+0 as selling_price"),
                 DB::raw("TRIM(lop.profit)+0 as profit"),
-                DB::raw("TRIM(lop.selling_price * py.total_item)+0 as price_overall"),
+                DB::raw("TRIM(lop.selling_price * py.total_item)+0 as overall_price"),
                 'branches.id as branch_id',
                 'branches.branch_name',
                 'users.id as user_id',
@@ -64,8 +64,7 @@ class DailyFinancialReportController extends Controller
             ->select(
                 DB::raw("TRIM(SUM(lop.capital_price))+0 as capital_price"),
                 DB::raw("TRIM(SUM(lop.selling_price))+0 as selling_price"),
-                DB::raw("TRIM(SUM(lop.profit))+0 as profit"),
-                DB::raw("TRIM(SUM(lop.selling_price * py.total_item))+0 as price_overall")
+                DB::raw("TRIM(SUM(lop.profit))+0 as profit")
             );
 
         $avg = $avg->where('py.isDeleted', '=', 0);
