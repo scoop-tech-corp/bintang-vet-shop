@@ -3,61 +3,66 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class DataWeeklyFinanceReport implements FromCollection
+class DataWeeklyFinanceReport implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
     protected $orderby;
     protected $column;
-    protected $date;
+    protected $date_from;
+    protected $date_to;
     protected $branch_id;
 
-    public function __construct($orderby, $column, $keyword, $category, $branch_id)
+    public function __construct($orderby, $column, $date_from, $date_to, $branch_id)
     {
         $this->orderby = $orderby;
         $this->column = $column;
-        $this->keyword = $keyword;
+        $this->date_from = $date_from;
+        $this->date_to = $date_to;
         $this->branch_id = $branch_id;
     }
     public function collection()
     {
-        $payment = DB::table('payments as py')
-            ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
-            ->join('users', 'loi.user_id', '=', 'users.id')
-            ->join('branches', 'loi.branch_id', '=', 'branches.id');
+        $item = DB::table('payments as py')
+            ->join('master_payments as mp', 'py.master_payment_id', '=', 'mp.id')
+            ->join('list_of_items as lop', 'py.list_of_item_id', '=', 'lop.id')
+            ->join('users', 'py.user_id', '=', 'users.id')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->select(
+                DB::raw("DATE_FORMAT(py.created_at, '%d/%m/%Y') as created_at"),
+                'mp.payment_number',
+                'lop.item_name',
+                'lop.category',
+                'py.total_item',
+                DB::raw("TRIM(lop.capital_price)+0 as capital_price"),
+                DB::raw("TRIM(lop.selling_price)+0 as selling_price"),
+                DB::raw("TRIM(lop.profit)+0 as profit"),
+                DB::raw("TRIM(lop.selling_price * py.total_item)+0 as overall_price"),
+                'branches.branch_name',
+                'users.fullname as created_by',
+            );
 
-        $payment = $payment->select(
-            'py.id',
-            'loi.item_name',
-            'py.total_item',
-            'loi.category',
-            DB::raw("TRIM(loi.selling_price)+0 as each_price"),
-            DB::raw("TRIM(loi.selling_price * py.total_item)+0 as overall_price"),
-            'branches.id as branch_id',
-            'branches.branch_name',
-            'users.id as user_id',
-            'users.fullname as created_by',
-            DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"));
-
-        $payment = $payment->where('py.isDeleted', '=', 0);
+        $item = $item->where('py.isDeleted', '=', 0);
 
         if ($this->branch_id) {
-            $payment = $payment->where('loi.branch_id', '=', $this->branch_id);
+            $item = $item->where('lop.branch_id', '=', $this->branch_id);
         }
 
-        if ($this->keyword) {
+        if ($this->date_from && $this->date_to) {
 
-            $payment = $payment->where('loi.item_name', 'like', '%' . $this->keyword . '%')
-                ->orwhere('branches.branch_name', 'like', '%' . $this->keyword . '%')
-                ->orwhere('users.fullname', 'like', '%' . $this->keyword . '%');
+            $item = $item->whereBetween(DB::raw('DATE(py.created_at)'), [$this->date_from, $this->date_to]);
         }
 
         if ($this->orderby) {
-            $payment = $payment->orderBy($this->column, $this->orderby);
+            $item = $item->orderBy($this->column, $this->orderby);
         }
 
-        $payment = $payment->orderBy('py.id', 'desc');
+        $item = $item->orderBy('py.id', 'desc');
 
-        $payment = $payment->get();
+        $item = $item->get();
 
         $val = 1;
         foreach ($item as $key) {
@@ -71,14 +76,15 @@ class DataWeeklyFinanceReport implements FromCollection
     public function headings(): array
     {
         return [
-            ['No.', 'Tanggal Dibuat', 'Nama Barang', 'Kategori Barang', 'Jumlah', 'Harga Satuan', 'Harga Keseluruhan', 'Dibuat Oleh',
+            ['No.', 'Tanggal Dibuat', 'No. Pembayaran', 'Nama Barang', 'Kategori Barang', 'Jumlah',
+                'Harga Modal', 'Harga Jual', 'Keuntungan', 'Harga Keseluruhan', 'Cabang', 'Dibuat Oleh',
             ],
         ];
     }
 
     public function title(): string
     {
-        return 'Data Pembayaran';
+        return 'Data Laporan Keuangan';
     }
 
     public function map($item): array
@@ -87,11 +93,15 @@ class DataWeeklyFinanceReport implements FromCollection
             [
                 $item->number,
                 $item->created_at,
+                $item->payment_number,
                 $item->item_name,
                 $item->category,
                 $item->total_item,
-                number_format($item->each_price, 2, ".", ","),
+                number_format($item->capital_price, 2, ".", ","),
+                number_format($item->selling_price, 2, ".", ","),
+                number_format($item->profit, 2, ".", ","),
                 number_format($item->overall_price, 2, ".", ","),
+                $item->branch_name,
                 $item->created_by,
             ],
         ];
