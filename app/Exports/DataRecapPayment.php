@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use DB;
 
 class DataRecapPayment implements FromCollection, ShouldAutoSize, WithHeadings, WithTitle, WithMapping
 {
@@ -15,7 +16,7 @@ class DataRecapPayment implements FromCollection, ShouldAutoSize, WithHeadings, 
     protected $date;
     protected $branch_id;
 
-    public function __construct($orderby, $column, $keyword, $category, $branch_id)
+    public function __construct($orderby, $column, $keyword,$branch_id)
     {
         $this->orderby = $orderby;
         $this->column = $column;
@@ -40,7 +41,7 @@ class DataRecapPayment implements FromCollection, ShouldAutoSize, WithHeadings, 
             'branches.branch_name',
             'users.id as user_id',
             'users.fullname as created_by',
-            DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"));
+            DB::raw("DATE_FORMAT(py.created_at, '%d/%m/%Y') as created_at"));
 
         $payment = $payment->where('py.isDeleted', '=', 0);
 
@@ -64,12 +65,12 @@ class DataRecapPayment implements FromCollection, ShouldAutoSize, WithHeadings, 
         $payment = $payment->get();
 
         $val = 1;
-        foreach ($item as $key) {
+        foreach ($payment as $key) {
             $key->number = $val;
             $val++;
         }
 
-        return $item;
+        return $payment;
     }
 
     public function headings(): array

@@ -17,12 +17,14 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $payment = DB::table('payments as py')
+            ->join('master_payments as mp', 'py.master_payment_id', '=', 'mp.id')
             ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
             ->join('users', 'loi.user_id', '=', 'users.id')
             ->join('branches', 'loi.branch_id', '=', 'branches.id');
 
         $payment = $payment->select(
             'py.id',
+            'mp.payment_number',
             'loi.item_name',
             'py.total_item',
             'loi.category',
@@ -32,7 +34,7 @@ class PaymentController extends Controller
             'branches.branch_name',
             'users.id as user_id',
             'users.fullname as created_by',
-            DB::raw("DATE_FORMAT(py.created_at, '%d %b %Y') as created_at"))
+            DB::raw("DATE_FORMAT(py.created_at, '%d/%m/%Y') as created_at"))
             ->where('py.isDeleted', '=', 0);
 
         if ($request->branch_id && $request->user()->role == 'admin') {
@@ -133,6 +135,7 @@ class PaymentController extends Controller
         return response()->json(
             [
                 'message' => 'Tambah Data Berhasil!',
+                'master_payment_id' => $master_payment->id,
             ], 200
         );
 
@@ -181,12 +184,6 @@ class PaymentController extends Controller
 
     public function filter_item(Request $request)
     {
-        // if ($request->user()->role == 'kasir') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
 
         $item = DB::table('list_of_items')
             ->select('id', 'item_name', 'category', DB::raw("TRIM(selling_price)+0 as selling_price"))
@@ -204,21 +201,6 @@ class PaymentController extends Controller
         //$payments;
         //json_decode($payments, true);
 
-        if ($result_payments) {
-
-            foreach ($result_payments as $key) {
-                $res_list_of_payments = $res_list_of_payments . (string) $key['id'] . ",";
-            }
-        }
-
-        $res_list_of_payments = rtrim($res_list_of_payments, ", ");
-        $myArray_list_of_payments = explode(',', $res_list_of_payments);
-
-        $find_payment = DB::table('payments')
-            ->select('master_payment_id')
-            ->whereIn('id', $myArray_list_of_payments)
-            ->first();
-
         $data_header = DB::table('master_payments as mp')
             ->join('users', 'mp.user_id', '=', 'users.id')
             ->join('branches', 'mp.branch_id', '=', 'branches.id')
@@ -228,7 +210,7 @@ class PaymentController extends Controller
                 'mp.payment_number',
                 'users.fullname as cashier_name',
                 DB::raw("DATE_FORMAT(mp.created_at, '%d %b %Y %H:%i:%s') as paid_time"))
-            ->where('mp.id', '=', $find_payment->master_payment_id)
+            ->where('mp.id', '=', $request->master_payment_id)
             ->get();
 
         $data_detail = DB::table('payments as py')
@@ -237,17 +219,15 @@ class PaymentController extends Controller
                 'loi.item_name',
                 'py.total_item',
                 DB::raw("TRIM(loi.selling_price)+0 as each_price"),
-                DB::raw("TRIM(py.total_item * loi.selling_price)+0 as total_price")
-            )
-            ->whereIn('py.id', $myArray_list_of_payments)
+                DB::raw("TRIM(py.total_item * loi.selling_price)+0 as total_price"))
+            ->where('py.master_payment_id', '=', $request->master_payment_id)
             ->get();
 
         $price_overall = DB::table('payments as py')
             ->join('list_of_items as loi', 'py.list_of_item_id', '=', 'loi.id')
             ->select(
-                DB::raw("TRIM(SUM(py.total_item * loi.selling_price))+0 as price_overall")
-            )
-            ->whereIn('py.id', $myArray_list_of_payments)
+                DB::raw("TRIM(SUM(py.total_item * loi.selling_price))+0 as price_overall"))
+            ->where('py.master_payment_id', '=', $request->master_payment_id)
             ->first();
 
         $data = [
@@ -258,7 +238,7 @@ class PaymentController extends Controller
 
         $find_payment_number = DB::table('master_payments')
             ->select('payment_number')
-            ->where('id', '=', $find_payment->master_payment_id)
+            ->where('id', '=', $request->master_payment_id)
             ->first();
 
         $pdf = PDF::loadview('pdf', $data);
