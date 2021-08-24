@@ -157,7 +157,7 @@ class WarehouseController extends Controller
             ->where('list_of_items.isDeleted', '=', 0);
 
         if ($request->keyword) {
-            $item = $item->where('list_of_items.item_name', 'like', $request->keyword);
+            $item = $item->where('list_of_items.item_name', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->user()->role == 'kasir') {
@@ -183,7 +183,7 @@ class WarehouseController extends Controller
             ->where('list_of_items.isDeleted', '=', 0);
 
         if ($request->keyword) {
-            $item = $item->where('branches.branch_name', 'like', $request->keyword);
+            $item = $item->where('branches.branch_name', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->user()->role == 'kasir') {
@@ -209,7 +209,7 @@ class WarehouseController extends Controller
             ->where('list_of_items.isDeleted', '=', 0);
 
         if ($request->keyword) {
-            $item = $item->where('users.fullname', 'like', $request->keyword);
+            $item = $item->where('users.fullname', 'like', '%' . $request->keyword . '%');
         }
 
         if ($request->user()->role == 'kasir') {
@@ -508,10 +508,21 @@ class WarehouseController extends Controller
             ], 403);
         }
 
+        info($request);
+
         $this->validate($request, [
             'file' => 'required|mimes:xls,xlsx',
             'category' => 'required|string',
         ]);
+
+        $filename = $request->file('file')->getClientOriginalName();
+
+        if (strpos($filename, $request->category) === false) {
+            return response()->json([
+                'message' => 'The data was invalid.',
+                'errors' => ['File yang diupload tidak sesuai!'],
+            ], 422);
+        }
 
         $rows = Excel::toArray(new UploadItem($request->category), $request->file('file'));
         $result = $rows[0];
@@ -519,7 +530,7 @@ class WarehouseController extends Controller
         foreach ($result as $key_result) {
 
             $check_duplicate = DB::table('list_of_items')
-                ->where('item_name', 'like', '%' . $key_result['nama_barang'] . '%')
+                ->where('item_name', '=', $key_result['nama_barang'])
                 ->where('category', '=', $request->category)
                 ->where('branch_id', '=', $key_result['kode_cabang'])
                 ->where('isDeleted', '=', 0)

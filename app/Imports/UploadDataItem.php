@@ -27,7 +27,7 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             'total_item' => $row['jumlah_barang'],
             'selling_price' => $row['harga_jual'],
             'capital_price' => $row['harga_modal'],
-            'profit' => $row['keuntungan'],
+            'profit' => $row['harga_jual'] - $row['harga_modal'],
             'image' => "",
             'category' => $this->category,
             'branch_id' => $row['kode_cabang'],
@@ -42,7 +42,6 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             '*.jumlah_barang' => 'required|numeric',
             '*.harga_jual' => 'required|numeric',
             '*.harga_modal' => 'required|numeric',
-            '*.keuntungan' => 'required|numeric',
             '*.kode_cabang' => 'required|numeric',
         ];
     }
