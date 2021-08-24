@@ -508,8 +508,6 @@ class WarehouseController extends Controller
             ], 403);
         }
 
-        info($request);
-
         $this->validate($request, [
             'file' => 'required|mimes:xls,xlsx',
             'category' => 'required|string',
