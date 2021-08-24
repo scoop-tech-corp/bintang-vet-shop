@@ -349,7 +349,7 @@ $(document).ready(function() {
               + `</tr>`;
           });
         } else {
-          listPembayaran += `<tr class="text-center"><td colspan="${(role.toLowerCase() == 'admin') ? '9' : '8'}">Tidak ada data.</td></tr>`;
+          listPembayaran += `<tr class="text-center"><td colspan="${(role.toLowerCase() == 'admin') ? '11' : '10'}">Tidak ada data.</td></tr>`;
         }
 
 				$('#list-pembayaran').append(listPembayaran);
