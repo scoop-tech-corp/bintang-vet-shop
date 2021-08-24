@@ -67,7 +67,7 @@
 
         <tr>
             <td class="center-content">
-                <label class="boldtext">Estell Vet Shop</label>
+                <label class="boldtext">Estell Vet Petcare & Petshop</label>
             </td>
         </tr>
         <tr>
