@@ -16,7 +16,7 @@
 
       </div>
       <div class="section-right-box-title">
-        
+
         <button type="button" class="btn btn-success btn-download-laporan" title="Download Laporan">
           <i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Download Laporan
         </button>
@@ -32,7 +32,7 @@
           <tr>
             <th>No</th>
             <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='branch_name' orderby="none">Nama Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='payment_number' orderby="none">No. Pembayaran <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='category' orderby="none">Kategori Barang <span class="fa fa-sort"></span></th>

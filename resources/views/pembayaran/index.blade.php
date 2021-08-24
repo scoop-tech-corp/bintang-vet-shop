@@ -26,7 +26,7 @@
           <tr>
             <th>No</th>
             <th class="onOrdering" data='created_at' orderby="none">Tanggal Dibuat <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='branch_name' orderby="none">Nama Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='payment_number' orderby="none">No. Pembayaran <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='category' orderby="none">Kategori Barang <span class="fa fa-sort"></span></th>
@@ -51,7 +51,7 @@
 
 @endsection
 @section('script-content')
-  <script src="{{ asset('main/js/pembayaran/pembayaran.js') }}"></script>  
+  <script src="{{ asset('main/js/pembayaran/pembayaran.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/pembayaran.css') }}">
