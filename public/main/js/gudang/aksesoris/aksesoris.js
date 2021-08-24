@@ -536,7 +536,7 @@ $(document).ready(function() {
     let hargaModal = $('#hargaModal').val().replaceAll('.', '');
 
     if (parseInt(hargaJual) <= parseInt(hargaModal)) {
-      $('#customErr1').text('Nominal Harga Jual harus lebih besar dari harga modal');
+      $('#customErr1').text('Nominal Harga Jual harus lebih besar dari Harga Modal');
       customErr1 = false;
 		} else {
 			$('#customErr1').text(''); customErr1 = true;
