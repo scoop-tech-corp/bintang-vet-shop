@@ -11,7 +11,7 @@ class CabangController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Akses User tidak diizinkan!'],
@@ -48,7 +48,7 @@ class CabangController extends Controller
     public function create(Request $request)
     {
 
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Akses User tidak diizinkan!'],
@@ -85,7 +85,7 @@ class CabangController extends Controller
     public function update(Request $request)
     {
 
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Akses User tidak diizinkan!'],
@@ -130,7 +130,7 @@ class CabangController extends Controller
     public function delete(Request $request)
     {
 
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Akses User tidak diizinkan!'],
@@ -150,8 +150,6 @@ class CabangController extends Controller
         $branch->deleted_by = $request->user()->fullname;
         $branch->deleted_at = \Carbon\Carbon::now();
         $branch->save();
-
-        //$branch->delete();
 
         return response()->json([
             'message' => 'Berhasil menghapus Cabang',

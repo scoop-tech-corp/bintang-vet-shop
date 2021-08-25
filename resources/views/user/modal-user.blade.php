@@ -69,8 +69,7 @@
                 <select id="selectRole" class="form-control" style="width: 100%">
                   <option selected="selected" value="">Pilih Role</option>
                   <option value="admin">Admin</option>
-                  <option value="resepsionis">Resepsionis</option>
-                  <option value="dokter">Dokter</option>
+                  <option value="kasir">Kasir</option>
                 </select>
                 <div id="roleErr1" class="validate-error"></div>
               </div>

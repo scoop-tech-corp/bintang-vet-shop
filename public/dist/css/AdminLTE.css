@@ -168,14 +168,15 @@ h6,
 }
 /* General Links */
 a {
-  color: #3c8dbc;
+  color: #903030;
 }
 a:hover,
 a:active,
 a:focus {
+  color: #903030;
   outline: none;
   text-decoration: none;
-  color: #72afd2;
+  opacity: 0.9;
 }
 /* Page Header */
 .page-header {
@@ -670,7 +671,7 @@ a:focus {
     top: 0;
     margin-left: -3px;
     padding: 12px 5px 12px 20px;
-    background-color: inherit;
+    background-color: #241818;
   }
   .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
     position: relative !important;
@@ -1291,7 +1292,7 @@ a:focus {
   border-color: #d2d6de;
 }
 .form-control:focus {
-  border-color: #3c8dbc;
+  border-color: #903030;
   box-shadow: none;
 }
 .form-control::-moz-placeholder,
@@ -1592,7 +1593,7 @@ a:focus {
   border-top-color: #3c8dbc;
 }
 .box.box-info {
-  border-top-color: #00c0ef;
+  border-top-color: #903030;
 }
 .box.box-danger {
   border-top-color: #dd4b39;
@@ -2283,13 +2284,15 @@ a:focus {
   background-color: #e7e7e7;
 }
 .btn-primary {
-  background-color: #3c8dbc;
-  border-color: #367fa9;
+  background-color: #903030;
+  border-color: #903030;
 }
 .btn-primary:hover,
 .btn-primary:active,
+.btn-primary:focus,
 .btn-primary.hover {
-  background-color: #367fa9;
+  background-color: #B53C3C !important;
+  outline: none;
 }
 .btn-success {
   background-color: #00a65a;
@@ -4812,7 +4815,7 @@ fieldset[disabled] .btn-yahoo.focus {
   border-radius: 0;
 }
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #3c8dbc;
+  background-color: #903030;
   color: white;
 }
 .select2-results__option {
@@ -4847,7 +4850,7 @@ fieldset[disabled] .btn-yahoo.focus {
 }
 .select2-container--default.select2-container--focus .select2-selection--multiple,
 .select2-container--default .select2-search--dropdown .select2-search__field {
-  border-color: #3c8dbc !important;
+  border-color: #903030 !important;
 }
 .select2-container--default .select2-results__option[aria-disabled=true] {
   color: #999;

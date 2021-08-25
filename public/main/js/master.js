@@ -5,11 +5,12 @@ let imageProfile = '';
 let email = '';
 let token = '';
 let userId = '';
+let branchId = '';
 let branchName = '';
 
 $(document).ready(function() {
 
-  let getAuthUser = localStorage.getItem('vet-clinic');
+  let getAuthUser = localStorage.getItem('vet-shop');
   if (!getAuthUser) {
     location.href = $('.baseUrl').val() + '/masuk';
   } else {
@@ -22,6 +23,7 @@ $(document).ready(function() {
     userId       = getAuthUser.user_id;
     token        = getAuthUser.token;
     email        = getAuthUser.email;
+    branchId     = getAuthUser.branch_id;
     branchName   = getAuthUser.branch_name;
 
     $('.username-txt').append(username);
@@ -34,7 +36,7 @@ $(document).ready(function() {
     if (getUrl.includes('profil')) {
       $('.content-header').append('<h3>User Profil</h3>')
     } else if(getUrl == '/') {
-      $('.content-header').append('<h2>Selamat datang di Sistem Administrasi Bintang Vet Clinic</h2>')
+      $('.content-header').append('<h2>Selamat datang di Sistem Warehouse Estell Vet Shop</h2>')
     }
 
     if (role === 'admin') {
@@ -44,15 +46,8 @@ $(document).ready(function() {
       $('.menuKeuangan').show(); $('.menuKunjungan').show();
       $('.menuCabang').show();   $('.menuUser').show();
       $('.menuPeriksa').show();
-    } else if (role === 'resepsionis') {
-      $('.menuPasien').show();   $('.menuPendaftaran').show();
-      $('.menuTindakan').show(); $('.menuPembayaran').show();
-      $('.menuKunjungan').show(); $('.menuGudang').show();
-    } else if (role === 'dokter') {
-      $('.menuDokter').show();   $('.menuPasien').show();
-      $('.menuTindakan').show(); $('.menuGudang').show();
-      $('.menuKunjungan').show(); $('.menuPeriksa').show();
-      $('.menuPendaftaran').show();
+    } else if (role === 'kasir') {
+      $('.menuGudang').show();   $('.menuPembayaran').show();
     }
   }
 
@@ -65,16 +60,12 @@ $(document).ready(function() {
     if ( Value['href'] === fullPath) {
       $(Value).parent().addClass('active');
 
-      if (pathName === '/kategori-barang' || pathName === '/satuan-barang'  || pathName === '/daftar-barang'
-        || pathName === '/pembagian-harga-barang' || pathName === '/kelompok-obat' || pathName === '/pembagian-harga-kelompok-obat') {
+      if (pathName === '/gudang/cat-food' || pathName === '/gudang/dog-food'  || pathName === '/gudang/animal-food'
+        || pathName === '/gudang/vitamin' || pathName === '/gudang/pet-care' || pathName === '/gudang/kandang'
+        || pathName === '/gudang/aksesoris' || pathName === '/gudang/lain-lain') {
         $('.menuGudang').addClass('active');
-      } else if(pathName === '/kategori-jasa' || pathName === '/daftar-jasa' || pathName === '/pembagian-harga-jasa') {
-        $('.menuLayanan').addClass('active');
-      } else if (pathName === '/rawat-jalan' || pathName === '/rawat-inap') {
-        $('.menuPendaftaran').addClass('active');
-      } else if (pathName === '/dokter-rawat-jalan' || pathName === '/dokter-rawat-inap') {
-        $('.menuDokter').addClass('active');
-      } else if (pathName === '/laporan-keuangan-harian' || pathName === '/laporan-keuangan-mingguan' || pathName === '/laporan-keuangan-bulanan') {
+      } else if (pathName === '/laporan-keuangan/harian' || pathName === '/laporan-keuangan/mingguan' 
+        || pathName === '/laporan-keuangan/bulanan') {
         $('.menuKeuangan').addClass('active');
       }
     } else {
@@ -82,18 +73,14 @@ $(document).ready(function() {
       if (Value['href'] ==  origin + '/pembayaran' 
         && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/edit') || pathName.includes('/pembayaran/detail'))) {
         $(Value).parent().addClass('active');
-      } else if (Value['href'] ==  origin + '/pasien' && pathName.includes('/riwayat-pameriksaan')) {
-        $(Value).parent().addClass('active');
-      } else if (Value['href'] ==  origin + '/hasil-pemeriksaan' && (pathName == '/hasil-pemeriksaan/tambah'
-        || pathName.includes('/hasil-pemeriksaan/edit') || pathName.includes('/hasil-pemeriksaan/detail'))) {
-        $(Value).parent().addClass('active');
-      } else if ((Value['href'] ==  origin + '/laporan-keuangan-harian' && (pathName.includes('/laporan-keuangan-harian/detail')))
-        || (Value['href'] ==  origin + '/laporan-keuangan-mingguan' && (pathName.includes('/laporan-keuangan-mingguan/detail')))
-        || (Value['href'] ==  origin + '/laporan-keuangan-bulanan' && (pathName.includes('/laporan-keuangan-bulanan/detail'))) ) {
+      } else if ((Value['href'] ==  origin + '/laporan-keuangan/harian' && (pathName.includes('/laporan-keuangan/harian/detail')))
+        || (Value['href'] ==  origin + '/laporan-keuangan/mingguan' && (pathName.includes('/laporan-keuangan/mingguan/detail')))
+        || (Value['href'] ==  origin + '/laporan-keuangan/bulanan' && (pathName.includes('/laporan-keuangan/bulanan/detail'))) ) {
         $('.menuKeuangan').addClass('active'); $(Value).parent().addClass('active');
       }
     }
   });
+
   $('#btn-profil').click(function() {
     window.location.href = $('.baseUrl').val() + `/profil/${userId}`;
   });
@@ -110,12 +97,12 @@ $(document).ready(function() {
       data: fd, contentType: false, cache: false,
       processData: false,
       success:function(resp) {
-        localStorage.removeItem('vet-clinic');
+        localStorage.removeItem('vet-shop');
         location.href = $('.baseUrl').val() + '/masuk';
       },
       error: function(err) {
         if (err.status == 401) {
-          localStorage.removeItem('vet-clinic');
+          localStorage.removeItem('vet-shop');
           location.href = $('.baseUrl').val() + '/masuk';
         }
       }
@@ -148,8 +135,6 @@ $(document).ready(function() {
 
     let newTime = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
     let newDay = nowDay + ', ' + day + ' ' + months[month] + ' ' + year;
-
-    // document.getElementById('time').innerHTML= ;
     
     $('#time-text').text(newDay + ' ' + newTime);
   }
@@ -158,9 +143,6 @@ $(document).ready(function() {
     if (i < 10) { i = "0" + i; }
     return i;
   }
+
   setInterval(showTime, 500); 
 });
-
-// <script type='text/javascript'>
-                       
-// 		</script>

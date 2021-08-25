@@ -51,7 +51,7 @@ const loginApp = new Vue({
           this.form.username = ''; this.form.password = '';
           const getDataLogin = resp.data;
 
-          localStorage.setItem('vet-clinic', JSON.stringify({
+          localStorage.setItem('vet-shop', JSON.stringify({
             fullname: getDataLogin.fullname,
             username: getDataLogin.username,
             email: getDataLogin.email,
@@ -59,6 +59,7 @@ const loginApp = new Vue({
             image_profile: getDataLogin.image_profile,
             token: getDataLogin.token,
             user_id: getDataLogin.user_id,
+            branch_id: getDataLogin.branch_id,
             branch_name: getDataLogin.branch_name
           }));
         })

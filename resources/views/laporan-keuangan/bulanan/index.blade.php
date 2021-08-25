@@ -16,8 +16,8 @@
 
       </div>
       <div class="section-right-box-title">
-        <button type="button" class="btn btn-success btn-download-excel" title="Download Excel">
-          <i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Download Excel
+        <button type="button" class="btn btn-success btn-download-laporan" title="Download Laporan">
+          <i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Download Laporan
         </button>
         <select id="filterCabang" style="width: 100%"></select>
       </div>
@@ -30,39 +30,33 @@
         <thead>
           <tr>
             <th>No</th>
-            <th class="onOrdering" data='registration_number' orderby="none">No. Registrasi <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='patient_number' orderby="none">No. Pasien <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='pet_category' orderby="none">Jenis Hewan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='pet_name' orderby="none">Nama Hewan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='complaint' orderby="none">Keluhan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='status_outpatient_inpatient' orderby="none">Perawatan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='price_overall' orderby="none">Total Keseluruhan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='capital_price' orderby="none">Harga Modal Keseluruhan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='doctor_fee' orderby="none">Fee Dokter Keseluruhan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='petshop_fee' orderby="none">Fee Petshop Keseluruhan <span class="fa fa-sort"></span></th>
-            <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='created_at' orderby="none">Tanggal dibuat <span class="fa fa-sort"></span></th>
-            <th>Aksi</th>
+            <th class="onOrdering" data='branch_name' orderby="none">Cabang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='payment_number' orderby="none">No. Pembayaran <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='category' orderby="none">Kategori Barang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='total_item' orderby="none">Jumlah <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='capital_price' orderby="none">Harga Modal <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='selling_price' orderby="none">Harga Jual <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='profit' orderby="none">Keuntungan <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='overall_price' orderby="none">Harga Keseluruhan <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='created_by' orderby="none">Dibuat Oleh <span class="fa fa-sort"></span></th>
           </tr>
         </thead>
         <tbody id="list-laporan-keuangan-bulanan"></tbody>
       </table>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan">Total Keseluruhan</label>
-      <span id="total-keseluruhan-txt">Rp. -</span>
-    </div>
-    <div class="m-b-10px m-t-10px">
       <label class="label-support-laporan">Harga Modal</label>
       <span id="harga-modal-txt">Rp. -</span>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan">Fee Dokter</label>
-      <span id="fee-dokter-txt">Rp. -</span>
+      <label class="label-support-laporan">Harga Jual</label>
+      <span id="harga-jual-txt">Rp. -</span>
     </div>
     <div class="m-b-10px m-t-10px">
-      <label class="label-support-laporan">Fee Petshop</label>
-      <span id="fee-petshop-txt">Rp. -</span>
+      <label class="label-support-laporan">Keuntungan</label>
+      <span id="keuntungan-txt">Rp. -</span>
     </div>
   </div>
 </div>

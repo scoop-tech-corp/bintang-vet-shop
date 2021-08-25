@@ -10,7 +10,7 @@
         <h3 class="profile-username text-center">-</h3>
         <p class="profile-role text-muted text-center">-</p>
         <div class="text-center">
-          <button class="btn btn-info text-center btn-upload-foto">Upload Foto</button>
+          <button class="btn btn-primary text-center btn-upload-foto">Upload Foto</button>
         </div>
       </div>
       <!-- /.box-body -->
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="box-footer">
-        <button class="btn btn-info" id="btnSubmitProfil">Simpan</button>
+        <button class="btn btn-primary" id="btnSubmitProfil">Simpan</button>
       </div>
     </div>
   </div>

@@ -1,210 +1,59 @@
-@extends('layout.master')
 
-@section('content')
-<div class="box box-info" id="tambah-pembayaran-app">
-  <div class="box-header ">
-    <h3 class="box-title">Tambah Pembayaran</h3>
-  </div>
+<div class="modal fade" id="modal-tambah-pembayaran">
+	<div class="modal-dialog">
+		<div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-pembarayan-tambah">
+          <div class="box-body">
+            <div class="form-group showDropdownCabang">
+              <label for="selectedCabang">Cari Cabang</label>
+              <select id="selectedCabang" class="form-control" style="width: 100%">
+              </select>
+              <div id="cabangErr1" class="validate-error"></div>
+            </div>
 
-  <div class="box-body">
-    <div class="btn-back-to-list">
-      <span class="fa fa-arrow-left"></span> <span class="text">List Pembayaran</span>
-    </div>
-    <div class="m-t-25px">
-      <form class="form-pembarayan-tambah">
-        <div class="col-md-12 m-b-20px">
-          <label for="selectedPasien">Cari Pasien</label>
-          <select id="selectedPasien" class="form-control" style="width: 100%">
-          </select>
-          <div id="pasienErr1" class="validate-error"></div>
-        </div>
-        <div class="col-md-6">
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nomor Registrasi</div>
-            <div id="nomorRegistrasiTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nomor Pasien</div>
-            <div id="nomorPasienTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Jenis Hewan</div>
-            <div id="jenisHewanTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nama Hewan</div>
-            <div id="namaHewanTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Jenis Kelamin</div>
-            <div id="jenisKelaminTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nama Pendaftar</div>
-            <div id="namaPendaftarTxt" class="p-left-10px"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Usia Hewan</div>
-            <div class="p-left-10px">
-              <span id="usiaHewanTahunTxt"></span>&nbsp;&nbsp;
-              <span id="usiaHewanBulanTxt"></span>
+            <div class="form-group showDropdownBarang">
+              <label for="selectedBarang">Cari Barang</label>
+              <select id="selectedBarang" class="form-control" style="width: 100%">
+              </select>
+            </div>
+
+            <div class="form-group">
+              <div class="table-responsive">
+                <table class="table table-striped text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Barang</th>
+                      <th>Kategori Barang</th>
+                      <th>Jumlah</th>
+                      <th>Harga Satuan</th>
+                      <th>Harga Keseluruhan</th>
+                      <th>Hapus</th>
+                    </tr>
+                  </thead>
+                  <tbody id="list-selected-barang">
+                    <tr class="text-center"><td colspan="7">Tidak ada data.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div id="barangErr1" class="validate-error"></div>
+            </div>
+            <div class="form-group">
+              <div id="beErr" class="validate-error"></div>
             </div>
           </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nama Pemilik</div>
-            <div id="namaPemilikTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Alamat Pemilik</div>
-            <div id="alamatPemilikTxt" class="p-left-10px"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Nomor HP Pemilik</div>
-            <div id="nomorHpPemilikTxt" class="p-left-10px" style="width: 75%"></div>
-          </div>
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Keluhan</div>
-            <div id="keluhanTxt" class="p-left-10px" style="width: 75%"></div>
-          </div>
-        </div>
-        <div class="col-md-12 m-b-10px">
-          <div class="label-detail-div m-b-10px">Jasa</div>
-          <div class="table-responsive">
-            <table class="table table-striped text-nowrap">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Dibuat Oleh</th>
-                  <th>Jenis Layanan</th>
-                  <th>Kategori Jasa</th>
-                  <th>Jumlah</th>
-                  <th>Harga Satuan</th>
-                  <th>Harga Keseluruhan</th>
-                  <th>Pembayaran</th>
-                </tr>
-              </thead>
-              <tbody id="list-selected-jasa"></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-12 m-b-10px">
-          <div class="label-detail-div m-b-10px">Barang</div>
-          <div class="table-responsive">
-            <table class="table table-striped text-nowrap">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Dibuat Oleh</th>
-                  <th>Kelompok Obat</th>
-                  <th>Nama Barang</th>
-                  <th>Kategori Barang</th>
-                  <th>Satuan Barang</th>
-                  <th>Jumlah</th>
-                  <th>Harga Satuan</th>
-                  <th>Harga Keseluruhan</th>
-                  <th>Pembayaran</th>
-                </tr>
-              </thead>
-              <tbody id="list-selected-barang"></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="d-flex m-b-10px">
-            <div class="label-detail-div">Rawat Inap</div>
-            <div id="rawatInapTxt" class="p-left-10px"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="d-flex">
-            <div class="label-detail-div">Status Pemeriksaan</div>
-            <div id="statusPemeriksaanTxt" class="p-left-10px"></div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-12 m-t-25px">
-      <div style="font-weight: 700">Detail Tagihan</div>
-    </div>
-    <div class="col-md-12 indented-detail-tagihan">
-      <div class="label-detail-div m-b-10px">Jasa</div>
-      <div class="table-responsive">
-        <table class="table table-striped text-nowrap">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Tanggal</th>
-              <th>Dibuat Oleh</th>
-              <th>Jenis Layanan</th>
-              <th>Kategori Jasa</th>
-              <th>Jumlah</th>
-              <th>Harga Satuan</th>
-              <th>Harga Keseluruhan</th>
-            </tr>
-          </thead>
-          <tbody id="list-tagihan-jasa">
-            <tr class="text-center"><td colspan="8">Tidak ada data.</td></tr>
-          </tbody>
-        </table>
+        </form>
       </div>
-    </div>
-    <div class="col-md-12 indented-detail-tagihan">
-      <div class="label-detail-div m-b-10px">Barang</div>
-      <div class="table-responsive">
-        <table class="table table-striped text-nowrap">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Tanggal</th>
-              <th>Dibuat Oleh</th>
-              <th>Kelompok Obat</th>
-              <th>Nama Barang</th>
-              <th>Kategori Barang</th>
-              <th>Satuan Barang</th>
-              <th>Jumlah</th>
-              <th>Harga Satuan</th>
-              <th>Harga Keseluruhan</th>
-            </tr>
-          </thead>
-          <tbody id="list-tagihan-barang">
-            <tr class="text-center"><td colspan="10">Tidak ada data.</td></tr>
-          </tbody>
-        </table>
+      <div class="modal-footer">
+        <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right m-r-10px" title="Simpan dan Unduh PDF">Simpan & Unduh</button>
       </div>
-    </div>
-    <div class="col-md-12 indented-detail-tagihan">
-      <div class="d-flex m-b-10px">
-        <div style="font-weight: 700">Total tagihan</div>
-        <div id="totalBayarTxt" class="p-left-10px" style="word-break: break-all;"></div>
-      </div>
-    </div>
-
-    <div class="col-md-12 m-t-25px">
-      <div id="beErr" class="validate-error"></div>
-      {{-- - Pembayaran Jasa harus dipilih salah satu<br>
-        - Pembayaran Barang harus dipilih salah satu<br>
-        - Status Pembayaran tidak dapat diselesaikan, karena terdapat barang atau jasa yang masih belum dibayarkan --}}
-    </div>
-    <div class="col-md-12 m-t-25px">
-      <button id="btnSubmitPembayaran" type="button" class="btn btn-primary pull-right m-r-10px" title="Simpan dan Unduh PDF">Simpan & Unduh</button>
-      <button id="btnKembali" type="button" class="btn btn-default pull-right m-r-10px">Kembali</button>
     </div>
   </div>
-  
 </div>
-
-@component('layout.message-box') @endcomponent
-@component('layout.modal-confirmation') @endcomponent
-
-@endsection
-@section('script-content')
-  <script src="{{ asset('main/js/pembayaran/pembayaran-tambah.js') }}"></script>  
-@endsection
-@section('css-content')
-  <link rel="stylesheet" type='text/css' href="{{ asset('main/css/pembayaran.css') }}">
-@endsection
-@section('vue-content')@endsection

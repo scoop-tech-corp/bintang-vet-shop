@@ -37,9 +37,9 @@ $(document).ready(function() {
   $('#filterCabang').on('select2:select', function () { onFilterCabang($(this).val()); });
   $('#filterCabang').on("select2:unselect", function () { onFilterCabang($(this).val()); });
 
-  $('.btn-download-excel').click(function() {
+  $('.btn-download-laporan').click(function() {
 		$.ajax({
-			url     : $('.baseUrl').val() + '/api/laporan-keuangan/bulanan/download',
+			url     : $('.baseUrl').val() + '/api/monthly-finance-report/generate',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
       data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, month: paramUrlSetup.month, year: paramUrlSetup.year, branch_id: paramUrlSetup.branchId },
@@ -61,7 +61,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -96,7 +96,7 @@ $(document).ready(function() {
 
   function loadLaporanKeuanganBulanan() {
     $.ajax({
-			url     : $('.baseUrl').val() + '/api/laporan-keuangan/bulanan',
+			url     : $('.baseUrl').val() + '/api/monthly-finance-report',
 			headers : { 'Authorization': `Bearer ${token}` },
 			type    : 'GET',
 			data	  : { orderby: paramUrlSetup.orderby, column: paramUrlSetup.column, month: paramUrlSetup.month, year: paramUrlSetup.year, branch_id: paramUrlSetup.branchId },
@@ -112,45 +112,34 @@ $(document).ready(function() {
 					$.each(getData, function(idx, v) {
 						listLaporanKeuanganBulanan += `<tr>`
 							+ `<td>${++idx}</td>`
-							+ `<td>${v.registration_number}</td>`
-							+ `<td>${v.patient_number}</td>`
-							+ `<td>${v.pet_category}</td>`
-							+ `<td>${v.pet_name}</td>`
-							+ `<td>${v.complaint}</td>`
-							+ `<td>${(v.status_outpatient_inpatient == 1) ? 'Rawat Inap' : 'Rawat Jalan'}</td>`
-							+ `<td>${typeof(v.price_overall) == 'number' ? v.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.doctor_fee) == 'number' ? v.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
-							+ `<td>${typeof(v.petshop_fee)== 'number' ? v.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+              + `<td>${v.created_at}</td>`
+              + `<td>${v.branch_name}</td>`
+              + `<td>${v.payment_number}</td>`
+							+ `<td>${v.item_name}</td>`
+							+ `<td>${v.category}</td>`
+							+ `<td>${v.total_item}</td>`
+							+ `<td>Rp ${typeof(v.capital_price) == 'number' ? v.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.profit) == 'number' ? v.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
+							+ `<td>Rp ${typeof(v.overall_price)== 'number' ? v.overall_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
 							+ `<td>${v.created_by}</td>`
-							+ `<td>${v.created_at}</td>`
-							+ `<td>
-									<button type="button" class="btn btn-info openDetail" value=${v.list_of_payment_id} title="Detail"><i class="fa fa-eye" aria-hidden="true"></i></button>
-								</td>`
 							+ `</tr>`;
 					});
 				} else { listLaporanKeuanganBulanan += `<tr class="text-center"><td colspan="14">Tidak ada data.</td></tr>`; }
 				$('#list-laporan-keuangan-bulanan').append(listLaporanKeuanganBulanan);
 
-				const priceOverall = resp.price_overall ? resp.price_overall.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
-				const capitalPrice = resp.capital_price ? resp.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
-				const docterFee    = resp.doctor_fee ? resp.doctor_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
-				const petshopFee   = resp.petshop_fee ? resp.petshop_fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+        const capitalPrice = resp.capital_price ? resp.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
+				const sellingPrice = resp.selling_price ? resp.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '-';
+				const profit       = resp.profit ? resp.profit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
 
-        $('#total-keseluruhan-txt').text(`Rp. ${priceOverall}`);
         $('#harga-modal-txt').text(`Rp. ${capitalPrice}`);
-        $('#fee-dokter-txt').text(`Rp. ${docterFee}`);
-        $('#fee-petshop-txt').text(`Rp. ${petshopFee}`);
-        
-        $('.openDetail').click(function() {
-          // const getObj = data.find(x => x.id == $(this).val());
-					window.location.href = $('.baseUrl').val() + `/laporan-keuangan-bulanan/detail/${$(this).val()}`;
-        });
+        $('#harga-jual-txt').text(`Rp. ${sellingPrice}`);
+        $('#keuntungan-txt').text(`Rp. ${profit}`);
 
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}
@@ -175,7 +164,7 @@ $(document).ready(function() {
 			}, complete: function() { $('#loading-screen').hide(); },
 			error: function(err) {
 				if (err.status == 401) {
-					localStorage.removeItem('vet-clinic');
+					localStorage.removeItem('vet-shop');
 					location.href = $('.baseUrl').val() + '/masuk';
 				}
 			}

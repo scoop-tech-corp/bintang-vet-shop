@@ -17,6 +17,7 @@ class CreateBranchesTable extends Migration
             $table->id();
             $table->string('branch_code');
             $table->string('branch_name');
+            $table->string('address');
             $table->boolean('isDeleted')->nullable()->default(false);
             $table->integer('user_id');
             $table->integer('user_update_id')->nullable();

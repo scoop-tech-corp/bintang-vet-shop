@@ -82,7 +82,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
 
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => ['Akses tidak diijinkan!'],
@@ -142,7 +142,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
                 'errors' => ['Akses User tidak diizinkan!'],
@@ -188,7 +188,7 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => ['Akses tidak diijinkan!'],
@@ -263,7 +263,7 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
-        if ($request->user()->role == 'dokter' || $request->user()->role == 'resepsionis') {
+        if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'User yang dimasukkan tidak valid!',
                 'errors' => ['Akses tidak diijinkan!'],
@@ -316,31 +316,5 @@ class UserController extends Controller
             [
                 'message' => 'Success!',
             ], 200);
-    }
-
-    public function doctor(Request $request)
-    {
-        // if ($request->user()->role == 'dokter') {
-        //     return response()->json([
-        //         'message' => 'The user role was invalid.',
-        //         'errors' => ['Akses User tidak diizinkan!'],
-        //     ], 403);
-        // }
-
-        $data = DB::table('users')
-            ->join('branches', 'users.branch_id', '=', 'branches.id')
-            ->select('users.id', 'users.username', 'users.role', 'branches.id as branch_id', 'branches.branch_name')
-            ->where('users.role', '=', 'dokter')
-            ->where('users.status', '=', '1');
-
-        if ($request->user()->role == 'resepsionis') {
-            $data = $data->where('users.branch_id', '=', $request->user()->branch_id);
-        }
-
-        $data = $data->orderBy('users.id', 'desc');
-
-        $data = $data->get();
-
-        return response()->json($data, 200);
     }
 }

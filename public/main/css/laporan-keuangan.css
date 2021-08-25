@@ -5,9 +5,9 @@
   display: flex;
 }
 .section-right-box-title {
-  width: 20%;
+  width: 300px;
 }
-.section-right-box-title .btn-download-excel {
+.section-right-box-title .btn-download-laporan {
   margin-right: 20px;
 }
 
@@ -22,6 +22,10 @@
 @media (max-width: 768px) {
   .label-support-laporan {
     width: 40%;
+  }
+
+  .section-right-box-title {
+    width: 100%;
   }
   .section-right-box-title .select2-container {
     margin-top: 0px;

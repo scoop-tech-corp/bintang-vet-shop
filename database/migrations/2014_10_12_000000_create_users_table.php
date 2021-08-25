@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('blood_group')->nullable();
             $table->string('id_card_number')->nullable();
             $table->string('email')->unique();
-            $table->string('password');            
+            $table->string('password');
             $table->string('home_number')->nullable();
             $table->string('phone_number')->unique();
             $table->string('address')->nullable();
@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->nullable();
             $table->integer('branch_id');
             $table->boolean('status');                   //aktif atau tidak jika tidak aktif maka tidak dapat login
+            $table->boolean('isDeleted')->nullable()->default(false);
             $table->string('created_by');
             $table->string('update_by')->nullable();    //siapa yang akan mengubah status user
             $table->string('deleted_by')->nullable();
