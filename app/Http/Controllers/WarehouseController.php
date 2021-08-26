@@ -234,16 +234,20 @@ class WarehouseController extends Controller
             ], 403);
         }
 
+        $messages_images = [
+            'image.max' => 'Foto lebih dari 5mb! Harap upload gambar dengan ukuran lebih kecil!',
+        ];
+
         $validator = Validator::make($request->all(), [
             'item_name' => 'required|string|min:3|max:50',
             'total_item' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric',
             'capital_price' => 'required|numeric',
             'profit' => 'required|numeric',
-            'image' => 'mimes:png,jpg|max:2048',
+            'image' => 'mimes:png,jpg|max:5000',
             'branch_id' => 'required|numeric',
             'category' => 'required|string',
-        ]);
+        ], $messages_images);
 
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
