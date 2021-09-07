@@ -36,7 +36,7 @@ $(document).ready(function() {
     if (getUrl.includes('profil')) {
       $('.content-header').append('<h3>User Profil</h3>')
     } else if(getUrl == '/') {
-      $('.content-header').append('<h2>Selamat datang di Sistem Warehouse Estell Vet Shop</h2>')
+      $('.content-header').append('<h2>Selamat datang di Sistem Warehouse Bintang Vet Clinic</h2>')
     }
 
     if (role === 'admin') {
