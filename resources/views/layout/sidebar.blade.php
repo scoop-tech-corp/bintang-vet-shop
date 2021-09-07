@@ -1,7 +1,7 @@
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<div class="section-logo-vet-clinic">
-			<img src="{{ asset('assets/image/logo-vet-clinic.png') }}">
+			<img src="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
 		</div>
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">MENU UTAMA</li>

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Estell Vet Shop | Dashboard</title>
+  <title>Bintang Vet Shop | Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-vet-clinic.png') }}">
+	<link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
@@ -32,12 +32,12 @@
 
 	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/input-custom.css') }}">
 	<link rel="stylesheet" type='text/css' href="{{ asset('main/css/global.css') }}">
-	@yield('css-content')	
+	@yield('css-content')
 
   <!-- Google Font -->
   <link rel="stylesheet"
 		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-		
+
 	<!-- jQuery 3 -->
 	<script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 	<!-- Bootstrap 3.3.7 -->
@@ -52,9 +52,9 @@
 			<!-- Logo -->
 			<a href="{{ url('/') }}" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
-				<span class="logo-mini"><b>E</b>VS</span>
+				<span class="logo-mini"><b>B</b>VS</span>
 				<!-- logo for regular state and mobile devices -->
-				<span class="logo-lg"><b>ESTELL</b> <b>VET</b> SHOP</span>
+				<span class="logo-lg"><b>BINTANG</b> <b>VET</b> SHOP</span>
 			</a>
 
 			<!-- Header Navbar: style can be found in header.less -->
@@ -141,7 +141,7 @@
 			<div class="pull-right hidden-xs">
 				<b>Version</b> 1.0
 			</div>
-			<strong>Copyright &copy; <script>document.write(new Date().getFullYear())</script> <a href="{{ url('/') }}">Estell Vet Shop</a></strong> | Powered by Scoop Tech
+			<strong>Copyright &copy; <script>document.write(new Date().getFullYear())</script> <a href="{{ url('/') }}">Bintang Vet Shop</a></strong> | Powered by Scoop Tech
 		</footer>
 
 		<!-- Control Sidebar -->
