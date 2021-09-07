@@ -15,7 +15,7 @@ $(document).ready(function() {
     location.href = $('.baseUrl').val() + '/masuk';
   } else {
     getAuthUser = JSON.parse(getAuthUser);
-    
+
     username     = getAuthUser.username;
     fullname     = getAuthUser.fullname;
     role         = getAuthUser.role.toLowerCase();
@@ -36,7 +36,7 @@ $(document).ready(function() {
     if (getUrl.includes('profil')) {
       $('.content-header').append('<h3>User Profil</h3>')
     } else if(getUrl == '/') {
-      $('.content-header').append('<h2>Selamat datang di Sistem Warehouse Bintang Vet Clinic</h2>')
+      $('.content-header').append('<h2>Selamat datang di Sistem Warehouse Bintang Vet Shop</h2>')
     }
 
     if (role === 'admin') {
@@ -64,13 +64,13 @@ $(document).ready(function() {
         || pathName === '/gudang/vitamin' || pathName === '/gudang/pet-care' || pathName === '/gudang/kandang'
         || pathName === '/gudang/aksesoris' || pathName === '/gudang/lain-lain') {
         $('.menuGudang').addClass('active');
-      } else if (pathName === '/laporan-keuangan/harian' || pathName === '/laporan-keuangan/mingguan' 
+      } else if (pathName === '/laporan-keuangan/harian' || pathName === '/laporan-keuangan/mingguan'
         || pathName === '/laporan-keuangan/bulanan') {
         $('.menuKeuangan').addClass('active');
       }
     } else {
       // additional custom url
-      if (Value['href'] ==  origin + '/pembayaran' 
+      if (Value['href'] ==  origin + '/pembayaran'
         && (pathName == '/pembayaran/tambah' || pathName.includes('/pembayaran/edit') || pathName.includes('/pembayaran/detail'))) {
         $(Value).parent().addClass('active');
       } else if ((Value['href'] ==  origin + '/laporan-keuangan/harian' && (pathName.includes('/laporan-keuangan/harian/detail')))
@@ -128,21 +128,21 @@ $(document).ready(function() {
 
     if (curr_hour == 0) { curr_hour = 12; }
     if (curr_hour > 12) { curr_hour = curr_hour - 12; }
-    
+
     curr_hour = checkTime(curr_hour);
     curr_minute = checkTime(curr_minute);
     curr_second = checkTime(curr_second);
 
     let newTime = curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
     let newDay = nowDay + ', ' + day + ' ' + months[month] + ' ' + year;
-    
+
     $('#time-text').text(newDay + ' ' + newTime);
   }
-        
+
   function checkTime(i) {
     if (i < 10) { i = "0" + i; }
     return i;
   }
 
-  setInterval(showTime, 500); 
+  setInterval(showTime, 500);
 });
