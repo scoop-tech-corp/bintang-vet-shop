@@ -6,6 +6,7 @@ use App\Exports\RecapWarehouse;
 use App\Exports\TemplateUploadGudang;
 use App\Imports\UploadItem;
 use App\Models\ListofItems;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -227,6 +228,7 @@ class WarehouseController extends Controller
 
     public function create(Request $request)
     {
+        info($request);
         if ($request->user()->role == 'kasir') {
             return response()->json([
                 'message' => 'The user role was invalid.',
@@ -241,6 +243,8 @@ class WarehouseController extends Controller
         $validator = Validator::make($request->all(), [
             'item_name' => 'required|string|min:3|max:50',
             'total_item' => 'required|numeric|min:0',
+            'limit_item' => 'required|numeric|min:0',
+            'expired_date' => 'required|date_format:d/m/Y',
             'selling_price' => 'required|numeric',
             'capital_price' => 'required|numeric',
             'profit' => 'required|numeric',
@@ -289,9 +293,15 @@ class WarehouseController extends Controller
             $file = "/documents/" . $fileName;
         }
 
+        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->expired_date)->format('Y/m/d'));
+
         $item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
+            'limit_item' => $request->limit_item,
+            'diff_item' => $request->total_item - $request->limit_item,
+            'diff_expired_days' => Carbon::parse(now())->diffInDays($exp_date, false),
+            'expired_date' => $exp_date,
             'selling_price' => $request->selling_price,
             'capital_price' => $request->capital_price,
             'profit' => $request->profit,
@@ -399,6 +409,10 @@ class WarehouseController extends Controller
         $insert_item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
+            'limit_item' => $request->limit_item,
+            'diff_item' => $request->limit_item,
+            'diff_expired_days' => $request->limit_item,
+            'expired_date' => $request->expired_date,
             'selling_price' => $request->selling_price,
             'capital_price' => $request->capital_price,
             'profit' => $request->profit,
@@ -420,6 +434,12 @@ class WarehouseController extends Controller
     {
         $update_item->item_name = $request->item_name;
         $update_item->total_item = $request->total_item;
+
+        $update_item->limit_item = $request->limit_item;
+        $update_item->diff_item = $request->total_item;
+        $update_item->diff_expired_days = $request->total_item;
+        $update_item->expired_date = $request->total_item;
+
         $update_item->selling_price = $request->selling_price;
         $update_item->capital_price = $request->capital_price;
         $update_item->profit = $request->profit;

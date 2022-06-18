@@ -3,6 +3,7 @@ $(document).ready(function() {
   let modalState = '';
   let optCabang= '';
 
+  let getTanggalKadaluwarsa = '';
   let isValidSelectedCabang = false;
   let isValidNamaBarang = false;
   let isValidJumlahBarang = false
@@ -36,6 +37,16 @@ $(document).ready(function() {
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
     $('#filterCabang').append(`<option value=''>Cabang</option>`);
     loadCabang();
+
+    $('#tanggalKadaluwarsa').datepicker({
+      autoclose: true,
+      clearBtn: true,
+      format: 'dd/mm/yyyy',
+      todayHighlight: true
+      }).on('changeDate', function(e) {
+        getTanggalKadaluwarsa = e.format();
+        validationForm();
+    });
   }
 
   loadCatFood();
@@ -191,6 +202,8 @@ $(document).ready(function() {
       fd.append('branch_id', $('#selectedCabang').val());
 			fd.append('item_name', $('#namaBarang').val());
       fd.append('total_item', $('#jumlahBarang').val());
+      fd.append('expired_date', getTanggalKadaluwarsa);
+      fd.append('limit_item', $('#limitBarang').val());
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
@@ -248,6 +261,8 @@ $(document).ready(function() {
       fd.append('branch_id', $('#selectedCabang').val());
 			fd.append('item_name', $('#namaBarang').val());
       fd.append('total_item', $('#jumlahBarang').val());
+      fd.append('limit_item', $('#limitBarang').val());
+      fd.append('expired_date', getTanggalKadaluwarsa);
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
@@ -393,6 +408,8 @@ $(document).ready(function() {
               + `<td>${++idx}</td>`
               + `<td>${v.item_name}</td>`
               + `<td>${v.total_item}</td>`
+              + `<td>${v.limit_item}</td>`
+              + `<td>${v.expired_date}</td>`
               + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
               + `<td>
                   ${
@@ -445,6 +462,12 @@ $(document).ready(function() {
           $('#selectedCabang').val(getObj.branch_id); $('#selectedCabang').trigger('change');
           $('#namaBarang').val(getObj.item_name);
           $('#jumlahBarang').val(getObj.total_item);
+          $('#limitBarang').val(getObj.limit_item);
+
+          const dateArr = getObj.expired_date.split('/');
+          getTanggalKadaluwarsa = getObj.expired_date;
+          $('#tanggalKadaluwarsa').datepicker('update', new Date(parseFloat(dateArr[2]), parseFloat(dateArr[1])-1, parseFloat(dateArr[0])));
+
           $('#hargaJual').val(getObj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
           $('#hargaModal').val(getObj.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 
@@ -519,6 +542,18 @@ $(document).ready(function() {
 		} else {
 			$('#jumlahBarangErr1').text(''); isValidJumlahBarang = true;
     }
+
+    if (!$('#limitBarang').val()) {
+      $('#limitBarangErr1').text('Limit barang harus di isi'); isValidLimitBarang = false;
+    } else {
+      $('#limitBarangErr1').text(''); isValidLimitBarang = true;
+    }
+
+    if (!$('#tanggalKadaluwarsa').datepicker('getDate')) {
+			$('#tanggalKadaluwarsaErr1').text('Tanggal kadaluwarsa harus di isi'); isValidTanggalKadaluwarsa = false;
+		} else {
+			$('#tanggalKadaluwarsaErr1').text(''); isValidTanggalKadaluwarsa = true;
+		}
 
     if ($('#hargaJual').val() == '') {
 			$('#hargaJualErr1').text('Harga jual harus di isi'); isValidHargaJual = false;

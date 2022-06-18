@@ -260,7 +260,6 @@ class PaymentController extends Controller
 
     public function create(Request $request)
     {
-        info($request);
         $validator = Validator::make($request->all(), [
             'list_of_items.*.list_of_item_id' => 'required|numeric',
             'list_of_items.*.total_item' => 'required|numeric|min:1',
