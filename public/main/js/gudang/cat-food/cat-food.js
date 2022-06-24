@@ -9,6 +9,8 @@ $(document).ready(function() {
   let isValidJumlahBarang = false
   let isValidHargaJual = false;
   let isValidHargaModal = false;
+  let isValidTanggalKadaluwarsa = false;
+  let isValidLimitBarang = false;
 
   let customErr1 = false;
   let isBeErr = false;
@@ -337,6 +339,7 @@ $(document).ready(function() {
 
   $('#namaBarang').keyup(function () { validationHargaJual(); validationForm(); });
   $('#jumlahBarang').keyup(function () { validationHargaJual(); validationForm(); });
+  $('#limitBarang').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaJual').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaModal').keyup(function () { validationHargaJual(); validationForm(); });
 
@@ -405,8 +408,8 @@ $(document).ready(function() {
         if(data.length) {
           $.each(data, function(idx, v) {
             listCatFood += `<tr>`
-              + `<td>${++idx}</td>`
-              + `<td>${v.item_name}</td>`
+              + `<td class="${v.diff_expired_days < 60 ? 'expired-date' : ''}">${++idx}</td>`
+              + `<td class="${v.diff_item < 0 ? 'item-outstock' : ''}">${v.item_name}</td>`
               + `<td>${v.total_item}</td>`
               + `<td>${v.limit_item}</td>`
               + `<td>${v.expired_date}</td>`
@@ -585,6 +588,7 @@ $(document).ready(function() {
 		$('#selectedCabang').val(null);
     $('#namaBarang').val(null);
     $('#jumlahBarang').val(null);
+    $('#limitBarang').val(null);
     $('#hargaJual').val(null);
     $('#hargaModal').val(null);
     resetImageUpload();
@@ -595,11 +599,14 @@ $(document).ready(function() {
     $('#cabangErr1').text(''); isValidSelectedCabang = true;
     $('#namaBarangErr1').text(''); isValidNamaBarang = true;
     $('#jumlahBarangErr1').text(''); isValidJumlahBarang = true;
+    $('#limitBarangErr1').text(''); isValidJumlahBarang = true;
 
     $('#hargaJualErr1').text(''); isValidHargaJual = true;
     $('#hargaModalErr1').text(''); isValidHargaModal = true;
 
     $('#label-keuntungan').text('-');
+
+    $('#tanggalKadaluwarsa').datepicker('update', new Date());
   }
 
   function formConfigure() {
@@ -622,8 +629,8 @@ $(document).ready(function() {
   }
 
   function validationBtnSubmitBarangCatFood() {
-    if (!isValidSelectedCabang || !isValidNamaBarang || !isValidJumlahBarang
-      || !isValidHargaJual || !isValidHargaModal || !customErr1 || isBeErr) {
+    if (!isValidSelectedCabang || !isValidNamaBarang || !isValidJumlahBarang || !isValidLimitBarang
+      || !isValidTanggalKadaluwarsa || !isValidHargaJual || !isValidHargaModal || !customErr1 || isBeErr) {
 			$('#btnSubmitBarangCatFood').attr('disabled', true);
 		} else {
 			$('#btnSubmitBarangCatFood').attr('disabled', false);

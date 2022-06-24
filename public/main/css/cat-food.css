@@ -4,6 +4,16 @@
   padding: 10px;
 }
 
+.item-outstock {
+  background-color: red;
+  color: #ffffff;
+}
+
+.expired-date {
+  background-color: cornflowerblue;
+  color: #ffffff;
+}
+
 .notes-upload-image {
   line-height: 17px;
   margin-bottom: 2px;

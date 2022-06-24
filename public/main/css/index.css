@@ -1,0 +1,9 @@
+.item-outstock {
+  background-color: red;
+  color: #ffffff;
+}
+
+.expired-date {
+  background-color: cornflowerblue;
+  color: #ffffff;
+}
