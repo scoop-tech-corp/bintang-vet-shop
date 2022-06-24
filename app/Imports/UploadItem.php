@@ -3,21 +3,22 @@
 namespace App\Imports;
 
 use App\Imports\UploadDataItem;
-use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class UploadItem implements WithMultipleSheets
 {
-  protected $category;
+    protected $category;
+    protected $id;
 
-  public function __construct($category)
-  {
-      $this->category = $category;
-  }
+    public function __construct($category, $id)
+    {
+        $this->category = $category;
+        $this->id = $id;
+    }
     public function sheets(): array
     {
         return [
-            0 => new UploadDataItem($this->category),
+            0 => new UploadDataItem($this->category, $this->id),
         ];
     }
 }
