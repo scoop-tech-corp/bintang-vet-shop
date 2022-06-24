@@ -17,7 +17,7 @@ class AddLimitAndExpired extends Migration
             $table->decimal('limit_item', $precision = 18, $scale = 2);
             $table->decimal('diff_item', $precision = 18, $scale = 2);
             $table->integer('diff_expired_days');
-            $table->date('expired_date');
+            $table->date('expired_date')->nullable($value = true);
         });
     }
 
