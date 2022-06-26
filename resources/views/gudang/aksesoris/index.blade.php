@@ -24,6 +24,8 @@
             <th>No</th>
             <th class="onOrdering" data='item_name' orderby="none">Nama Barang <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='total_item' orderby="none">Jumlah Barang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='limit_item' orderby="none">Limit Barang <span class="fa fa-sort"></span></th>
+            <th class="onOrdering" data='expired_date' orderby="none">Tanggal Kedaluwarsa <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='selling_price' orderby="none">Harga Jual <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='capital_price' orderby="none">Harga Modal <span class="fa fa-sort"></span></th>
             <th class="onOrdering" data='profit' orderby="none">Keuntungan <span class="fa fa-sort"></span></th>
@@ -56,9 +58,11 @@
   <script src="{{ asset('plugins/jquery.fileupload-validate.js') }}"></script>
   <script src="{{ asset('plugins/jquery.mask.js') }}"></script>
   <script src="{{ asset('main/js/gudang/aksesoris/aksesoris.js') }}"></script>
+  <script src="{{ asset('bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 @endsection
 @section('css-content')
   <link rel="stylesheet" type='text/css' href="{{ asset('main/css/aksesoris.css') }}">
   <link rel="stylesheet" type='text/css' href="{{ asset('plugins/magnific-popup/magnific-popup.css') }}">
+  <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endsection
 @section('vue-content') @endsection

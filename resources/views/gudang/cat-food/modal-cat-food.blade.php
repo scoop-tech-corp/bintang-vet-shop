@@ -31,11 +31,27 @@
             </div>
 
             <div class="form-group">
+							<label for="limitBarang">Limit Barang</label>
+							<input id="limitBarang" type="number" class="form-control" placeholder="Masukan Limit Barang">
+							<div id="limitBarangErr1" class="validate-error"></div>
+						</div>
+						<div class="form-group">
+							<label for="tanggalKedaluwarsa">Tanggal Kedaluwarsa</label>
+							<div class="input-group date">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control" id="tanggalKadaluwarsa" placeholder="dd/mm/yyyy" autocomplete="off">
+              </div>
+							<div id="tanggalKadaluwarsaErr1" class="validate-error"></div>
+						</div>
+
+            <div class="form-group">
 							<label for="hargaJual">Harga Jual</label>
 							<input id="hargaJual" type="text" class="form-control" min="0" placeholder="Masukan Harga Jual">
 							<div id="hargaJualErr1" class="validate-error"></div>
 						</div>
- 
+
             <div class="form-group">
 							<label for="hargaModal">Harga Modal</label>
 							<input id="hargaModal" type="text" class="form-control" min="0" placeholder="Masukan Harga Modal">
@@ -54,7 +70,7 @@
                 <div class="notes-upload-image">Format gambar .jpg .jpeg .png dan ukuran maksimal 5mb</div>
                 <div class="box-image-upload" id="box-1">
                   <a class="img-preview-1"><img class="img-preview-1"></a>
-                  <span class="icon-plus-upload" id="icon-plus-upload-1">+</span> 
+                  <span class="icon-plus-upload" id="icon-plus-upload-1">+</span>
                   <input type="file" class="input-file" id="upload-image-1" accept=".png, .jpg, .jpeg">
                   <div class="btn-icon btn-trash-upload-image" noUploadImage='1'><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                 </div>

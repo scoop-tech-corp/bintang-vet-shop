@@ -8,6 +8,8 @@ $(document).ready(function() {
   let isValidJumlahBarang = false
   let isValidHargaJual = false;
   let isValidHargaModal = false;
+  let isValidTanggalKadaluwarsa = false;
+  let getTanggalKadaluwarsa = '';
 
   let customErr1 = false;
   let isBeErr = false;
@@ -36,6 +38,16 @@ $(document).ready(function() {
     $('#filterCabang').select2({ placeholder: 'Cabang', allowClear: true });
     $('#filterCabang').append(`<option value=''>Cabang</option>`);
     loadCabang();
+
+    $('#tanggalKadaluwarsa').datepicker({
+      autoclose: true,
+      clearBtn: true,
+      format: 'dd/mm/yyyy',
+      todayHighlight: true
+      }).on('changeDate', function(e) {
+        getTanggalKadaluwarsa = e.format();
+        validationForm();
+    });
   }
 
   loadKandang();
@@ -191,6 +203,8 @@ $(document).ready(function() {
       fd.append('branch_id', $('#selectedCabang').val());
 			fd.append('item_name', $('#namaBarang').val());
       fd.append('total_item', $('#jumlahBarang').val());
+      fd.append('expired_date', getTanggalKadaluwarsa);
+      fd.append('limit_item', $('#limitBarang').val());
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
@@ -248,6 +262,8 @@ $(document).ready(function() {
       fd.append('branch_id', $('#selectedCabang').val());
 			fd.append('item_name', $('#namaBarang').val());
       fd.append('total_item', $('#jumlahBarang').val());
+      fd.append('limit_item', $('#limitBarang').val());
+      fd.append('expired_date', getTanggalKadaluwarsa);
 			fd.append('selling_price', $('#hargaJual').val().replaceAll('.', ''));
       fd.append('capital_price', $('#hargaModal').val().replaceAll('.', ''));
       fd.append('profit', $('#label-keuntungan').text().replaceAll('.', ''));
@@ -322,6 +338,7 @@ $(document).ready(function() {
 
   $('#namaBarang').keyup(function () { validationHargaJual(); validationForm(); });
   $('#jumlahBarang').keyup(function () { validationHargaJual(); validationForm(); });
+  $('#limitBarang').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaJual').keyup(function () { validationHargaJual(); validationForm(); });
   $('#hargaModal').keyup(function () { validationHargaJual(); validationForm(); });
 
@@ -390,9 +407,11 @@ $(document).ready(function() {
         if(data.length) {
           $.each(data, function(idx, v) {
             listKandang += `<tr>`
-            + `<td>${++idx}</td>`
-            + `<td>${v.item_name}</td>`
+            + `<td class="${v.diff_expired_days < 60 ? 'expired-date' : ''}">${++idx}</td>`
+            + `<td class="${v.diff_item < 0 ? 'item-outstock' : ''}">${v.item_name}</td>`
             + `<td>${v.total_item}</td>`
+            + `<td>${v.limit_item}</td>`
+            + `<td>${v.expired_date}</td>`
             + `<td>Rp ${typeof(v.selling_price) == 'number' ? v.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : ''}</td>`
             + `<td>
                 ${
@@ -445,6 +464,13 @@ $(document).ready(function() {
           $('#selectedCabang').val(getObj.branch_id); $('#selectedCabang').trigger('change');
           $('#namaBarang').val(getObj.item_name);
           $('#jumlahBarang').val(getObj.total_item);
+
+          $('#limitBarang').val(getObj.limit_item);
+
+          const dateArr = getObj.expired_date.split('/');
+          getTanggalKadaluwarsa = getObj.expired_date;
+          $('#tanggalKadaluwarsa').datepicker('update', new Date(parseFloat(dateArr[2]), parseFloat(dateArr[1])-1, parseFloat(dateArr[0])));
+
           $('#hargaJual').val(getObj.selling_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
           $('#hargaModal').val(getObj.capital_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 
@@ -520,6 +546,18 @@ $(document).ready(function() {
 			$('#jumlahBarangErr1').text(''); isValidJumlahBarang = true;
     }
 
+    if (!$('#limitBarang').val()) {
+      $('#limitBarangErr1').text('Limit barang harus di isi'); isValidLimitBarang = false;
+    } else {
+      $('#limitBarangErr1').text(''); isValidLimitBarang = true;
+    }
+
+    if (!$('#tanggalKadaluwarsa').datepicker('getDate')) {
+			$('#tanggalKadaluwarsaErr1').text('Tanggal kadaluwarsa harus di isi'); isValidTanggalKadaluwarsa = false;
+		} else {
+			$('#tanggalKadaluwarsaErr1').text(''); isValidTanggalKadaluwarsa = true;
+		}
+
     if ($('#hargaJual').val() == '') {
 			$('#hargaJualErr1').text('Harga jual harus di isi'); isValidHargaJual = false;
 		} else {
@@ -550,6 +588,7 @@ $(document).ready(function() {
 		$('#selectedCabang').val(null);
     $('#namaBarang').val(null);
     $('#jumlahBarang').val(null);
+    $('#limitBarang').val(null);
     $('#hargaJual').val(null);
     $('#hargaModal').val(null);
     resetImageUpload();
@@ -560,11 +599,13 @@ $(document).ready(function() {
     $('#cabangErr1').text(''); isValidSelectedCabang = true;
     $('#namaBarangErr1').text(''); isValidNamaBarang = true;
     $('#jumlahBarangErr1').text(''); isValidJumlahBarang = true;
+    $('#limitBarangErr1').text(''); isValidJumlahBarang = true;
 
     $('#hargaJualErr1').text(''); isValidHargaJual = true;
     $('#hargaModalErr1').text(''); isValidHargaModal = true;
 
     $('#label-keuntungan').text('-');
+    $('#tanggalKadaluwarsa').datepicker('update', new Date());
   }
 
   function formConfigure() {
@@ -587,7 +628,7 @@ $(document).ready(function() {
   }
 
   function validationBtnSubmitBarangKandang() {
-    if (!isValidSelectedCabang || !isValidNamaBarang || !isValidJumlahBarang
+    if (!isValidSelectedCabang || !isValidNamaBarang || !isValidJumlahBarang || !isValidLimitBarang || !isValidTanggalKadaluwarsa
       || !isValidHargaJual || !isValidHargaModal || !customErr1 || isBeErr) {
 			$('#btnSubmitBarangKandang').attr('disabled', true);
 		} else {

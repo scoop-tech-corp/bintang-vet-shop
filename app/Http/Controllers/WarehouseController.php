@@ -6,10 +6,11 @@ use App\Exports\RecapWarehouse;
 use App\Exports\TemplateUploadGudang;
 use App\Imports\UploadItem;
 use App\Models\ListofItems;
-use DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
 
 class WarehouseController extends Controller
 {
@@ -29,6 +30,10 @@ class WarehouseController extends Controller
                     'list_of_items.id',
                     'list_of_items.item_name',
                     'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
                     DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
                     DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
                     'list_of_items.image',
@@ -44,6 +49,10 @@ class WarehouseController extends Controller
                     'list_of_items.id',
                     'list_of_items.item_name',
                     'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
                     DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
                     DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
                     DB::raw("TRIM(list_of_items.profit)+0 as profit"),
@@ -93,12 +102,10 @@ class WarehouseController extends Controller
                     'list_of_items.id',
                     'list_of_items.item_name',
                     'list_of_items.total_item',
-                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
-                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
-                    'list_of_items.image',
-                    'branches.id as branch_id',
-                    'branches.branch_name',
-                    'users.id as user_id',
+                    'list_of_items.limit_item',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                     ->where('list_of_items.isDeleted', '=', 0)
@@ -108,6 +115,10 @@ class WarehouseController extends Controller
                     'list_of_items.id',
                     'list_of_items.item_name',
                     'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
                     DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
                     DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
                     DB::raw("TRIM(list_of_items.profit)+0 as profit"),
@@ -119,6 +130,144 @@ class WarehouseController extends Controller
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                     ->where('list_of_items.isDeleted', '=', 0)
                     ->where('list_of_items.category', '=', $request->category);
+            }
+
+            if ($request->branch_id && $request->user()->role == 'admin') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+            }
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+            }
+
+            if ($request->orderby) {
+
+                $item = $item->orderBy($request->column, $request->orderby);
+            }
+
+            $item = $item->orderBy('list_of_items.id', 'desc');
+
+            $item = $item->get();
+
+            return response()->json($item, 200);
+        }
+    }
+
+    public function index_limit(Request $request)
+    {
+        if ($request->keyword) {
+
+            $res = $this->Search($request);
+
+            $item = DB::table('list_of_items')
+                ->join('users', 'list_of_items.user_id', '=', 'users.id')
+                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    'list_of_items.category as category_name',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0);
+            } else {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    'list_of_items.category as category_name',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    DB::raw("TRIM(list_of_items.profit)+0 as profit"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0);
+            }
+
+            if ($res) {
+                $item = $item->where($res, 'like', '%' . $request->keyword . '%');
+            } else {
+                $data = [];
+                return response()->json($data, 200);
+            }
+
+            if ($request->branch_id && $request->user()->role == 'admin') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->branch_id);
+            }
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->where('list_of_items.branch_id', '=', $request->user()->branch_id);
+            }
+
+            if ($request->orderby) {
+
+                $item = $item->orderBy($request->column, $request->orderby);
+            }
+
+            $item = $item->orderBy('list_of_items.id', 'desc');
+
+            $item = $item->get();
+
+            return response()->json($item, 200);
+        } else {
+
+            $item = DB::table('list_of_items')
+                ->join('users', 'list_of_items.user_id', '=', 'users.id')
+                ->join('branches', 'list_of_items.branch_id', '=', 'branches.id');
+
+            if ($request->user()->role == 'kasir') {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    'list_of_items.category as category_name',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0);
+            } else {
+                $item = $item->select(
+                    'list_of_items.id',
+                    'list_of_items.item_name',
+                    'list_of_items.total_item',
+                    'list_of_items.limit_item',
+                    'list_of_items.category as category_name',
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
+                    DB::raw('(CASE WHEN list_of_items.expired_date = "0000-00-00" THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
+                    DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    DB::raw("TRIM(list_of_items.capital_price)+0 as capital_price"),
+                    DB::raw("TRIM(list_of_items.profit)+0 as profit"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
+                    'users.id as user_id',
+                    'users.fullname as created_by',
+                    DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
+                    ->where('list_of_items.isDeleted', '=', 0);
             }
 
             if ($request->branch_id && $request->user()->role == 'admin') {
@@ -241,6 +390,8 @@ class WarehouseController extends Controller
         $validator = Validator::make($request->all(), [
             'item_name' => 'required|string|min:3|max:50',
             'total_item' => 'required|numeric|min:0',
+            'limit_item' => 'required|numeric|min:0',
+            'expired_date' => 'required|date_format:d/m/Y',
             'selling_price' => 'required|numeric',
             'capital_price' => 'required|numeric',
             'profit' => 'required|numeric',
@@ -289,9 +440,15 @@ class WarehouseController extends Controller
             $file = "/documents/" . $fileName;
         }
 
+        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->expired_date)->format('Y/m/d'));
+
         $item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
+            'limit_item' => $request->limit_item,
+            'diff_item' => $request->total_item - $request->limit_item,
+            'diff_expired_days' => Carbon::parse(now())->diffInDays($exp_date, false),
+            'expired_date' => $exp_date,
             'selling_price' => $request->selling_price,
             'capital_price' => $request->capital_price,
             'profit' => $request->profit,
@@ -322,6 +479,8 @@ class WarehouseController extends Controller
             'id' => 'required|numeric',
             'item_name' => 'required|string|min:3|max:50',
             'total_item' => 'required|numeric|min:0',
+            'limit_item' => 'required|numeric|min:0',
+            'expired_date' => 'required|date_format:d/m/Y',
             'selling_price' => 'required|numeric',
             'capital_price' => 'required|numeric',
             'profit' => 'required|numeric',
@@ -396,9 +555,15 @@ class WarehouseController extends Controller
 
     private function update_and_delete($request, $update_item, $file)
     {
+        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->expired_date)->format('Y/m/d'));
+
         $insert_item = ListofItems::create([
             'item_name' => $request->item_name,
             'total_item' => $request->total_item,
+            'limit_item' => $request->limit_item,
+            'diff_item' => $request->total_item - $request->limit_item,
+            'diff_expired_days' => Carbon::parse(now())->diffInDays($exp_date, false),
+            'expired_date' => $exp_date,
             'selling_price' => $request->selling_price,
             'capital_price' => $request->capital_price,
             'profit' => $request->profit,
@@ -418,8 +583,16 @@ class WarehouseController extends Controller
 
     private function update_data($request, $update_item, $file)
     {
+        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->expired_date)->format('Y/m/d'));
+
         $update_item->item_name = $request->item_name;
         $update_item->total_item = $request->total_item;
+
+        $update_item->limit_item = $request->limit_item;
+        $update_item->diff_item = $request->total_item - $request->limit_item;
+        $update_item->diff_expired_days = Carbon::parse(now())->diffInDays($exp_date, false);
+        $update_item->expired_date = $exp_date;
+
         $update_item->selling_price = $request->selling_price;
         $update_item->capital_price = $request->capital_price;
         $update_item->profit = $request->profit;
@@ -526,7 +699,7 @@ class WarehouseController extends Controller
             ], 422);
         }
 
-        $rows = Excel::toArray(new UploadItem($request->category), $request->file('file'));
+        $rows = Excel::toArray(new UploadItem($request->category, $request->user()->id), $request->file('file'));
         $result = $rows[0];
 
         foreach ($result as $key_result) {
@@ -555,7 +728,7 @@ class WarehouseController extends Controller
 
             $file = $request->file('file');
 
-            Excel::import(new UploadItem($request->category), $file);
+            Excel::import(new UploadItem($request->category, $request->user()->id), $file);
 
             return response()->json([
                 'message' => 'Berhasil mengupload Barang',

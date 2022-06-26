@@ -11,7 +11,7 @@ class DataBarang implements ShouldAutoSize, WithHeadings, WithTitle
   public function headings(): array
   {
       return [
-          ['Nama Barang', 'Jumlah Barang', 'Harga Jual', 'Harga Modal','Kode Cabang']
+          ['Nama Barang', 'Jumlah Barang','Limit Barang','Tanggal Kedaluwarsa Barang (dd/mm/yyyy)', 'Harga Jual', 'Harga Modal','Kode Cabang']
       ];
   }
 

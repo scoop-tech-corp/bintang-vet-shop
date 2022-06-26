@@ -52,6 +52,8 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('gudang/generate', 'WarehouseController@download_report_excel');
         Route::post('gudang/upload', 'WarehouseController@upload_excel');
 
+        Route::get('daftar-barang-batas', 'WarehouseController@index_limit');
+
         //Payment
         Route::get('payment', 'PaymentController@index');
         Route::post('payment', 'PaymentController@create');
