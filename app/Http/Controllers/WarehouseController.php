@@ -86,7 +86,9 @@ class WarehouseController extends Controller
                 $item = $item->orderBy($request->column, $request->orderby);
             }
 
-            $item = $item->orderBy('list_of_items.id', 'desc');
+            $item = $item->orderBy('list_of_items.diff_item', 'ASC')
+                ->orderBy('list_of_items.diff_expired_days', 'ASC')
+                ->orderBy('list_of_items.id', 'DESC');
 
             $item = $item->get();
 
@@ -145,7 +147,9 @@ class WarehouseController extends Controller
                 $item = $item->orderBy($request->column, $request->orderby);
             }
 
-            $item = $item->orderBy('list_of_items.id', 'desc');
+            $item = $item->orderBy('list_of_items.diff_item', 'ASC')
+                ->orderBy('list_of_items.diff_expired_days', 'ASC')
+                ->orderBy('list_of_items.id', 'DESC');
 
             $item = $item->get();
 
@@ -181,7 +185,8 @@ class WarehouseController extends Controller
                     'users.id as user_id',
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                    ->where('list_of_items.isDeleted', '=', 0);
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.diff_item', '<', 0);
             } else {
                 $item = $item->select(
                     'list_of_items.id',
@@ -201,7 +206,8 @@ class WarehouseController extends Controller
                     'users.id as user_id',
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                    ->where('list_of_items.isDeleted', '=', 0);
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.diff_item', '<', 0);
             }
 
             if ($res) {
@@ -224,7 +230,9 @@ class WarehouseController extends Controller
                 $item = $item->orderBy($request->column, $request->orderby);
             }
 
-            $item = $item->orderBy('list_of_items.id', 'desc');
+            $item = $item->orderBy('list_of_items.diff_item', 'ASC')
+                ->orderBy('list_of_items.diff_expired_days', 'ASC')
+                ->orderBy('list_of_items.id', 'DESC');
 
             $item = $item->get();
 
@@ -247,7 +255,8 @@ class WarehouseController extends Controller
                     DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                    ->where('list_of_items.isDeleted', '=', 0);
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.diff_item', '<', 0);
             } else {
                 $item = $item->select(
                     'list_of_items.id',
@@ -267,7 +276,8 @@ class WarehouseController extends Controller
                     'users.id as user_id',
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
-                    ->where('list_of_items.isDeleted', '=', 0);
+                    ->where('list_of_items.isDeleted', '=', 0)
+                    ->where('list_of_items.diff_item', '<', 0);
             }
 
             if ($request->branch_id && $request->user()->role == 'admin') {
@@ -283,7 +293,9 @@ class WarehouseController extends Controller
                 $item = $item->orderBy($request->column, $request->orderby);
             }
 
-            $item = $item->orderBy('list_of_items.id', 'desc');
+            $item = $item->orderBy('list_of_items.diff_item', 'ASC')
+                ->orderBy('list_of_items.diff_expired_days', 'ASC')
+                ->orderBy('list_of_items.id', 'DESC');
 
             $item = $item->get();
 
