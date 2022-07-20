@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Bintang Vet Shop | Dashboard</title>
+  <title>Hello Vet Shop | Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
+	<link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-hello-vet.jpeg') }}">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
@@ -52,9 +52,9 @@
 			<!-- Logo -->
 			<a href="{{ url('/') }}" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
-				<span class="logo-mini"><b>B</b>VS</span>
+				<span class="logo-mini"><b>H</b>VS</span>
 				<!-- logo for regular state and mobile devices -->
-				<span class="logo-lg"><b>BINTANG</b> <b>VET</b> SHOP</span>
+				<span class="logo-lg"><b>HELLO</b> <b>VET</b> SHOP</span>
 			</a>
 
 			<!-- Header Navbar: style can be found in header.less -->
@@ -141,7 +141,7 @@
 			<div class="pull-right hidden-xs">
 				<b>Version</b> 1.0
 			</div>
-			<strong>Copyright &copy; <script>document.write(new Date().getFullYear())</script> <a href="{{ url('/') }}">Bintang Vet Shop</a></strong> | Powered by Scoop Tech
+			<strong>Copyright &copy; <script>document.write(new Date().getFullYear())</script> <a href="{{ url('/') }}">Hello Vet Shop</a></strong> | Powered by Scoop Tech
 		</footer>
 
 		<!-- Control Sidebar -->
