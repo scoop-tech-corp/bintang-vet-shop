@@ -285,7 +285,7 @@ class PaymentController extends Controller
 
         $branch = Branch::find($request->branch_id);
 
-        $payment_number = 'EVS-P-' . $branch->branch_code . '-' . str_pad($lastnumber + 1, 4, 0, STR_PAD_LEFT);
+        $payment_number = 'SVS-P-' . $branch->branch_code . '-' . str_pad($lastnumber + 1, 4, 0, STR_PAD_LEFT);
 
         $master_payment = Master_Payments::create([
             'payment_number' => $payment_number,
