@@ -38,7 +38,7 @@
 
     <div class="header-login-section">
       <div class="title-login">Sistem Warehouse Stella Vet Shop</div>
-      <img src="{{ asset('assets/image/logo-stella-vet.jpeg) }}">
+      <img src="{{ asset('assets/image/logo-stella-vet.jpeg') }}">
     </div>
     <div class="login-container">
     <div v-if="showAlert" class="alert alert-dismissible"
