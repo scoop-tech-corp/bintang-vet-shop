@@ -94,14 +94,15 @@ class DailyFinancialReportController extends Controller
 
     public function download_report(Request $request)
     {
+        $branch = "";
+
         if ($request->user()->role == 'kasir') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
+            $branch = $request->user()->branch_id;
+        } else {
+            $branch = $request->branch_id;
         }
 
-        return (new DailyFinanceReport($request->orderby, $request->column, $request->date, $request->branch_id))
+        return (new DailyFinanceReport($request->orderby, $request->column, $request->date, $branch))
             ->download('Laporan Keuangan Harian.xlsx');
     }
 }
