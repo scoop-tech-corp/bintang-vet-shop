@@ -94,14 +94,15 @@ class WeeklyFinancialReportController extends Controller
 
     public function download_report(Request $request)
     {
+        $branch = "";
+
         if ($request->user()->role == 'kasir') {
-            return response()->json([
-                'message' => 'The user role was invalid.',
-                'errors' => ['Akses User tidak diizinkan!'],
-            ], 403);
+            $branch = $request->user()->branch_id;
+        } else {
+            $branch = $request->branch_id;
         }
 
-        return (new WeeklyFinanceReport($request->orderby, $request->column, $request->date_from, $request->date_to, $request->branch_id))
+        return (new WeeklyFinanceReport($request->orderby, $request->column, $request->date_from, $request->date_to, $branch))
             ->download('Laporan Keuangan Mingguan.xlsx');
     }
 }

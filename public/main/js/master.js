@@ -48,6 +48,7 @@ $(document).ready(function() {
       $('.menuPeriksa').show();
     } else if (role === 'kasir') {
       $('.menuGudang').show();   $('.menuPembayaran').show();
+      $('.menuKeuangan').show();
     }
   }
 

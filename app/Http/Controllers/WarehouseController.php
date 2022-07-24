@@ -108,6 +108,10 @@ class WarehouseController extends Controller
                     DB::raw('(CASE WHEN list_of_items.expired_date IS NULL THEN "" ELSE DATE_FORMAT(list_of_items.expired_date, "%d/%m/%Y") END) as expired_date'),
                     DB::raw('(CASE WHEN list_of_items.expired_date IS NULL THEN 60 ELSE list_of_items.diff_expired_days END)+0 as diff_expired_days'),
                     DB::raw("TRIM(list_of_items.diff_item)+0 as diff_item"),
+                    DB::raw("TRIM(list_of_items.selling_price)+0 as selling_price"),
+                    'list_of_items.image',
+                    'branches.id as branch_id',
+                    'branches.branch_name',
                     'users.fullname as created_by',
                     DB::raw("DATE_FORMAT(list_of_items.created_at, '%d %b %Y') as created_at"))
                     ->where('list_of_items.isDeleted', '=', 0)
