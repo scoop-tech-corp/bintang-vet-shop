@@ -23,13 +23,17 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 
     public function model(array $row)
     {
-        $exp_date = $exp_date = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tanggal_kedaluwarsa_barang_ddmmyyyy']));
+        $exp_date = Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('d-m-Y');
+
+        //$exp_date = $exp_date = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tanggal_kedaluwarsa_barang_ddmmyyyy']));
         //Carbon::parse(Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('Y/m/d'));
+        $exp_date_insert = Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('Y-m-d');
+
         return new ListofItems([
             'item_name' => $row['nama_barang'],
             'total_item' => $row['jumlah_barang'],
             'limit_item' => $row['limit_barang'],
-            'expired_date' => $exp_date,
+            'expired_date' => $exp_date_insert,
             'selling_price' => $row['harga_jual'],
             'capital_price' => $row['harga_modal'],
             'profit' => $row['harga_jual'] - $row['harga_modal'],
