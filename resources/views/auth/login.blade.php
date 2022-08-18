@@ -6,7 +6,7 @@
   <title>Sistem Warehouse Hello Vet Shop | Masuk</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
+  <link rel="shortcut icon" type="image/jpg" href="{{ asset('assets/image/logo-hello-vet.jpeg') }}">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
@@ -38,7 +38,7 @@
 
     <div class="header-login-section">
       <div class="title-login">Sistem Warehouse Hello Vet Shop</div>
-      <img src="{{ asset('assets/image/logo-vet-clinic.jpg') }}">
+      <img src="{{ asset('assets/image/logo-hello-vet.jpeg') }}">
     </div>
     <div class="login-container">
     <div v-if="showAlert" class="alert alert-dismissible"
