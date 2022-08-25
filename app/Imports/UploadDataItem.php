@@ -29,14 +29,14 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             'total_item' => $row['jumlah_barang'],
             'limit_item' => $row['limit_barang'],
             'expired_date' => $exp_date,
-            'selling_price' => $row['harga_jual'],
-            'capital_price' => $row['harga_modal'],
-            'profit' => $row['harga_jual'] - $row['harga_modal'],
+            'selling_price' => (int)$row['harga_jual'],
+            'capital_price' => (int)$row['harga_modal'],
+            'profit' => (int)$row['harga_jual'] - (int)$row['harga_modal'],
             'image' => "",
             'category' => $this->category,
             'branch_id' => $row['kode_cabang'],
             'diff_item' => $row['jumlah_barang'] - $row['limit_barang'],
-            'diff_expired_days' => \Carbon\Carbon::parse(now())->diffInDays($exp_date, false),
+            'diff_expired_days' => Carbon::parse(now())->diffInDays($exp_date, false),
             'user_id' => $this->id,
         ]);
     }
@@ -48,8 +48,8 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             '*.jumlah_barang' => 'required|numeric',
             '*.limit_barang' => 'required|numeric',
             '*.tanggal_kedaluwarsa_barang_ddmmyyyy' => 'required|date_format:d/m/Y',
-            '*.harga_jual' => 'required|numeric',
-            '*.harga_modal' => 'required|numeric',
+            // '*.harga_jual' => 'required|numeric',
+            // '*.harga_modal' => 'required|numeric',
             '*.kode_cabang' => 'required|numeric',
         ];
     }
