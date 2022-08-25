@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Carbon\Carbon;
 
 class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 {
@@ -22,7 +23,7 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 
     public function model(array $row)
     {
-        $exp_date = \Carbon\Carbon::parse(Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('Y/m/d'));
+        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('Y/m/d'));
         return new ListofItems([
             'item_name' => $row['nama_barang'],
             'total_item' => $row['jumlah_barang'],
