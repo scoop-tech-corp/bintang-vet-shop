@@ -703,11 +703,11 @@ class WarehouseController extends Controller
         ]);
 
         $filename = $request->file('file')->getClientOriginalName();
-
+        
         if (strpos($filename, $request->category) === false) {
             return response()->json([
                 'message' => 'The data was invalid.',
-                'errors' => ['File yang diupload tidak sesuai!'],
+                'errors' => ['Nama File harus mengandung kata ' . $request->category . '!'],
             ], 422);
         }
 
@@ -737,15 +737,15 @@ class WarehouseController extends Controller
                     'errors' => ['Harga Modal harus lebih kecil dengan Harga Jual!'],
                 ], 422);
             }
-
-            $file = $request->file('file');
-
-            Excel::import(new UploadItem($request->category, $request->user()->id), $file);
-
-            return response()->json([
-                'message' => 'Berhasil mengupload Barang',
-            ], 200);
         }
+
+        $file = $request->file('file');
+
+        Excel::import(new UploadItem($request->category, $request->user()->id), $file);
+
+        return response()->json([
+            'message' => 'Berhasil mengupload Barang',
+        ], 200);
 
     }
 }

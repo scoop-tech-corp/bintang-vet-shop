@@ -3,11 +3,11 @@
 namespace App\Imports;
 
 use App\Models\ListofItems;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Carbon\Carbon;
 
 class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 {
@@ -23,15 +23,16 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
 
     public function model(array $row)
     {
-        $exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('Y/m/d'));
+        $exp_date = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int) $row['tanggal_kedaluwarsa_barang_ddmmyyyy']));
+        //$exp_date = Carbon::parse(Carbon::createFromFormat('d/m/Y', $row['tanggal_kedaluwarsa_barang_ddmmyyyy'])->format('d/m/Y'));
         return new ListofItems([
             'item_name' => $row['nama_barang'],
             'total_item' => $row['jumlah_barang'],
             'limit_item' => $row['limit_barang'],
             'expired_date' => $exp_date,
-            'selling_price' => (int)$row['harga_jual'],
-            'capital_price' => (int)$row['harga_modal'],
-            'profit' => (int)$row['harga_jual'] - (int)$row['harga_modal'],
+            'selling_price' => (int) $row['harga_jual'],
+            'capital_price' => (int) $row['harga_modal'],
+            'profit' => (int) $row['harga_jual'] - (int) $row['harga_modal'],
             'image' => "",
             'category' => $this->category,
             'branch_id' => $row['kode_cabang'],
@@ -47,7 +48,7 @@ class UploadDataItem implements ToModel, WithHeadingRow, WithValidation
             '*.nama_barang' => 'required|string',
             '*.jumlah_barang' => 'required|numeric',
             '*.limit_barang' => 'required|numeric',
-            '*.tanggal_kedaluwarsa_barang_ddmmyyyy' => 'required|date_format:d/m/Y',
+            '*.tanggal_kedaluwarsa_barang_ddmmyyyy' => 'required',
             // '*.harga_jual' => 'required|numeric',
             // '*.harga_modal' => 'required|numeric',
             '*.kode_cabang' => 'required|numeric',
